@@ -39,9 +39,9 @@ const envSchema = z
     SENTRY_DSN: z.string().optional(),
 
     // 보안 설정
-    RATE_LIMIT_REQUESTS: z.string().transform(Number).default("100"),
-    RATE_LIMIT_WINDOW: z.string().transform(Number).default("15"),
-    SESSION_TIMEOUT: z.string().transform(Number).default("86400"),
+    RATE_LIMIT_REQUESTS: z.string().transform(Number).default(100),
+    RATE_LIMIT_WINDOW: z.string().transform(Number).default(15),
+    SESSION_TIMEOUT: z.string().transform(Number).default(86400),
   })
   .refine(
     data => {
@@ -75,7 +75,7 @@ export function validateEnv() {
   } catch (error) {
     return {
       success: false,
-      error: error instanceof z.ZodError ? error.errors : error,
+      error: error instanceof z.ZodError ? error.issues : error,
     };
   }
 }

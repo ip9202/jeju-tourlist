@@ -1,0 +1,4 @@
+
+> @jeju-tourlist/web@0.1.0 type-check /Users/ip9202/develop/vibe/jeju-tourlist/apps/web
+> tsc --noEmit
+

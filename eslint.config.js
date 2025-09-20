@@ -43,6 +43,7 @@ export default [
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-non-null-assertion': 'warn',
       '@typescript-eslint/no-unsafe-function-type': 'warn',
+      '@typescript-eslint/no-namespace': 'off', // Express 타입 확장에 필요
       'no-undef': 'off', // TypeScript가 이미 처리
     },
   },

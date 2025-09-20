@@ -6,6 +6,8 @@ import morgan from "morgan";
 import { env, validateEnv } from "@jeju-tourlist/config";
 import { ErrorHandler } from "./middleware/errorHandler";
 import healthRoutes from "./routes/health";
+import { createAuthRouter } from "./routes/auth";
+import { createUserRouter } from "./routes/user";
 
 // 환경변수 검증
 const validation = validateEnv();
@@ -31,6 +33,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // 라우트 설정
 app.use("/health", healthRoutes);
+app.use("/api/auth", createAuthRouter());
+app.use("/api/users", createUserRouter());
 
 // API 라우트
 app.get("/api", (req, res) => {

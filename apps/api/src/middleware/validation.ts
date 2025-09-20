@@ -12,8 +12,8 @@ export class ValidationMiddleware {
         next();
       } catch (error) {
         if (error instanceof z.ZodError) {
-          const errorMessage = error.errors
-            .map(err => `${err.path.join(".")}: ${err.message}`)
+          const errorMessage = error.issues
+            .map((err: any) => `${err.path.join(".")}: ${err.message}`)
             .join(", ");
           ResponseHelper.badRequest(res, `유효성 검사 실패: ${errorMessage}`);
         } else {
@@ -27,12 +27,12 @@ export class ValidationMiddleware {
   static validateQuery(schema: ZodSchema) {
     return (req: Request, res: Response, next: NextFunction) => {
       try {
-        req.query = schema.parse(req.query);
+        req.query = schema.parse(req.query) as any;
         next();
       } catch (error) {
         if (error instanceof z.ZodError) {
-          const errorMessage = error.errors
-            .map(err => `${err.path.join(".")}: ${err.message}`)
+          const errorMessage = error.issues
+            .map((err: any) => `${err.path.join(".")}: ${err.message}`)
             .join(", ");
           ResponseHelper.badRequest(
             res,
@@ -49,12 +49,12 @@ export class ValidationMiddleware {
   static validateParams(schema: ZodSchema) {
     return (req: Request, res: Response, next: NextFunction) => {
       try {
-        req.params = schema.parse(req.params);
+        req.params = schema.parse(req.params) as any;
         next();
       } catch (error) {
         if (error instanceof z.ZodError) {
-          const errorMessage = error.errors
-            .map(err => `${err.path.join(".")}: ${err.message}`)
+          const errorMessage = error.issues
+            .map((err: any) => `${err.path.join(".")}: ${err.message}`)
             .join(", ");
           ResponseHelper.badRequest(
             res,

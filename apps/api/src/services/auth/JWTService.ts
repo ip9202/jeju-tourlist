@@ -1,0 +1,127 @@
+import jwt from "jsonwebtoken";
+import { JWTPayload, TokenPair, User, UserRole } from "@jeju-tourlist/types";
+import { env } from "@jeju-tourlist/config";
+
+/**
+ * JWT 토큰 관리 서비스
+ * Single Responsibility Principle: JWT 토큰 생성, 검증, 갱신만 담당
+ */
+export class JWTService {
+  private readonly accessTokenSecret: string;
+  private readonly refreshTokenSecret: string;
+  private readonly accessTokenExpiry: string;
+  private readonly refreshTokenExpiry: string;
+
+  constructor() {
+    this.accessTokenSecret = env.NEXTAUTH_SECRET;
+    this.refreshTokenSecret = env.NEXTAUTH_SECRET + "_refresh";
+    this.accessTokenExpiry = "15m"; // 15분
+    this.refreshTokenExpiry = "7d"; // 7일
+  }
+
+  /**
+   * 액세스 토큰과 리프레시 토큰 쌍 생성
+   */
+  generateTokenPair(user: User): TokenPair {
+    const payload: JWTPayload = {
+      sub: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role,
+      iat: Math.floor(Date.now() / 1000),
+      exp: Math.floor(Date.now() / 1000) + 15 * 60, // 15분
+    };
+
+    const accessToken = jwt.sign(payload, this.accessTokenSecret, {
+      expiresIn: this.accessTokenExpiry,
+    } as jwt.SignOptions);
+
+    const refreshToken = jwt.sign(
+      { sub: user.id, type: "refresh" },
+      this.refreshTokenSecret,
+      { expiresIn: this.refreshTokenExpiry } as jwt.SignOptions
+    );
+
+    return {
+      accessToken,
+      refreshToken,
+      expiresIn: 15 * 60, // 15분 (초 단위)
+    };
+  }
+
+  /**
+   * 액세스 토큰 검증
+   */
+  verifyAccessToken(token: string): JWTPayload | null {
+    try {
+      const decoded = jwt.verify(token, this.accessTokenSecret) as JWTPayload;
+      return decoded;
+    } catch {
+      return null;
+    }
+  }
+
+  /**
+   * 리프레시 토큰 검증
+   */
+  verifyRefreshToken(token: string): { sub: string; type: string } | null {
+    try {
+      const decoded = jwt.verify(token, this.refreshTokenSecret) as any;
+      if (decoded.type !== "refresh") {
+        return null;
+      }
+      return decoded;
+    } catch {
+      return null;
+    }
+  }
+
+  /**
+   * 토큰에서 사용자 ID 추출
+   */
+  extractUserId(token: string): string | null {
+    const payload = this.verifyAccessToken(token);
+    return payload?.sub || null;
+  }
+
+  /**
+   * 토큰 만료 시간 확인
+   */
+  isTokenExpired(_token: string): boolean {
+    try {
+      const decoded = jwt.decode(_token) as any;
+      if (!decoded || !decoded.exp) {
+        return true;
+      }
+      return Date.now() >= decoded.exp * 1000;
+    } catch {
+      return true;
+    }
+  }
+
+  /**
+   * 토큰에서 역할 정보 추출
+   */
+  extractUserRole(token: string): UserRole | null {
+    const payload = this.verifyAccessToken(token);
+    return payload?.role || null;
+  }
+
+  /**
+   * 토큰 블랙리스트 관리 (로그아웃 시 사용)
+   */
+  blacklistToken(_token: string): void {
+    // Redis에 토큰을 블랙리스트로 저장하는 로직
+    // 현재는 메모리 기반으로 구현
+    // TODO: Redis 연동 시 구현
+  }
+
+  /**
+   * 토큰이 블랙리스트에 있는지 확인
+   */
+  isTokenBlacklisted(_token: string): boolean {
+    // Redis에서 토큰 블랙리스트 확인
+    // TODO: Redis 연동 시 구현
+    return false;
+  }
+}

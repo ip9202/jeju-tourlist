@@ -2,7 +2,7 @@ import { Router } from "express";
 import { ResponseHelper } from "../utils/response";
 import { env } from "@jeju-tourlist/config";
 
-const router = Router();
+const router: Router = Router();
 
 // 헬스 체크 라우트 (SRP: 단일 책임 원칙)
 router.get("/", (req, res) => {
