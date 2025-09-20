@@ -1,0 +1,396 @@
+name: Phase 9: 테스트 및 최적화
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+env:
+  NODE_ENV: test
+  DATABASE_URL: postgresql://test:test@localhost:5432/jeju_tourlist_test
+  REDIS_URL: redis://localhost:6379
+  NEXTAUTH_SECRET: test-secret-key-for-testing-only
+  API_BASE_URL: http://localhost:4000
+  LOG_LEVEL: error
+
+jobs:
+  # 1. 환경 설정 및 의존성 설치
+  setup:
+    name: 환경 설정
+    runs-on: ubuntu-latest
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: Node.js 설정
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'pnpm'
+
+      - name: pnpm 설치
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: 의존성 설치
+        run: pnpm install --frozen-lockfile
+
+      - name: TypeScript 컴파일 검사
+        run: pnpm run type-check
+
+      - name: ESLint 검사
+        run: pnpm run lint
+
+  # 2. 단위 테스트
+  unit-tests:
+    name: 단위 테스트
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: Node.js 설정
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'pnpm'
+
+      - name: pnpm 설치
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: 의존성 설치
+        run: pnpm install --frozen-lockfile
+
+      - name: 단위 테스트 실행
+        run: pnpm run test:unit
+
+      - name: 테스트 커버리지 업로드
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./coverage/lcov.info
+          flags: unittests
+
+  # 3. 통합 테스트
+  integration-tests:
+    name: 통합 테스트
+    runs-on: ubuntu-latest
+    needs: setup
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: jeju_tourlist_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:7
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: Node.js 설정
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'pnpm'
+
+      - name: pnpm 설치
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: 의존성 설치
+        run: pnpm install --frozen-lockfile
+
+      - name: 데이터베이스 마이그레이션
+        run: pnpm run db:push
+
+      - name: 통합 테스트 실행
+        run: pnpm run test:integration
+
+  # 4. E2E 테스트
+  e2e-tests:
+    name: E2E 테스트
+    runs-on: ubuntu-latest
+    needs: setup
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: jeju_tourlist_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:7
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: Node.js 설정
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'pnpm'
+
+      - name: pnpm 설치
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: 의존성 설치
+        run: pnpm install --frozen-lockfile
+
+      - name: Playwright 설치
+        run: npx playwright install --with-deps
+
+      - name: 데이터베이스 마이그레이션
+        run: pnpm run db:push
+
+      - name: 애플리케이션 빌드
+        run: pnpm run build
+
+      - name: E2E 테스트 실행
+        run: pnpm run test:e2e
+
+      - name: E2E 테스트 결과 업로드
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+
+  # 5. 보안 테스트
+  security-tests:
+    name: 보안 테스트
+    runs-on: ubuntu-latest
+    needs: setup
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: jeju_tourlist_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:7
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: Node.js 설정
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'pnpm'
+
+      - name: pnpm 설치
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: 의존성 설치
+        run: pnpm install --frozen-lockfile
+
+      - name: 데이터베이스 마이그레이션
+        run: pnpm run db:push
+
+      - name: 보안 테스트 실행
+        run: pnpm run test:security
+
+      - name: 의존성 보안 스캔
+        run: pnpm run security:scan
+
+  # 6. 성능 테스트
+  performance-tests:
+    name: 성능 테스트
+    runs-on: ubuntu-latest
+    needs: setup
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: jeju_tourlist_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:7
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: Node.js 설정
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'pnpm'
+
+      - name: pnpm 설치
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: 의존성 설치
+        run: pnpm install --frozen-lockfile
+
+      - name: 데이터베이스 마이그레이션
+        run: pnpm run db:push
+
+      - name: 애플리케이션 빌드
+        run: pnpm run build
+
+      - name: 성능 테스트 실행
+        run: pnpm run test:performance
+
+      - name: 성능 벤치마크 실행
+        run: pnpm run benchmark
+
+      - name: 성능 테스트 결과 업로드
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: performance-results
+          path: |
+            performance-results/
+            lighthouse-report.json
+          retention-days: 30
+
+  # 7. 빌드 테스트
+  build-tests:
+    name: 빌드 테스트
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: Node.js 설정
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'pnpm'
+
+      - name: pnpm 설치
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: 의존성 설치
+        run: pnpm install --frozen-lockfile
+
+      - name: 애플리케이션 빌드
+        run: pnpm run build
+
+      - name: 빌드 결과 검증
+        run: |
+          if [ ! -d "apps/web/.next" ]; then
+            echo "❌ 웹 애플리케이션 빌드 실패"
+            exit 1
+          fi
+          if [ ! -d "apps/api/dist" ]; then
+            echo "❌ API 서버 빌드 실패"
+            exit 1
+          fi
+          echo "✅ 모든 빌드 성공"
+
+  # 8. 최종 결과
+  final-result:
+    name: 최종 결과
+    runs-on: ubuntu-latest
+    needs: [unit-tests, integration-tests, e2e-tests, security-tests, performance-tests, build-tests]
+    if: always()
+    steps:
+      - name: 테스트 결과 요약
+        run: |
+          echo "🎉 Phase 9: 테스트 및 최적화 완료"
+          echo "=================================="
+          echo "✅ 단위 테스트: ${{ needs.unit-tests.result }}"
+          echo "✅ 통합 테스트: ${{ needs.integration-tests.result }}"
+          echo "✅ E2E 테스트: ${{ needs.e2e-tests.result }}"
+          echo "✅ 보안 테스트: ${{ needs.security-tests.result }}"
+          echo "✅ 성능 테스트: ${{ needs.performance-tests.result }}"
+          echo "✅ 빌드 테스트: ${{ needs.build-tests.result }}"
+          echo "=================================="
+          
+          if [[ "${{ needs.unit-tests.result }}" == "success" && 
+                "${{ needs.integration-tests.result }}" == "success" && 
+                "${{ needs.e2e-tests.result }}" == "success" && 
+                "${{ needs.security-tests.result }}" == "success" && 
+                "${{ needs.performance-tests.result }}" == "success" && 
+                "${{ needs.build-tests.result }}" == "success" ]]; then
+            echo "🚀 모든 테스트 통과! 프로덕션 배포 준비 완료!"
+            exit 0
+          else
+            echo "❌ 일부 테스트 실패. 문제를 해결한 후 다시 시도해주세요."
+            exit 1
+          fi
