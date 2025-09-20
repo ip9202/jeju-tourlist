@@ -11,6 +11,10 @@ import { generalLimiter } from "./middleware/rateLimiter";
 import { sanitizeInput } from "./middleware/validation";
 import { swaggerSpec, swaggerUiOptions } from "./config/swagger";
 import healthRoutes from "./routes/health";
+import pointRoutes from "./routes/point";
+import badgeRoutes from "./routes/badge";
+import adminRoutes from "./routes/admin";
+import notificationRoutes from "./routes/notification";
 // import { PrismaClient } from "@prisma/client";
 import {
   SocketConfig,
@@ -82,6 +86,13 @@ app.use(
 
 // 라우트 설정
 app.use("/health", healthRoutes);
+
+// API 라우트
+app.use("/api/points", pointRoutes);
+app.use("/api/badges", badgeRoutes);
+app.use("/api/admin", adminRoutes);
+app.use("/api/notifications", notificationRoutes);
+
 // TODO: Phase 7 테스트 후 활성화
 // app.use("/api/auth", authLimiter, createAuthRouter());
 // app.use("/api/users", createUserRouter());

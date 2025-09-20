@@ -52,6 +52,7 @@ model User {
   notifications Notification[]
   userBadges    UserBadge[]
   userProfile   UserProfile?
+  pointTransactions PointTransaction[]
   
   // 인덱스
   @@index([email])
@@ -364,6 +365,39 @@ model UserBadge {
 }
 
 // ===========================================
+// 포인트 시스템 모델 (Point Domain)
+// ===========================================
+
+model PointTransaction {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // 포인트 정보
+  amount      Int      // 양수: 적립, 음수: 차감
+  balance     Int      // 거래 후 잔액
+  type        PointTransactionType
+  
+  // 관련 엔티티 (선택적)
+  relatedType String?  // 'question', 'answer', 'badge', 'system'
+  relatedId   String?  // 관련 엔티티 ID
+  
+  // 설명
+  description String
+  metadata    Json?    // 추가 메타데이터
+  
+  // 타임스탬프
+  createdAt   DateTime @default(now())
+  
+  // 인덱스
+  @@index([userId])
+  @@index([type])
+  @@index([createdAt])
+  @@index([relatedType, relatedId])
+  @@map("point_transactions")
+}
+
+// ===========================================
 // 열거형 (Enums)
 // ===========================================
 
@@ -400,4 +434,17 @@ enum NotificationType {
   QUESTION_BOOKMARKED
   BADGE_EARNED
   SYSTEM_ANNOUNCEMENT
+}
+
+enum PointTransactionType {
+  QUESTION_CREATED
+  ANSWER_CREATED
+  ANSWER_ACCEPTED
+  QUESTION_LIKED
+  ANSWER_LIKED
+  BADGE_EARNED
+  DAILY_LOGIN
+  SYSTEM_REWARD
+  SYSTEM_PENALTY
+  ADMIN_ADJUSTMENT
 }
