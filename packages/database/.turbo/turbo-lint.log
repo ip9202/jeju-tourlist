@@ -1,0 +1,172 @@
+
+> @jeju-tourlist/database@1.0.0 lint /Users/ip9202/develop/vibe/jeju-tourlist/packages/database
+> eslint src --ext .ts
+
+(node:37240) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/ip9202/develop/vibe/jeju-tourlist/eslint.config.js?mtime=1758350521529 is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /Users/ip9202/develop/vibe/jeju-tourlist/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+/Users/ip9202/develop/vibe/jeju-tourlist/packages/database/src/__tests__/repositories/enhanced-user.repository.test.ts
+   57:64  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  106:44  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  156:67  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  273:67  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  330:67  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  368:63  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  462:70  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/ip9202/develop/vibe/jeju-tourlist/packages/database/src/__tests__/repositories/question.repository.test.ts
+   61:72  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  132:75  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  200:75  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  256:75  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  323:71  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  376:75  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  411:33  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/ip9202/develop/vibe/jeju-tourlist/packages/database/src/__tests__/repositories/user.repository.test.ts
+   41:64  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   94:64  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  138:67  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  189:67  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  235:67  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  295:63  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/ip9202/develop/vibe/jeju-tourlist/packages/database/src/__tests__/services/search.service.test.ts
+   65:71  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  116:71  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  175:71  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  258:67  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  307:63  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  346:12  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  351:12  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  354:12  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  378:12  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  410:12  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/ip9202/develop/vibe/jeju-tourlist/packages/database/src/errors/database.errors.ts
+   17:44  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   23:30  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   60:41  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   61:30  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   82:12  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   83:30  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  100:30  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  113:30  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  130:30  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  143:30  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  161:30  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  179:30  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  194:73  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  209:30  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  224:57  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  238:57  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/ip9202/develop/vibe/jeju-tourlist/packages/database/src/errors/error-handler.ts
+   31:28  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   73:28  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  158:28  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  171:28  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  186:28  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  206:28  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  233:28  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  284:28  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/ip9202/develop/vibe/jeju-tourlist/packages/database/src/repositories/answer.repository.ts
+   22:44  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  145:44  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  599:61  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  600:18  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/ip9202/develop/vibe/jeju-tourlist/packages/database/src/repositories/base.repository.ts
+  119:56  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  127:6   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  149:47  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/ip9202/develop/vibe/jeju-tourlist/packages/database/src/repositories/category.repository.ts
+   21:46  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   95:46  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  124:20  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  255:50  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  264:48  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  265:67  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  325:63  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  326:18  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/ip9202/develop/vibe/jeju-tourlist/packages/database/src/repositories/enhanced-user.repository.ts
+  406:18  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  408:14  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/ip9202/develop/vibe/jeju-tourlist/packages/database/src/repositories/question.repository.ts
+   31:46  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  215:46  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  603:63  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  604:18  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/ip9202/develop/vibe/jeju-tourlist/packages/database/src/repositories/user.repository.ts
+   33:42  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  192:42  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  417:59  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  418:18  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/ip9202/develop/vibe/jeju-tourlist/packages/database/src/services/cache.service.ts
+   76:18  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  277:33  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  286:51  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  299:48  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  320:34  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/ip9202/develop/vibe/jeju-tourlist/packages/database/src/services/search.service.ts
+   17:60  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   18:56  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   19:45  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   19:59  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   20:42  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   20:56  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   21:48  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   21:62  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   89:66  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  131:62  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  171:50  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  171:69  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  220:47  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  220:66  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  257:53  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  257:72  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  317:34  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  340:36  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  380:23  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  381:20  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  382:21  warning  Forbidden non-null assertion              @typescript-eslint/no-non-null-assertion
+  391:69  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  392:18  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  451:65  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  452:18  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  473:70  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/ip9202/develop/vibe/jeju-tourlist/packages/database/src/types/index.ts
+  12:20  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  13:27  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  14:24  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  15:22  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  16:24  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  17:28  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  18:26  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  19:24  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  20:22  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  21:28  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  22:21  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  23:25  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  24:30  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  25:28  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  26:32  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  27:28  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  28:32  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  60:28  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/ip9202/develop/vibe/jeju-tourlist/packages/database/src/types/notification.ts
+  70:25  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+✖ 129 problems (0 errors, 129 warnings)
+

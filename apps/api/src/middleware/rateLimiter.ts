@@ -108,15 +108,6 @@ export const searchLimiter = rateLimit({
 export const userLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15분
   max: 200, // 최대 200회 요청
-  keyGenerator: (req: Request) => {
-    // IP 주소 기반으로 제한
-    return req.ip || req.connection.remoteAddress || "unknown";
-  },
-  message: {
-    success: false,
-    error: "사용자 요청이 너무 많습니다. 잠시 후 다시 시도해주세요.",
-    timestamp: new Date().toISOString(),
-  },
   standardHeaders: true,
   legacyHeaders: false,
   handler: (req: Request, res: Response) => {

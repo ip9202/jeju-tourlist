@@ -1,21 +1,28 @@
 import "dotenv-flow/config";
 import express from "express";
+import { createServer } from "http";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import swaggerUi from "swagger-ui-express";
 import { env, validateEnv } from "@jeju-tourlist/config";
 import { ErrorHandler } from "./middleware/errorHandler";
-import { generalLimiter, authLimiter } from "./middleware/rateLimiter";
+import { generalLimiter } from "./middleware/rateLimiter";
 import { sanitizeInput } from "./middleware/validation";
 import { swaggerSpec, swaggerUiOptions } from "./config/swagger";
 import healthRoutes from "./routes/health";
-import { createAuthRouter } from "./routes/auth";
-import { createUserRouter } from "./routes/user";
-import { createQuestionRouter } from "./routes/question";
-import { createAnswerRouter } from "./routes/answer";
-import { createUserActivityRouter } from "./routes/userActivity";
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
+import {
+  SocketConfig,
+  createAuthMiddleware,
+  createLoggingMiddleware,
+  createRateLimitMiddleware,
+} from "./config/socket";
+import { RoomManager } from "./services/socket/roomManager";
+import { ConnectionManager } from "./services/socket/connectionManager";
+import { NotificationManager } from "./services/socket/notificationManager";
+import { StatsManager } from "./services/socket/statsManager";
+import { SocketEventHandler } from "./services/socket/eventHandler";
 
 // 환경변수 검증
 const validation = validateEnv();
@@ -25,10 +32,11 @@ if (!validation.success) {
 }
 
 const app = express();
+const httpServer = createServer(app); // HTTP 서버 생성
 const PORT = process.env.PORT || 4000;
 
-// Prisma 클라이언트 초기화
-const prisma = new PrismaClient();
+// Prisma 클라이언트 초기화 (Phase 7에서는 스킵)
+// const prisma = new PrismaClient();
 
 // 미들웨어 설정
 app.use(
@@ -74,11 +82,12 @@ app.use(
 
 // 라우트 설정
 app.use("/health", healthRoutes);
-app.use("/api/auth", authLimiter, createAuthRouter());
-app.use("/api/users", createUserRouter());
-app.use("/api/questions", createQuestionRouter(prisma));
-app.use("/api/answers", createAnswerRouter(prisma));
-app.use("/api", createUserActivityRouter(prisma));
+// TODO: Phase 7 테스트 후 활성화
+// app.use("/api/auth", authLimiter, createAuthRouter());
+// app.use("/api/users", createUserRouter());
+// app.use("/api/questions", createQuestionRouter(prisma));
+// app.use("/api/answers", createAnswerRouter(prisma));
+// app.use("/api", createUserActivityRouter(prisma));
 
 // API 라우트
 app.get("/api", (req, res) => {
@@ -95,11 +104,94 @@ app.use("*", ErrorHandler.notFound);
 // 에러 핸들러
 app.use(ErrorHandler.handle);
 
+// Socket.io 서버 설정 및 초기화
+async function startServer() {
+  try {
+    // Socket.io 서버 생성
+    const io = await SocketConfig.createServer(httpServer);
+
+    // Socket.io 미들웨어 설정
+    io.use(createAuthMiddleware());
+    io.use(createLoggingMiddleware());
+    io.use(createRateLimitMiddleware(100, 60000)); // 분당 100개 이벤트 제한
+
+    // Socket.io 서비스 매니저 초기화
+    const roomManager = new RoomManager(io);
+    const connectionManager = new ConnectionManager(io);
+    const notificationManager = new NotificationManager(io);
+    const statsManager = new StatsManager(io);
+    const eventHandler = new SocketEventHandler(
+      notificationManager,
+      statsManager,
+      roomManager,
+      connectionManager
+    );
+
+    // Socket.io 연결 이벤트 핸들러
+    io.on("connection", socket => {
+      console.log(`🔌 새 소켓 연결: ${socket.id}`);
+
+      // 연결 관리
+      connectionManager.handleConnection(socket);
+
+      // 모든 이벤트 핸들러 등록
+      eventHandler.registerAllHandlers(socket);
+
+      // 기본 룸 이벤트 핸들러 (기존 호환성 유지)
+      socket.on("join_room", async data => {
+        try {
+          await roomManager.joinRoom(socket, data.roomId, data.userId);
+        } catch {
+          socket.emit("error", {
+            message: "룸 참여 실패",
+            code: "JOIN_ROOM_FAILED",
+          });
+        }
+      });
+
+      socket.on("leave_room", async data => {
+        try {
+          await roomManager.leaveRoom(socket, data.roomId, data.userId);
+        } catch {
+          socket.emit("error", {
+            message: "룸 나가기 실패",
+            code: "LEAVE_ROOM_FAILED",
+          });
+        }
+      });
+    });
+
+    // HTTP 서버 시작
+    httpServer.listen(PORT, () => {
+      console.log(`🚀 API 서버가 포트 ${PORT}에서 실행 중입니다.`);
+      console.log(`📊 환경: ${env.NODE_ENV}`);
+      console.log(`🔗 API URL: http://localhost:${PORT}/api`);
+      console.log(`📚 API 문서: http://localhost:${PORT}/api-docs`);
+      console.log(`❤️  Health Check: http://localhost:${PORT}/health`);
+      console.log(`⚡ Socket.io 서버가 동일한 포트에서 실행 중입니다.`);
+    });
+
+    // Graceful shutdown 처리
+    process.on("SIGTERM", async () => {
+      console.log("🛑 SIGTERM 신호 수신. 서버를 종료합니다...");
+      statsManager.stop();
+      await SocketConfig.closeServer();
+      // await prisma.$disconnect();
+      process.exit(0);
+    });
+
+    process.on("SIGINT", async () => {
+      console.log("🛑 SIGINT 신호 수신. 서버를 종료합니다...");
+      statsManager.stop();
+      await SocketConfig.closeServer();
+      // await prisma.$disconnect();
+      process.exit(0);
+    });
+  } catch (error) {
+    console.error("❌ 서버 시작 실패:", error);
+    process.exit(1);
+  }
+}
+
 // 서버 시작
-app.listen(PORT, () => {
-  console.log(`🚀 API 서버가 포트 ${PORT}에서 실행 중입니다.`);
-  console.log(`📊 환경: ${env.NODE_ENV}`);
-  console.log(`🔗 API URL: http://localhost:${PORT}/api`);
-  console.log(`📚 API 문서: http://localhost:${PORT}/api-docs`);
-  console.log(`❤️  Health Check: http://localhost:${PORT}/health`);
-});
+startServer();

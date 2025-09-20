@@ -11,8 +11,13 @@ const envSchema = z
     // 선택적 환경변수 (기본값 제공)
     API_BASE_URL: z.string().url().default("http://localhost:4000"),
     SOCKET_URL: z.string().url().default("http://localhost:4001"),
+    SOCKET_PORT: z.string().default("4001"),
     LOG_LEVEL: z.enum(["debug", "info", "warn", "error"]).default("info"),
-    REDIS_URL: z.string().url().default("redis://localhost:6379"),
+    REDIS_URL: z.string().default("redis://localhost:6379"),
+    REDIS_HOST: z.string().default("localhost"),
+    REDIS_PORT: z.string().default("6379"),
+    REDIS_PASSWORD: z.string().optional(),
+    REDIS_DB: z.string().default("0"),
 
     // OAuth 관련 (개발용 더미 값 허용)
     KAKAO_CLIENT_ID: z.string().optional(),
