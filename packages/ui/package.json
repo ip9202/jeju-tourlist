@@ -1,0 +1,32 @@
+{
+  "name": "@jeju-tourlist/ui",
+  "version": "1.0.0",
+  "description": "공통 UI 컴포넌트 라이브러리",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "type-check": "tsc --noEmit",
+    "build": "tsc",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@radix-ui/react-slot": "^1.2.3",
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-dropdown-menu": "^2.1.16",
+    "@radix-ui/react-toast": "^1.2.15",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.23.16",
+    "lucide-react": "^0.544.0",
+    "tailwind-merge": "^3.3.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "peerDependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  }
+}

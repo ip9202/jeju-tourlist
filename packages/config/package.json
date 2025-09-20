@@ -1,0 +1,17 @@
+{
+  "name": "@jeju-tourlist/config",
+  "version": "1.0.0",
+  "description": "공통 설정 패키지",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "zod": "^4.1.9",
+    "dotenv-flow": "^4.1.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2"
+  }
+}
