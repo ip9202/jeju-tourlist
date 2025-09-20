@@ -1,5 +1,21 @@
 // import { env } from "@jeju-tourlist/config";
 
+/**
+ * 캐시 서비스 인터페이스
+ *
+ * @description
+ * 애플리케이션에서 사용할 캐시 기능을 정의하는 인터페이스입니다.
+ * Redis, Memcached 등 다양한 캐시 구현체를 지원할 수 있도록 설계되었습니다.
+ *
+ * **주요 기능:**
+ * - 키-값 저장 및 조회
+ * - TTL(Time To Live) 기반 만료 관리
+ * - 패턴 기반 일괄 삭제
+ * - 캐시 상태 확인
+ *
+ * @interface ICacheService
+ * @since 1.0.0
+ */
 // 캐시 서비스 인터페이스 (ISP)
 export interface ICacheService {
   get<T>(key: string): Promise<T | null>;
@@ -12,6 +28,49 @@ export interface ICacheService {
   extendTTL(key: string, ttl: number): Promise<void>;
 }
 
+/**
+ * Redis 캐시 서비스 클래스
+ *
+ * @description
+ * Redis를 사용한 캐시 서비스 구현체입니다.
+ * 고성능 키-값 저장소인 Redis를 활용하여 애플리케이션의 성능을 향상시킵니다.
+ *
+ * **캐시 전략:**
+ * - Cache-Aside: 애플리케이션에서 캐시 관리
+ * - TTL 기반: 자동 만료를 통한 메모리 관리
+ * - 패턴 매칭: 관련 캐시 일괄 삭제
+ *
+ * **성능 최적화:**
+ * - Connection Pooling: 연결 풀을 통한 효율적 연결 관리
+ * - Pipeline: 다중 명령어 일괄 처리
+ * - Compression: 대용량 데이터 압축 저장
+ *
+ * **SOLID 원칙 적용:**
+ * - SRP: 캐시 기능만 담당
+ * - OCP: 다른 캐시 구현체로 교체 가능
+ * - LSP: ICacheService 완전 구현
+ * - ISP: 캐시 관련 메서드만 포함
+ * - DIP: 추상화(인터페이스)에 의존
+ *
+ * @class RedisCacheService
+ * @implements ICacheService
+ *
+ * @example
+ * ```typescript
+ * const cacheService = new RedisCacheService();
+ *
+ * // 데이터 저장 (5분 TTL)
+ * await cacheService.set("user:123", userData, 300);
+ *
+ * // 데이터 조회
+ * const user = await cacheService.get<User>("user:123");
+ *
+ * // 패턴 기반 삭제
+ * await cacheService.deletePattern("user:*");
+ * ```
+ *
+ * @since 1.0.0
+ */
 // Redis 캐시 서비스 구현 (SRP)
 export class RedisCacheService implements ICacheService {
   private redis: any;

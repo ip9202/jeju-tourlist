@@ -9,6 +9,16 @@ import {
   QuestionListItem,
 } from "../types/question";
 
+/**
+ * 질문 Repository 인터페이스
+ *
+ * @description
+ * 질문 관련 데이터 접근 인터페이스를 정의합니다.
+ * 질문 CRUD, 검색, 통계, 좋아요/북마크 등의 기능을 포함합니다.
+ *
+ * @interface IQuestionRepository
+ * @since 1.0.0
+ */
 // 질문 Repository 인터페이스 (ISP)
 export interface IQuestionRepository {
   findById(id: string): Promise<Question | null>;
@@ -57,6 +67,47 @@ export interface IQuestionRepository {
 }
 
 // 질문 Repository 구현 (SRP)
+
+/**
+ * 질문 Repository 클래스
+ *
+ * @description
+ * 제주도 동네물어봐 서비스의 질문 관련 데이터베이스 작업을 담당합니다.
+ *
+ * **주요 기능:**
+ * - 질문 CRUD (생성, 조회, 수정, 삭제)
+ * - 질문 검색 및 필터링 (카테고리, 태그, 지역별)
+ * - 조회수, 좋아요 수, 답변 수 관리
+ * - 질문 상태 관리 (활성, 해결됨, 삭제됨)
+ *
+ * **SOLID 원칙 적용:**
+ * - SRP: 질문 데이터 접근만 담당
+ * - OCP: BaseRepository 확장으로 기능 추가
+ * - LSP: IQuestionRepository 완전 구현
+ * - ISP: 질문 관련 메서드만 포함
+ * - DIP: 인터페이스에 의존
+ *
+ * @class QuestionRepository
+ * @extends BaseRepository
+ * @implements IQuestionRepository
+ *
+ * @example
+ * ```typescript
+ * const questionRepo = new QuestionRepository(prisma);
+ *
+ * // 질문 생성
+ * const newQuestion = await questionRepo.create({
+ *   title: "제주도 맛집 추천해주세요",
+ *   content: "제주시 근처 맛집을 찾고 있어요",
+ *   authorId: "user123",
+ *   categoryId: "food",
+ *   tags: ["맛집", "제주시"],
+ *   location: "제주시"
+ * });
+ * ```
+ *
+ * @since 1.0.0
+ */
 export class QuestionRepository
   extends BaseRepository<
     Question,

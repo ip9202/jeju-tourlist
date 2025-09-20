@@ -22,6 +22,51 @@ import {
 } from "../types/answer";
 import { CreateCategoryData, UpdateCategoryData } from "../types/category";
 
+/**
+ * 캐시된 Repository 서비스 클래스
+ *
+ * @description
+ * Repository 패턴과 Decorator 패턴을 조합하여 캐싱 기능을 제공합니다.
+ * 기존 Repository 기능을 확장하여 Redis 캐시를 통한 성능 최적화를 구현합니다.
+ *
+ * **디자인 패턴:**
+ * - Decorator Pattern: Repository 기능을 캐싱으로 확장
+ * - Facade Pattern: 복잡한 캐시 로직을 단순한 인터페이스로 제공
+ * - Strategy Pattern: 다양한 캐시 전략 적용 가능
+ *
+ * **SOLID 원칙 적용:**
+ * - SRP: 캐시 로직만 담당
+ * - OCP: 기존 Repository 수정 없이 기능 확장
+ * - LSP: Repository 인터페이스 완전 호환
+ * - ISP: 캐시 관련 인터페이스만 의존
+ * - DIP: Repository 인터페이스에 의존
+ *
+ * **캐싱 전략:**
+ * - Cache-Aside: 캐시 미스 시 DB 조회 후 캐시 저장
+ * - Write-Through: 데이터 변경 시 캐시도 함께 업데이트
+ * - TTL 기반: 시간 기반 캐시 만료
+ *
+ * @class CachedRepositoryService
+ *
+ * @example
+ * ```typescript
+ * const cachedService = new CachedRepositoryService(
+ *   prisma,
+ *   cacheService,
+ *   userRepo,
+ *   questionRepo,
+ *   answerRepo,
+ *   categoryRepo
+ * );
+ *
+ * // 캐시된 사용자 조회 (첫 번째 호출은 DB, 두 번째부터는 캐시)
+ * const user1 = await cachedService.getUserById("user123"); // DB 조회
+ * const user2 = await cachedService.getUserById("user123"); // 캐시 조회
+ * ```
+ *
+ * @since 1.0.0
+ */
+
 // 캐시된 Repository 서비스 (Decorator 패턴)
 export class CachedRepositoryService {
   private cache: ICacheService;
