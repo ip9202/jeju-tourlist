@@ -1,0 +1,403 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ===========================================
+// 사용자 관련 모델 (User Domain)
+// ===========================================
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  nickname  String   @unique
+  avatar    String?
+  provider  String   // 'kakao', 'naver', 'google'
+  providerId String  // OAuth provider의 사용자 ID
+  
+  // 프로필 정보
+  bio       String?
+  location  String?
+  website   String?
+  
+  // 상태 관리
+  isActive  Boolean  @default(true)
+  isVerified Boolean @default(false)
+  lastLoginAt DateTime?
+  
+  // 통계 정보
+  points    Int      @default(0)
+  level     Int      @default(1)
+  
+  // 타임스탬프
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // 관계
+  questions     Question[]
+  answers       Answer[]
+  questionLikes QuestionLike[]
+  answerLikes   AnswerLike[]
+  bookmarks     Bookmark[]
+  reports       Report[]
+  notifications Notification[]
+  userBadges    UserBadge[]
+  userProfile   UserProfile?
+  
+  // 인덱스
+  @@index([email])
+  @@index([provider, providerId])
+  @@index([isActive])
+  @@index([points])
+  @@map("users")
+}
+
+model UserProfile {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // 상세 프로필 정보
+  birthDate   DateTime?
+  gender      String?  // 'male', 'female', 'other', 'prefer_not_to_say'
+  phone       String?
+  
+  // 제주 관련 정보
+  isJejuResident Boolean @default(false)
+  jejuDistrict   String? // 제주시, 서귀포시, 제주도 등
+  interests      String[] // 관심사 배열
+  
+  // 알림 설정
+  emailNotifications Boolean @default(true)
+  pushNotifications  Boolean @default(true)
+  marketingEmails    Boolean @default(false)
+  
+  // 타임스탬프
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("user_profiles")
+}
+
+// ===========================================
+// 질문 관련 모델 (Question Domain)
+// ===========================================
+
+model Question {
+  id          String   @id @default(cuid())
+  title       String
+  content     String
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  
+  // 카테고리 및 태그
+  categoryId  String?
+  category    Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  tags        String[]  // 해시태그 배열
+  
+  // 위치 정보
+  location    String?   // 제주도 내 위치
+  latitude    Float?
+  longitude   Float?
+  
+  // 상태 관리
+  status      QuestionStatus @default(ACTIVE)
+  isResolved  Boolean        @default(false)
+  isPinned    Boolean        @default(false)
+  
+  // 통계
+  viewCount   Int      @default(0)
+  likeCount   Int      @default(0)
+  answerCount Int      @default(0)
+  
+  // 타임스탬프
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  resolvedAt  DateTime?
+  
+  // 관계
+  answers     Answer[]
+  likes       QuestionLike[]
+  bookmarks   Bookmark[]
+  reports     Report[] @relation("ReportQuestion")
+  
+  // 인덱스
+  @@index([authorId])
+  @@index([categoryId])
+  @@index([status])
+  @@index([isResolved])
+  @@index([isPinned])
+  @@index([createdAt])
+  @@index([viewCount])
+  @@index([likeCount])
+  @@map("questions")
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  color       String?  // 카테고리 색상
+  icon        String?  // 아이콘 이름
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  
+  // 타임스탬프
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // 관계
+  questions   Question[]
+  
+  @@index([isActive])
+  @@index([order])
+  @@map("categories")
+}
+
+// ===========================================
+// 답변 관련 모델 (Answer Domain)
+// ===========================================
+
+model Answer {
+  id          String   @id @default(cuid())
+  content     String
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  questionId  String
+  question    Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  
+  // 상태 관리
+  status      AnswerStatus @default(ACTIVE)
+  isAccepted  Boolean      @default(false) // 질문자가 채택한 답변
+  
+  // 통계
+  likeCount   Int      @default(0)
+  dislikeCount Int     @default(0)
+  
+  // 타임스탬프
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  acceptedAt  DateTime?
+  
+  // 관계
+  likes       AnswerLike[]
+  reports     Report[] @relation("ReportAnswer")
+  
+  // 인덱스
+  @@index([authorId])
+  @@index([questionId])
+  @@index([status])
+  @@index([isAccepted])
+  @@index([createdAt])
+  @@index([likeCount])
+  @@map("answers")
+}
+
+// ===========================================
+// 상호작용 모델 (Interaction Domain)
+// ===========================================
+
+model QuestionLike {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  
+  // 타임스탬프
+  createdAt  DateTime @default(now())
+  
+  // 유니크 제약
+  @@unique([userId, questionId])
+  @@map("question_likes")
+}
+
+model AnswerLike {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  answerId  String
+  answer    Answer   @relation(fields: [answerId], references: [id], onDelete: Cascade)
+  isLike    Boolean  // true: 좋아요, false: 싫어요
+  
+  // 타임스탬프
+  createdAt DateTime @default(now())
+  
+  // 유니크 제약
+  @@unique([userId, answerId])
+  @@map("answer_likes")
+}
+
+model Bookmark {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  
+  // 타임스탬프
+  createdAt  DateTime @default(now())
+  
+  // 유니크 제약
+  @@unique([userId, questionId])
+  @@map("bookmarks")
+}
+
+// ===========================================
+// 신고 및 관리 모델 (Moderation Domain)
+// ===========================================
+
+model Report {
+  id         String   @id @default(cuid())
+  reporterId String
+  reporter   User     @relation(fields: [reporterId], references: [id], onDelete: Cascade)
+  
+  // 신고 대상
+  targetType ReportTargetType
+  targetId   String
+  
+  // 신고 내용
+  reason     String
+  description String?
+  
+  // 처리 상태
+  status     ReportStatus @default(PENDING)
+  adminId    String?
+  adminNote  String?
+  
+  // 타임스탬프
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  resolvedAt DateTime?
+  
+  // 관계 (polymorphic)
+  question   Question? @relation("ReportQuestion", fields: [targetId], references: [id], onDelete: Cascade, map: "reports_question_fkey")
+  answer     Answer?   @relation("ReportAnswer", fields: [targetId], references: [id], onDelete: Cascade, map: "reports_answer_fkey")
+  
+  // 인덱스
+  @@index([targetType, targetId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("reports")
+}
+
+// ===========================================
+// 알림 모델 (Notification Domain)
+// ===========================================
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // 알림 내용
+  type      NotificationType
+  title     String
+  message   String
+  data      Json?    // 추가 데이터
+  
+  // 상태
+  isRead    Boolean  @default(false)
+  
+  // 타임스탬프
+  createdAt DateTime @default(now())
+  readAt    DateTime?
+  
+  // 인덱스
+  @@index([userId])
+  @@index([isRead])
+  @@index([createdAt])
+  @@map("notifications")
+}
+
+// ===========================================
+// 배지 시스템 모델 (Badge Domain)
+// ===========================================
+
+model Badge {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String
+  icon        String   // 아이콘 이름
+  color       String   // 배지 색상
+  category    String   // 배지 카테고리
+  points      Int      @default(0) // 획득 시 포인트
+  
+  // 획득 조건
+  condition   Json     // 획득 조건 (JSON)
+  isActive    Boolean  @default(true)
+  
+  // 타임스탬프
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // 관계
+  userBadges  UserBadge[]
+  
+  @@index([category])
+  @@index([isActive])
+  @@map("badges")
+}
+
+model UserBadge {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badgeId   String
+  badge     Badge    @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+  
+  // 타임스탬프
+  createdAt DateTime @default(now())
+  
+  // 유니크 제약
+  @@unique([userId, badgeId])
+  @@map("user_badges")
+}
+
+// ===========================================
+// 열거형 (Enums)
+// ===========================================
+
+enum QuestionStatus {
+  ACTIVE
+  CLOSED
+  DELETED
+  HIDDEN
+}
+
+enum AnswerStatus {
+  ACTIVE
+  DELETED
+  HIDDEN
+}
+
+enum ReportTargetType {
+  QUESTION
+  ANSWER
+  USER
+}
+
+enum ReportStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  RESOLVED
+}
+
+enum NotificationType {
+  QUESTION_ANSWERED
+  ANSWER_LIKED
+  ANSWER_ACCEPTED
+  QUESTION_BOOKMARKED
+  BADGE_EARNED
+  SYSTEM_ANNOUNCEMENT
+}
