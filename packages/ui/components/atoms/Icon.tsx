@@ -387,7 +387,7 @@ export type IconName =
  */
 export interface IconProps
   extends Omit<React.HTMLAttributes<HTMLSpanElement>, 'color'>,
-    VariantProps<typeof iconVariants> {
+    Omit<VariantProps<typeof iconVariants>, 'size'> {
   /**
    * 아이콘 이름
    */
@@ -461,11 +461,15 @@ const Icon = React.forwardRef<HTMLSpanElement, IconProps>(
         <span
           ref={ref}
           className={cn(iconVariants({ 
-            size: size as 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl', 
             color: color as 'default' | 'secondary' | 'primary' | 'success' | 'warning' | 'error' | 'info' | 'muted' | 'white' | 'black', 
             weight, 
             className 
           }))}
+          style={{ 
+            width: size ? `${size}px` : undefined, 
+            height: size ? `${size}px` : undefined,
+            ...props.style 
+          }}
           aria-label={ariaLabel}
           aria-hidden={ariaHidden}
           {...props}
@@ -478,7 +482,12 @@ const Icon = React.forwardRef<HTMLSpanElement, IconProps>(
     return (
       <span
         ref={ref}
-        className={cn(iconVariants({ size, color, weight, className }))}
+        className={cn(iconVariants({ color, weight, className }))}
+        style={{ 
+          width: size ? `${size}px` : undefined, 
+          height: size ? `${size}px` : undefined,
+          ...props.style 
+        }}
         aria-label={ariaLabel}
         aria-hidden={ariaHidden}
         {...props}

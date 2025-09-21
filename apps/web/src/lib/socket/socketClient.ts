@@ -21,10 +21,9 @@ import {
  * Socket.io 클라이언트 구현 클래스
  */
 export class SocketClient implements ISocketClient {
-  private socket: unknown = null; // Socket.io 인스턴스 (dynamic import 후 타입 지정)
+  private socket: any = null; // Socket.io 인스턴스 (dynamic import 후 타입 지정)
   private status: SocketConnectionStatus = "disconnected";
-  private eventListeners: Map<string, ((...args: unknown[]) => void)[]> =
-    new Map();
+  private eventListeners: Map<string, any[]> = new Map();
   private options: SocketClientOptions;
   private reconnectAttempts = 0;
 

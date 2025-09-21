@@ -2,12 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { Avatar } from "@/packages/ui/components/atoms/Avatar";
-import { LikeButton } from "@/packages/ui/components/molecules/LikeButton";
-import { BookmarkButton } from "@/packages/ui/components/molecules/BookmarkButton";
-import { ShareButton } from "@/packages/ui/components/molecules/ShareButton";
-import { HashtagList } from "@/packages/ui/components/molecules/HashtagList";
-import { TimestampDisplay } from "@/packages/ui/components/molecules/TimestampDisplay";
+import { Avatar, LikeButton, BookmarkButton, ShareButton, HashtagList, TimestampDisplay } from "@jeju-tourlist/ui";
 import {
   MessageCircle,
   Eye,
@@ -268,7 +263,7 @@ export const QuestionDetail: React.FC<QuestionDetailProps> = ({
               <span className="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm font-medium">
                 {question.category}
               </span>
-              <HashtagList tags={question.tags} />
+              <HashtagList hashtags={question.tags.map(tag => ({ id: tag, name: tag, text: tag }))} />
             </div>
           </div>
 
@@ -348,15 +343,21 @@ export const QuestionDetail: React.FC<QuestionDetailProps> = ({
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <LikeButton
-              isLiked={question.isLiked}
-              likeCount={question.likeCount}
-              onToggle={handleLikeToggle}
+              liked={question.isLiked}
+              count={question.likeCount}
+              onLike={handleLikeToggle}
             />
             <BookmarkButton
-              isBookmarked={question.isBookmarked}
+              bookmarked={question.isBookmarked}
               onToggle={handleBookmarkToggle}
             />
-            <ShareButton onShare={handleShare} />
+            <ShareButton 
+              onShare={handleShare} 
+              shareOptions={{
+                url: window.location.href,
+                title: question.title
+              }}
+            />
           </div>
 
           <div className="text-sm text-gray-500">

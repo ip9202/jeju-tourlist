@@ -205,7 +205,7 @@ const Code = React.forwardRef<HTMLElement, CodeProps>(
     return (
       <div className="relative group">
         <pre
-          ref={ref as React.Ref<HTMLElement>}
+          ref={ref as React.Ref<HTMLPreElement>}
           className={cn(
             codeVariants({
               variant,

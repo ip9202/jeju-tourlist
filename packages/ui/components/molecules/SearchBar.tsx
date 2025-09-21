@@ -81,7 +81,7 @@ export interface SearchSuggestion {
  * SearchBar 컴포넌트 Props 타입 정의
  */
 export interface SearchBarProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'onSubmit'>,
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'onSubmit' | 'size'>,
     VariantProps<typeof searchBarVariants> {
   /**
    * 검색어
@@ -463,7 +463,7 @@ const SearchBar = React.forwardRef<HTMLInputElement, SearchBarProps>(
                 {suggestions.slice(0, maxSuggestions).map((suggestion, index) => (
                   <button
                     key={suggestion.id}
-                    ref={el => suggestionRefs.current[index] = el}
+                    ref={el => { suggestionRefs.current[index] = el; }}
                     onClick={() => handleSuggestionClick(suggestion)}
                     className={cn(
                       'w-full text-left px-3 py-2 text-sm rounded-md transition-colors',

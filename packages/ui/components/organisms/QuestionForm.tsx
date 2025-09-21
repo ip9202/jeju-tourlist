@@ -24,7 +24,7 @@
 import React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils';
-import { Button, Input, Textarea, Select, Checkbox, RadioGroup, RadioGroupItem } from '../atoms';
+import { Button, Input, Textarea, Select, Checkbox, RadioGroup } from '../atoms';
 import { Label } from '../atoms';
 
 /**

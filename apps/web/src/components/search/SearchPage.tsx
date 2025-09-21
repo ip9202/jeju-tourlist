@@ -3,10 +3,9 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { MainLayout } from "@/components/layout";
-import { SearchForm } from "./SearchForm";
+import { SearchForm, type SearchFilters } from "./SearchForm";
 import { SearchResults } from "./SearchResults";
-import { Breadcrumb } from "@/packages/ui/components/molecules/Breadcrumb";
-import { Button } from "@/packages/ui/components/atoms/Button";
+import { Breadcrumb, Button } from "@jeju-tourlist/ui";
 import { ArrowLeft, TrendingUp, Clock, MessageCircle } from "lucide-react";
 
 /**
@@ -26,9 +25,15 @@ import { ArrowLeft, TrendingUp, Clock, MessageCircle } from "lucide-react";
 export const SearchPage: React.FC = () => {
   const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchFilters, setSearchFilters] = useState<
-    Record<string, string | boolean>
-  >({});
+  const [searchFilters, setSearchFilters] = useState<SearchFilters>({
+    query: "",
+    category: "",
+    location: "",
+    dateRange: "",
+    isAnswered: false,
+    hasImages: false,
+    sortBy: "relevance",
+  });
   const [hasSearched, setHasSearched] = useState(false);
 
   /**
@@ -63,16 +68,16 @@ export const SearchPage: React.FC = () => {
   /**
    * 검색 실행 핸들러
    */
-  const handleSearch = (filters: Record<string, string | boolean>) => {
-    setSearchQuery(filters.query);
+  const handleSearch = (filters: SearchFilters) => {
+    setSearchQuery(String(filters.query));
     setSearchFilters(filters);
     setHasSearched(true);
 
     // URL 업데이트
     const params = new URLSearchParams();
     Object.entries(filters).forEach(([key, value]) => {
-      if (value && value !== "" && value !== false) {
-        params.set(key, String(value));
+      if (typeof value === 'string' && value !== "") {
+        params.set(key, value);
       }
     });
 
@@ -85,7 +90,15 @@ export const SearchPage: React.FC = () => {
    */
   const handleReset = () => {
     setSearchQuery("");
-    setSearchFilters({});
+    setSearchFilters({
+      query: "",
+      category: "",
+      location: "",
+      dateRange: "",
+      isAnswered: false,
+      hasImages: false,
+      sortBy: "relevance",
+    });
     setHasSearched(false);
     window.history.pushState({}, "", "/search");
   };

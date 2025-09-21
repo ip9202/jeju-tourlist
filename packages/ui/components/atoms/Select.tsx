@@ -95,7 +95,7 @@ export interface SelectProps
   /**
    * 선택된 값
    */
-  value?: string | number | string[] | number[];
+  value?: string | number | readonly string[];
   
   /**
    * 값 변경 핸들러

@@ -2,8 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { Avatar } from "@/packages/ui/components/atoms/Avatar";
-import { Button } from "@/packages/ui/components/atoms/Button";
+import { Avatar, Button } from "@jeju-tourlist/ui";
 import { Calendar, MapPin, Edit, Settings, CheckCircle } from "lucide-react";
 
 /**
@@ -57,7 +56,7 @@ interface UserProfileProps {
  * <UserProfile userId="123" />
  * ```
  */
-export const UserProfileComponent: React.FC<UserProfileProps> = ({
+export const UserProfile: React.FC<UserProfileProps> = ({
   userId,
   className = "",
 }) => {

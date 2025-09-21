@@ -11,21 +11,9 @@
  * @version 1.0.0
  */
 
-import { PrismaClient, Badge, UserBadge, User } from '@prisma/client';
+import { PrismaClient, Badge, UserBadge, User } from '../../node_modules/.prisma/client';
 import { BaseService } from './base.service';
-
-/**
- * 배지 생성 데이터
- */
-export interface CreateBadgeData {
-  name: string;
-  description: string;
-  icon: string;
-  color: string;
-  category: string;
-  points?: number;
-  condition: Record<string, any>;
-}
+import { CreateBadgeData } from '../types/badge';
 
 /**
  * 배지 조건 검증 결과
@@ -57,6 +45,10 @@ export interface UserBadgeInfo {
  * - 배지 통계 및 분석
  */
 export class BadgeService extends BaseService {
+  constructor(prisma: PrismaClient) {
+    super(prisma);
+  }
+
   /**
    * 배지 생성
    * 

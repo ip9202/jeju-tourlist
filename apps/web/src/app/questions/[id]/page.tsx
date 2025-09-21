@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { QuestionPage } from "@/components/question";
-import { generateMetadata, generateQuestionStructuredData } from "@/lib/seo";
+import { generateMetadata as generateSEOMetadata, generateQuestionStructuredData } from "@/lib/seo";
 
 /**
  * 질문 상세 페이지
@@ -46,7 +46,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       updatedAt: new Date().toISOString(),
     };
 
-    return generateMetadata({
+    return generateSEOMetadata({
       title: question.title,
       description: question.content.length > 160 
         ? `${question.content.substring(0, 160)}...` 
@@ -64,7 +64,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     console.error('메타데이터 생성 오류:', error);
     
     // 오류 발생 시 기본 메타데이터 반환
-    return generateMetadata({
+    return generateSEOMetadata({
       title: `질문 #${id}`,
       description: "제주 여행에 대한 질문과 답변을 확인하세요.",
       url: `/questions/${id}`,

@@ -11,7 +11,7 @@
  * @version 1.0.0
  */
 
-import { PrismaClient, PointTransactionType, User } from '@prisma/client';
+import { PrismaClient, PointTransactionType, User } from '../../node_modules/.prisma/client';
 import { BaseService } from './base.service';
 
 /**
@@ -51,6 +51,10 @@ export interface PointRanking {
  * - 포인트 정합성 검증
  */
 export class PointService extends BaseService {
+  constructor(prisma: PrismaClient) {
+    super(prisma);
+  }
+
   /**
    * 포인트 적립/차감
    * 

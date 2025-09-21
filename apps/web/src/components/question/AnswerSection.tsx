@@ -2,9 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { AnswerCard } from "@/packages/ui/components/organisms/AnswerCard";
-import { AnswerForm } from "@/packages/ui/components/organisms/AnswerForm";
-import { Button } from "@/packages/ui/components/atoms/Button";
+import { AnswerCard, AnswerForm, Button, type AnswerData } from "@jeju-tourlist/ui";
 import { MessageCircle, SortAsc } from "lucide-react";
 
 /**
@@ -27,6 +25,26 @@ interface Answer {
   isAuthor: boolean;
   isQuestionAuthor: boolean;
 }
+
+/**
+ * Answer를 AnswerData로 변환하는 함수
+ */
+const convertAnswerToAnswerData = (answer: Answer): AnswerData => ({
+  id: answer.id,
+  content: answer.content,
+  author: {
+    id: answer.author.id,
+    name: answer.author.name,
+    avatar: answer.author.profileImage,
+    level: 1,
+    points: 100,
+  },
+  likes: answer.likeCount,
+  dislikes: 0,
+  createdAt: answer.createdAt,
+  updatedAt: answer.updatedAt,
+  isAccepted: answer.isAccepted,
+});
 
 /**
  * AnswerSection 컴포넌트 Props
@@ -278,10 +296,21 @@ export const AnswerSection: React.FC<AnswerSectionProps> = ({
   /**
    * 답변 작성 완료 핸들러
    */
-  const handleAnswerSubmit = async (content: string) => {
+  // 답변 폼 데이터 상태
+  const [answerFormData, setAnswerFormData] = useState({
+    content: "",
+    category: "general",
+    priority: "normal" as const,
+    isPublic: true,
+    enableNotifications: true,
+    allowComments: true,
+    isAnonymous: false,
+  });
+
+  const handleAnswerSubmit = async (data: { content: string; category: string }) => {
     const newAnswer: Answer = {
       id: Date.now().toString(),
-      content,
+      content: data.content,
       author: {
         id: user?.id || "anonymous",
         name: user?.name || "익명",
@@ -301,7 +330,11 @@ export const AnswerSection: React.FC<AnswerSectionProps> = ({
     setShowAnswerForm(false);
 
     // TODO: API 호출
-    console.log("답변 작성:", content);
+    console.log("답변 작성:", data.content);
+  };
+
+  const handleAnswerFormChange = (data: Partial<{ content: string; category: string }>) => {
+    setAnswerFormData(prev => ({ ...prev, ...data }));
   };
 
   /**
@@ -385,9 +418,10 @@ export const AnswerSection: React.FC<AnswerSectionProps> = ({
       {showAnswerForm && (
         <div className="p-6 border-b border-gray-200">
           <AnswerForm
+            data={answerFormData}
+            onChange={handleAnswerFormChange}
             onSubmit={handleAnswerSubmit}
             onCancel={() => setShowAnswerForm(false)}
-            placeholder="답변을 작성해주세요..."
           />
         </div>
       )}
@@ -404,7 +438,7 @@ export const AnswerSection: React.FC<AnswerSectionProps> = ({
           filteredAndSortedAnswers.map(answer => (
             <div key={answer.id} className="p-6">
               <AnswerCard
-                answer={answer}
+                answer={convertAnswerToAnswerData(answer)}
                 onLike={() => handleAnswerLike(answer.id)}
                 onAccept={
                   isQuestionAuthor

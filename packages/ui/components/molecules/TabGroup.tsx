@@ -137,9 +137,14 @@ export interface Tab {
   label: string;
   
   /**
-   * 탭 내용
+   * 탭 내용 (선택적)
    */
-  content: React.ReactNode;
+  content?: React.ReactNode;
+  
+  /**
+   * 탭 카운트 (선택적)
+   */
+  count?: number;
   
   /**
    * 탭 비활성화 여부

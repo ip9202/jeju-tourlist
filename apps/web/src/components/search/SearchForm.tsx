@@ -1,16 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button } from "@/packages/ui/components/atoms/Button";
-import { Input } from "@/packages/ui/components/atoms/Input";
-import { Select } from "@/packages/ui/components/atoms/Select";
-import { Checkbox } from "@/packages/ui/components/atoms/Checkbox";
+import { Button, Input, Select, Checkbox } from "@jeju-tourlist/ui";
 import { Search, Filter, Calendar, MapPin, Tag, X } from "lucide-react";
 
 /**
  * 검색 필터 데이터 타입
  */
-interface SearchFilters {
+export interface SearchFilters {
   query: string;
   category: string;
   location: string;
@@ -205,7 +202,7 @@ export const SearchForm: React.FC<SearchFormProps> = ({
                 </label>
                 <Select
                   value={filters.category}
-                  onChange={value => handleFilterChange("category", value)}
+                  onChange={value => handleFilterChange("category", String(value))}
                   options={categoryOptions}
                 />
               </div>
@@ -218,7 +215,7 @@ export const SearchForm: React.FC<SearchFormProps> = ({
                 </label>
                 <Select
                   value={filters.location}
-                  onChange={value => handleFilterChange("location", value)}
+                  onChange={value => handleFilterChange("location", String(value))}
                   options={locationOptions}
                 />
               </div>
@@ -231,7 +228,7 @@ export const SearchForm: React.FC<SearchFormProps> = ({
                 </label>
                 <Select
                   value={filters.dateRange}
-                  onChange={value => handleFilterChange("dateRange", value)}
+                  onChange={value => handleFilterChange("dateRange", String(value))}
                   options={dateRangeOptions}
                 />
               </div>
@@ -243,7 +240,7 @@ export const SearchForm: React.FC<SearchFormProps> = ({
                 </label>
                 <Select
                   value={filters.sortBy}
-                  onChange={value => handleFilterChange("sortBy", value)}
+                  onChange={value => handleFilterChange("sortBy", String(value))}
                   options={sortOptions}
                 />
               </div>

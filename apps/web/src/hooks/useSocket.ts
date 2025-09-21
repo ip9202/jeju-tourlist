@@ -192,7 +192,9 @@ export function useSocketEvent<
     if (!socket) return;
 
     const eventHandler = (...args: unknown[]) => {
-      (handlerRef.current as unknown)(...args);
+      if (typeof handlerRef.current === 'function') {
+        (handlerRef.current as (...args: unknown[]) => void)(...args);
+      }
     };
 
     socket.on(event, eventHandler);

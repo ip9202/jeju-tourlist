@@ -72,3 +72,6 @@ function extractToken(req: Request): string | null {
 
   return null;
 }
+
+// Backward compatibility alias
+export const authenticate = authMiddleware;

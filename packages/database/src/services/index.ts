@@ -1,11 +1,16 @@
 // 서비스 인터페이스 및 구현 내보내기
+export * from "./base.service";
 export * from "./search.service";
 export * from "./cache.service";
 export * from "./cached.repository.service";
+export * from "./point.service";
+export * from "./badge.service";
+export * from "./notification.service";
+export * from "./admin.service";
+export * from "./moderation.service";
 
 // 데이터베이스 서비스 팩토리
-// @ts-expect-error Prisma client type recognition issue in monorepo
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "../../node_modules/.prisma/client";
 import { RepositoryFactory } from "../repositories";
 import { RedisCacheService, ICacheService } from "./cache.service";
 import { SearchService, ISearchService } from "./search.service";

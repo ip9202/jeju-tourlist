@@ -163,7 +163,7 @@ const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
     const Component = `h${level}` as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
     
     // 제목 레벨에 따른 기본 크기 설정
-    const defaultSize = size || (level === 1 ? '4xl' : level === 2 ? '3xl' : level === 3 ? '2xl' : level === 4 ? 'xl' : level === 5 ? 'lg' : 'base');
+    const defaultSize = size || (level === 1 ? '4xl' : level === 2 ? '3xl' : level === 3 ? '2xl' : level === 4 ? 'xl' : level === 5 ? 'lg' : 'md');
     
         return (
           <Component

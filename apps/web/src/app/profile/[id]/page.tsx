@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { ProfilePage } from "@/components/profile";
-import { generateMetadata, generateProfileStructuredData } from "@/lib/seo";
+import { generateMetadata as generateSEOMetadata, generateProfileStructuredData } from "@/lib/seo";
 
 /**
  * 사용자 프로필 페이지
@@ -48,7 +48,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       },
     };
 
-    return generateMetadata({
+    return generateSEOMetadata({
       title: `${user.name}의 프로필`,
       description: user.bio || `${user.name}님의 제주 여행 질문과 답변을 확인하세요.`,
       keywords: ["제주여행", "사용자프로필", "제주커뮤니티", user.name],
@@ -60,7 +60,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     console.error('메타데이터 생성 오류:', error);
     
     // 오류 발생 시 기본 메타데이터 반환
-    return generateMetadata({
+    return generateSEOMetadata({
       title: `사용자 #${id}의 프로필`,
       description: "제주 여행 커뮤니티 사용자 프로필을 확인하세요.",
       url: `/profile/${id}`,

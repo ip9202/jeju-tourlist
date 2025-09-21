@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Button } from "@/packages/ui/components/atoms/Button";
-import { Badge } from "@/packages/ui/components/atoms/Badge";
+import { Button, Badge } from "@jeju-tourlist/ui";
+import { type SearchFilters } from "./SearchForm";
 import {
   Search,
   SortAsc,
@@ -46,7 +46,7 @@ interface SearchResult {
  */
 interface SearchResultsProps {
   query: string;
-  filters: Record<string, string | boolean>;
+  filters: SearchFilters;
   className?: string;
 }
 

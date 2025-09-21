@@ -1,0 +1,74 @@
+# API 성능 테스트 전용 설정
+# REST API 엔드포인트별 성능 측정
+
+config:
+  target: 'http://localhost:3001'
+  phases:
+    - duration: 60
+      arrivalRate: 10
+      name: "API load test"
+
+  ensure:
+    # API 응답 시간 더 엄격한 기준
+    - p95: 300
+    - p99: 500
+    - maxErrorRate: 0.5
+
+scenarios:
+  # 질문 API 테스트
+  - name: "Questions API"
+    weight: 40
+    flow:
+      - get:
+          url: "/api/questions"
+          name: "GET /api/questions"
+      - get:
+          url: "/api/questions/search"
+          qs:
+            q: "제주"
+            limit: 20
+          name: "GET /api/questions/search"
+
+  # 인증 API 테스트
+  - name: "Auth API"
+    weight: 30
+    flow:
+      - post:
+          url: "/api/auth/login"
+          json:
+            email: "perf.test{{ $randomInt(1, 1000) }}@example.com"
+            provider: "google"
+            providerId: "google-perf-{{ $randomString() }}"
+          name: "POST /api/auth/login"
+          capture:
+            - json: "$.data.token"
+              as: "token"
+      - get:
+          url: "/api/auth/me"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          name: "GET /api/auth/me"
+
+  # 답변 API 테스트
+  - name: "Answers API"
+    weight: 20
+    flow:
+      - get:
+          url: "/api/questions"
+          capture:
+            - json: "$.data.questions[0].id"
+              as: "questionId"
+      - get:
+          url: "/api/questions/{{ questionId }}/answers"
+          name: "GET /api/questions/:id/answers"
+
+  # 통계 API 테스트
+  - name: "Analytics API"
+    weight: 10
+    flow:
+      - get:
+          url: "/api/analytics/stats"
+          name: "GET /api/analytics/stats"
+      - get:
+          url: "/api/analytics/trending"
+          name: "GET /api/analytics/trending"

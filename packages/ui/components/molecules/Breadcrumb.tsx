@@ -222,19 +222,19 @@ const Breadcrumb = React.forwardRef<HTMLDivElement, BreadcrumbProps>(
               
               {item.disabled ? (
                 <span className="text-muted-foreground cursor-default">
-                  {item.icon && (
+                  {'icon' in item && item.icon && (
                     <span className="mr-1" aria-hidden="true">
                       {item.icon}
                     </span>
                   )}
                   {item.label}
                 </span>
-              ) : item.href ? (
+              ) : 'href' in item && item.href ? (
                 <Link
                   href={item.href}
                   className="text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  {item.icon && (
+                  {'icon' in item && item.icon && (
                     <span className="mr-1" aria-hidden="true">
                       {item.icon}
                     </span>
@@ -243,10 +243,10 @@ const Breadcrumb = React.forwardRef<HTMLDivElement, BreadcrumbProps>(
                 </Link>
               ) : (
                 <button
-                  onClick={item.onClick}
+                  onClick={'onClick' in item ? item.onClick : undefined}
                   className="text-muted-foreground hover:text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded"
                 >
-                  {item.icon && (
+                  {'icon' in item && item.icon && (
                     <span className="mr-1" aria-hidden="true">
                       {item.icon}
                     </span>

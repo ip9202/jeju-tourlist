@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제주도 여행 Q&A 커뮤니티 - 동네물어봐</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .feature-card p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
+        .tech-stack {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+        
+        .tech-stack h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .tech-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border-left: 4px solid #667eea;
+        }
+        
+        .tech-item h4 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .tech-item p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .project-structure {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+        
+        .project-structure h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .structure-tree {
+            font-family: 'Courier New', monospace;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+        }
+        
+        .structure-tree pre {
+            margin: 0;
+            white-space: pre-wrap;
+        }
+        
+        .cta {
+            text-align: center;
+            color: white;
+        }
+        
+        .cta h2 {
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+        
+        .cta p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: white;
+            color: #667eea;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+        
+        .status {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+        }
+        
+        .status h3 {
+            color: white;
+            margin-bottom: 10px;
+        }
+        
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .status-item:last-child {
+            border-bottom: none;
+        }
+        
+        .status-label {
+            color: white;
+            font-weight: 500;
+        }
+        
+        .status-value {
+            color: #4ade80;
+            font-weight: bold;
+        }
+        
+        .status-value.error {
+            color: #f87171;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏝️ 동네물어봐</h1>
+            <p>제주도 여행 Q&A 커뮤니티 플랫폼</p>
+        </div>
+        
+        <div class="status">
+            <h3>📊 프로젝트 상태</h3>
+            <div class="status-item">
+                <span class="status-label">프로젝트 구조</span>
+                <span class="status-value">✅ 완료</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">API 서버</span>
+                <span class="status-value error">⚠️ 의존성 설치 필요</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">웹 애플리케이션</span>
+                <span class="status-value error">⚠️ 의존성 설치 필요</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">데이터베이스</span>
+                <span class="status-value">📋 Prisma 스키마 준비됨</span>
+            </div>
+        </div>
+        
+        <div class="features">
+            <div class="feature-card">
+                <h3>🔍 실시간 Q&A</h3>
+                <p>Socket.io를 활용한 실시간 질문과 답변 시스템으로 빠른 소통이 가능합니다.</p>
+                <ul>
+                    <li>실시간 알림</li>
+                    <li>라이브 채팅</li>
+                    <li>즉시 답변</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <h3>🏆 포인트 시스템</h3>
+                <p>질문과 답변에 따른 포인트 적립으로 사용자 참여를 유도합니다.</p>
+                <ul>
+                    <li>질문 작성 시 포인트</li>
+                    <li>답변 채택 시 보상</li>
+                    <li>활동 기반 랭킹</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <h3>🎯 위치 기반 검색</h3>
+                <p>제주도의 특정 지역을 중심으로 한 맞춤형 질문과 답변을 제공합니다.</p>
+                <ul>
+                    <li>지역별 필터링</li>
+                    <li>카카오맵 연동</li>
+                    <li>근처 장소 추천</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <h3>👤 사용자 프로필</h3>
+                <p>개인화된 프로필과 활동 이력을 통해 신뢰할 수 있는 커뮤니티를 구축합니다.</p>
+                <ul>
+                    <li>활동 이력 추적</li>
+                    <li>뱃지 시스템</li>
+                    <li>신뢰도 점수</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="tech-stack">
+            <h2>🛠️ 기술 스택</h2>
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <h4>Frontend</h4>
+                    <p>Next.js 14, React 18, TypeScript, Tailwind CSS</p>
+                </div>
+                <div class="tech-item">
+                    <h4>Backend</h4>
+                    <p>Node.js, Express, TypeScript, Socket.io</p>
+                </div>
+                <div class="tech-item">
+                    <h4>Database</h4>
+                    <p>PostgreSQL, Prisma ORM, Redis</p>
+                </div>
+                <div class="tech-item">
+                    <h4>Authentication</h4>
+                    <p>NextAuth.js, JWT, OAuth (Kakao, Naver, Google)</p>
+                </div>
+                <div class="tech-item">
+                    <h4>Real-time</h4>
+                    <p>Socket.io, WebSocket, Redis Pub/Sub</p>
+                </div>
+                <div class="tech-item">
+                    <h4>Deployment</h4>
+                    <p>Docker, AWS, Vercel, Railway</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="project-structure">
+            <h2>📁 프로젝트 구조</h2>
+            <div class="structure-tree">
+                <pre>jeju-tourlist/
+├── apps/
+│   ├── web/                 # Next.js 웹 애플리케이션
+│   │   ├── src/
+│   │   │   ├── app/         # App Router 페이지
+│   │   │   ├── components/  # React 컴포넌트
+│   │   │   ├── contexts/    # React Context
+│   │   │   └── lib/         # 유틸리티 함수
+│   │   └── package.json
+│   └── api/                 # Express API 서버
+│       ├── src/
+│       │   ├── controllers/ # API 컨트롤러
+│       │   ├── services/    # 비즈니스 로직
+│       │   ├── routes/      # API 라우트
+│       │   └── middleware/  # 미들웨어
+│       └── package.json
+├── packages/
+│   ├── database/            # Prisma 데이터베이스
+│   ├── ui/                  # 공유 UI 컴포넌트
+│   ├── types/               # TypeScript 타입 정의
+│   └── utils/               # 공유 유틸리티
+└── docs/                    # 프로젝트 문서</pre>
+            </div>
+        </div>
+        
+        <div class="cta">
+            <h2>🚀 시작하기</h2>
+            <p>제주도 여행에 대한 모든 궁금증을 해결하고, 현지인과 소통해보세요!</p>
+            <a href="#" class="btn">지금 시작하기</a>
+        </div>
+    </div>
+    
+    <script>
+        // 간단한 인터랙션
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.feature-card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px) scale(1.02)';
+                });
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+            
+            // 현재 시간 표시
+            const now = new Date();
+            const koreanTime = new Date(now.getTime() + (9 * 60 * 60 * 1000));
+            console.log('현재 한국 시간:', koreanTime.toLocaleString('ko-KR'));
+        });
+    </script>
+</body>
+</html>

@@ -5,16 +5,46 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import swaggerUi from "swagger-ui-express";
-import { env, validateEnv } from "@jeju-tourlist/config";
+// 환경변수 설정
+const env = {
+  NODE_ENV: process.env.NODE_ENV || 'development',
+  DATABASE_URL: process.env.DATABASE_URL || 'postgresql://localhost:5432/jeju_tourlist',
+  NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET || 'your-super-secret-key-here-must-be-at-least-32-characters-long',
+  NEXTAUTH_URL: process.env.NEXTAUTH_URL || 'http://localhost:3000',
+  API_BASE_URL: process.env.API_BASE_URL || 'http://localhost:4000',
+  SOCKET_URL: process.env.SOCKET_URL || 'http://localhost:4001',
+  SOCKET_PORT: process.env.SOCKET_PORT || '4001',
+  LOG_LEVEL: process.env.LOG_LEVEL || 'info',
+  REDIS_URL: process.env.REDIS_URL || 'redis://localhost:6379',
+  REDIS_HOST: process.env.REDIS_HOST || 'localhost',
+  REDIS_PORT: process.env.REDIS_PORT || '6379',
+  REDIS_PASSWORD: process.env.REDIS_PASSWORD,
+  REDIS_DB: process.env.REDIS_DB || '0',
+};
+
+// 환경변수 검증 함수
+function validateEnv() {
+  const required = ['NODE_ENV', 'DATABASE_URL', 'NEXTAUTH_SECRET'];
+  const missing = required.filter(key => !process.env[key]);
+  
+  if (missing.length > 0) {
+    return {
+      success: false,
+      error: `Missing required environment variables: ${missing.join(', ')}`
+    };
+  }
+  
+  return { success: true, error: null };
+}
 import { ErrorHandler } from "./middleware/errorHandler";
 import { generalLimiter } from "./middleware/rateLimiter";
 import { sanitizeInput } from "./middleware/validation";
 import { swaggerSpec, swaggerUiOptions } from "./config/swagger";
 import healthRoutes from "./routes/health";
 import pointRoutes from "./routes/point";
-import badgeRoutes from "./routes/badge";
-import adminRoutes from "./routes/admin";
-import notificationRoutes from "./routes/notification";
+// import badgeRoutes from "./routes/badge";
+// import adminRoutes from "./routes/admin";
+// import notificationRoutes from "./routes/notification";
 // import { PrismaClient } from "@prisma/client";
 import {
   SocketConfig,
@@ -89,9 +119,9 @@ app.use("/health", healthRoutes);
 
 // API 라우트
 app.use("/api/points", pointRoutes);
-app.use("/api/badges", badgeRoutes);
-app.use("/api/admin", adminRoutes);
-app.use("/api/notifications", notificationRoutes);
+// app.use("/api/badges", badgeRoutes);
+// app.use("/api/admin", adminRoutes);
+// app.use("/api/notifications", notificationRoutes);
 
 // TODO: Phase 7 테스트 후 활성화
 // app.use("/api/auth", authLimiter, createAuthRouter());

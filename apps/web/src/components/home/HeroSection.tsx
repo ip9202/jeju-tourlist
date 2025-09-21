@@ -3,8 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
-import { Button } from "@/packages/ui/components/atoms/Button";
-import { Avatar } from "@/packages/ui/components/atoms/Avatar";
+import { Button, Avatar } from "@jeju-tourlist/ui";
 import { MessageCircle, TrendingUp, Users } from "lucide-react";
 
 /**
@@ -109,6 +108,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className = "" }) => {
                   window.location.href = "/questions";
                 }}
               >
+                <Users className="w-5 h-5 mr-2" />
                 둘러보기
               </Button>
             </div>

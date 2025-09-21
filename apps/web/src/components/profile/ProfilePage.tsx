@@ -5,8 +5,7 @@ import { useParams } from "next/navigation";
 import { MainLayout } from "@/components/layout";
 import { UserProfile } from "./UserProfile";
 import { ActivityHistory } from "./ActivityHistory";
-import { Breadcrumb } from "@/packages/ui/components/molecules/Breadcrumb";
-import { Button } from "@/packages/ui/components/atoms/Button";
+import { Breadcrumb, Button } from "@jeju-tourlist/ui";
 import { ArrowLeft, Share2 } from "lucide-react";
 
 /**

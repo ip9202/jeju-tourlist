@@ -48,3 +48,6 @@ export type { RadioGroupProps, RadioOption } from './RadioGroup';
 
 export { Textarea, textareaVariants } from './Textarea';
 export type { TextareaProps } from './Textarea';
+
+export { Badge, badgeVariants } from './Badge';
+export type { BadgeProps } from './Badge';

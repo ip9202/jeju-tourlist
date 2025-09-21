@@ -7,7 +7,7 @@
  * - SRP: 각 함수는 특정 성능 최적화 작업만 담당
  */
 
-import { useCallback, useMemo, useRef, useEffect } from "react";
+import React, { useCallback, useMemo, useRef, useEffect, useState } from "react";
 
 /**
  * 이미지 지연 로딩 훅
@@ -214,7 +214,7 @@ export function useVirtualList<T>(
  */
 export function withMemo<T extends React.ComponentType<any>>(
   Component: T,
-  propsAreEqual?: (prevProps: React.ComponentProps<T>, nextProps: React.ComponentProps<T>) => boolean
+  propsAreEqual?: (prevProps: Readonly<React.ComponentProps<T>>, nextProps: Readonly<React.ComponentProps<T>>) => boolean
 ) {
   return React.memo(Component, propsAreEqual);
 }

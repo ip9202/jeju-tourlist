@@ -3,9 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
-import { Button } from "@/packages/ui/components/atoms/Button";
-import { Avatar } from "@/packages/ui/components/atoms/Avatar";
-import { SearchBar } from "@/packages/ui/components/molecules/SearchBar";
+import { Button, Avatar, SearchBar } from "@jeju-tourlist/ui";
 import { MapPin, Menu, User, LogOut } from "lucide-react";
 
 /**

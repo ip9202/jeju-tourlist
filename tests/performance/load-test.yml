@@ -1,0 +1,172 @@
+# Artillery 부하 테스트 설정
+# 제주도 여행 Q&A 커뮤니티 플랫폼 성능 테스트
+
+config:
+  target: 'http://localhost:3000'
+  phases:
+    # 워밍업 단계 - 점진적 로드
+    - duration: 60
+      arrivalRate: 5
+      name: "Warm up"
+    # 정상 로드 테스트
+    - duration: 120
+      arrivalRate: 20
+      name: "Normal load"
+    # 피크 로드 테스트
+    - duration: 60
+      arrivalRate: 50
+      name: "Peak load"
+    # 스트레스 테스트
+    - duration: 30
+      arrivalRate: 100
+      name: "Stress test"
+
+  # 성능 임계값 설정
+  ensure:
+    # 평균 응답 시간 500ms 이하
+    - p95: 500
+    # 95퍼센타일 응답 시간 1초 이하
+    - p99: 1000
+    # 에러율 1% 이하
+    - maxErrorRate: 1
+
+  # HTTP 설정
+  http:
+    timeout: 10
+    pool: 10
+
+  # 환경변수
+  environments:
+    development:
+      target: 'http://localhost:3000'
+    staging:
+      target: 'https://staging.jeju-tourlist.com'
+    production:
+      target: 'https://jeju-tourlist.com'
+
+  # 플러그인 설정
+  plugins:
+    metrics-by-endpoint:
+      useOnlyRequestNames: true
+    publish-metrics:
+      - type: datadog
+        prefix: 'jeju-tourlist'
+
+scenarios:
+  # 메인 페이지 시나리오
+  - name: "Homepage browsing"
+    weight: 30
+    flow:
+      - get:
+          url: "/"
+          capture:
+            - json: "$.data.questions[0].id"
+              as: "questionId"
+      - think: 2
+      - get:
+          url: "/api/questions"
+          headers:
+            Accept: "application/json"
+
+  # 질문 상세 조회 시나리오
+  - name: "Question detail viewing"
+    weight: 25
+    flow:
+      - get:
+          url: "/api/questions"
+          capture:
+            - json: "$.data.questions[0].id"
+              as: "questionId"
+      - think: 1
+      - get:
+          url: "/questions/{{ questionId }}"
+      - think: 5
+      - get:
+          url: "/api/questions/{{ questionId }}"
+          headers:
+            Accept: "application/json"
+
+  # 검색 시나리오
+  - name: "Search functionality"
+    weight: 20
+    flow:
+      - get:
+          url: "/search"
+      - think: 2
+      - get:
+          url: "/api/questions/search"
+          qs:
+            q: "{{ $randomString() }}"
+            region: "jeju_city"
+          headers:
+            Accept: "application/json"
+
+  # 로그인 시나리오
+  - name: "Authentication flow"
+    weight: 15
+    flow:
+      - get:
+          url: "/auth/signin"
+      - think: 3
+      - post:
+          url: "/api/auth/login"
+          json:
+            email: "test{{ $randomInt(1, 1000) }}@example.com"
+            provider: "google"
+            providerId: "google-{{ $randomString() }}"
+          headers:
+            Content-Type: "application/json"
+          capture:
+            - json: "$.data.token"
+              as: "authToken"
+
+  # 질문 작성 시나리오 (인증 필요)
+  - name: "Question creation"
+    weight: 10
+    flow:
+      # 먼저 로그인
+      - post:
+          url: "/api/auth/login"
+          json:
+            email: "testuser{{ $randomInt(1, 100) }}@example.com"
+            provider: "google"
+            providerId: "google-test-{{ $randomString() }}"
+          capture:
+            - json: "$.data.token"
+              as: "authToken"
+      - think: 5
+      # 질문 작성
+      - post:
+          url: "/api/questions"
+          headers:
+            Authorization: "Bearer {{ authToken }}"
+            Content-Type: "application/json"
+          json:
+            title: "테스트 질문 {{ $randomString() }}"
+            content: "이것은 성능 테스트용 질문입니다. {{ $randomString() }}"
+            tags: ["테스트", "성능"]
+            regionCode: "jeju_city"
+
+# 실시간 기능 테스트 (Socket.IO)
+socketio:
+  target: 'ws://localhost:3001'
+  scenarios:
+    - name: "Real-time messaging"
+      weight: 5
+      flow:
+        - emit:
+            channel: "join_room"
+            data:
+              questionId: "test-question-1"
+        - think: 2
+        - emit:
+            channel: "typing_start"
+            data:
+              questionId: "test-question-1"
+              userId: "test-user-{{ $randomInt(1, 100) }}"
+        - think: 3
+        - emit:
+            channel: "typing_stop"
+            data:
+              questionId: "test-question-1"
+              userId: "test-user-{{ $randomInt(1, 100) }}"

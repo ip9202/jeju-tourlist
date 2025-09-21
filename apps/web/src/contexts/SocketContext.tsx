@@ -118,10 +118,13 @@ export function SocketProvider({
   const updateTypingState = useCallback((data: unknown) => {
     const dataObj = data as Record<string, unknown>;
     const { questionId, userId: typingUserId, userName, isTyping } = dataObj;
+    const questionIdStr = String(questionId);
+    const typingUserIdStr = String(typingUserId);
+    const userNameStr = String(userName);
 
     setTypingStates(prev => {
       const existingStateIndex = prev.findIndex(
-        state => state.questionId === questionId
+        state => state.questionId === questionIdStr
       );
 
       if (existingStateIndex === -1) {
@@ -130,11 +133,11 @@ export function SocketProvider({
           return [
             ...prev,
             {
-              questionId,
+              questionId: questionIdStr,
               users: [
                 {
-                  userId: typingUserId,
-                  userName,
+                  userId: typingUserIdStr,
+                  userName: userNameStr,
                   startTime: Date.now(),
                 },
               ],
@@ -147,7 +150,7 @@ export function SocketProvider({
       // 기존 질문의 타이핑 상태 업데이트
       const existingState = prev[existingStateIndex];
       const userIndex = existingState.users.findIndex(
-        user => user.userId === typingUserId
+        user => user.userId === typingUserIdStr
       );
 
       if (isTyping) {
@@ -158,8 +161,8 @@ export function SocketProvider({
             users: [
               ...existingState.users,
               {
-                userId: typingUserId,
-                userName,
+                userId: typingUserIdStr,
+                userName: userNameStr,
                 startTime: Date.now(),
               },
             ],

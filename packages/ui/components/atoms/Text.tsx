@@ -180,7 +180,7 @@ const Text = React.forwardRef<HTMLSpanElement, TextProps>(
   ) => {
         return (
           <Component
-            ref={ref}
+            ref={ref as any}
             className={cn(
               textVariants({
                 variant,

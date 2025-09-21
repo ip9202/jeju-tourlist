@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Button } from "@/packages/ui/components/atoms/Button";
-import { TabGroup } from "@/packages/ui/components/molecules/TabGroup";
+import { Button, TabGroup } from "@jeju-tourlist/ui";
 import {
   MessageCircle,
   ThumbsUp,

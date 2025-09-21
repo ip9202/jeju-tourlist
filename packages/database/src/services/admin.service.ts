@@ -12,7 +12,7 @@
  * @version 1.0.0
  */
 
-import { PrismaClient, User, Question, Answer, Report } from '@prisma/client';
+import { PrismaClient, User, Question, Answer, Report } from '../../node_modules/.prisma/client';
 import { BaseService } from './base.service';
 
 /**
@@ -138,6 +138,10 @@ export interface ContentManagementData {
  * - 사용자 및 콘텐츠 관리 기능
  */
 export class AdminService extends BaseService {
+  constructor(prisma: PrismaClient) {
+    super(prisma);
+  }
+
   /**
    * 대시보드 통계 조회
    * 

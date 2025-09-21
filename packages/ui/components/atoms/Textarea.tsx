@@ -57,7 +57,7 @@ const textareaVariants = cva(
  * Textarea 컴포넌트 Props 타입 정의
  */
 export interface TextareaProps
-  extends React.TextareaHTMLAttributes<HTMLTextAreaElement>,
+  extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'autoComplete' | 'autoCapitalize' | 'autoCorrect' | 'autoFocus'>,
     VariantProps<typeof textareaVariants> {
   /**
    * 에러 상태
@@ -130,7 +130,7 @@ export interface TextareaProps
    * 자동 완성 여부
    * @default true
    */
-  autoComplete?: boolean;
+  autoComplete?: boolean | string;
   
   /**
    * 자동 수정 여부

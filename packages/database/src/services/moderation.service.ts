@@ -12,19 +12,9 @@
  * @version 1.0.0
  */
 
-import { PrismaClient, ReportStatus, ReportTargetType, User } from '@prisma/client';
+import { PrismaClient, ReportStatus, ReportTargetType, User } from '../../node_modules/.prisma/client';
 import { BaseService } from './base.service';
-
-/**
- * 신고 생성 데이터
- */
-export interface CreateReportData {
-  reporterId: string;
-  targetType: ReportTargetType;
-  targetId: string;
-  reason: string;
-  description?: string;
-}
+import { CreateReportData } from '../types/moderation';
 
 /**
  * 신고 처리 데이터
@@ -66,6 +56,10 @@ export interface UserSanctionData {
  * - 사용자 제재 및 복구 관리
  */
 export class ModerationService extends BaseService {
+  constructor(prisma: PrismaClient) {
+    super(prisma);
+  }
+
   /**
    * 신고 생성
    * 

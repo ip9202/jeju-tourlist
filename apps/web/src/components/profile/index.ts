@@ -7,6 +7,6 @@
  * - 필요한 컴포넌트만 선택적으로 import 가능
  */
 
-export { UserProfileComponent as UserProfile } from "./UserProfile";
+export { UserProfile } from "./UserProfile";
 export { ActivityHistory } from "./ActivityHistory";
 export { ProfilePage } from "./ProfilePage";

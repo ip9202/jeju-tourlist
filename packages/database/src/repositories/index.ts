@@ -6,7 +6,6 @@ export * from "./answer.repository";
 export * from "./category.repository";
 
 // Repository 팩토리 클래스 (DIP - Dependency Inversion Principle)
-// @ts-expect-error Prisma client type recognition issue in monorepo
 import { PrismaClient } from "@prisma/client";
 import { IUserRepository, UserRepository } from "./user.repository";
 import { IQuestionRepository, QuestionRepository } from "./question.repository";

@@ -11,20 +11,9 @@
  * @version 1.0.0
  */
 
-import { PrismaClient, NotificationType, User, Notification } from '@prisma/client';
+import { PrismaClient, NotificationType, User, Notification } from '../../node_modules/.prisma/client';
 import { BaseService } from './base.service';
-
-/**
- * 알림 생성 데이터
- */
-export interface CreateNotificationData {
-  userId: string;
-  type: NotificationType;
-  title: string;
-  message: string;
-  data?: Record<string, any>;
-  channels?: NotificationChannel[];
-}
+import { CreateNotificationData, NotificationStats } from '../types/notification';
 
 /**
  * 알림 채널 타입
@@ -66,27 +55,6 @@ export interface NotificationSendResult {
   error?: string;
 }
 
-/**
- * 알림 통계 데이터
- */
-export interface NotificationStats {
-  total: number;
-  unread: number;
-  byType: Array<{
-    type: NotificationType;
-    count: number;
-  }>;
-  byChannel: Array<{
-    channel: NotificationChannel;
-    count: number;
-  }>;
-  recentActivity: Array<{
-    type: NotificationType;
-    title: string;
-    createdAt: Date;
-    isRead: boolean;
-  }>;
-}
 
 /**
  * 알림 서비스
@@ -97,6 +65,10 @@ export interface NotificationStats {
  * - 알림 설정 및 개인화 관리
  */
 export class NotificationService extends BaseService {
+  constructor(prisma: PrismaClient) {
+    super(prisma);
+  }
+
   /**
    * 알림 생성 및 전송
    * 
@@ -125,7 +97,7 @@ export class NotificationService extends BaseService {
       const settings = await this.getUserNotificationSettings(data.userId);
 
       // 선택된 채널에 따라 전송
-      const channels = data.channels || this.selectChannels(data.type, settings);
+      const channels = this.selectChannels(data.type, settings);
       const sendResults = await this.sendToChannels(notification, channels, settings);
 
       return {
@@ -412,19 +384,14 @@ export class NotificationService extends BaseService {
     ]);
 
     return {
-      total,
-      unread,
-      byType: byType.map(item => ({
-        type: item.type,
-        count: item._count.id,
-      })),
-      byChannel: [], // 실제 구현 필요
-      recentActivity: recentActivity.map(item => ({
-        type: item.type,
-        title: item.title,
-        createdAt: item.createdAt,
-        isRead: item.isRead,
-      })),
+      totalNotifications: total,
+      unreadNotifications: unread,
+      readNotifications: total - unread,
+      notificationsByType: byType.reduce((acc, item) => {
+        acc[item.type] = item._count.id;
+        return acc;
+      }, {} as Record<string, number>),
+      averageReadTime: undefined, // 실제 구현 필요
     };
   }
 

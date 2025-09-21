@@ -82,7 +82,7 @@ describe("Penetration Testing", () => {
         provider: "google",
         providerId: adminUser.providerId,
       });
-    adminToken = adminLoginResponse.body.data.token;
+    _adminToken = adminLoginResponse.body.data.token;
   });
 
   describe("Authentication Bypass Attacks", () => {

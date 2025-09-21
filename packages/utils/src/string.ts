@@ -7,7 +7,7 @@
  * - SRP: 각 함수는 특정 문자열 작업만 담당
  */
 
-import DOMPurify from "isomorphic-dompurify";
+// DOMPurify 대신 간단한 HTML 정리 함수 사용
 
 /**
  * HTML 태그 제거 및 XSS 방지
@@ -31,13 +31,8 @@ export function sanitizeHtml(html: string): string {
     return "";
   }
 
-  // DOMPurify를 사용하여 HTML 정리
-  const cleanHtml = DOMPurify.sanitize(html, {
-    ALLOWED_TAGS: [], // 모든 태그 제거
-    ALLOWED_ATTR: [], // 모든 속성 제거
-  });
-
-  return cleanHtml;
+  // 간단한 HTML 태그 제거 (XSS 방지)
+  return html.replace(/<[^>]*>/g, "");
 }
 
 /**

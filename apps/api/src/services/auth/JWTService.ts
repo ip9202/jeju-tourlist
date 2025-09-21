@@ -1,6 +1,44 @@
 import jwt from "jsonwebtoken";
-import { JWTPayload, TokenPair, User, UserRole } from "@jeju-tourlist/types";
-import { env } from "@jeju-tourlist/config";
+// 타입 정의
+interface JWTPayload {
+  userId: string;
+  email: string;
+  role: string;
+  iat: number;
+  exp: number;
+}
+
+interface TokenPair {
+  accessToken: string;
+  refreshToken: string;
+}
+
+interface User {
+  id: string;
+  email: string;
+  name: string;
+  role: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+type UserRole = 'user' | 'admin' | 'moderator';
+// 환경변수 설정
+const env = {
+  NODE_ENV: process.env.NODE_ENV || 'development',
+  DATABASE_URL: process.env.DATABASE_URL || 'postgresql://localhost:5432/jeju_tourlist',
+  NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET || 'your-super-secret-key-here-must-be-at-least-32-characters-long',
+  NEXTAUTH_URL: process.env.NEXTAUTH_URL || 'http://localhost:3000',
+  API_BASE_URL: process.env.API_BASE_URL || 'http://localhost:4000',
+  SOCKET_URL: process.env.SOCKET_URL || 'http://localhost:4001',
+  SOCKET_PORT: process.env.SOCKET_PORT || '4001',
+  LOG_LEVEL: process.env.LOG_LEVEL || 'info',
+  REDIS_URL: process.env.REDIS_URL || 'redis://localhost:6379',
+  REDIS_HOST: process.env.REDIS_HOST || 'localhost',
+  REDIS_PORT: process.env.REDIS_PORT || '6379',
+  REDIS_PASSWORD: process.env.REDIS_PASSWORD,
+  REDIS_DB: process.env.REDIS_DB || '0',
+};
 
 /**
  * JWT 토큰 관리 서비스

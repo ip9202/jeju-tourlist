@@ -1,5 +1,3 @@
-import type { NextConfig } from "next";
-
 /**
  * Next.js 설정 - SEO 최적화 및 성능 향상
  * 
@@ -9,7 +7,7 @@ import type { NextConfig } from "next";
  * - 보안 헤더 설정
  * - 성능 모니터링 설정
  */
-const nextConfig: NextConfig = {
+const nextConfig = {
   // 이미지 최적화 설정
   images: {
     formats: ['image/webp', 'image/avif'],
@@ -164,4 +162,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+module.exports = nextConfig;

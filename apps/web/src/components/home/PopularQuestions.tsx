@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { Button } from "@/packages/ui/components/atoms/Button";
+import { Button } from "@jeju-tourlist/ui";
 import { TrendingUp, Clock, MessageCircle, Eye } from "lucide-react";
 
 /**
@@ -230,9 +230,11 @@ export const PopularQuestions: React.FC<PopularQuestionsProps> = ({
 
           {showViewAll && (
             <Link href="/questions?sort=popular">
-              <Button variant="outline" size="sm">
-                전체보기
-              </Button>
+              {(Button as any)({
+                variant: "outline",
+                size: "sm",
+                children: "전체보기"
+              })}
             </Link>
           )}
         </div>
