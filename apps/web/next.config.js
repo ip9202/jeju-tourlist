@@ -27,8 +27,6 @@ const nextConfig = {
     serverComponentsExternalPackages: ['@prisma/client'],
     // 메모리 사용량 최적화
     memoryBasedWorkersCount: true,
-    // 번들 분석기 활성화 (개발 환경)
-    bundlePagesRouterDependencies: true,
   },
 
   // 웹팩 설정

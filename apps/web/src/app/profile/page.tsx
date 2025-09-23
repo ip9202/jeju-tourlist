@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useAuth } from "@/contexts/AuthContext";
-import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
-import { Button } from "@/components/ui/button";
+import { useAuth } from "../../contexts/AuthContext";
+import { ProtectedRoute } from "../../components/auth/ProtectedRoute";
+import { Button } from "../../components/ui/button";
 import { User, Settings, Edit3, Save, X } from "lucide-react";
 
 /**

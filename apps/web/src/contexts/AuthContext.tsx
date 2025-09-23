@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { User, UserRole } from "@jeju-tourlist/types";
+import { User, UserRole, AuthProvider as AuthProviderEnum } from "@jeju-tourlist/types";
 
 /**
  * 인증 컨텍스트 타입 정의
@@ -42,9 +42,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           email: testAuthState.user.email || "",
           name: testAuthState.user.name || "",
           profileImage: testAuthState.user.profileImage || undefined,
-          provider: "local",
+          provider: AuthProviderEnum.LOCAL,
           providerId: testAuthState.user.id || "",
-          role: "user" as UserRole,
+          role: UserRole.USER,
           isActive: true,
           createdAt: new Date(),
           updatedAt: new Date(),

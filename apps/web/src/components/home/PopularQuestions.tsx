@@ -2,29 +2,15 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { Button } from "@jeju-tourlist/ui";
+import { Button } from "@/components/ui/button";
+import { QuestionCard, QuestionData } from "@/components/feed";
 import { TrendingUp, Clock, MessageCircle, Eye } from "lucide-react";
 
 /**
- * 인기 질문 데이터 타입
+ * 인기 질문 데이터 타입 (QuestionData와 호환)
  */
-interface PopularQuestion {
-  id: string;
-  title: string;
-  content: string;
-  author: {
-    id: string;
-    name: string;
-    profileImage?: string;
-  };
-  category: string;
-  tags: string[];
-  createdAt: string;
-  answerCount: number;
-  viewCount: number;
-  likeCount: number;
-  isAnswered: boolean;
-  isBookmarked?: boolean;
+interface PopularQuestion extends Omit<QuestionData, 'isAuthor' | 'updatedAt'> {
+  // QuestionData와 동일한 구조를 유지하되 일부 필드는 선택적으로
 }
 
 /**
@@ -74,6 +60,7 @@ export const PopularQuestions: React.FC<PopularQuestionsProps> = ({
         id: "user1",
         name: "김제주",
         profileImage: "/avatars/kim-jeju.jpg",
+        isVerified: true,
       },
       category: "여행",
       tags: ["3박4일", "가족여행", "코스추천"],
@@ -83,6 +70,7 @@ export const PopularQuestions: React.FC<PopularQuestionsProps> = ({
       likeCount: 45,
       isAnswered: true,
       isBookmarked: false,
+      isLiked: false,
     },
     {
       id: "2",
@@ -93,6 +81,7 @@ export const PopularQuestions: React.FC<PopularQuestionsProps> = ({
         id: "user2",
         name: "박여행",
         profileImage: "/avatars/park-travel.jpg",
+        isVerified: false,
       },
       category: "교통",
       tags: ["렌터카", "대중교통", "비용"],
@@ -102,6 +91,7 @@ export const PopularQuestions: React.FC<PopularQuestionsProps> = ({
       likeCount: 67,
       isAnswered: true,
       isBookmarked: true,
+      isLiked: true,
     },
     {
       id: "3",
@@ -112,6 +102,7 @@ export const PopularQuestions: React.FC<PopularQuestionsProps> = ({
         id: "user3",
         name: "이현지",
         profileImage: "/avatars/lee-local.jpg",
+        isVerified: true,
       },
       category: "일반",
       tags: ["12월", "날씨", "옷차림"],
@@ -121,6 +112,7 @@ export const PopularQuestions: React.FC<PopularQuestionsProps> = ({
       likeCount: 23,
       isAnswered: true,
       isBookmarked: false,
+      isLiked: false,
     },
     {
       id: "4",
@@ -131,6 +123,7 @@ export const PopularQuestions: React.FC<PopularQuestionsProps> = ({
         id: "user4",
         name: "최맛집",
         profileImage: "/avatars/choi-food.jpg",
+        isVerified: true,
       },
       category: "맛집",
       tags: ["맛집", "해산물", "흑돼지"],
@@ -140,6 +133,7 @@ export const PopularQuestions: React.FC<PopularQuestionsProps> = ({
       likeCount: 89,
       isAnswered: true,
       isBookmarked: true,
+      isLiked: true,
     },
     {
       id: "5",
@@ -150,6 +144,7 @@ export const PopularQuestions: React.FC<PopularQuestionsProps> = ({
         id: "user5",
         name: "정포토",
         profileImage: "/avatars/jung-photo.jpg",
+        isVerified: false,
       },
       category: "포토스팟",
       tags: ["포토스팟", "일몰", "인스타그램"],
@@ -159,6 +154,7 @@ export const PopularQuestions: React.FC<PopularQuestionsProps> = ({
       likeCount: 56,
       isAnswered: true,
       isBookmarked: false,
+      isLiked: false,
     },
   ];
 
@@ -185,31 +181,52 @@ export const PopularQuestions: React.FC<PopularQuestionsProps> = ({
   };
 
   /**
-   * 시간 포맷팅 함수
+   * 좋아요 핸들러
    */
-  const formatTimeAgo = (dateString: string) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffInHours = Math.floor(
-      (now.getTime() - date.getTime()) / (1000 * 60 * 60)
+  const handleLike = (questionId: string) => {
+    setQuestions(prev =>
+      prev.map(q =>
+        q.id === questionId
+          ? {
+              ...q,
+              isLiked: !q.isLiked,
+              likeCount: q.isLiked ? q.likeCount - 1 : q.likeCount + 1,
+            }
+          : q
+      )
     );
+  };
 
-    if (diffInHours < 1) return "방금 전";
-    if (diffInHours < 24) return `${diffInHours}시간 전`;
-    const diffInDays = Math.floor(diffInHours / 24);
-    return `${diffInDays}일 전`;
+  /**
+   * 북마크 핸들러
+   */
+  const handleBookmark = (questionId: string) => {
+    setQuestions(prev =>
+      prev.map(q =>
+        q.id === questionId
+          ? { ...q, isBookmarked: !q.isBookmarked }
+          : q
+      )
+    );
+  };
+
+  /**
+   * 공유 핸들러
+   */
+  const handleShare = (questionId: string) => {
+    console.log("공유:", questionId);
   };
 
   if (loading) {
     return (
-      <div className={`bg-white rounded-xl shadow-md p-6 ${className}`}>
+      <div className={`bg-card rounded-2xl shadow-sm border p-6 ${className}`}>
         <div className="animate-pulse">
-          <div className="h-6 bg-gray-200 rounded w-1/4 mb-4"></div>
+          <div className="h-6 bg-muted rounded w-1/4 mb-4"></div>
           <div className="space-y-4">
             {[...Array(limit)].map((_, index) => (
-              <div key={index} className="border-l-4 border-gray-200 pl-4 py-2">
-                <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+              <div key={index} className="border-l-4 border-muted pl-4 py-2">
+                <div className="h-4 bg-muted rounded w-3/4 mb-2"></div>
+                <div className="h-3 bg-muted rounded w-1/2"></div>
               </div>
             ))}
           </div>
@@ -219,54 +236,52 @@ export const PopularQuestions: React.FC<PopularQuestionsProps> = ({
   }
 
   return (
-    <div className={`bg-white rounded-xl shadow-md ${className}`}>
+    <div className={`bg-card rounded-mobile shadow-mobile border ${className}`}>
       {/* 헤더 */}
-      <div className="p-6 border-b border-gray-200">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-2xl font-bold text-gray-900 flex items-center">
-            <TrendingUp className="h-6 w-6 mr-2 text-indigo-600" />
+      <div className="p-mobile border-b">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+          <h3 className="text-mobile-xl font-bold text-foreground flex items-center">
+            <TrendingUp className="h-5 w-5 sm:h-6 sm:w-6 mr-2 text-primary" />
             인기 질문
           </h3>
 
           {showViewAll && (
             <Link href="/questions?sort=popular">
-              {(Button as any)({
-                variant: "outline",
-                size: "sm",
-                children: "전체보기"
-              })}
+              <Button variant="outline" size="sm" className="touch-target">
+                전체보기
+              </Button>
             </Link>
           )}
         </div>
 
-        {/* 정렬 옵션 */}
-        <div className="flex space-x-2">
+        {/* 정렬 옵션 - 모바일에서는 스크롤 가능 */}
+        <div className="flex space-x-2 overflow-x-auto scrollbar-thin pb-2">
           <button
             onClick={() => handleSortChange("popular")}
-            className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+            className={`px-3 py-2 rounded-full text-sm font-medium transition-colors touch-target whitespace-nowrap ${
               sortBy === "popular"
-                ? "bg-indigo-100 text-indigo-700"
-                : "text-gray-600 hover:bg-gray-100"
+                ? "bg-primary text-primary-foreground"
+                : "text-muted-foreground hover:bg-accent"
             }`}
           >
             인기순
           </button>
           <button
             onClick={() => handleSortChange("recent")}
-            className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+            className={`px-3 py-2 rounded-full text-sm font-medium transition-colors touch-target whitespace-nowrap ${
               sortBy === "recent"
-                ? "bg-indigo-100 text-indigo-700"
-                : "text-gray-600 hover:bg-gray-100"
+                ? "bg-primary text-primary-foreground"
+                : "text-muted-foreground hover:bg-accent"
             }`}
           >
             최신순
           </button>
           <button
             onClick={() => handleSortChange("answered")}
-            className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+            className={`px-3 py-2 rounded-full text-sm font-medium transition-colors touch-target whitespace-nowrap ${
               sortBy === "answered"
-                ? "bg-indigo-100 text-indigo-700"
-                : "text-gray-600 hover:bg-gray-100"
+                ? "bg-primary text-primary-foreground"
+                : "text-muted-foreground hover:bg-accent"
             }`}
           >
             답변완료
@@ -274,59 +289,23 @@ export const PopularQuestions: React.FC<PopularQuestionsProps> = ({
         </div>
       </div>
 
-      {/* 질문 목록 */}
-      <div className="p-6">
-        <div className="space-y-4">
+      {/* 질문 목록 - 새로운 Card 기반 */}
+      <div className="p-mobile">
+        <div className="space-mobile">
           {questions.map(question => (
-            <div
+            <QuestionCard
               key={question.id}
-              className="border-l-4 border-indigo-500 pl-4 py-3 hover:bg-gray-50 rounded-r-md transition-colors"
-            >
-              <Link href={`/questions/${question.id}`}>
-                <div className="group cursor-pointer">
-                  <h4 className="text-lg font-medium text-gray-900 group-hover:text-indigo-600 transition-colors mb-2 line-clamp-2">
-                    {question.title}
-                  </h4>
-
-                  <p className="text-gray-600 text-sm mb-3 line-clamp-2">
-                    {question.content}
-                  </p>
-
-                  <div className="flex items-center justify-between text-sm text-gray-500">
-                    <div className="flex items-center space-x-4">
-                      <div className="flex items-center">
-                        <span className="font-medium text-gray-700">
-                          {question.author.name}
-                        </span>
-                      </div>
-                      <div className="flex items-center">
-                        <Clock className="h-4 w-4 mr-1" />
-                        <span>{formatTimeAgo(question.createdAt)}</span>
-                      </div>
-                      <div className="flex items-center">
-                        <MessageCircle className="h-4 w-4 mr-1" />
-                        <span>{question.answerCount}개 답변</span>
-                      </div>
-                      <div className="flex items-center">
-                        <Eye className="h-4 w-4 mr-1" />
-                        <span>{question.viewCount.toLocaleString()}</span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center space-x-2">
-                      <span className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full text-xs font-medium">
-                        {question.category}
-                      </span>
-                      {question.isAnswered && (
-                        <span className="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-medium">
-                          답변완료
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            </div>
+              question={{
+                ...question,
+                isAuthor: false, // 인기 질문에서는 작성자 여부를 false로 설정
+                updatedAt: question.createdAt, // updatedAt이 없으므로 createdAt 사용
+              }}
+              variant="default"
+              showActions={true}
+              onLike={handleLike}
+              onBookmark={handleBookmark}
+              onShare={handleShare}
+            />
           ))}
         </div>
       </div>

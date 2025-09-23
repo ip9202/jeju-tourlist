@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import { Button, Heading, Text } from '@jeju-tourlist/ui';
 import { Home, ArrowLeft } from 'lucide-react';

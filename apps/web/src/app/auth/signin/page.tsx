@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { useAuth } from "@/contexts/AuthContext";
-import { Button } from "@/components/ui/button";
+import { useAuth } from "../../../contexts/AuthContext";
+import { Button } from "../../../components/ui/button";
 import { LogIn, Mail, Lock } from "lucide-react";
 
 /**

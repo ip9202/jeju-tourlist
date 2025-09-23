@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { SessionProvider } from "@/components/providers/SessionProvider";
-
-const interSans = Inter({
-  variable: "--font-inter-sans",
-  subsets: ["latin"],
-});
+import { DynamicSocketProvider } from "@/components/providers/DynamicSocketProvider";
+import "@fontsource/pretendard/400.css";
+import "@fontsource/pretendard/500.css";
+import "@fontsource/pretendard/600.css";
+import "@fontsource/pretendard/700.css";
 
 const jetBrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
@@ -27,10 +27,13 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body
-        className={`${interSans.variable} ${jetBrainsMono.variable} antialiased`}
+        className={`${jetBrainsMono.variable} antialiased`}
+        style={{ fontFamily: 'Pretendard Variable, Pretendard, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans KR, Helvetica Neue, Arial, sans-serif' }}
       >
         <SessionProvider>
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            {children}
+          </AuthProvider>
         </SessionProvider>
       </body>
     </html>
