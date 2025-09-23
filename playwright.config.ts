@@ -95,17 +95,17 @@ export default defineConfig({
     },
   ],
 
-  /* 로컬 개발 서버 설정 */
-  webServer: {
-    command: 'pnpm run dev',
-    url: 'http://localhost:3000',
-    reuseExistingServer: !process.env.CI,
-    timeout: 120000,
-    env: {
-      NODE_ENV: 'test',
-      DATABASE_URL: process.env.TEST_DATABASE_URL || 'postgresql://test:test@localhost:5432/jeju_tourlist_test',
-    }
-  },
+  /* 로컬 개발 서버 설정 - 수동 시작 */
+  // webServer: {
+  //   command: 'pnpm run dev',
+  //   url: 'http://localhost:3000',
+  //   reuseExistingServer: !process.env.CI,
+  //   timeout: 120000,
+  //   env: {
+  //     NODE_ENV: 'test',
+  //     DATABASE_URL: process.env.TEST_DATABASE_URL || 'postgresql://test:test@localhost:5432/jeju_tourlist_test',
+  //   }
+  // },
 
   /* 테스트 결과 출력 디렉토리 */
   outputDir: 'test-results/',
@@ -113,9 +113,9 @@ export default defineConfig({
   /* 테스트 타임아웃 설정 (30초) */
   timeout: 30000,
 
-  /* 글로벌 셋업/티어다운 */
-  globalSetup: require.resolve('./apps/web/src/__tests__/global-setup.ts'),
-  globalTeardown: require.resolve('./apps/web/src/__tests__/global-teardown.ts'),
+  /* 글로벌 셋업/티어다운 - 데이터베이스 없이 테스트 */
+  // globalSetup: require.resolve('./apps/web/src/__tests__/global-setup.ts'),
+  // globalTeardown: require.resolve('./apps/web/src/__tests__/global-teardown.ts'),
 
   /* 테스트 매칭 패턴 */
   testMatch: [

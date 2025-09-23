@@ -51,3 +51,6 @@ export type { TextareaProps } from './Textarea';
 
 export { Badge, badgeVariants } from './Badge';
 export type { BadgeProps } from './Badge';
+
+export { Switch, switchVariants } from './Switch';
+export type { SwitchProps } from './Switch';

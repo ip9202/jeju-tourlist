@@ -1,0 +1,44 @@
+# Page snapshot
+
+```yaml
+- generic [active]:
+  - alert [ref=e1]
+  - dialog [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - heading "Build Error" [level=1] [ref=e7]
+        - paragraph [ref=e8]: Failed to compile
+        - generic [ref=e9]:
+          - generic "An outdated version detected (latest is 15.5.3), upgrade is highly recommended!" [ref=e11]: Next.js (14.2.32) is outdated
+          - link "(learn more)" [ref=e12] [cursor=pointer]:
+            - /url: https://nextjs.org/docs/messages/version-staleness
+      - generic [ref=e13]:
+        - generic [ref=e14]:
+          - link "./src/components/notification/NotificationBell.tsx" [ref=e15] [cursor=pointer]:
+            - text: ./src/components/notification/NotificationBell.tsx
+            - img [ref=e16] [cursor=pointer]
+          - generic [ref=e20]:
+            - generic [ref=e21]: "Error:"
+            - generic [ref=e22]: x
+            - generic [ref=e23]: "Unexpected token `div`. Expected jsx identifier ,-["
+            - generic [ref=e24]: /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/components/notification/NotificationBell.tsx
+            - generic [ref=e25]: :99:1]
+            - generic [ref=e26]: "99"
+            - generic [ref=e27]: "| };"
+            - generic [ref=e28]: "100"
+            - generic [ref=e29]: "|"
+            - generic [ref=e30]: "101"
+            - generic [ref=e31]: "| return ("
+            - generic [ref=e32]: "102"
+            - generic [ref=e33]: "| <div className=\"relative\" style={{ display: 'block', visibility: 'visible' }}> :"
+            - generic [ref=e34]: ^^^
+            - generic [ref=e36]: "103"
+            - generic [ref=e37]: "| {/* 알림 벨 버튼 */}"
+            - generic [ref=e38]: "104"
+            - generic [ref=e39]: "| <button"
+            - generic [ref=e40]: "105"
+            - generic [ref=e41]: "| onClick={handleBellClick} `---- Caused by: Syntax Error"
+        - contentinfo [ref=e42]:
+          - paragraph [ref=e43]:
+            - generic [ref=e44]: This error occurred during the build process and can only be dismissed by fixing the error.
+```
