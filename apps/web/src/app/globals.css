@@ -149,6 +149,20 @@
     @apply p-6 shadow-md rounded-2xl;
   }
   
+  /* 데스크톱 전용 그리드 */
+  .grid-desktop {
+    @apply grid grid-cols-3 gap-8;
+  }
+  
+  .grid-desktop-lg {
+    @apply grid grid-cols-4 gap-8;
+  }
+  
+  /* 데스크톱 카드 최적화 */
+  .card-desktop {
+    @apply p-8 shadow-lg rounded-2xl hover:shadow-xl transition-shadow duration-300;
+  }
+  
   .flex-responsive {
     @apply flex flex-col sm:flex-row gap-4 sm:gap-6;
   }

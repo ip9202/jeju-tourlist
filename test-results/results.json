@@ -174,27 +174,27 @@
   },
   "suites": [
     {
-      "title": "responsive-tablet.e2e.test.ts",
-      "file": "responsive-tablet.e2e.test.ts",
+      "title": "responsive-desktop.e2e.test.ts",
+      "file": "responsive-desktop.e2e.test.ts",
       "column": 0,
       "line": 0,
       "specs": [],
       "suites": [
         {
-          "title": "태블릿 반응형 테스트",
-          "file": "responsive-tablet.e2e.test.ts",
+          "title": "데스크톱 반응형 테스트",
+          "file": "responsive-desktop.e2e.test.ts",
           "line": 3,
           "column": 6,
           "specs": [],
           "suites": [
             {
-              "title": "iPad (768x1024) - 표준 태블릿",
-              "file": "responsive-tablet.e2e.test.ts",
+              "title": "데스크톱 (1024x768) - 표준 데스크톱",
+              "file": "responsive-desktop.e2e.test.ts",
               "line": 9,
               "column": 8,
               "specs": [
                 {
-                  "title": "페이지가 태블릿 화면에 맞게 조정됨",
+                  "title": "페이지가 데스크톱 화면에 맞게 조정됨",
                   "ok": true,
                   "tags": [],
                   "tests": [
@@ -209,12 +209,12 @@
                           "workerIndex": 0,
                           "parallelIndex": 0,
                           "status": "passed",
-                          "duration": 24753,
+                          "duration": 11405,
                           "errors": [],
                           "stdout": [],
                           "stderr": [],
                           "retry": 0,
-                          "startTime": "2025-09-23T11:03:31.793Z",
+                          "startTime": "2025-09-23T11:11:56.137Z",
                           "annotations": [],
                           "attachments": []
                         }
@@ -222,13 +222,13 @@
                       "status": "expected"
                     }
                   ],
-                  "id": "b039b5ba77290d6bfe3c-10cbb5b8bcb831ddefdc",
-                  "file": "responsive-tablet.e2e.test.ts",
+                  "id": "00b97bdbc362ef549a97-41626066acbb7e65c535",
+                  "file": "responsive-desktop.e2e.test.ts",
                   "line": 14,
                   "column": 9
                 },
                 {
-                  "title": "헤더가 태블릿에 최적화됨",
+                  "title": "헤더가 데스크톱에 최적화됨",
                   "ok": true,
                   "tags": [],
                   "tests": [
@@ -243,12 +243,12 @@
                           "workerIndex": 1,
                           "parallelIndex": 1,
                           "status": "passed",
-                          "duration": 25164,
+                          "duration": 11796,
                           "errors": [],
                           "stdout": [],
                           "stderr": [],
                           "retry": 0,
-                          "startTime": "2025-09-23T11:03:31.773Z",
+                          "startTime": "2025-09-23T11:11:56.146Z",
                           "annotations": [],
                           "attachments": []
                         }
@@ -256,8 +256,8 @@
                       "status": "expected"
                     }
                   ],
-                  "id": "b039b5ba77290d6bfe3c-cb18614fd58c7ca7f324",
-                  "file": "responsive-tablet.e2e.test.ts",
+                  "id": "00b97bdbc362ef549a97-3ac42095f241374d6aeb",
+                  "file": "responsive-desktop.e2e.test.ts",
                   "line": 22,
                   "column": 9
                 },
@@ -277,12 +277,12 @@
                           "workerIndex": 2,
                           "parallelIndex": 2,
                           "status": "passed",
-                          "duration": 23898,
+                          "duration": 11373,
                           "errors": [],
                           "stdout": [],
                           "stderr": [],
                           "retry": 0,
-                          "startTime": "2025-09-23T11:03:31.777Z",
+                          "startTime": "2025-09-23T11:11:56.162Z",
                           "annotations": [],
                           "attachments": []
                         }
@@ -290,13 +290,13 @@
                       "status": "expected"
                     }
                   ],
-                  "id": "b039b5ba77290d6bfe3c-fd1fc4829b9787a54d6a",
-                  "file": "responsive-tablet.e2e.test.ts",
+                  "id": "00b97bdbc362ef549a97-031e29d43f283a6d2161",
+                  "file": "responsive-desktop.e2e.test.ts",
                   "line": 31,
                   "column": 9
                 },
                 {
-                  "title": "카드가 2열로 표시됨",
+                  "title": "카드가 3열로 표시됨",
                   "ok": true,
                   "tags": [],
                   "tests": [
@@ -311,12 +311,12 @@
                           "workerIndex": 3,
                           "parallelIndex": 3,
                           "status": "passed",
-                          "duration": 24439,
+                          "duration": 11464,
                           "errors": [],
                           "stdout": [],
                           "stderr": [],
                           "retry": 0,
-                          "startTime": "2025-09-23T11:03:31.761Z",
+                          "startTime": "2025-09-23T11:11:56.143Z",
                           "annotations": [],
                           "attachments": []
                         }
@@ -324,13 +324,13 @@
                       "status": "expected"
                     }
                   ],
-                  "id": "b039b5ba77290d6bfe3c-d73e91bc0cfcadab18c9",
-                  "file": "responsive-tablet.e2e.test.ts",
+                  "id": "00b97bdbc362ef549a97-84dd57dd340b7483ea00",
+                  "file": "responsive-desktop.e2e.test.ts",
                   "line": 44,
                   "column": 9
                 },
                 {
-                  "title": "터치 타겟이 44px 이상",
+                  "title": "마우스 호버 효과가 작동함",
                   "ok": true,
                   "tags": [],
                   "tests": [
@@ -345,12 +345,12 @@
                           "workerIndex": 2,
                           "parallelIndex": 2,
                           "status": "passed",
-                          "duration": 9458,
+                          "duration": 7018,
                           "errors": [],
                           "stdout": [],
                           "stderr": [],
                           "retry": 0,
-                          "startTime": "2025-09-23T11:03:58.297Z",
+                          "startTime": "2025-09-23T11:12:09.395Z",
                           "annotations": [],
                           "attachments": []
                         }
@@ -358,13 +358,13 @@
                       "status": "expected"
                     }
                   ],
-                  "id": "b039b5ba77290d6bfe3c-3e34da5d5752b425e605",
-                  "file": "responsive-tablet.e2e.test.ts",
-                  "line": 63,
+                  "id": "00b97bdbc362ef549a97-a7f48d6595e4f5e0a77f",
+                  "file": "responsive-desktop.e2e.test.ts",
+                  "line": 68,
                   "column": 9
                 },
                 {
-                  "title": "텍스트가 태블릿에 적절한 크기",
+                  "title": "텍스트가 데스크톱에 적절한 크기",
                   "ok": true,
                   "tags": [],
                   "tests": [
@@ -376,15 +376,15 @@
                       "projectName": "chromium",
                       "results": [
                         {
-                          "workerIndex": 3,
-                          "parallelIndex": 3,
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
                           "status": "passed",
-                          "duration": 8445,
+                          "duration": 7188,
                           "errors": [],
                           "stdout": [],
                           "stderr": [],
                           "retry": 0,
-                          "startTime": "2025-09-23T11:03:59.007Z",
+                          "startTime": "2025-09-23T11:12:09.426Z",
                           "annotations": [],
                           "attachments": []
                         }
@@ -392,9 +392,9 @@
                       "status": "expected"
                     }
                   ],
-                  "id": "b039b5ba77290d6bfe3c-9511fcf8d2bcab3f02c8",
-                  "file": "responsive-tablet.e2e.test.ts",
-                  "line": 79,
+                  "id": "00b97bdbc362ef549a97-b441ddf72225bbb0e322",
+                  "file": "responsive-desktop.e2e.test.ts",
+                  "line": 94,
                   "column": 9
                 },
                 {
@@ -410,15 +410,15 @@
                       "projectName": "chromium",
                       "results": [
                         {
-                          "workerIndex": 0,
-                          "parallelIndex": 0,
+                          "workerIndex": 3,
+                          "parallelIndex": 3,
                           "status": "passed",
-                          "duration": 8282,
+                          "duration": 7565,
                           "errors": [],
                           "stdout": [],
                           "stderr": [],
                           "retry": 0,
-                          "startTime": "2025-09-23T11:03:59.260Z",
+                          "startTime": "2025-09-23T11:12:09.462Z",
                           "annotations": [],
                           "attachments": []
                         }
@@ -426,9 +426,9 @@
                       "status": "expected"
                     }
                   ],
-                  "id": "b039b5ba77290d6bfe3c-efca806ab9b44c3d15bc",
-                  "file": "responsive-tablet.e2e.test.ts",
-                  "line": 92,
+                  "id": "00b97bdbc362ef549a97-97fb025b77e6486a9fef",
+                  "file": "responsive-desktop.e2e.test.ts",
+                  "line": 107,
                   "column": 9
                 },
                 {
@@ -447,12 +447,12 @@
                           "workerIndex": 1,
                           "parallelIndex": 1,
                           "status": "passed",
-                          "duration": 9524,
+                          "duration": 6790,
                           "errors": [],
                           "stdout": [],
                           "stderr": [],
                           "retry": 0,
-                          "startTime": "2025-09-23T11:03:59.569Z",
+                          "startTime": "2025-09-23T11:12:09.936Z",
                           "annotations": [],
                           "attachments": []
                         }
@@ -460,21 +460,55 @@
                       "status": "expected"
                     }
                   ],
-                  "id": "b039b5ba77290d6bfe3c-12a67413dc5c90967408",
-                  "file": "responsive-tablet.e2e.test.ts",
-                  "line": 102,
+                  "id": "00b97bdbc362ef549a97-9a0b24c85da75fa69941",
+                  "file": "responsive-desktop.e2e.test.ts",
+                  "line": 117,
                   "column": 9
                 }
               ]
             },
             {
-              "title": "iPad Pro (834x1194) - 대형 태블릿",
-              "file": "responsive-tablet.e2e.test.ts",
-              "line": 120,
+              "title": "대형 데스크톱 (1920x1080) - FHD 모니터",
+              "file": "responsive-desktop.e2e.test.ts",
+              "line": 135,
               "column": 8,
               "specs": [
                 {
-                  "title": "카드 레이아웃이 2열로 표시됨",
+                  "title": "카드 레이아웃이 4열로 표시됨",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 2,
+                          "parallelIndex": 2,
+                          "status": "passed",
+                          "duration": 10466,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-23T11:12:16.655Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "00b97bdbc362ef549a97-82200ae33c1abbe18214",
+                  "file": "responsive-desktop.e2e.test.ts",
+                  "line": 140,
+                  "column": 9
+                },
+                {
+                  "title": "텍스트가 대형 데스크톱에 적절한 크기",
                   "ok": true,
                   "tags": [],
                   "tests": [
@@ -489,12 +523,12 @@
                           "workerIndex": 0,
                           "parallelIndex": 0,
                           "status": "passed",
-                          "duration": 11814,
+                          "duration": 10163,
                           "errors": [],
                           "stdout": [],
                           "stderr": [],
                           "retry": 0,
-                          "startTime": "2025-09-23T11:04:07.616Z",
+                          "startTime": "2025-09-23T11:12:16.744Z",
                           "annotations": [],
                           "attachments": []
                         }
@@ -502,43 +536,9 @@
                       "status": "expected"
                     }
                   ],
-                  "id": "b039b5ba77290d6bfe3c-0ad788a2d96a42967886",
-                  "file": "responsive-tablet.e2e.test.ts",
-                  "line": 125,
-                  "column": 9
-                },
-                {
-                  "title": "텍스트가 대형 태블릿에 적절한 크기",
-                  "ok": true,
-                  "tags": [],
-                  "tests": [
-                    {
-                      "timeout": 30000,
-                      "annotations": [],
-                      "expectedStatus": "passed",
-                      "projectId": "chromium",
-                      "projectName": "chromium",
-                      "results": [
-                        {
-                          "workerIndex": 3,
-                          "parallelIndex": 3,
-                          "status": "passed",
-                          "duration": 11846,
-                          "errors": [],
-                          "stdout": [],
-                          "stderr": [],
-                          "retry": 0,
-                          "startTime": "2025-09-23T11:04:07.616Z",
-                          "annotations": [],
-                          "attachments": []
-                        }
-                      ],
-                      "status": "expected"
-                    }
-                  ],
-                  "id": "b039b5ba77290d6bfe3c-eab3f7a097ef0b497156",
-                  "file": "responsive-tablet.e2e.test.ts",
-                  "line": 142,
+                  "id": "00b97bdbc362ef549a97-1df846fa5983623e985d",
+                  "file": "responsive-desktop.e2e.test.ts",
+                  "line": 166,
                   "column": 9
                 },
                 {
@@ -554,15 +554,15 @@
                       "projectName": "chromium",
                       "results": [
                         {
-                          "workerIndex": 2,
-                          "parallelIndex": 2,
+                          "workerIndex": 1,
+                          "parallelIndex": 1,
                           "status": "passed",
-                          "duration": 12191,
+                          "duration": 10100,
                           "errors": [],
                           "stdout": [],
                           "stderr": [],
                           "retry": 0,
-                          "startTime": "2025-09-23T11:04:07.842Z",
+                          "startTime": "2025-09-23T11:12:16.853Z",
                           "annotations": [],
                           "attachments": []
                         }
@@ -570,9 +570,9 @@
                       "status": "expected"
                     }
                   ],
-                  "id": "b039b5ba77290d6bfe3c-183ef0613429017eeede",
-                  "file": "responsive-tablet.e2e.test.ts",
-                  "line": 154,
+                  "id": "00b97bdbc362ef549a97-e6130f34f3178fbad64f",
+                  "file": "responsive-desktop.e2e.test.ts",
+                  "line": 178,
                   "column": 9
                 },
                 {
@@ -588,15 +588,15 @@
                       "projectName": "chromium",
                       "results": [
                         {
-                          "workerIndex": 1,
-                          "parallelIndex": 1,
+                          "workerIndex": 3,
+                          "parallelIndex": 3,
                           "status": "passed",
-                          "duration": 12713,
+                          "duration": 12269,
                           "errors": [],
                           "stdout": [],
                           "stderr": [],
                           "retry": 0,
-                          "startTime": "2025-09-23T11:04:09.288Z",
+                          "startTime": "2025-09-23T11:12:17.364Z",
                           "annotations": [],
                           "attachments": []
                         }
@@ -604,9 +604,9 @@
                       "status": "expected"
                     }
                   ],
-                  "id": "b039b5ba77290d6bfe3c-1e47777139a9bd854bda",
-                  "file": "responsive-tablet.e2e.test.ts",
-                  "line": 168,
+                  "id": "00b97bdbc362ef549a97-c584c029ca2d887189ef",
+                  "file": "responsive-desktop.e2e.test.ts",
+                  "line": 192,
                   "column": 9
                 },
                 {
@@ -625,12 +625,12 @@
                           "workerIndex": 0,
                           "parallelIndex": 0,
                           "status": "passed",
-                          "duration": 7732,
+                          "duration": 9445,
                           "errors": [],
                           "stdout": [],
                           "stderr": [],
                           "retry": 0,
-                          "startTime": "2025-09-23T11:04:19.550Z",
+                          "startTime": "2025-09-23T11:12:26.981Z",
                           "annotations": [],
                           "attachments": []
                         }
@@ -638,21 +638,13 @@
                       "status": "expected"
                     }
                   ],
-                  "id": "b039b5ba77290d6bfe3c-ab17ccf929a85108b246",
-                  "file": "responsive-tablet.e2e.test.ts",
-                  "line": 191,
+                  "id": "00b97bdbc362ef549a97-dc3ae987bd084c7408c3",
+                  "file": "responsive-desktop.e2e.test.ts",
+                  "line": 215,
                   "column": 9
-                }
-              ]
-            },
-            {
-              "title": "태블릿 카드 컴포넌트 테스트",
-              "file": "responsive-tablet.e2e.test.ts",
-              "line": 208,
-              "column": 8,
-              "specs": [
+                },
                 {
-                  "title": "QuestionCard 태블릿 최적화",
+                  "title": "네비게이션이 충분히 넓은 공간을 차지함",
                   "ok": true,
                   "tags": [],
                   "tests": [
@@ -664,15 +656,15 @@
                       "projectName": "chromium",
                       "results": [
                         {
-                          "workerIndex": 3,
-                          "parallelIndex": 3,
+                          "workerIndex": 1,
+                          "parallelIndex": 1,
                           "status": "passed",
-                          "duration": 7521,
+                          "duration": 9410,
                           "errors": [],
                           "stdout": [],
                           "stderr": [],
                           "retry": 0,
-                          "startTime": "2025-09-23T11:04:19.697Z",
+                          "startTime": "2025-09-23T11:12:27.041Z",
                           "annotations": [],
                           "attachments": []
                         }
@@ -680,13 +672,21 @@
                       "status": "expected"
                     }
                   ],
-                  "id": "b039b5ba77290d6bfe3c-ed5d2820898f22dc4504",
-                  "file": "responsive-tablet.e2e.test.ts",
-                  "line": 213,
+                  "id": "00b97bdbc362ef549a97-4184ca33002cc2170711",
+                  "file": "responsive-desktop.e2e.test.ts",
+                  "line": 231,
                   "column": 9
-                },
+                }
+              ]
+            },
+            {
+              "title": "데스크톱 카드 컴포넌트 테스트",
+              "file": "responsive-desktop.e2e.test.ts",
+              "line": 242,
+              "column": 8,
+              "specs": [
                 {
-                  "title": "터치 인터페이스 최적화",
+                  "title": "QuestionCard 데스크톱 최적화",
                   "ok": true,
                   "tags": [],
                   "tests": [
@@ -701,12 +701,12 @@
                           "workerIndex": 2,
                           "parallelIndex": 2,
                           "status": "passed",
-                          "duration": 7735,
+                          "duration": 10063,
                           "errors": [],
                           "stdout": [],
                           "stderr": [],
                           "retry": 0,
-                          "startTime": "2025-09-23T11:04:20.085Z",
+                          "startTime": "2025-09-23T11:12:27.284Z",
                           "annotations": [],
                           "attachments": []
                         }
@@ -714,9 +714,43 @@
                       "status": "expected"
                     }
                   ],
-                  "id": "b039b5ba77290d6bfe3c-b0d42689a0e8a621bf3b",
-                  "file": "responsive-tablet.e2e.test.ts",
-                  "line": 236,
+                  "id": "00b97bdbc362ef549a97-cfe6f2143db4691ec81a",
+                  "file": "responsive-desktop.e2e.test.ts",
+                  "line": 247,
+                  "column": 9
+                },
+                {
+                  "title": "마우스 인터페이스 최적화",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 3,
+                          "parallelIndex": 3,
+                          "status": "passed",
+                          "duration": 9439,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-23T11:12:29.713Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "00b97bdbc362ef549a97-a862e09d90620b342f12",
+                  "file": "responsive-desktop.e2e.test.ts",
+                  "line": 270,
                   "column": 9
                 },
                 {
@@ -735,12 +769,12 @@
                           "workerIndex": 1,
                           "parallelIndex": 1,
                           "status": "passed",
-                          "duration": 7731,
+                          "duration": 5385,
                           "errors": [],
                           "stdout": [],
                           "stderr": [],
                           "retry": 0,
-                          "startTime": "2025-09-23T11:04:22.244Z",
+                          "startTime": "2025-09-23T11:12:36.515Z",
                           "annotations": [],
                           "attachments": []
                         }
@@ -748,9 +782,9 @@
                       "status": "expected"
                     }
                   ],
-                  "id": "b039b5ba77290d6bfe3c-fdfa4a31f27395243806",
-                  "file": "responsive-tablet.e2e.test.ts",
-                  "line": 252,
+                  "id": "00b97bdbc362ef549a97-91fc28f6a6d58310e705",
+                  "file": "responsive-desktop.e2e.test.ts",
+                  "line": 287,
                   "column": 9
                 },
                 {
@@ -766,15 +800,15 @@
                       "projectName": "chromium",
                       "results": [
                         {
-                          "workerIndex": 3,
-                          "parallelIndex": 3,
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
                           "status": "passed",
-                          "duration": 8360,
+                          "duration": 5144,
                           "errors": [],
                           "stdout": [],
                           "stderr": [],
                           "retry": 0,
-                          "startTime": "2025-09-23T11:04:27.311Z",
+                          "startTime": "2025-09-23T11:12:36.529Z",
                           "annotations": [],
                           "attachments": []
                         }
@@ -782,17 +816,51 @@
                       "status": "expected"
                     }
                   ],
-                  "id": "b039b5ba77290d6bfe3c-a69cad43bfc4c459b85e",
-                  "file": "responsive-tablet.e2e.test.ts",
-                  "line": 262,
+                  "id": "00b97bdbc362ef549a97-6a44d0780f224b0abbc8",
+                  "file": "responsive-desktop.e2e.test.ts",
+                  "line": 297,
+                  "column": 9
+                },
+                {
+                  "title": "호버 효과 최적화",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 2,
+                          "parallelIndex": 2,
+                          "status": "passed",
+                          "duration": 5526,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-23T11:12:37.419Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "00b97bdbc362ef549a97-bafe7b41d403fbc65e49",
+                  "file": "responsive-desktop.e2e.test.ts",
+                  "line": 318,
                   "column": 9
                 }
               ]
             },
             {
-              "title": "태블릿 성능 테스트",
-              "file": "responsive-tablet.e2e.test.ts",
-              "line": 284,
+              "title": "데스크톱 성능 테스트",
+              "file": "responsive-desktop.e2e.test.ts",
+              "line": 354,
               "column": 8,
               "specs": [
                 {
@@ -808,15 +876,15 @@
                       "projectName": "chromium",
                       "results": [
                         {
-                          "workerIndex": 0,
-                          "parallelIndex": 0,
+                          "workerIndex": 3,
+                          "parallelIndex": 3,
                           "status": "passed",
-                          "duration": 14072,
+                          "duration": 9471,
                           "errors": [],
                           "stdout": [],
                           "stderr": [],
                           "retry": 0,
-                          "startTime": "2025-09-23T11:04:27.391Z",
+                          "startTime": "2025-09-23T11:12:39.221Z",
                           "annotations": [],
                           "attachments": []
                         }
@@ -824,9 +892,9 @@
                       "status": "expected"
                     }
                   ],
-                  "id": "b039b5ba77290d6bfe3c-f6341eaddffeea025f9f",
-                  "file": "responsive-tablet.e2e.test.ts",
-                  "line": 289,
+                  "id": "00b97bdbc362ef549a97-9e666e3c8c979ee8eac1",
+                  "file": "responsive-desktop.e2e.test.ts",
+                  "line": 359,
                   "column": 9
                 },
                 {
@@ -842,15 +910,15 @@
                       "projectName": "chromium",
                       "results": [
                         {
-                          "workerIndex": 2,
-                          "parallelIndex": 2,
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
                           "status": "passed",
-                          "duration": 9075,
+                          "duration": 5894,
                           "errors": [],
                           "stdout": [],
                           "stderr": [],
                           "retry": 0,
-                          "startTime": "2025-09-23T11:04:27.978Z",
+                          "startTime": "2025-09-23T11:12:41.740Z",
                           "annotations": [],
                           "attachments": []
                         }
@@ -858,9 +926,9 @@
                       "status": "expected"
                     }
                   ],
-                  "id": "b039b5ba77290d6bfe3c-9d5d7225fcd3679beca5",
-                  "file": "responsive-tablet.e2e.test.ts",
-                  "line": 299,
+                  "id": "00b97bdbc362ef549a97-6f1d0510ae42456855f1",
+                  "file": "responsive-desktop.e2e.test.ts",
+                  "line": 369,
                   "column": 9
                 },
                 {
@@ -879,12 +947,12 @@
                           "workerIndex": 1,
                           "parallelIndex": 1,
                           "status": "passed",
-                          "duration": 9007,
+                          "duration": 4933,
                           "errors": [],
                           "stdout": [],
                           "stderr": [],
                           "retry": 0,
-                          "startTime": "2025-09-23T11:04:30.032Z",
+                          "startTime": "2025-09-23T11:12:41.960Z",
                           "annotations": [],
                           "attachments": []
                         }
@@ -892,17 +960,51 @@
                       "status": "expected"
                     }
                   ],
-                  "id": "b039b5ba77290d6bfe3c-f1c1717ee131d230a524",
-                  "file": "responsive-tablet.e2e.test.ts",
-                  "line": 332,
+                  "id": "00b97bdbc362ef549a97-2873de4447a05c731ca3",
+                  "file": "responsive-desktop.e2e.test.ts",
+                  "line": 402,
+                  "column": 9
+                },
+                {
+                  "title": "애니메이션 성능",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 2,
+                          "parallelIndex": 2,
+                          "status": "passed",
+                          "duration": 5045,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-23T11:12:43.013Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "00b97bdbc362ef549a97-e9f35535dc976cd3b3dd",
+                  "file": "responsive-desktop.e2e.test.ts",
+                  "line": 415,
                   "column": 9
                 }
               ]
             },
             {
-              "title": "태블릿 접근성 테스트",
-              "file": "responsive-tablet.e2e.test.ts",
-              "line": 346,
+              "title": "데스크톱 접근성 테스트",
+              "file": "responsive-desktop.e2e.test.ts",
+              "line": 439,
               "column": 8,
               "specs": [
                 {
@@ -918,15 +1020,15 @@
                       "projectName": "chromium",
                       "results": [
                         {
-                          "workerIndex": 3,
-                          "parallelIndex": 3,
+                          "workerIndex": 1,
+                          "parallelIndex": 1,
                           "status": "passed",
-                          "duration": 6573,
+                          "duration": 3772,
                           "errors": [],
                           "stdout": [],
                           "stderr": [],
                           "retry": 0,
-                          "startTime": "2025-09-23T11:04:35.821Z",
+                          "startTime": "2025-09-23T11:12:47.024Z",
                           "annotations": [],
                           "attachments": []
                         }
@@ -934,9 +1036,9 @@
                       "status": "expected"
                     }
                   ],
-                  "id": "b039b5ba77290d6bfe3c-dd7c0815d46450b4649b",
-                  "file": "responsive-tablet.e2e.test.ts",
-                  "line": 351,
+                  "id": "00b97bdbc362ef549a97-07759d911cb613735d6f",
+                  "file": "responsive-desktop.e2e.test.ts",
+                  "line": 444,
                   "column": 9
                 },
                 {
@@ -952,15 +1054,15 @@
                       "projectName": "chromium",
                       "results": [
                         {
-                          "workerIndex": 2,
-                          "parallelIndex": 2,
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
                           "status": "passed",
-                          "duration": 6405,
+                          "duration": 4460,
                           "errors": [],
                           "stdout": [],
                           "stderr": [],
                           "retry": 0,
-                          "startTime": "2025-09-23T11:04:37.122Z",
+                          "startTime": "2025-09-23T11:12:47.680Z",
                           "annotations": [],
                           "attachments": []
                         }
@@ -968,9 +1070,9 @@
                       "status": "expected"
                     }
                   ],
-                  "id": "b039b5ba77290d6bfe3c-16dc24b46877b442f9c9",
-                  "file": "responsive-tablet.e2e.test.ts",
-                  "line": 360,
+                  "id": "00b97bdbc362ef549a97-6e8214ee46362419b9f7",
+                  "file": "responsive-desktop.e2e.test.ts",
+                  "line": 453,
                   "column": 9
                 },
                 {
@@ -986,15 +1088,15 @@
                       "projectName": "chromium",
                       "results": [
                         {
-                          "workerIndex": 1,
-                          "parallelIndex": 1,
+                          "workerIndex": 2,
+                          "parallelIndex": 2,
                           "status": "passed",
-                          "duration": 4705,
+                          "duration": 4174,
                           "errors": [],
                           "stdout": [],
                           "stderr": [],
                           "retry": 0,
-                          "startTime": "2025-09-23T11:04:39.143Z",
+                          "startTime": "2025-09-23T11:12:48.110Z",
                           "annotations": [],
                           "attachments": []
                         }
@@ -1002,9 +1104,43 @@
                       "status": "expected"
                     }
                   ],
-                  "id": "b039b5ba77290d6bfe3c-6dd0d59061c140ef6ee5",
-                  "file": "responsive-tablet.e2e.test.ts",
-                  "line": 375,
+                  "id": "00b97bdbc362ef549a97-5333956c471140f14e3a",
+                  "file": "responsive-desktop.e2e.test.ts",
+                  "line": 468,
+                  "column": 9
+                },
+                {
+                  "title": "포커스 표시",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 3,
+                          "parallelIndex": 3,
+                          "status": "passed",
+                          "duration": 4159,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-23T11:12:48.733Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "00b97bdbc362ef549a97-f3caeb59174132fc0ffa",
+                  "file": "responsive-desktop.e2e.test.ts",
+                  "line": 486,
                   "column": 9
                 }
               ]
@@ -1016,9 +1152,9 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-09-23T11:03:30.073Z",
-    "duration": 74016.98700000001,
-    "expected": 23,
+    "startTime": "2025-09-23T11:11:55.098Z",
+    "duration": 58007.742000000006,
+    "expected": 27,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

@@ -314,7 +314,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 
   // Default variant 렌더링
   return (
-    <Card className={cn("hover:shadow-mobile transition-shadow", className)}>
+    <Card className={cn("hover:shadow-mobile lg:hover:shadow-xl transition-all duration-300 hover:scale-105", className)}>
       <Link href={`/questions/${question.id}`}>
         <CardContent className="p-mobile">
           <div className="space-mobile">
