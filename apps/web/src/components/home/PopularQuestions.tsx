@@ -291,7 +291,7 @@ export const PopularQuestions: React.FC<PopularQuestionsProps> = ({
 
       {/* 질문 목록 - 새로운 Card 기반 */}
       <div className="p-mobile">
-        <div className="space-mobile">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           {questions.map(question => (
             <QuestionCard
               key={question.id}

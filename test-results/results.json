@@ -1,0 +1,1026 @@
+{
+  "config": {
+    "configFile": "/Users/ip9202/develop/vibe/jeju-tourlist/playwright.config.ts",
+    "rootDir": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 4
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/results.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "test-results/junit.xml"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/Users/ip9202/develop/vibe/jeju-tourlist/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e",
+        "testIgnore": [
+          "**/node_modules/**",
+          "**/dist/**",
+          "**/.next/**"
+        ],
+        "testMatch": [
+          "**/*.e2e.test.ts",
+          "**/*.e2e.spec.ts"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/ip9202/develop/vibe/jeju-tourlist/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e",
+        "testIgnore": [
+          "**/node_modules/**",
+          "**/dist/**",
+          "**/.next/**"
+        ],
+        "testMatch": [
+          "**/*.e2e.test.ts",
+          "**/*.e2e.spec.ts"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/ip9202/develop/vibe/jeju-tourlist/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e",
+        "testIgnore": [
+          "**/node_modules/**",
+          "**/dist/**",
+          "**/.next/**"
+        ],
+        "testMatch": [
+          "**/*.e2e.test.ts",
+          "**/*.e2e.spec.ts"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/ip9202/develop/vibe/jeju-tourlist/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "Mobile Chrome",
+        "name": "Mobile Chrome",
+        "testDir": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e",
+        "testIgnore": [
+          "**/node_modules/**",
+          "**/dist/**",
+          "**/.next/**"
+        ],
+        "testMatch": [
+          "**/*.e2e.test.ts",
+          "**/*.e2e.spec.ts"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/ip9202/develop/vibe/jeju-tourlist/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "Mobile Safari",
+        "name": "Mobile Safari",
+        "testDir": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e",
+        "testIgnore": [
+          "**/node_modules/**",
+          "**/dist/**",
+          "**/.next/**"
+        ],
+        "testMatch": [
+          "**/*.e2e.test.ts",
+          "**/*.e2e.spec.ts"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/ip9202/develop/vibe/jeju-tourlist/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "Mobile Safari iPad",
+        "name": "Mobile Safari iPad",
+        "testDir": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e",
+        "testIgnore": [
+          "**/node_modules/**",
+          "**/dist/**",
+          "**/.next/**"
+        ],
+        "testMatch": [
+          "**/*.e2e.test.ts",
+          "**/*.e2e.spec.ts"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.55.0",
+    "workers": 4,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "responsive-tablet.e2e.test.ts",
+      "file": "responsive-tablet.e2e.test.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "태블릿 반응형 테스트",
+          "file": "responsive-tablet.e2e.test.ts",
+          "line": 3,
+          "column": 6,
+          "specs": [],
+          "suites": [
+            {
+              "title": "iPad (768x1024) - 표준 태블릿",
+              "file": "responsive-tablet.e2e.test.ts",
+              "line": 9,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "페이지가 태블릿 화면에 맞게 조정됨",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 24753,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-23T11:03:31.793Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b039b5ba77290d6bfe3c-10cbb5b8bcb831ddefdc",
+                  "file": "responsive-tablet.e2e.test.ts",
+                  "line": 14,
+                  "column": 9
+                },
+                {
+                  "title": "헤더가 태블릿에 최적화됨",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 1,
+                          "parallelIndex": 1,
+                          "status": "passed",
+                          "duration": 25164,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-23T11:03:31.773Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b039b5ba77290d6bfe3c-cb18614fd58c7ca7f324",
+                  "file": "responsive-tablet.e2e.test.ts",
+                  "line": 22,
+                  "column": 9
+                },
+                {
+                  "title": "데스크톱 네비게이션이 표시됨",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 2,
+                          "parallelIndex": 2,
+                          "status": "passed",
+                          "duration": 23898,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-23T11:03:31.777Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b039b5ba77290d6bfe3c-fd1fc4829b9787a54d6a",
+                  "file": "responsive-tablet.e2e.test.ts",
+                  "line": 31,
+                  "column": 9
+                },
+                {
+                  "title": "카드가 2열로 표시됨",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 3,
+                          "parallelIndex": 3,
+                          "status": "passed",
+                          "duration": 24439,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-23T11:03:31.761Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b039b5ba77290d6bfe3c-d73e91bc0cfcadab18c9",
+                  "file": "responsive-tablet.e2e.test.ts",
+                  "line": 44,
+                  "column": 9
+                },
+                {
+                  "title": "터치 타겟이 44px 이상",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 2,
+                          "parallelIndex": 2,
+                          "status": "passed",
+                          "duration": 9458,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-23T11:03:58.297Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b039b5ba77290d6bfe3c-3e34da5d5752b425e605",
+                  "file": "responsive-tablet.e2e.test.ts",
+                  "line": 63,
+                  "column": 9
+                },
+                {
+                  "title": "텍스트가 태블릿에 적절한 크기",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 3,
+                          "parallelIndex": 3,
+                          "status": "passed",
+                          "duration": 8445,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-23T11:03:59.007Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b039b5ba77290d6bfe3c-9511fcf8d2bcab3f02c8",
+                  "file": "responsive-tablet.e2e.test.ts",
+                  "line": 79,
+                  "column": 9
+                },
+                {
+                  "title": "콘텐츠가 잘리지 않음",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 8282,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-23T11:03:59.260Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b039b5ba77290d6bfe3c-efca806ab9b44c3d15bc",
+                  "file": "responsive-tablet.e2e.test.ts",
+                  "line": 92,
+                  "column": 9
+                },
+                {
+                  "title": "카드 간격이 적절함",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 1,
+                          "parallelIndex": 1,
+                          "status": "passed",
+                          "duration": 9524,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-23T11:03:59.569Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b039b5ba77290d6bfe3c-12a67413dc5c90967408",
+                  "file": "responsive-tablet.e2e.test.ts",
+                  "line": 102,
+                  "column": 9
+                }
+              ]
+            },
+            {
+              "title": "iPad Pro (834x1194) - 대형 태블릿",
+              "file": "responsive-tablet.e2e.test.ts",
+              "line": 120,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "카드 레이아웃이 2열로 표시됨",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 11814,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-23T11:04:07.616Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b039b5ba77290d6bfe3c-0ad788a2d96a42967886",
+                  "file": "responsive-tablet.e2e.test.ts",
+                  "line": 125,
+                  "column": 9
+                },
+                {
+                  "title": "텍스트가 대형 태블릿에 적절한 크기",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 3,
+                          "parallelIndex": 3,
+                          "status": "passed",
+                          "duration": 11846,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-23T11:04:07.616Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b039b5ba77290d6bfe3c-eab3f7a097ef0b497156",
+                  "file": "responsive-tablet.e2e.test.ts",
+                  "line": 142,
+                  "column": 9
+                },
+                {
+                  "title": "버튼들이 충분히 큰 크기",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 2,
+                          "parallelIndex": 2,
+                          "status": "passed",
+                          "duration": 12191,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-23T11:04:07.842Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b039b5ba77290d6bfe3c-183ef0613429017eeede",
+                  "file": "responsive-tablet.e2e.test.ts",
+                  "line": 154,
+                  "column": 9
+                },
+                {
+                  "title": "스크롤이 부드럽게 작동함",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 1,
+                          "parallelIndex": 1,
+                          "status": "passed",
+                          "duration": 12713,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-23T11:04:09.288Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b039b5ba77290d6bfe3c-1e47777139a9bd854bda",
+                  "file": "responsive-tablet.e2e.test.ts",
+                  "line": 168,
+                  "column": 9
+                },
+                {
+                  "title": "카드 너비가 적절함",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 7732,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-23T11:04:19.550Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b039b5ba77290d6bfe3c-ab17ccf929a85108b246",
+                  "file": "responsive-tablet.e2e.test.ts",
+                  "line": 191,
+                  "column": 9
+                }
+              ]
+            },
+            {
+              "title": "태블릿 카드 컴포넌트 테스트",
+              "file": "responsive-tablet.e2e.test.ts",
+              "line": 208,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "QuestionCard 태블릿 최적화",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 3,
+                          "parallelIndex": 3,
+                          "status": "passed",
+                          "duration": 7521,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-23T11:04:19.697Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b039b5ba77290d6bfe3c-ed5d2820898f22dc4504",
+                  "file": "responsive-tablet.e2e.test.ts",
+                  "line": 213,
+                  "column": 9
+                },
+                {
+                  "title": "터치 인터페이스 최적화",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 2,
+                          "parallelIndex": 2,
+                          "status": "passed",
+                          "duration": 7735,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-23T11:04:20.085Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b039b5ba77290d6bfe3c-b0d42689a0e8a621bf3b",
+                  "file": "responsive-tablet.e2e.test.ts",
+                  "line": 236,
+                  "column": 9
+                },
+                {
+                  "title": "Pretendard Variable 폰트 적용",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 1,
+                          "parallelIndex": 1,
+                          "status": "passed",
+                          "duration": 7731,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-23T11:04:22.244Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b039b5ba77290d6bfe3c-fdfa4a31f27395243806",
+                  "file": "responsive-tablet.e2e.test.ts",
+                  "line": 252,
+                  "column": 9
+                },
+                {
+                  "title": "카드 그림자와 둥근 모서리",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 3,
+                          "parallelIndex": 3,
+                          "status": "passed",
+                          "duration": 8360,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-23T11:04:27.311Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b039b5ba77290d6bfe3c-a69cad43bfc4c459b85e",
+                  "file": "responsive-tablet.e2e.test.ts",
+                  "line": 262,
+                  "column": 9
+                }
+              ]
+            },
+            {
+              "title": "태블릿 성능 테스트",
+              "file": "responsive-tablet.e2e.test.ts",
+              "line": 284,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "페이지 로딩 성능",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 14072,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-23T11:04:27.391Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b039b5ba77290d6bfe3c-f6341eaddffeea025f9f",
+                  "file": "responsive-tablet.e2e.test.ts",
+                  "line": 289,
+                  "column": 9
+                },
+                {
+                  "title": "스크롤 성능",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 2,
+                          "parallelIndex": 2,
+                          "status": "passed",
+                          "duration": 9075,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-23T11:04:27.978Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b039b5ba77290d6bfe3c-9d5d7225fcd3679beca5",
+                  "file": "responsive-tablet.e2e.test.ts",
+                  "line": 299,
+                  "column": 9
+                },
+                {
+                  "title": "이미지 로딩 성능",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 1,
+                          "parallelIndex": 1,
+                          "status": "passed",
+                          "duration": 9007,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-23T11:04:30.032Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b039b5ba77290d6bfe3c-f1c1717ee131d230a524",
+                  "file": "responsive-tablet.e2e.test.ts",
+                  "line": 332,
+                  "column": 9
+                }
+              ]
+            },
+            {
+              "title": "태블릿 접근성 테스트",
+              "file": "responsive-tablet.e2e.test.ts",
+              "line": 346,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "키보드 네비게이션",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 3,
+                          "parallelIndex": 3,
+                          "status": "passed",
+                          "duration": 6573,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-23T11:04:35.821Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b039b5ba77290d6bfe3c-dd7c0815d46450b4649b",
+                  "file": "responsive-tablet.e2e.test.ts",
+                  "line": 351,
+                  "column": 9
+                },
+                {
+                  "title": "ARIA 레이블",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 2,
+                          "parallelIndex": 2,
+                          "status": "passed",
+                          "duration": 6405,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-23T11:04:37.122Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b039b5ba77290d6bfe3c-16dc24b46877b442f9c9",
+                  "file": "responsive-tablet.e2e.test.ts",
+                  "line": 360,
+                  "column": 9
+                },
+                {
+                  "title": "색상 대비",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 1,
+                          "parallelIndex": 1,
+                          "status": "passed",
+                          "duration": 4705,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2025-09-23T11:04:39.143Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b039b5ba77290d6bfe3c-6dd0d59061c140ef6ee5",
+                  "file": "responsive-tablet.e2e.test.ts",
+                  "line": 375,
+                  "column": 9
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-09-23T11:03:30.073Z",
+    "duration": 74016.98700000001,
+    "expected": 23,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

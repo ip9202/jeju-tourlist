@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <DynamicSocketProvider socketUrl="http://localhost:4000" autoConnect={true}>
       <MainLayout showSidebar={true}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="w-full max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-8 overflow-x-hidden">
           {/* Hero Section */}
           <HeroSection />
 

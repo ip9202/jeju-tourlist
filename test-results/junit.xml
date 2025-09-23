@@ -1,0 +1,50 @@
+<testsuites id="" name="" tests="23" failures="0" skipped="0" errors="0" time="74.01698700000001">
+<testsuite name="responsive-tablet.e2e.test.ts" timestamp="2025-09-23T11:03:30.293Z" hostname="chromium" tests="23" failures="0" skipped="0" time="271.443" errors="0">
+<testcase name="태블릿 반응형 테스트 › iPad (768x1024) - 표준 태블릿 › 페이지가 태블릿 화면에 맞게 조정됨" classname="responsive-tablet.e2e.test.ts" time="24.753">
+</testcase>
+<testcase name="태블릿 반응형 테스트 › iPad (768x1024) - 표준 태블릿 › 헤더가 태블릿에 최적화됨" classname="responsive-tablet.e2e.test.ts" time="25.164">
+</testcase>
+<testcase name="태블릿 반응형 테스트 › iPad (768x1024) - 표준 태블릿 › 데스크톱 네비게이션이 표시됨" classname="responsive-tablet.e2e.test.ts" time="23.898">
+</testcase>
+<testcase name="태블릿 반응형 테스트 › iPad (768x1024) - 표준 태블릿 › 카드가 2열로 표시됨" classname="responsive-tablet.e2e.test.ts" time="24.439">
+</testcase>
+<testcase name="태블릿 반응형 테스트 › iPad (768x1024) - 표준 태블릿 › 터치 타겟이 44px 이상" classname="responsive-tablet.e2e.test.ts" time="9.458">
+</testcase>
+<testcase name="태블릿 반응형 테스트 › iPad (768x1024) - 표준 태블릿 › 텍스트가 태블릿에 적절한 크기" classname="responsive-tablet.e2e.test.ts" time="8.445">
+</testcase>
+<testcase name="태블릿 반응형 테스트 › iPad (768x1024) - 표준 태블릿 › 콘텐츠가 잘리지 않음" classname="responsive-tablet.e2e.test.ts" time="8.282">
+</testcase>
+<testcase name="태블릿 반응형 테스트 › iPad (768x1024) - 표준 태블릿 › 카드 간격이 적절함" classname="responsive-tablet.e2e.test.ts" time="9.524">
+</testcase>
+<testcase name="태블릿 반응형 테스트 › iPad Pro (834x1194) - 대형 태블릿 › 카드 레이아웃이 2열로 표시됨" classname="responsive-tablet.e2e.test.ts" time="11.814">
+</testcase>
+<testcase name="태블릿 반응형 테스트 › iPad Pro (834x1194) - 대형 태블릿 › 텍스트가 대형 태블릿에 적절한 크기" classname="responsive-tablet.e2e.test.ts" time="11.846">
+</testcase>
+<testcase name="태블릿 반응형 테스트 › iPad Pro (834x1194) - 대형 태블릿 › 버튼들이 충분히 큰 크기" classname="responsive-tablet.e2e.test.ts" time="12.191">
+</testcase>
+<testcase name="태블릿 반응형 테스트 › iPad Pro (834x1194) - 대형 태블릿 › 스크롤이 부드럽게 작동함" classname="responsive-tablet.e2e.test.ts" time="12.713">
+</testcase>
+<testcase name="태블릿 반응형 테스트 › iPad Pro (834x1194) - 대형 태블릿 › 카드 너비가 적절함" classname="responsive-tablet.e2e.test.ts" time="7.732">
+</testcase>
+<testcase name="태블릿 반응형 테스트 › 태블릿 카드 컴포넌트 테스트 › QuestionCard 태블릿 최적화" classname="responsive-tablet.e2e.test.ts" time="7.521">
+</testcase>
+<testcase name="태블릿 반응형 테스트 › 태블릿 카드 컴포넌트 테스트 › 터치 인터페이스 최적화" classname="responsive-tablet.e2e.test.ts" time="7.735">
+</testcase>
+<testcase name="태블릿 반응형 테스트 › 태블릿 카드 컴포넌트 테스트 › Pretendard Variable 폰트 적용" classname="responsive-tablet.e2e.test.ts" time="7.731">
+</testcase>
+<testcase name="태블릿 반응형 테스트 › 태블릿 카드 컴포넌트 테스트 › 카드 그림자와 둥근 모서리" classname="responsive-tablet.e2e.test.ts" time="8.36">
+</testcase>
+<testcase name="태블릿 반응형 테스트 › 태블릿 성능 테스트 › 페이지 로딩 성능" classname="responsive-tablet.e2e.test.ts" time="14.072">
+</testcase>
+<testcase name="태블릿 반응형 테스트 › 태블릿 성능 테스트 › 스크롤 성능" classname="responsive-tablet.e2e.test.ts" time="9.075">
+</testcase>
+<testcase name="태블릿 반응형 테스트 › 태블릿 성능 테스트 › 이미지 로딩 성능" classname="responsive-tablet.e2e.test.ts" time="9.007">
+</testcase>
+<testcase name="태블릿 반응형 테스트 › 태블릿 접근성 테스트 › 키보드 네비게이션" classname="responsive-tablet.e2e.test.ts" time="6.573">
+</testcase>
+<testcase name="태블릿 반응형 테스트 › 태블릿 접근성 테스트 › ARIA 레이블" classname="responsive-tablet.e2e.test.ts" time="6.405">
+</testcase>
+<testcase name="태블릿 반응형 테스트 › 태블릿 접근성 테스트 › 색상 대비" classname="responsive-tablet.e2e.test.ts" time="4.705">
+</testcase>
+</testsuite>
+</testsuites>

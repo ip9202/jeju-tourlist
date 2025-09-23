@@ -33,11 +33,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className = "" }) => {
   return (
     <section className={`text-center py-16 ${className}`}>
       {/* 메인 제목 및 설명 */}
-      <div className="mb-12">
-        <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+      <div className="mb-12 px-4">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold text-gray-900 mb-6 break-words">
           제주 여행, 궁금한 게 있으신가요?
         </h1>
-        <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
+        <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 mb-8 max-w-4xl mx-auto leading-relaxed break-words">
           제주도 현지인과 여행자들이 함께 만드는
           <br />
           가장 신뢰할 수 있는 여행 정보 커뮤니티
@@ -46,7 +46,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className = "" }) => {
 
       {/* 인증된 사용자 섹션 */}
       {isAuthenticated ? (
-        <div className="bg-white rounded-2xl shadow-xl p-8 max-w-2xl mx-auto mb-12">
+        <div className="bg-white rounded-2xl shadow-xl p-4 sm:p-8 max-w-2xl mx-auto mb-12 mx-4">
           <div className="flex flex-col md:flex-row items-center justify-center mb-6">
             <div className="flex items-center mb-4 md:mb-0 md:mr-6">
               <Avatar
@@ -56,10 +56,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className = "" }) => {
                 className="mr-4"
               />
               <div className="text-left">
-                <h2 className="text-2xl font-bold text-gray-900">
+                <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 break-words">
                   안녕하세요, {user?.name}님!
                 </h2>
-                <p className="text-gray-600">제주 여행에 대해 질문해보세요</p>
+                <p className="text-sm sm:text-base text-gray-600 break-words">제주 여행에 대해 질문해보세요</p>
               </div>
             </div>
           </div>
@@ -81,12 +81,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className = "" }) => {
         </div>
       ) : (
         /* 비인증 사용자 섹션 */
-        <div className="space-y-6 mb-12">
-          <div className="bg-white rounded-2xl shadow-xl p-8 max-w-2xl mx-auto">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+        <div className="space-y-6 mb-12 px-4">
+          <div className="bg-white rounded-2xl shadow-xl p-4 sm:p-8 max-w-2xl mx-auto">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-4 break-words">
               지금 시작해보세요!
             </h2>
-            <p className="text-gray-600 mb-6">
+            <p className="text-sm sm:text-base text-gray-600 mb-6 break-words">
               로그인하고 제주 여행 정보를 공유하고 받아보세요
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

@@ -73,7 +73,7 @@ export const Header: React.FC = () => {
           </div>
 
           {/* 데스크톱 네비게이션 */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden sm:flex items-center space-x-4">
             <Link
               href="/questions"
               className="text-gray-700 hover:text-indigo-600 transition-colors font-medium"
@@ -152,7 +152,7 @@ export const Header: React.FC = () => {
           </div>
 
           {/* 모바일 메뉴 버튼 */}
-          <div className="md:hidden">
+          <div className="sm:hidden">
             <button
               onClick={toggleMobileMenu}
               className="text-gray-700 hover:text-indigo-600 transition-colors"
@@ -166,7 +166,7 @@ export const Header: React.FC = () => {
 
         {/* 모바일 메뉴 */}
         {isMobileMenuOpen && (
-          <div className="md:hidden border-t border-gray-200 py-4">
+          <div className="sm:hidden border-t border-gray-200 py-4">
             {/* 모바일 검색바 */}
             <div className="mb-4">
               <SearchBar
