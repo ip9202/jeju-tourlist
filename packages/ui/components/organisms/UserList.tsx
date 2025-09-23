@@ -586,13 +586,13 @@ const UserList = React.forwardRef<HTMLDivElement, UserListProps>(
       >
         {/* 사용자 목록 헤더 */}
         <div className="mb-6">
-          <Text as="h2" size="lg" weight="semibold" className="mb-2">
+          <h2 className="text-lg font-semibold mb-2">
             {title}
-          </Text>
+          </h2>
           {description && (
-            <Text as="p" size="sm" className="text-muted-foreground">
+            <p className="text-sm text-gray-500">
               {description}
-            </Text>
+            </p>
           )}
         </div>
         
@@ -601,12 +601,12 @@ const UserList = React.forwardRef<HTMLDivElement, UserListProps>(
           {/* 검색 */}
           {showSearch && (
             <div className="flex-1 min-w-64">
-              <Input
+              <input
                 type="text"
                 placeholder={searchPlaceholder}
                 value={searchQuery}
                 onChange={(e) => handleSearchChange(e.target.value)}
-                className="w-full"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
           )}
@@ -614,34 +614,34 @@ const UserList = React.forwardRef<HTMLDivElement, UserListProps>(
           {/* 정렬 */}
           {showSort && (
             <div className="min-w-32">
-              <Select
+              <select
                 value={currentSort}
                 onChange={(e) => handleSortChange(e.target.value)}
-                className="w-full"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 {sortOptions.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
                 ))}
-              </Select>
+              </select>
             </div>
           )}
           
           {/* 필터 */}
           {showFilter && (
             <div className="min-w-32">
-              <Select
+              <select
                 value={currentFilter}
                 onChange={(e) => handleFilterChange(e.target.value)}
-                className="w-full"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 {filterOptions.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
                 ))}
-              </Select>
+              </select>
             </div>
           )}
         </div>
@@ -666,8 +666,8 @@ const UserList = React.forwardRef<HTMLDivElement, UserListProps>(
                   points={user.points}
                   bio={user.bio}
                   location={user.location}
-                  joinDate={user.joinDate}
-                  lastActive={user.lastActive}
+                  joinDate={user.joinDate instanceof Date ? user.joinDate.toISOString() : user.joinDate}
+                  lastActive={user.lastActive instanceof Date ? user.lastActive.toISOString() : user.lastActive}
                   socialLinks={userSocialLinks.reduce((acc, link) => {
                     if (user.socialLinks?.[link]) {
                       acc[link] = user.socialLinks[link];
@@ -740,12 +740,6 @@ const UserList = React.forwardRef<HTMLDivElement, UserListProps>(
               currentPage={currentPage}
               totalPages={totalPages}
               onPageChange={handlePageChange}
-              showControls={showPaginationControls}
-              showPageSizeSelect={showPageSizeSelect}
-              showPageInfo={showPageInfo}
-              pageSize={pageSize}
-              onPageSizeChange={handlePageSizeChange}
-              pageSizeOptions={pageSizeOptions}
             />
           </div>
         )}

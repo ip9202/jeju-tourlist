@@ -1,6 +1,8 @@
+"use client";
+
 /**
  * AnswerCard 컴포넌트
- * 
+ *
  * @description
  * - 답변을 표시하는 카드 컴포넌트
  * - SOLID 원칙 중 SRP(단일 책임 원칙) 준수
@@ -440,8 +442,8 @@ const AnswerCard = React.forwardRef<HTMLDivElement, AnswerCardProps>(
         {showTimestamp && (
           <div className="mb-4">
             <TimestampDisplay
-              datetime={answer.createdAt}
-              formatType="relative"
+              timestamp={answer.createdAt}
+              format="relative"
               size="xs"
             />
           </div>
@@ -504,7 +506,7 @@ const AnswerCard = React.forwardRef<HTMLDivElement, AnswerCardProps>(
         {/* 답변 댓글들 */}
         {showComments && answer.comments && answer.comments.length > 0 && (
           <div className="mt-4 border-t pt-4">
-            <Text as="h4" size="sm" weight="semibold" className="mb-2">
+            <Text as="div" size="sm" weight="semibold" className="mb-2">
               댓글 ({answer.comments.length})
             </Text>
             <div className="space-y-2">
@@ -521,8 +523,8 @@ const AnswerCard = React.forwardRef<HTMLDivElement, AnswerCardProps>(
                       {comment.content}
                     </Text>
                     <TimestampDisplay
-                      datetime={comment.createdAt}
-                      formatType="relative"
+                      timestamp={comment.createdAt}
+                      format="relative"
                       size="xs"
                     />
                   </div>

@@ -81,7 +81,7 @@ export type TimestampFormat =
  * TimestampDisplay 컴포넌트 Props 타입 정의
  */
 export interface TimestampDisplayProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'color'>,
     VariantProps<typeof timestampDisplayVariants> {
   /**
    * 타임스탬프 (Date 객체, 문자열, 또는 숫자)

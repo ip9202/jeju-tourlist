@@ -1,3 +1,4 @@
+"use client";
 /**
  * Checkbox 컴포넌트
  * 

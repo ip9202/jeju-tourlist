@@ -1,11 +1,13 @@
+"use client";
+
 /**
  * QuestionCard 컴포넌트
- * 
+ *
  * @description
  * - 질문을 표시하는 카드 컴포넌트
  * - SOLID 원칙 중 SRP(단일 책임 원칙) 준수
  * - 접근성(A11y) 고려사항 포함
- * 
+ *
  * @example
  * ```tsx
  * <QuestionCard
@@ -170,7 +172,7 @@ export interface QuestionData {
   /**
    * 질문 답변들
    */
-  answers?: {
+  answerList?: {
     id: string;
     content: string;
     author: {
@@ -398,7 +400,7 @@ const QuestionCard = React.forwardRef<HTMLDivElement, QuestionCardProps>(
       >
         {/* 질문 제목 */}
         <Heading
-          level="h3"
+          level={3}
           size={size === 'sm' ? 'md' : size === 'lg' ? 'xl' : 'lg'}
           className="mb-2 line-clamp-2"
         >
@@ -418,10 +420,9 @@ const QuestionCard = React.forwardRef<HTMLDivElement, QuestionCardProps>(
         {showTags && displayTags.length > 0 && (
           <div className="mb-4">
             <HashtagList
-              hashtags={displayTags.map(tag => ({ id: tag, name: tag }))}
-              onHashtagClick={({ name }) => handleTagClick(name)}
+              hashtags={displayTags.map(tag => ({ id: tag, name: tag, text: tag }))}
+              onHashtagClick={({ text }) => handleTagClick(text)}
               size="sm"
-              variant="outline"
             />
           </div>
         )}
@@ -455,8 +456,8 @@ const QuestionCard = React.forwardRef<HTMLDivElement, QuestionCardProps>(
         {showTimestamp && (
           <div className="mb-4">
             <TimestampDisplay
-              datetime={question.createdAt}
-              formatType="relative"
+              timestamp={question.createdAt}
+              format="relative"
               size="xs"
             />
           </div>

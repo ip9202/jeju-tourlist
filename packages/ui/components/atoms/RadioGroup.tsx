@@ -1,3 +1,4 @@
+"use client";
 /**
  * RadioGroup 컴포넌트
  * 

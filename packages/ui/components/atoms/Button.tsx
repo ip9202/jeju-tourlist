@@ -1,11 +1,13 @@
+"use client";
+
 /**
  * Button 컴포넌트
- * 
+ *
  * @description
  * - 다양한 variant, size, state를 지원하는 버튼 컴포넌트
  * - SOLID 원칙 중 SRP(단일 책임 원칙) 준수
  * - 접근성(A11y) 고려사항 포함
- * 
+ *
  * @example
  * ```tsx
  * <Button variant="primary" size="md" onClick={handleClick}>

@@ -458,7 +458,7 @@ const MessageList = React.forwardRef<HTMLDivElement, MessageListProps>(
             
             {/* 메시지 내용 */}
             <MessageBubble
-              content={message.content}
+              message={message.content}
               variant={message.author.id === 'current-user' ? 'sent' : 'received'}
               onClick={() => handleMessageClick(message.id)}
               className="mb-2"
@@ -495,8 +495,8 @@ const MessageList = React.forwardRef<HTMLDivElement, MessageListProps>(
             {showTimestamp && (
               <div className="mb-2">
                 <TimestampDisplay
-                  datetime={message.createdAt}
-                  formatType="relative"
+                  timestamp={message.createdAt}
+                  format="relative"
                   size="xs"
                 />
               </div>
@@ -559,34 +559,34 @@ const MessageList = React.forwardRef<HTMLDivElement, MessageListProps>(
             {/* 메시지 댓글들 */}
             {showComments && message.comments && message.comments.length > 0 && (
               <div className="mt-2 border-t pt-2">
-                <Text as="h4" size="xs" weight="semibold" className="mb-1">
+                <h4 className="text-xs font-semibold mb-1">
                   댓글 ({message.comments.length})
-                </Text>
+                </h4>
                 <div className="space-y-1">
                   {message.comments.slice(0, 3).map((comment) => (
                     <div key={comment.id} className="flex items-start gap-1">
                       <UserProfile
                         name={comment.author.name}
                         avatar={comment.author.avatar}
-                        size="xs"
+                        size="sm"
                         orientation="horizontal"
                       />
                       <div className="flex-1">
-                        <Text as="p" size="xs" className="text-muted-foreground">
+                        <p className="text-xs text-gray-500">
                           {comment.content}
-                        </Text>
+                        </p>
                         <TimestampDisplay
-                          datetime={comment.createdAt}
-                          formatType="relative"
+                          timestamp={comment.createdAt}
+                          format="relative"
                           size="xs"
                         />
                       </div>
                     </div>
                   ))}
                   {message.comments.length > 3 && (
-                    <Text as="p" size="xs" className="text-muted-foreground">
+                    <p className="text-xs text-gray-500">
                       댓글 {message.comments.length - 3}개 더 보기
-                    </Text>
+                    </p>
                   )}
                 </div>
               </div>

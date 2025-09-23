@@ -1,6 +1,8 @@
+"use client";
+
 /**
  * AnswerForm 컴포넌트
- * 
+ *
  * @description
  * - 답변 작성/수정을 위한 폼 컴포넌트
  * - SOLID 원칙 중 SRP(단일 책임 원칙) 준수
@@ -133,7 +135,7 @@ export interface AnswerFormErrors {
  * AnswerForm 컴포넌트 Props 타입 정의
  */
 export interface AnswerFormProps
-  extends React.HTMLAttributes<HTMLFormElement>,
+  extends Omit<React.HTMLAttributes<HTMLFormElement>, 'onChange' | 'onSubmit'>,
     VariantProps<typeof answerFormVariants> {
   /**
    * 답변 폼 데이터
@@ -458,13 +460,13 @@ const AnswerForm = React.forwardRef<HTMLFormElement, AnswerFormProps>(
               className={cn(errors.content && 'border-error-500')}
             />
             {errors.content && (
-              <Text as="p" size="sm" className="mt-1 text-error-500">
+              <div className="mt-1 text-sm text-red-500">
                 {errors.content}
-              </Text>
+              </div>
             )}
-            <Text as="p" size="xs" className="mt-1 text-muted-foreground">
+            <div className="mt-1 text-xs text-muted-foreground">
               {data.content.length}/{maxContentLength}자
-            </Text>
+            </div>
           </div>
         )}
         
@@ -477,8 +479,18 @@ const AnswerForm = React.forwardRef<HTMLFormElement, AnswerFormProps>(
             <Select
               id="category"
               value={data.category}
-              onChange={(e) => handleChange('category', e.target.value)}
+              onChange={(e) => handleChange('category', e as string)}
               className={cn(errors.category && 'border-error-500')}
+              options={[
+                { value: 'general', label: '일반' },
+                { value: 'accommodation', label: '숙박' },
+                { value: 'food', label: '음식' },
+                { value: 'transportation', label: '교통' },
+                { value: 'attraction', label: '관광지' },
+                { value: 'shopping', label: '쇼핑' },
+                { value: 'activity', label: '액티비티' },
+                { value: 'other', label: '기타' }
+              ]}
             >
               {categoryOptions.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -487,9 +499,9 @@ const AnswerForm = React.forwardRef<HTMLFormElement, AnswerFormProps>(
               ))}
             </Select>
             {errors.category && (
-              <Text as="p" size="sm" className="mt-1 text-error-500">
+              <div className="mt-1 text-sm text-red-500">
                 {errors.category}
-              </Text>
+              </div>
             )}
           </div>
         )}
@@ -501,21 +513,17 @@ const AnswerForm = React.forwardRef<HTMLFormElement, AnswerFormProps>(
               답변 우선순위 *
             </Label>
             <RadioGroup
+              name="priority"
               value={data.priority}
-              onValueChange={(value) => handleChange('priority', value)}
+              onChange={(e) => handleChange('priority', e as string)}
               className="flex flex-wrap gap-4"
+              options={priorityOptions}
             >
-              {priorityOptions.map((option) => (
-                <div key={option.value} className="flex items-center space-x-2">
-                  <RadioGroupItem value={option.value} id={option.value} />
-                  <Label htmlFor={option.value}>{option.label}</Label>
-                </div>
-              ))}
             </RadioGroup>
             {errors.priority && (
-              <Text as="p" size="sm" className="mt-1 text-error-500">
+              <div className="mt-1 text-sm text-red-500">
                 {errors.priority}
-              </Text>
+              </div>
             )}
           </div>
         )}
@@ -529,20 +537,18 @@ const AnswerForm = React.forwardRef<HTMLFormElement, AnswerFormProps>(
             <Select
               id="location"
               value={data.location || ''}
-              onChange={(e) => handleChange('location', e.target.value)}
+              onChange={(e) => handleChange('location', e as string)}
               className={cn(errors.location && 'border-error-500')}
+              options={[
+                { value: '', label: '위치를 선택하세요' },
+                ...locationOptions
+              ]}
             >
-              <option value="">위치를 선택하세요</option>
-              {locationOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
             </Select>
             {errors.location && (
-              <Text as="p" size="sm" className="mt-1 text-error-500">
+              <div className="mt-1 text-sm text-red-500">
                 {errors.location}
-              </Text>
+              </div>
             )}
           </div>
         )}
@@ -553,7 +559,7 @@ const AnswerForm = React.forwardRef<HTMLFormElement, AnswerFormProps>(
             <Label htmlFor="images" className="mb-2 block">
               답변 이미지
             </Label>
-            <Input
+            <input
               id="images"
               type="url"
               placeholder="이미지 URL을 입력하세요"
@@ -564,16 +570,16 @@ const AnswerForm = React.forwardRef<HTMLFormElement, AnswerFormProps>(
                   e.currentTarget.value = '';
                 }
               }}
-              className={cn(errors.images && 'border-error-500')}
+              className={cn("w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500", errors.images && 'border-red-500')}
             />
             {errors.images && (
-              <Text as="p" size="sm" className="mt-1 text-error-500">
+              <div className="mt-1 text-sm text-red-500">
                 {errors.images}
-              </Text>
+              </div>
             )}
-            <Text as="p" size="xs" className="mt-1 text-muted-foreground">
+            <div className="mt-1 text-xs text-gray-500">
               최대 {maxImages}개
-            </Text>
+            </div>
             {data.images && data.images.length > 0 && (
               <div className="mt-2 flex flex-wrap gap-2">
                 {data.images.map((image, index) => (
@@ -602,7 +608,7 @@ const AnswerForm = React.forwardRef<HTMLFormElement, AnswerFormProps>(
             <Label htmlFor="attachments" className="mb-2 block">
               답변 첨부파일
             </Label>
-            <Input
+            <input
               id="attachments"
               type="file"
               multiple
@@ -620,16 +626,16 @@ const AnswerForm = React.forwardRef<HTMLFormElement, AnswerFormProps>(
                   }
                 });
               }}
-              className={cn(errors.attachments && 'border-error-500')}
+              className={cn("w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500", errors.attachments && 'border-red-500')}
             />
             {errors.attachments && (
-              <Text as="p" size="sm" className="mt-1 text-error-500">
+              <div className="mt-1 text-sm text-red-500">
                 {errors.attachments}
-              </Text>
+              </div>
             )}
-            <Text as="p" size="xs" className="mt-1 text-muted-foreground">
+            <div className="mt-1 text-xs text-gray-500">
               최대 {maxAttachments}개, 각 파일은 {maxAttachmentSize}MB 이하
-            </Text>
+            </div>
             {data.attachments && data.attachments.length > 0 && (
               <div className="mt-2 flex flex-wrap gap-2">
                 {data.attachments.map((attachment, index) => (
@@ -656,17 +662,19 @@ const AnswerForm = React.forwardRef<HTMLFormElement, AnswerFormProps>(
         {showPublicField && (
           <div className="mb-4">
             <div className="flex items-center space-x-2">
-              <Checkbox
+              <input
                 id="isPublic"
+                type="checkbox"
                 checked={data.isPublic}
-                onCheckedChange={(checked) => handleChange('isPublic', checked)}
+                onChange={(e) => handleChange('isPublic', e.target.checked)}
+                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
               />
               <Label htmlFor="isPublic">답변을 공개합니다</Label>
             </div>
             {errors.isPublic && (
-              <Text as="p" size="sm" className="mt-1 text-error-500">
+              <div className="mt-1 text-sm text-red-500">
                 {errors.isPublic}
-              </Text>
+              </div>
             )}
           </div>
         )}
@@ -675,17 +683,19 @@ const AnswerForm = React.forwardRef<HTMLFormElement, AnswerFormProps>(
         {showNotificationField && (
           <div className="mb-4">
             <div className="flex items-center space-x-2">
-              <Checkbox
+              <input
                 id="enableNotifications"
+                type="checkbox"
                 checked={data.enableNotifications}
-                onCheckedChange={(checked) => handleChange('enableNotifications', checked)}
+                onChange={(e) => handleChange('enableNotifications', e.target.checked)}
+                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
               />
               <Label htmlFor="enableNotifications">댓글 알림을 받습니다</Label>
             </div>
             {errors.enableNotifications && (
-              <Text as="p" size="sm" className="mt-1 text-error-500">
+              <div className="mt-1 text-sm text-red-500">
                 {errors.enableNotifications}
-              </Text>
+              </div>
             )}
           </div>
         )}
@@ -694,17 +704,19 @@ const AnswerForm = React.forwardRef<HTMLFormElement, AnswerFormProps>(
         {showCommentField && (
           <div className="mb-4">
             <div className="flex items-center space-x-2">
-              <Checkbox
+              <input
                 id="allowComments"
+                type="checkbox"
                 checked={data.allowComments}
-                onCheckedChange={(checked) => handleChange('allowComments', checked)}
+                onChange={(e) => handleChange('allowComments', e.target.checked)}
+                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
               />
               <Label htmlFor="allowComments">댓글을 허용합니다</Label>
             </div>
             {errors.allowComments && (
-              <Text as="p" size="sm" className="mt-1 text-error-500">
+              <div className="mt-1 text-sm text-red-500">
                 {errors.allowComments}
-              </Text>
+              </div>
             )}
           </div>
         )}
@@ -713,17 +725,19 @@ const AnswerForm = React.forwardRef<HTMLFormElement, AnswerFormProps>(
         {showAnonymousField && (
           <div className="mb-4">
             <div className="flex items-center space-x-2">
-              <Checkbox
+              <input
                 id="isAnonymous"
+                type="checkbox"
                 checked={data.isAnonymous}
-                onCheckedChange={(checked) => handleChange('isAnonymous', checked)}
+                onChange={(e) => handleChange('isAnonymous', e.target.checked)}
+                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
               />
               <Label htmlFor="isAnonymous">익명으로 답변합니다</Label>
             </div>
             {errors.isAnonymous && (
-              <Text as="p" size="sm" className="mt-1 text-error-500">
+              <div className="mt-1 text-sm text-red-500">
                 {errors.isAnonymous}
-              </Text>
+              </div>
             )}
           </div>
         )}

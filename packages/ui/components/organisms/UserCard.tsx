@@ -322,8 +322,8 @@ const UserCard = React.forwardRef<HTMLDivElement, UserCardProps>(
           points={user.points}
           bio={truncatedBio}
           location={user.location}
-          joinDate={user.joinDate}
-          lastActive={user.lastActive}
+          joinDate={user.joinDate instanceof Date ? user.joinDate.toISOString() : user.joinDate}
+          lastActive={user.lastActive instanceof Date ? user.lastActive.toISOString() : user.lastActive}
           socialLinks={showSocialLinks ? user.socialLinks : undefined}
           size={size === 'sm' ? 'sm' : size === 'lg' ? 'lg' : 'md'}
           orientation="horizontal"

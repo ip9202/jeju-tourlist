@@ -1,3 +1,4 @@
+"use client";
 /**
  * Input 컴포넌트
  * 

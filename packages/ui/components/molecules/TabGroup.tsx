@@ -1,11 +1,13 @@
+"use client";
+
 /**
  * TabGroup 컴포넌트
- * 
+ *
  * @description
  * - 탭 그룹을 표시하는 컴포넌트
  * - SOLID 원칙 중 SRP(단일 책임 원칙) 준수
  * - 접근성(A11y) 고려사항 포함
- * 
+ *
  * @example
  * ```tsx
  * <TabGroup

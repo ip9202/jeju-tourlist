@@ -1,6 +1,8 @@
+"use client";
+
 /**
  * LikeButton 컴포넌트
- * 
+ *
  * @description
  * - 좋아요 버튼을 표시하는 컴포넌트
  * - SOLID 원칙 중 SRP(단일 책임 원칙) 준수
