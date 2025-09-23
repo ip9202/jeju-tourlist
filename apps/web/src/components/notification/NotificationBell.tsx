@@ -1,90 +1,83 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Bell, X } from 'lucide-react';
+import { Bell, X, Check, Trash2 } from 'lucide-react';
+
+interface Notification {
+  id: string;
+  message: string;
+  read: boolean;
+  timestamp: string;
+  type: 'answer' | 'like' | 'accept' | 'system';
+}
 
 export const NotificationBell: React.FC = () => {
-  const [notifications, setNotifications] = useState<any[]>([]);
-  const [unreadCount, setUnreadCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
 
-  // 알림 시뮬레이션을 위한 useEffect
+  const unreadCount = notifications.filter(n => !n.read).length;
+
   useEffect(() => {
-    const handleNotification = (event: CustomEvent) => {
-      console.log('알림 수신:', event.detail);
-      const notification = event.detail;
-      setNotifications(prev => [notification, ...prev]);
-      setUnreadCount(prev => prev + 1);
-    };
-
-    // 테스트용 알림 생성
-    const testNotifications = [
+    // 목업 알림 데이터
+    const mockNotifications: Notification[] = [
       {
-        id: 'test-notif-1',
-        type: 'system',
-        title: '테스트 알림',
-        message: '알림 시스템이 정상 작동합니다.',
+        id: '1',
+        message: '새로운 답변이 등록되었습니다.',
+        read: false,
         timestamp: new Date().toISOString(),
-        read: false
+        type: 'answer'
       },
       {
-        id: 'test-notif-2',
-        type: 'answer',
-        title: '새로운 답변',
-        message: '질문에 답변이 작성되었습니다.',
-        timestamp: new Date(Date.now() - 1000 * 60 * 5).toISOString(),
-        read: false
+        id: '2',
+        message: '누군가 내 답변에 좋아요를 눌렀습니다.',
+        read: true,
+        timestamp: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
+        type: 'like'
       }
     ];
-    
-    // 초기 알림 추가
-    setNotifications(testNotifications);
-    setUnreadCount(testNotifications.length);
-
-    window.addEventListener('notification', handleNotification as EventListener);
-    
-    return () => {
-      window.removeEventListener('notification', handleNotification as EventListener);
-    };
+    setNotifications(mockNotifications);
   }, []);
 
   const handleBellClick = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleNotificationClick = (notificationId: string) => {
+  // 외부 클릭 감지
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (isOpen && !target.closest('[data-testid="notification-bell"]') && !target.closest('[data-testid="notification-dropdown"]')) {
+        setIsOpen(false);
+      }
+    };
+    
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
+
+  const handleMarkAsRead = (id: string) => {
     setNotifications(prev => 
-      prev.map(notif => 
-        notif.id === notificationId ? { ...notif, read: true } : notif
+      prev.map(notification => 
+        notification.id === id 
+          ? { ...notification, read: true }
+          : notification
       )
     );
-    setUnreadCount(prev => Math.max(0, prev - 1));
   };
 
-  const handleMarkAllRead = () => {
+  const handleMarkAllAsRead = () => {
     setNotifications(prev => 
-      prev.map(notif => ({ ...notif, read: true }))
+      prev.map(notification => ({ ...notification, read: true }))
     );
-    setUnreadCount(0);
   };
 
   const handleClearAll = () => {
     setNotifications([]);
-    setUnreadCount(0);
-    setIsOpen(false);
-  };
-
-  const getNotificationIcon = (type: string) => {
-    switch (type) {
-      case 'answer':
-        return '💬';
-      case 'accept':
-        return '✅';
-      case 'system':
-        return '📢';
-      default:
-        return '📢';
-    }
   };
 
   const formatTime = (timestamp: string) => {
@@ -99,18 +92,13 @@ export const NotificationBell: React.FC = () => {
   };
 
   return (
-    <div className="relative" style={{ display: 'block', visibility: 'visible' }}>
+    <div className="relative">
       {/* 알림 벨 버튼 */}
       <button
         onClick={handleBellClick}
         className="relative p-2 text-gray-600 hover:text-gray-900 transition-colors"
         data-testid="notification-bell"
-        style={{ 
-          display: 'block !important', 
-          visibility: 'visible !important',
-          opacity: '1 !important',
-          position: 'relative !important'
-        }}
+        data-unread={unreadCount > 0 ? 'true' : 'false'}
       >
         <Bell size={24} />
         {unreadCount > 0 && (
@@ -125,77 +113,72 @@ export const NotificationBell: React.FC = () => {
 
       {/* 알림 드롭다운 */}
       {isOpen && (
-        <div
-          data-testid="notification-dropdown"
+        <div 
           className="absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-50"
+          data-testid="notification-dropdown"
         >
-          {/* 헤더 */}
           <div className="p-4 border-b border-gray-200">
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-semibold text-gray-900">알림</h3>
               <div className="flex space-x-2">
-                {unreadCount > 0 && (
-                  <button
-                    onClick={handleMarkAllRead}
-                    className="text-sm text-blue-600 hover:text-blue-800"
-                    data-testid="mark-all-read-button"
-                  >
-                    모두 읽음
-                  </button>
-                )}
+                <button
+                  onClick={handleMarkAllAsRead}
+                  className="text-sm text-gray-500 hover:text-gray-700"
+                  data-testid="mark-all-read-button"
+                >
+                  모두 읽음
+                </button>
                 <button
                   onClick={handleClearAll}
                   className="text-sm text-gray-500 hover:text-gray-700"
-                  data-testid="clear-all-button"
+                  data-testid="clear-all-notifications-button"
                 >
                   전체 삭제
                 </button>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-sm text-gray-500 hover:text-gray-700"
                   data-testid="close-notifications-button"
                 >
                   <X size={16} />
                 </button>
               </div>
             </div>
+            <div className="mt-2">
+              <a
+                href="/notifications/settings"
+                className="text-sm text-indigo-600 hover:text-indigo-800"
+                data-testid="notification-settings-link"
+              >
+                알림 설정
+              </a>
+            </div>
           </div>
-
-          {/* 알림 목록 */}
-          <div className="max-h-96 overflow-y-auto">
+          
+          <div className="max-h-96 overflow-y-auto" data-testid="notification-list">
             {notifications.length === 0 ? (
-              <div className="p-4 text-center text-gray-500" data-testid="no-notifications">
+              <div className="p-4 text-center text-gray-500" data-testid="no-notifications-message">
                 알림이 없습니다
               </div>
             ) : (
               notifications.map((notification) => (
                 <div
                   key={notification.id}
-                  onClick={() => handleNotificationClick(notification.id)}
                   className={`p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer ${
                     !notification.read ? 'bg-blue-50' : ''
                   }`}
                   data-testid="notification-item"
+                  onClick={() => handleMarkAsRead(notification.id)}
                 >
-                  <div className="flex items-start">
-                    <div className="flex-shrink-0 pt-1">
-                      <span className="text-lg">
-                        {getNotificationIcon(notification.type)}
-                      </span>
-                    </div>
-                    <div className="ml-3 flex-grow">
-                      <p className="text-sm font-medium text-gray-900">
-                        {notification.title}
-                      </p>
-                      <p className="text-sm text-gray-600 mt-1">
-                        {notification.message}
-                      </p>
+                  <div className="flex justify-between items-start">
+                    <div className="flex-1">
+                      <p className="text-sm text-gray-900">{notification.message}</p>
                       <p className="text-xs text-gray-500 mt-1">
                         {formatTime(notification.timestamp)}
                       </p>
                     </div>
                     {!notification.read && (
-                      <div className="flex-shrink-0 w-2 h-2 bg-blue-600 rounded-full ml-2 mt-2"></div>
+                      <div className="w-2 h-2 bg-blue-500 rounded-full ml-2"></div>
                     )}
                   </div>
                 </div>

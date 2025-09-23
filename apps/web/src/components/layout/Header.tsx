@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button, Avatar, SearchBar } from "@jeju-tourlist/ui";
 import { MapPin, Menu, User, LogOut } from "lucide-react";
+import { NotificationBell } from "../notification/NotificationBell";
 
 /**
  * Header 컴포넌트
@@ -86,6 +87,9 @@ export const Header: React.FC = () => {
               카테고리
             </Link>
 
+            {/* 알림 벨 - 항상 표시 */}
+            <NotificationBell />
+            
             {isAuthenticated ? (
               <div className="flex items-center space-x-3">
                 <Link
@@ -153,6 +157,7 @@ export const Header: React.FC = () => {
               onClick={toggleMobileMenu}
               className="text-gray-700 hover:text-indigo-600 transition-colors"
               aria-label="메뉴 열기"
+              data-testid="mobile-menu"
             >
               <Menu className="h-6 w-6" />
             </button>
@@ -190,6 +195,11 @@ export const Header: React.FC = () => {
                 카테고리
               </Link>
 
+              {/* 모바일 알림 벨 - 항상 표시 */}
+              <div className="px-3 py-2">
+                <NotificationBell />
+              </div>
+              
               {isAuthenticated ? (
                 <>
                   <Link

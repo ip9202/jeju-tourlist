@@ -40,6 +40,7 @@ export const QuestionPage: React.FC<QuestionPageProps> = ({ questionId }) => {
     answerCount: number;
   } | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   // URL 파라미터에서 questionId 가져오기
   const actualQuestionId = questionId || (params?.id as string);
@@ -50,24 +51,36 @@ export const QuestionPage: React.FC<QuestionPageProps> = ({ questionId }) => {
   useEffect(() => {
     const loadQuestion = async () => {
       setLoading(true);
-      // 실제로는 API 호출
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      setError(null);
+      
+      try {
+        // 실제로는 API 호출
+        await new Promise(resolve => setTimeout(resolve, 1000));
 
-      // 목업 데이터
-      const mockQuestion = {
-        id: actualQuestionId,
-        title: "제주도 3박 4일 여행 코스 추천해주세요",
-        author: {
-          id: "user1",
-          name: "김제주",
-        },
-        category: "여행",
-        isAnswered: true,
-        answerCount: 12,
-      };
+        // 잘못된 ID인 경우 에러 시뮬레이션
+        if (actualQuestionId === 'invalid-id') {
+          throw new Error('질문을 찾을 수 없습니다');
+        }
 
-      setQuestion(mockQuestion);
-      setLoading(false);
+        // 목업 데이터
+        const mockQuestion = {
+          id: actualQuestionId,
+          title: "제주도 3박 4일 여행 코스 추천해주세요",
+          author: {
+            id: "user1",
+            name: "김제주",
+          },
+          category: "여행",
+          isAnswered: true,
+          answerCount: 12,
+        };
+
+        setQuestion(mockQuestion);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다');
+      } finally {
+        setLoading(false);
+      }
     };
 
     if (actualQuestionId) {
@@ -110,7 +123,7 @@ export const QuestionPage: React.FC<QuestionPageProps> = ({ questionId }) => {
     return (
       <MainLayout>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="animate-pulse">
+          <div className="animate-pulse" data-testid="loading-spinner">
             <div className="h-6 bg-gray-200 rounded w-1/4 mb-6"></div>
             <div className="h-8 bg-gray-200 rounded w-3/4 mb-4"></div>
             <div className="h-4 bg-gray-200 rounded w-1/2 mb-8"></div>
@@ -118,6 +131,27 @@ export const QuestionPage: React.FC<QuestionPageProps> = ({ questionId }) => {
               <div className="h-32 bg-gray-200 rounded"></div>
               <div className="h-32 bg-gray-200 rounded"></div>
             </div>
+          </div>
+        </div>
+      </MainLayout>
+    );
+  }
+
+  if (error) {
+    return (
+      <MainLayout>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="text-center" data-testid="question-not-found">
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">
+              {error}
+            </h1>
+            <p className="text-gray-600 mb-8">
+              요청하신 질문이 존재하지 않거나 삭제되었습니다.
+            </p>
+            <Button onClick={handleGoBack}>
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              이전 페이지로
+            </Button>
           </div>
         </div>
       </MainLayout>

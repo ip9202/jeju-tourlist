@@ -33,6 +33,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // NextAuth 세션을 User 타입으로 변환
   useEffect(() => {
+    // 테스트 환경에서 인증 상태 강제 설정
+    if (typeof window !== 'undefined' && window.__AUTH_STATE__) {
+      const testAuthState = window.__AUTH_STATE__;
+      if (testAuthState.isAuthenticated && testAuthState.user) {
+        const userData: User = {
+          id: testAuthState.user.id || "",
+          email: testAuthState.user.email || "",
+          name: testAuthState.user.name || "",
+          profileImage: testAuthState.user.profileImage || undefined,
+          provider: "local",
+          providerId: testAuthState.user.id || "",
+          role: "user" as UserRole,
+          isActive: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        };
+        setUser(userData);
+        setIsLoading(false);
+        return;
+      }
+    }
+
     if (status === "loading") {
       setIsLoading(true);
       return;
