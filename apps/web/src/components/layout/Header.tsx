@@ -89,9 +89,7 @@ export const Header: React.FC = () => {
             </Link>
 
             {/* 알림 벨 - 항상 표시 */}
-            <div className="flex items-center">
-              <NotificationBell />
-            </div>
+            <NotificationBell />
 
             {isAuthenticated ? (
               <div className="flex items-center space-x-3">
