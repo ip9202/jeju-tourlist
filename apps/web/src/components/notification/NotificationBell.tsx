@@ -97,18 +97,18 @@ export const NotificationBell: React.FC = () => {
   };
 
   return (
-    <div className="relative flex items-center">
+    <div className="relative flex items-center h-6">
       {/* 알림 벨 버튼 */}
       <button
         onClick={handleBellClick}
-        className="relative p-2 text-gray-600 hover:text-gray-900 transition-colors flex items-center justify-center"
+        className="relative p-1 text-gray-600 hover:text-gray-900 transition-colors flex items-center justify-center h-6 w-6"
         data-testid="notification-bell"
         data-unread={unreadCount > 0 ? "true" : "false"}
       >
-        <Bell size={18} />
+        <Bell size={16} />
         {unreadCount > 0 && (
           <span
-            className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full h-5 w-5 flex items-center justify-center text-xs font-medium min-w-[20px]"
+            className="absolute -top-0.5 -right-0.5 bg-red-500 text-white rounded-full h-4 w-4 flex items-center justify-center text-[10px] font-bold leading-none"
             data-testid="notification-badge"
           >
             {unreadCount}

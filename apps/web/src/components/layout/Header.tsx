@@ -74,16 +74,16 @@ export const Header: React.FC = () => {
           </div>
 
           {/* 데스크톱 네비게이션 */}
-          <div className="hidden sm:flex items-center space-x-6">
+          <div className="hidden sm:flex items-center space-x-6 h-6">
             <Link
               href="/questions"
-              className="text-gray-700 hover:text-indigo-600 transition-colors font-medium text-sm"
+              className="text-gray-700 hover:text-indigo-600 transition-colors font-medium text-sm h-6 flex items-center"
             >
               질문목록
             </Link>
             <Link
               href="/categories"
-              className="text-gray-700 hover:text-indigo-600 transition-colors font-medium text-sm"
+              className="text-gray-700 hover:text-indigo-600 transition-colors font-medium text-sm h-6 flex items-center"
             >
               카테고리
             </Link>
@@ -134,7 +134,7 @@ export const Header: React.FC = () => {
               <div className="flex items-center space-x-3">
                 <Link
                   href="/auth/signin"
-                  className="text-gray-700 hover:text-indigo-600 transition-colors font-medium text-sm"
+                  className="text-gray-700 hover:text-indigo-600 transition-colors font-medium text-sm h-6 flex items-center"
                 >
                   로그인
                 </Link>
