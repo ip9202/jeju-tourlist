@@ -3,7 +3,8 @@
 import React from "react";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
-import { Button, Avatar, SearchBar } from "@jeju-tourlist/ui";
+import { Button, Avatar } from "@jeju-tourlist/ui";
+import { SearchBar } from "../search/SearchBar";
 import { MapPin, Menu, User, LogOut } from "lucide-react";
 import { NotificationBell } from "../notification/NotificationBell";
 
@@ -89,7 +90,7 @@ export const Header: React.FC = () => {
 
             {/* 알림 벨 - 항상 표시 */}
             <NotificationBell />
-            
+
             {isAuthenticated ? (
               <div className="flex items-center space-x-3">
                 <Link
@@ -199,7 +200,7 @@ export const Header: React.FC = () => {
               <div className="px-3 py-2">
                 <NotificationBell />
               </div>
-              
+
               {isAuthenticated ? (
                 <>
                   <Link

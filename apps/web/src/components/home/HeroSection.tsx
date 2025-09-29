@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button, Avatar } from "@jeju-tourlist/ui";
+import { SearchBar } from "../search/SearchBar";
 import { MessageCircle, TrendingUp, Users } from "lucide-react";
 
 /**
@@ -42,6 +43,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className = "" }) => {
           <br />
           가장 신뢰할 수 있는 여행 정보 커뮤니티
         </p>
+
+        {/* 검색 바 */}
+        <div className="max-w-2xl mx-auto mb-8">
+          <SearchBar
+            placeholder="제주 여행에 대해 질문해보세요..."
+            className="w-full"
+          />
+        </div>
       </div>
 
       {/* 인증된 사용자 섹션 */}
@@ -59,7 +68,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className = "" }) => {
                 <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 break-words">
                   안녕하세요, {user?.name}님!
                 </h2>
-                <p className="text-sm sm:text-base text-gray-600 break-words">제주 여행에 대해 질문해보세요</p>
+                <p className="text-sm sm:text-base text-gray-600 break-words">
+                  제주 여행에 대해 질문해보세요
+                </p>
               </div>
             </div>
           </div>
