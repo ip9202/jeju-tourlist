@@ -48,7 +48,7 @@ export const Header: React.FC = () => {
   return (
     <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-16 overflow-visible">
           {/* 로고 섹션 */}
           <div className="flex items-center">
             <Link
@@ -74,22 +74,27 @@ export const Header: React.FC = () => {
           </div>
 
           {/* 데스크톱 네비게이션 */}
-          <div className="hidden sm:flex items-center space-x-6 h-6">
+          <div className="hidden sm:flex items-center space-x-6 overflow-visible">
             <Link
               href="/questions"
-              className="text-gray-700 hover:text-indigo-600 transition-colors font-medium text-sm h-6 flex items-center"
+              className="text-gray-700 hover:text-indigo-600 transition-colors font-medium text-sm flex items-center"
             >
               질문목록
             </Link>
             <Link
               href="/categories"
-              className="text-gray-700 hover:text-indigo-600 transition-colors font-medium text-sm h-6 flex items-center"
+              className="text-gray-700 hover:text-indigo-600 transition-colors font-medium text-sm flex items-center"
             >
               카테고리
             </Link>
 
             {/* 알림 벨 - 항상 표시 */}
-            <NotificationBell />
+            <div
+              className="relative"
+              style={{ padding: "12px", overflow: "visible" }}
+            >
+              <NotificationBell />
+            </div>
 
             {isAuthenticated ? (
               <div className="flex items-center space-x-3">
@@ -134,7 +139,7 @@ export const Header: React.FC = () => {
               <div className="flex items-center space-x-3">
                 <Link
                   href="/auth/signin"
-                  className="text-gray-700 hover:text-indigo-600 transition-colors font-medium text-sm h-6 flex items-center"
+                  className="text-gray-700 hover:text-indigo-600 transition-colors font-medium text-sm flex items-center"
                 >
                   로그인
                 </Link>
@@ -197,8 +202,16 @@ export const Header: React.FC = () => {
               </Link>
 
               {/* 모바일 알림 벨 - 항상 표시 */}
-              <div className="px-3 py-2">
-                <NotificationBell />
+              <div
+                className="px-3 py-2 relative"
+                style={{ overflow: "visible" }}
+              >
+                <div
+                  className="relative"
+                  style={{ padding: "12px", overflow: "visible" }}
+                >
+                  <NotificationBell />
+                </div>
               </div>
 
               {isAuthenticated ? (

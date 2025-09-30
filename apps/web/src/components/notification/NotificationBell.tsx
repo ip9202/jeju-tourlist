@@ -97,21 +97,28 @@ export const NotificationBell: React.FC = () => {
   };
 
   return (
-    <div className="relative flex items-center h-6">
+    <div className="relative flex items-center">
       {/* 알림 벨 버튼 */}
       <button
         onClick={handleBellClick}
-        className="relative p-1 text-gray-600 hover:text-gray-900 transition-colors flex items-center justify-center h-6 w-6"
+        className="relative p-2 text-gray-600 hover:text-gray-900 transition-colors flex items-center justify-center"
         data-testid="notification-bell"
         data-unread={unreadCount > 0 ? "true" : "false"}
+        style={{ margin: "8px" }} // 충분한 마진으로 배지 공간 확보
       >
         <Bell size={16} />
         {unreadCount > 0 && (
           <span
-            className="absolute -top-0.5 -right-0.5 bg-red-500 text-white rounded-full h-4 w-4 flex items-center justify-center text-[10px] font-bold leading-none"
+            className="absolute bg-red-500 text-white rounded-full h-5 w-5 flex items-center justify-center text-[10px] font-bold leading-none border-2 border-white shadow-lg"
             data-testid="notification-badge"
+            style={{
+              top: "-8px",
+              right: "-8px",
+              zIndex: 9999,
+              position: "absolute",
+            }}
           >
-            {unreadCount}
+            {unreadCount > 99 ? "99+" : unreadCount}
           </span>
         )}
       </button>
@@ -119,7 +126,7 @@ export const NotificationBell: React.FC = () => {
       {/* 알림 드롭다운 */}
       {isOpen && (
         <div
-          className="absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-50"
+          className="absolute right-0 top-full mt-2 w-80 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-50"
           data-testid="notification-dropdown"
         >
           <div className="p-4 border-b border-gray-200">
