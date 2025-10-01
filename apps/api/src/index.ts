@@ -7,33 +7,36 @@ import morgan from "morgan";
 import swaggerUi from "swagger-ui-express";
 // 환경변수 설정
 const env = {
-  NODE_ENV: process.env.NODE_ENV || 'development',
-  DATABASE_URL: process.env.DATABASE_URL || 'postgresql://localhost:5432/jeju_tourlist',
-  NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET || 'your-super-secret-key-here-must-be-at-least-32-characters-long',
-  NEXTAUTH_URL: process.env.NEXTAUTH_URL || 'http://localhost:3000',
-  API_BASE_URL: process.env.API_BASE_URL || 'http://localhost:4000',
-  SOCKET_URL: process.env.SOCKET_URL || 'http://localhost:4001',
-  SOCKET_PORT: process.env.SOCKET_PORT || '4001',
-  LOG_LEVEL: process.env.LOG_LEVEL || 'info',
-  REDIS_URL: process.env.REDIS_URL || 'redis://localhost:6379',
-  REDIS_HOST: process.env.REDIS_HOST || 'localhost',
-  REDIS_PORT: process.env.REDIS_PORT || '6379',
+  NODE_ENV: process.env.NODE_ENV || "development",
+  DATABASE_URL:
+    process.env.DATABASE_URL || "postgresql://localhost:5432/jeju_tourlist",
+  NEXTAUTH_SECRET:
+    process.env.NEXTAUTH_SECRET ||
+    "your-super-secret-key-here-must-be-at-least-32-characters-long",
+  NEXTAUTH_URL: process.env.NEXTAUTH_URL || "http://localhost:3000",
+  API_BASE_URL: process.env.API_BASE_URL || "http://localhost:4000",
+  SOCKET_URL: process.env.SOCKET_URL || "http://localhost:4001",
+  SOCKET_PORT: process.env.SOCKET_PORT || "4001",
+  LOG_LEVEL: process.env.LOG_LEVEL || "info",
+  REDIS_URL: process.env.REDIS_URL || "redis://localhost:6379",
+  REDIS_HOST: process.env.REDIS_HOST || "localhost",
+  REDIS_PORT: process.env.REDIS_PORT || "6379",
   REDIS_PASSWORD: process.env.REDIS_PASSWORD,
-  REDIS_DB: process.env.REDIS_DB || '0',
+  REDIS_DB: process.env.REDIS_DB || "0",
 };
 
 // 환경변수 검증 함수
 function validateEnv() {
-  const required = ['NODE_ENV', 'DATABASE_URL', 'NEXTAUTH_SECRET'];
+  const required = ["NODE_ENV", "DATABASE_URL", "NEXTAUTH_SECRET"];
   const missing = required.filter(key => !process.env[key]);
-  
+
   if (missing.length > 0) {
     return {
       success: false,
-      error: `Missing required environment variables: ${missing.join(', ')}`
+      error: `Missing required environment variables: ${missing.join(", ")}`,
     };
   }
-  
+
   return { success: true, error: null };
 }
 import { ErrorHandler } from "./middleware/errorHandler";
@@ -45,7 +48,11 @@ import pointRoutes from "./routes/point";
 // import badgeRoutes from "./routes/badge";
 // import adminRoutes from "./routes/admin";
 // import notificationRoutes from "./routes/notification";
-// import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
+import { createQuestionRouter } from "./routes/question";
+import { createAnswerRouter } from "./routes/answer";
+import { createCategoryRouter } from "./routes/category";
+import uploadRoutes from "./routes/upload";
 import {
   SocketConfig,
   createAuthMiddleware,
@@ -69,8 +76,8 @@ const app = express();
 const httpServer = createServer(app); // HTTP 서버 생성
 const PORT = process.env.PORT || 4000;
 
-// Prisma 클라이언트 초기화 (Phase 7에서는 스킵)
-// const prisma = new PrismaClient();
+// Prisma 클라이언트 초기화
+const prisma = new PrismaClient();
 
 // 미들웨어 설정
 app.use(
@@ -123,11 +130,20 @@ app.use("/api/points", pointRoutes);
 // app.use("/api/admin", adminRoutes);
 // app.use("/api/notifications", notificationRoutes);
 
+// 질문/답변/카테고리 라우트 활성화
+app.use("/api/questions", createQuestionRouter(prisma));
+app.use("/api/answers", createAnswerRouter(prisma));
+app.use("/api/categories", createCategoryRouter(prisma));
+
+// 파일 업로드 라우트
+app.use("/api/upload", uploadRoutes);
+
+// 업로드된 파일 정적 제공
+app.use("/uploads", express.static("uploads"));
+
 // TODO: Phase 7 테스트 후 활성화
 // app.use("/api/auth", authLimiter, createAuthRouter());
 // app.use("/api/users", createUserRouter());
-// app.use("/api/questions", createQuestionRouter(prisma));
-// app.use("/api/answers", createAnswerRouter(prisma));
 // app.use("/api", createUserActivityRouter(prisma));
 
 // API 라우트

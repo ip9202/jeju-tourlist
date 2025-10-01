@@ -17,7 +17,8 @@
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
-    "db:seed": "tsx src/seed.ts"
+    "db:seed": "tsx src/seed.ts",
+    "db:seed:categories": "tsx prisma/seed-categories.ts"
   },
   "devDependencies": {
     "@jest/globals": "^30.1.2",

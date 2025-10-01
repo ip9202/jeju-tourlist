@@ -40,6 +40,7 @@ export class QuestionRepository {
           authorId: data.authorId,
           categoryId: data.categoryId,
           tags: data.tags,
+          attachments: data.attachments || [],
           location: data.location,
           latitude: data.latitude,
           longitude: data.longitude,

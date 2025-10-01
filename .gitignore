@@ -108,3 +108,13 @@ Thumbs.db
 
 # Prisma
 prisma/migrations/
+
+# Uploads (사용자가 업로드한 파일)
+apps/api/uploads/*
+!apps/api/uploads/.gitkeep
+
+# Playwright MCP
+.playwright-mcp/
+
+# Temporary test files
+check_attachments.js

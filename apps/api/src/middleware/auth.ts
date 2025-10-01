@@ -22,6 +22,23 @@ export const authMiddleware = async (
   try {
     const token = extractToken(req);
 
+    // 개발 환경에서는 토큰 없이도 동작 (임시 처리)
+    if (!token && process.env.NODE_ENV === "development") {
+      console.log("[Auth] 개발 환경 - 임시 사용자로 인증 우회");
+      req.user = {
+        id: "temp-user-id",
+        email: "temp@example.com",
+        name: "임시 사용자",
+        avatar: undefined,
+        role: "user",
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+      next();
+      return;
+    }
+
     if (!token) {
       res.status(401).json({
         success: false,

@@ -4,7 +4,7 @@ import { PrismaClient } from "@prisma/client";
 import {
   CreateAnswerSchema,
   UpdateAnswerSchema,
-} from "@jeju-tourlist/database/types/answer";
+} from "@jeju-tourlist/database/src/types/answer";
 import { ApiResponse, PaginatedResponse } from "../types";
 import { z } from "zod";
 

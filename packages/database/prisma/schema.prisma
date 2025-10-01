@@ -3,7 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../node_modules/.prisma/client"
+  output   = "../../../node_modules/.prisma/client"
 }
 
 datasource db {
@@ -109,7 +109,10 @@ model Question {
   location    String?   // 제주도 내 위치
   latitude    Float?
   longitude   Float?
-  
+
+  // 첨부 파일
+  attachments String[]  // 파일 URL 배열
+
   // 상태 관리
   status      QuestionStatus @default(ACTIVE)
   isResolved  Boolean        @default(false)

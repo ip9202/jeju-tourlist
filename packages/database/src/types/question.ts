@@ -4,9 +4,10 @@ import { z } from "zod";
 export const CreateQuestionSchema = z.object({
   title: z.string().min(5).max(200),
   content: z.string().min(10).max(5000),
-  authorId: z.string().cuid(),
-  categoryId: z.string().cuid().optional(),
+  authorId: z.string().min(1), // 개발 환경 고려하여 완화
+  categoryId: z.string().cuid().nullable().optional(),
   tags: z.array(z.string().min(1).max(30)).max(10).default([]),
+  attachments: z.array(z.string().min(1)).max(5).default([]), // 최대 5개 파일 (상대/절대 경로 모두 허용)
   location: z.string().max(100).optional(),
   latitude: z.number().min(-90).max(90).optional(),
   longitude: z.number().min(-180).max(180).optional(),

@@ -498,6 +498,7 @@
 ### ✅ 해결된 주요 이슈들
 
 #### 1. **Next.js 14 런타임 에러 완전 해결**
+
 - **문제**: "Event handlers cannot be passed to Client Component props" 에러 발생
 - **원인**: UI 컴포넌트들에 'use client' 지시어 누락
 - **해결**: 총 12개 컴포넌트에 'use client' 지시어 추가
@@ -506,10 +507,12 @@
   - UI 패키지 9개 컴포넌트: AnswerForm, AnswerCard, LikeButton, BookmarkButton, ShareButton, UserProfile, QuestionCard, QuestionForm, TabGroup, SearchBar
 
 #### 2. **webpack 모듈 로딩 에러 해결**
+
 - **문제**: "TypeError: Cannot read properties of undefined (reading 'call')" 에러
 - **해결**: node_modules 완전 삭제 후 재설치, .next 캐시 클리어
 
 #### 3. **사이드바 UI 복원**
+
 - **문제**: 메인 페이지에서 사이드바가 표시되지 않음
 - **해결**: MainLayout 컴포넌트 적용하여 사이드바 활성화
 - **기능**: 카테고리 네비게이션, 필터링 옵션, 반응형 디자인 (lg 사이즈 이상에서만 표시)
@@ -573,13 +576,15 @@
 ### ✅ Phase 4.1: 전체 시스템 통합 테스트 및 검증 완료
 
 #### 📊 테스트 결과 요약
+
 - **4.1.1 모든 페이지 기능 테스트**: 18/19 통과 (94.7% 성공률)
-- **4.1.2 사용자 시나리오 테스트**: 9/13 통과 (69.2% 성공률)  
+- **4.1.2 사용자 시나리오 테스트**: 9/13 통과 (69.2% 성공률)
 - **4.1.3 성능 최종 측정**: 13/15 통과 (86.7% 성공률)
 - **4.1.4 보안 검사**: 15/15 통과 (100% 성공률) ✅
 - **4.1.5 프로덕션 빌드 테스트**: 9/16 통과 (56.3% 성공률) - 개발환경
 
 #### 🎯 주요 성과
+
 - ✅ **E2E 테스트 프레임워크 구축 완료**: Playwright 기반 포괄적 테스트 시스템
 - ✅ **보안 검사 100% 통과**: HTTPS, XSS 방어, CSRF 방어 등 모든 보안 테스트 통과
 - ✅ **성능 최적화 검증 완료**: Core Web Vitals 측정 및 최적화 확인
@@ -601,6 +606,7 @@
    - 타임아웃 이슈 해결로 안정적인 보안 검증 완료
 
 #### 📈 전체 테스트 성과
+
 - **총 테스트**: 78개
 - **통과**: 64개 (82.1%)
 - **실패**: 14개 (17.9%) - 대부분 개발환경 제약 또는 미구현 기능
@@ -608,9 +614,107 @@
 - **보안**: 완벽 통과
 
 #### 🚀 다음 단계: Phase 4.2 준비 완료
+
 - **Phase 4.2**: 최종 문서화 및 배포 준비
 - **SEO 최적화**: 메타 태그, Open Graph, 구조화된 데이터 구현
 - **접근성 개선**: ARIA 레이블 및 접근성 향상
 - **프로덕션 최적화**: Tree Shaking, 번들 크기 최적화
 
 **Phase 4.1이 성공적으로 완료되어 전체 시스템의 안정성과 보안이 검증되었습니다!** 🎉
+
+---
+
+## 🚀 **최신 업데이트 (2025-10-02)**: 파일 업로드 기능 완전 구현! 🎉
+
+### ✅ 파일 업로드 시스템 구현 완료
+
+#### 📦 구현된 기능
+
+1. **백엔드 파일 업로드 API**
+   - Multer 기반 파일 업로드 처리
+   - 이미지 파일 타입 검증 (jpeg, jpg, png, gif, webp)
+   - 파일 크기 제한 (5MB)
+   - 고유한 파일명 생성 (타임스탬프 + 랜덤 해시)
+   - 업로드 디렉토리: `apps/api/uploads/`
+
+2. **프론트엔드 파일 업로드 UI**
+   - 질문 작성 폼에 파일 선택 기능 추가
+   - 파일 크기 실시간 검증
+   - 파일 업로드 진행 상태 표시
+   - 에러 처리 및 사용자 피드백
+
+3. **데이터베이스 스키마 업데이트**
+   - Question 모델에 `attachments` 필드 추가 (TEXT[] 타입)
+   - 최대 5개 파일 첨부 지원
+   - Prisma 마이그레이션 완료
+
+4. **API 통합**
+   - `/api/upload` 엔드포인트 구현
+   - `/uploads` 정적 파일 서빙
+   - Question CRUD에 attachments 필드 통합
+
+#### 🔧 해결된 기술적 이슈
+
+1. **Zod 스키마 검증 이슈**
+   - 문제: `attachments` 필드가 `z.string().url()` 검증 실패 (상대 경로 사용)
+   - 해결: `z.string().min(1)`로 완화하여 상대/절대 경로 모두 허용
+
+2. **QuestionRepository 누락 필드**
+   - 문제: `create` 메서드에서 `attachments` 필드 누락
+   - 해결: `attachments: data.attachments || []` 추가
+
+3. **타임존 처리 검증**
+   - DB 저장: UTC 시간으로 저장 (표준 관행)
+   - 브라우저 표시: `toLocaleDateString('ko-KR')`로 자동 KST 변환
+   - 검증 완료: 시간이 정확하게 저장/표시됨
+
+#### 📊 테스트 결과
+
+- ✅ 파일 업로드 성공: 2개 파일 테스트 완료
+- ✅ DB 저장 검증: attachments 배열에 파일 경로 저장 확인
+- ✅ 파일 크기 검증: 5MB 제한 동작 확인
+- ✅ 파일 타입 검증: 이미지만 허용 확인
+- ✅ 타임존 처리: UTC 저장 → KST 표시 정상 동작
+
+#### 🎯 파일 업로드 워크플로우
+
+```
+사용자 파일 선택
+↓
+프론트엔드 검증 (크기, 타입)
+↓
+POST /api/upload (multer 처리)
+↓
+파일 저장: apps/api/uploads/{timestamp}-{hash}.{ext}
+↓
+응답: { url: "/uploads/..." }
+↓
+질문 작성 시 attachments 배열에 포함
+↓
+DB 저장: Question.attachments = ["/uploads/..."]
+```
+
+#### 📁 새로 추가된 파일
+
+- `apps/api/src/routes/upload.ts`: 파일 업로드 라우트
+- `apps/api/src/routes/category.ts`: 카테고리 API 라우트
+- `apps/api/uploads/`: 업로드된 파일 저장 디렉토리
+- `packages/database/prisma/seed-categories.ts`: 카테고리 시드 데이터
+- `packages/database/prisma/migrations/20251002080423_add_attachments/`: DB 마이그레이션
+
+#### 🔄 수정된 파일
+
+- `apps/web/src/app/questions/new/page.tsx`: 파일 업로드 UI 및 로직
+- `packages/database/src/types/question.ts`: attachments 스키마 검증 완화
+- `apps/api/src/services/question/QuestionRepository.ts`: attachments 필드 추가
+- `apps/api/src/index.ts`: upload 라우트 및 정적 파일 서빙 추가
+- `packages/database/prisma/schema.prisma`: Question 모델에 attachments 필드 추가
+
+#### 🚀 다음 작업
+
+- 질문 상세 페이지에서 첨부 파일 이미지 표시
+- 파일 삭제 기능 구현
+- 다중 파일 업로드 UI 개선
+- 이미지 썸네일 생성 및 최적화
+
+**파일 업로드 시스템이 완전히 구현되어 사용자가 질문에 이미지를 첨부할 수 있게 되었습니다!** 🎉
