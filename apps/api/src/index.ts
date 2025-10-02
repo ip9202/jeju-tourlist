@@ -5,6 +5,7 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import swaggerUi from "swagger-ui-express";
+import path from "path";
 // 환경변수 설정
 const env = {
   NODE_ENV: process.env.NODE_ENV || "development",
@@ -139,7 +140,7 @@ app.use("/api/categories", createCategoryRouter(prisma));
 app.use("/api/upload", uploadRoutes);
 
 // 업로드된 파일 정적 제공
-app.use("/uploads", express.static("uploads"));
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 // TODO: Phase 7 테스트 후 활성화
 // app.use("/api/auth", authLimiter, createAuthRouter());

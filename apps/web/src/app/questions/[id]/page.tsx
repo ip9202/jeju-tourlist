@@ -19,14 +19,21 @@ interface Question {
   author: {
     id: string;
     name: string;
-    profileImage?: string;
+    nickname: string;
+    avatar?: string | null;
   };
-  category: string;
-  isAnswered: boolean;
+  category: {
+    id: string;
+    name: string;
+    color?: string;
+  } | null;
+  tags: string[];
+  attachments: string[];
+  isResolved: boolean;
   answerCount: number;
   createdAt: string;
-  views: number;
-  likes: number;
+  viewCount: number;
+  likeCount: number;
 }
 
 interface Answer {
@@ -35,11 +42,11 @@ interface Answer {
   author: {
     id: string;
     name: string;
-    profileImage?: string;
-    isVerified: boolean;
+    nickname: string;
+    avatar?: string | null;
   };
   createdAt: string;
-  likes: number;
+  likeCount: number;
   isAccepted: boolean;
 }
 
@@ -59,64 +66,26 @@ export default function QuestionDetailPage() {
       setError(null);
 
       try {
-        // 잘못된 ID인 경우 에러 시뮬레이션
-        if (params.id === "invalid-id") {
-          throw new Error("질문을 찾을 수 없습니다");
+        // API 호출
+        const response = await fetch(`/api/questions/${params.id}`);
+
+        if (!response.ok) {
+          if (response.status === 404) {
+            throw new Error("질문을 찾을 수 없습니다");
+          }
+          throw new Error("질문을 불러오는 중 오류가 발생했습니다");
         }
 
-        // 목업 데이터
-        const mockQuestion: Question = {
-          id: params.id as string,
-          title: "제주도 3박 4일 여행 코스 추천해주세요",
-          content:
-            "가족과 함께 제주도 3박 4일 여행을 계획하고 있습니다. 7세 아이와 60대 어머니가 함께 가는데, 모두가 즐길 수 있는 코스를 추천해주세요. 렌터카를 이용할 예정이고, 숙박은 제주시와 서귀포 각각 2박씩 생각하고 있습니다.",
-          author: {
-            id: "user1",
-            name: "김제주",
-            profileImage: "/avatars/default.png",
-          },
-          category: "여행",
-          isAnswered: true,
-          answerCount: 3,
-          createdAt: new Date().toISOString(),
-          views: 156,
-          likes: 12,
-        };
+        const result = await response.json();
 
-        const mockAnswers: Answer[] = [
-          {
-            id: "answer1",
-            content:
-              "3박 4일 가족 여행이라면 다음과 같은 코스를 추천드립니다:\n\n**1일차: 제주시 중심**\n- 오전: 제주공항 도착 → 렌터카 픽업 → 제주시내 숙소 체크인\n- 오후: 제주도립미술관 (아이들이 좋아할 만한 전시)\n- 저녁: 동문시장에서 저녁식사\n\n**2일차: 동부 해안**\n- 오전: 성산일출봉 (일출 명소)\n- 오후: 섭지코지 (드라마 촬영지)\n- 저녁: 서귀포로 이동\n\n**3일차: 서부 해안**\n- 오전: 한라산 등반 (체력에 따라 조절)\n- 오후: 중문관광단지\n- 저녁: 서귀포 시장 탐방\n\n**4일차: 마무리**\n- 오전: 제주시로 이동하며 중간 관광지 방문\n- 오후: 공항으로 이동",
-            author: {
-              id: "expert1",
-              name: "제주현지인",
-              profileImage: "/avatars/jeju-guide.jpg",
-              isVerified: true,
-            },
-            createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-            likes: 8,
-            isAccepted: true,
-          },
-          {
-            id: "answer2",
-            content:
-              "7세 아이와 60대 어머니를 고려하면 체력적으로 부담이 적은 코스가 좋겠네요. 제가 추천하는 코스는:\n\n1. **제주시 2박**: 도심 관광과 가까운 관광지 위주\n2. **서귀포 2박**: 자연 경관과 해변 위주\n\n특히 한라산 등반은 체력에 따라 조절하시고, 아이들이 좋아할 만한 테마파크나 수족관도 고려해보세요.",
-            author: {
-              id: "user2",
-              name: "제주맘",
-              profileImage: "/avatars/mom-blogger.jpg",
-              isVerified: false,
-            },
-            createdAt: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
-            likes: 5,
-            isAccepted: false,
-          },
-        ];
+        if (!result.success) {
+          throw new Error(result.error || "질문을 불러올 수 없습니다");
+        }
 
-        setQuestion(mockQuestion);
-        setAnswers(mockAnswers);
+        setQuestion(result.data);
+        setAnswers(result.data.answers || []);
       } catch (err) {
+        console.error("[DEBUG] 질문 로드 실패:", err);
         setError(
           err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다"
         );
@@ -171,23 +140,19 @@ export default function QuestionDetailPage() {
       const result = await response.json();
       console.log("답변 작성 성공:", result);
 
-      // 새 답변을 목록에 추가
-      const newAnswerObj: Answer = {
-        id: result.data.id,
-        content: result.data.content,
-        author: {
-          id: result.data.authorId,
-          name: "현재 사용자",
-          profileImage: "/avatars/default.png",
-          isVerified: false,
-        },
-        createdAt: result.data.createdAt,
-        likes: 0,
-        isAccepted: false,
-      };
-
-      setAnswers(prev => [newAnswerObj, ...prev]);
+      // 새 답변을 목록에 추가 (API 응답에 author 정보가 포함됨)
+      if (result.data.author) {
+        setAnswers(prev => [result.data, ...prev]);
+      }
       setNewAnswer("");
+
+      // 답변 개수 업데이트
+      if (question) {
+        setQuestion({
+          ...question,
+          answerCount: question.answerCount + 1,
+        });
+      }
     } catch (error) {
       console.error("답변 작성 실패:", error);
       setAnswerError(
@@ -312,13 +277,25 @@ export default function QuestionDetailPage() {
                 {question.title}
               </Heading>
               <div className="flex items-center space-x-4 text-sm text-gray-500 mb-4">
-                <span>조회 {question.views}</span>
-                <span>좋아요 {question.likes}</span>
+                <span>조회 {question.viewCount}</span>
+                <span>좋아요 {question.likeCount}</span>
                 <span>답변 {question.answerCount}</span>
                 <span>
-                  {new Date(question.createdAt).toLocaleDateString("ko-KR")}
+                  {new Date(question.createdAt).toLocaleString("ko-KR")}
                 </span>
               </div>
+              {question.tags.length > 0 && (
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {question.tags.map((tag, index) => (
+                    <span
+                      key={index}
+                      className="px-3 py-1 bg-blue-100 text-blue-700 text-sm rounded-full"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
             <div className="flex space-x-2">
               <Button variant="outline" size="sm">
@@ -348,6 +325,33 @@ export default function QuestionDetailPage() {
             </Text>
           </div>
 
+          {/* 첨부 파일 이미지 표시 */}
+          {question.attachments && question.attachments.length > 0 && (
+            <div className="mb-6">
+              <div className="grid grid-cols-2 gap-4">
+                {question.attachments.map((attachment, index) => (
+                  <div key={index} className="relative">
+                    <img
+                      src={attachment}
+                      alt={`첨부 이미지 ${index + 1}`}
+                      className="w-full h-auto rounded-lg border border-gray-200"
+                      onError={e => {
+                        const target = e.currentTarget;
+                        // 무한 루프 방지
+                        if (!target.dataset.errorHandled) {
+                          target.dataset.errorHandled = "true";
+                          console.error("이미지 로드 실패:", attachment);
+                          // 에러 시 숨김 처리
+                          target.style.display = "none";
+                        }
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           <div className="flex items-center justify-between pt-4 border-t border-gray-200">
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
@@ -359,7 +363,9 @@ export default function QuestionDetailPage() {
                 <div className="font-medium text-gray-900">
                   {question.author.name}
                 </div>
-                <div className="text-sm text-gray-500">{question.category}</div>
+                <div className="text-sm text-gray-500">
+                  {question.category ? question.category.name : "미분류"}
+                </div>
               </div>
             </div>
             <Button variant="outline" size="sm">
@@ -402,15 +408,10 @@ export default function QuestionDetailPage() {
                     <div>
                       <div className="font-medium text-gray-900">
                         {answer.author.name}
-                      </div>
-                      {answer.author.isVerified && (
-                        <span
-                          data-testid="verification-badge"
-                          className="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800"
-                        >
-                          검증된 현지인
+                        <span className="ml-2 text-sm text-gray-500">
+                          @{answer.author.nickname}
                         </span>
-                      )}
+                      </div>
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
@@ -432,7 +433,7 @@ export default function QuestionDetailPage() {
                 <div className="flex items-center space-x-4">
                   <Button variant="outline" size="sm">
                     <Heart className="w-4 h-4 mr-2" />
-                    좋아요 {answer.likes}
+                    좋아요 {answer.likeCount}
                   </Button>
                   <Button variant="outline" size="sm">
                     답변하기
