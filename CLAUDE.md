@@ -710,11 +710,64 @@ DB 저장: Question.attachments = ["/uploads/..."]
 - `apps/api/src/index.ts`: upload 라우트 및 정적 파일 서빙 추가
 - `packages/database/prisma/schema.prisma`: Question 모델에 attachments 필드 추가
 
-#### 🚀 다음 작업
+#### 🚀 완료된 추가 작업
 
-- 질문 상세 페이지에서 첨부 파일 이미지 표시
-- 파일 삭제 기능 구현
-- 다중 파일 업로드 UI 개선
-- 이미지 썸네일 생성 및 최적화
+- ✅ 질문 상세 페이지에서 첨부 파일 이미지 표시 완료
+- ✅ 이미지 라이트박스 기능 구현 (클릭 시 크게 보기)
+- ✅ 이미지 호버 효과 및 줌 아이콘 표시
+- ✅ 키보드 네비게이션 (ESC, 화살표 키) 지원
 
 **파일 업로드 시스템이 완전히 구현되어 사용자가 질문에 이미지를 첨부할 수 있게 되었습니다!** 🎉
+
+---
+
+## 🚀 **최신 업데이트 (2025-10-02)**: Playwright MCP 서버 재설정 완료! 🎉
+
+### ✅ Playwright MCP 서버 재설정
+
+#### 🔧 수행된 작업
+
+1. **기존 MCP 서버 프로세스 정리**
+   - 실행 중이던 Playwright MCP 서버 프로세스 종료
+   - 충돌 가능성 제거
+
+2. **공식 Playwright MCP 서버 재등록**
+   - 명령어: `npx -y @playwright/mcp@latest`
+   - macOS 환경에 맞게 올바른 명령어 사용 (Windows `cmd /c` 제거)
+   - 설정 파일: `/Users/ip9202/.claude.json` 업데이트
+
+3. **시스템 상태 확인**
+   - Web Server (localhost:3000): ✅ 정상 실행
+   - API Server (localhost:4000): ✅ 정상 실행
+   - Playwright 버전: 1.55.0 ✅ 정상 설치
+   - Playwright 브라우저: ✅ 정상 설치 (Chromium, Firefox, WebKit)
+
+#### 📊 MCP 서버 설정
+
+```json
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"]
+    }
+  }
+}
+```
+
+#### 🎯 다음 사용 가능 기능
+
+- **브라우저 자동화**: E2E 테스트 자동 실행
+- **스크린샷 캡처**: UI 테스트 시각 검증
+- **사용자 상호작용 테스트**: 폼 제출, 클릭, 네비게이션
+- **접근성 테스트**: WCAG 준수 자동 검증
+
+#### 🔄 향후 세션을 위한 개발 컨텍스트 (업데이트)
+
+- **현재 상태**: **파일 업로드 + 이미지 라이트박스 완전 구현** 🎉
+- **서버 실행 상태**: Web(3000) + API(4000) 정상 가동
+- **MCP 서버**: Playwright MCP 재설정 완료
+- **다음 작업**: E2E 테스트 실행 또는 새로운 기능 개발
+- **기술적 기반**: Next.js 14, TypeScript, Playwright MCP 모두 안정화
+
+**모든 개발 환경이 완벽하게 설정되어 새로운 기능 개발 및 테스트가 가능합니다!** 🚀
