@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { Button, Heading, Text } from "@jeju-tourlist/ui";
+import { Button, Heading, Text, ImageLightbox } from "@jeju-tourlist/ui";
 import {
   ArrowLeft,
   Share2,
@@ -59,6 +59,8 @@ export default function QuestionDetailPage() {
   const [newAnswer, setNewAnswer] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [answerError, setAnswerError] = useState("");
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
     const loadQuestion = async () => {
@@ -330,11 +332,15 @@ export default function QuestionDetailPage() {
             <div className="mb-6">
               <div className="grid grid-cols-2 gap-4">
                 {question.attachments.map((attachment, index) => (
-                  <div key={index} className="relative">
+                  <div key={index} className="relative cursor-pointer group">
                     <img
                       src={attachment}
                       alt={`첨부 이미지 ${index + 1}`}
-                      className="w-full h-auto rounded-lg border border-gray-200"
+                      className="w-full h-auto rounded-lg border border-gray-200 transition-all group-hover:shadow-lg group-hover:scale-[1.02]"
+                      onClick={() => {
+                        setCurrentImageIndex(index);
+                        setLightboxOpen(true);
+                      }}
                       onError={e => {
                         const target = e.currentTarget;
                         // 무한 루프 방지
@@ -346,6 +352,22 @@ export default function QuestionDetailPage() {
                         }
                       }}
                     />
+                    {/* 호버 시 확대 아이콘 표시 */}
+                    <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all rounded-lg">
+                      <svg
+                        className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"
+                        />
+                      </svg>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -481,6 +503,21 @@ export default function QuestionDetailPage() {
           </form>
         </div>
       </div>
+
+      {/* 이미지 라이트박스 */}
+      {lightboxOpen && question.attachments && (
+        <ImageLightbox
+          images={question.attachments}
+          currentIndex={currentImageIndex}
+          onClose={() => setLightboxOpen(false)}
+          onPrevious={() => setCurrentImageIndex(prev => Math.max(0, prev - 1))}
+          onNext={() =>
+            setCurrentImageIndex(prev =>
+              Math.min(question.attachments.length - 1, prev + 1)
+            )
+          }
+        />
+      )}
     </div>
   );
 }

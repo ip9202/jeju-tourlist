@@ -1,6 +1,6 @@
 /**
  * Molecules 컴포넌트 내보내기
- * 
+ *
  * @description
  * - Atomic Design의 Molecules 레벨 컴포넌트들을 내보냄
  * - SOLID 원칙 중 SRP(단일 책임 원칙) 준수
@@ -8,40 +8,65 @@
  */
 
 // 메시지 관련 컴포넌트들
-export { MessageBubble, messageBubbleVariants } from './MessageBubble';
-export type { MessageBubbleProps } from './MessageBubble';
+export { MessageBubble, messageBubbleVariants } from "./MessageBubble";
+export type { MessageBubbleProps } from "./MessageBubble";
 
-export { UserProfile, userProfileVariants } from './UserProfile';
-export type { UserProfileProps } from './UserProfile';
+export { UserProfile, userProfileVariants } from "./UserProfile";
+export type { UserProfileProps } from "./UserProfile";
 
-export { HashtagList, hashtagListVariants, hashtagItemVariants } from './HashtagList';
-export type { HashtagListProps, Hashtag } from './HashtagList';
+export {
+  HashtagList,
+  hashtagListVariants,
+  hashtagItemVariants,
+} from "./HashtagList";
+export type { HashtagListProps, Hashtag } from "./HashtagList";
 
-export { TimestampDisplay, timestampDisplayVariants } from './TimestampDisplay';
-export type { TimestampDisplayProps, TimestampFormat } from './TimestampDisplay';
+export { TimestampDisplay, timestampDisplayVariants } from "./TimestampDisplay";
+export type {
+  TimestampDisplayProps,
+  TimestampFormat,
+} from "./TimestampDisplay";
 
 // 상호작용 컴포넌트들
-export { LikeButton, likeButtonVariants } from './LikeButton';
-export type { LikeButtonProps } from './LikeButton';
+export { LikeButton, likeButtonVariants } from "./LikeButton";
+export type { LikeButtonProps } from "./LikeButton";
 
-export { ShareButton, shareButtonVariants } from './ShareButton';
-export type { ShareButtonProps, ShareOptions } from './ShareButton';
+export { ShareButton, shareButtonVariants } from "./ShareButton";
+export type { ShareButtonProps, ShareOptions } from "./ShareButton";
 
-export { BookmarkButton, bookmarkButtonVariants } from './BookmarkButton';
-export type { BookmarkButtonProps } from './BookmarkButton';
+export { BookmarkButton, bookmarkButtonVariants } from "./BookmarkButton";
+export type { BookmarkButtonProps } from "./BookmarkButton";
 
-export { ReportButton, reportButtonVariants } from './ReportButton';
-export type { ReportButtonProps, ReportType, ReportOption } from './ReportButton';
+export { ReportButton, reportButtonVariants } from "./ReportButton";
+export type {
+  ReportButtonProps,
+  ReportType,
+  ReportOption,
+} from "./ReportButton";
 
 // 네비게이션 컴포넌트들
-export { Breadcrumb, breadcrumbVariants } from './Breadcrumb';
-export type { BreadcrumbProps, BreadcrumbItem } from './Breadcrumb';
+export { Breadcrumb, breadcrumbVariants } from "./Breadcrumb";
+export type { BreadcrumbProps, BreadcrumbItem } from "./Breadcrumb";
 
-export { Pagination, paginationVariants, paginationButtonVariants } from './Pagination';
-export type { PaginationProps } from './Pagination';
+export {
+  Pagination,
+  paginationVariants,
+  paginationButtonVariants,
+} from "./Pagination";
+export type { PaginationProps } from "./Pagination";
 
-export { TabGroup, tabGroupVariants, tabListVariants, tabButtonVariants, tabPanelVariants } from './TabGroup';
-export type { TabGroupProps, Tab } from './TabGroup';
+export {
+  TabGroup,
+  tabGroupVariants,
+  tabListVariants,
+  tabButtonVariants,
+  tabPanelVariants,
+} from "./TabGroup";
+export type { TabGroupProps, Tab } from "./TabGroup";
 
-export { SearchBar, searchBarVariants } from './SearchBar';
-export type { SearchBarProps, SearchSuggestion } from './SearchBar';
+export { SearchBar, searchBarVariants } from "./SearchBar";
+export type { SearchBarProps, SearchSuggestion } from "./SearchBar";
+
+// 미디어 컴포넌트들
+export { ImageLightbox } from "./ImageLightbox";
+export type { ImageLightboxProps } from "./ImageLightbox";
