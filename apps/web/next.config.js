@@ -118,16 +118,22 @@ const nextConfig = {
 
   // 리라이트 설정 (API 프록시)
   async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: `${process.env.API_BASE_URL || 'http://localhost:4000'}/api/:path*`,
-      },
-      {
-        source: '/uploads/:path*',
-        destination: `${process.env.API_BASE_URL || 'http://localhost:4000'}/uploads/:path*`,
-      },
-    ];
+    return {
+      beforeFiles: [
+        // uploads는 항상 백엔드로
+        {
+          source: '/uploads/:path*',
+          destination: `${process.env.API_BASE_URL || 'http://localhost:4000'}/uploads/:path*`,
+        },
+      ],
+      afterFiles: [
+        // NextAuth를 제외한 모든 API 요청을 백엔드로
+        {
+          source: '/api/:path((?!auth).*)*',
+          destination: `${process.env.API_BASE_URL || 'http://localhost:4000'}/api/:path*`,
+        },
+      ],
+    };
   },
 
   // 환경변수 설정
