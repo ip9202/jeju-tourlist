@@ -1,7 +1,7 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["**/.env.*local"],
-  "tasks": {
+  "pipeline": {
     "build": {
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
@@ -10,17 +10,79 @@
       "cache": false,
       "persistent": true
     },
+    "start": {
+      "dependsOn": ["build"],
+      "cache": false
+    },
     "lint": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "lint:fix": {
+      "dependsOn": ["^build"],
+      "outputs": []
     },
     "type-check": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "outputs": []
     },
     "test": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"]
+    },
+    "test:unit": {
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"]
+    },
+    "test:integration": {
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"]
+    },
+    "test:e2e": {
+      "dependsOn": ["^build"],
+      "outputs": ["test-results/**", "playwright-report/**"]
+    },
+    "test:security": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "test:performance": {
+      "dependsOn": ["^build"],
+      "outputs": ["lighthouse-report.json", "artillery-report.json"]
+    },
+    "test:coverage": {
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"]
     },
     "clean": {
-      "cache": false
+      "cache": false,
+      "outputs": []
+    },
+    "security:scan": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "benchmark": {
+      "dependsOn": ["^build"],
+      "outputs": ["lighthouse-report.json", "artillery-report.json"]
+    },
+    "db:generate": {
+      "outputs": ["prisma/generated/**"]
+    },
+    "db:push": {
+      "dependsOn": ["db:generate"],
+      "outputs": []
+    },
+    "db:migrate": {
+      "dependsOn": ["db:generate"],
+      "outputs": []
+    },
+    "db:seed": {
+      "dependsOn": ["db:push"],
+      "outputs": []
+    },
+    "db:reset": {
+      "outputs": []
     }
   }
 }
