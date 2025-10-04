@@ -21,8 +21,15 @@ interface Question {
   isAnswered: boolean;
 }
 
+interface Category {
+  id: string;
+  name: string;
+  icon?: string;
+}
+
 export default function QuestionsPage() {
   const [questions, setQuestions] = useState<Question[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({
@@ -36,21 +43,47 @@ export default function QuestionsPage() {
     totalPages: 0,
   });
 
-  // 하드코딩된 카테고리 (API에서 가져온 데이터 기반)
-  const categories = [
-    { id: "cmg79rb3800008pm77904hv8e", name: "일반", icon: "💬" },
-    { id: "cmg79rb3f00018pm7mzuwl77u", name: "숙박", icon: "🏨" },
-    { id: "cmg79rb3g00028pm7hb1uu2gg", name: "맛집", icon: "🍽️" },
-    { id: "cmg79rb3h00038pm7g9l18mtz", name: "교통", icon: "🚗" },
-    { id: "cmg79rb3i00048pm76tr09hlp", name: "관광지", icon: "🗺️" },
-    { id: "cmg79rb3j00058pm79m7yek42", name: "쇼핑", icon: "🛍️" },
-    { id: "cmg79rb3k00068pm7f2r2d0l4", name: "액티비티", icon: "🏄" },
-    { id: "cmg79rb3l00078pm7wwd77xqx", name: "날씨", icon: "🌤️" },
-  ];
+  useEffect(() => {
+    loadCategories();
+  }, []);
 
   useEffect(() => {
     loadQuestions();
-  }, [filters, pagination.page]);
+  }, [filters, pagination.page, searchTerm]);
+
+  const loadCategories = async () => {
+    try {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
+      const response = await fetch(`${API_URL}/categories`);
+
+      if (!response.ok) {
+        throw new Error("카테고리 목록을 불러오는데 실패했습니다.");
+      }
+
+      const data = await response.json();
+
+      // 카테고리에 아이콘 매핑
+      const iconMap: Record<string, string> = {
+        "관광지": "🗺️",
+        "맛집": "🍽️",
+        "숙박": "🏨",
+        "교통": "🚗",
+        "쇼핑": "🛍️",
+        "기타": "💬",
+        "액티비티": "🏄",
+        "날씨": "🌤️",
+      };
+
+      const categoriesWithIcons = data.data.map((cat: Category) => ({
+        ...cat,
+        icon: iconMap[cat.name] || "💬",
+      }));
+
+      setCategories(categoriesWithIcons);
+    } catch (error) {
+      console.error("카테고리 로드 실패:", error);
+    }
+  };
 
   const loadQuestions = async () => {
     setLoading(true);
@@ -70,7 +103,14 @@ export default function QuestionsPage() {
       }
 
       if (searchTerm) {
-        params.append("search", searchTerm);
+        params.append("query", searchTerm);
+      }
+
+      // 상태 필터링을 API에 전달
+      if (filters.status === "answered") {
+        params.append("isResolved", "true");
+      } else if (filters.status === "unanswered") {
+        params.append("isResolved", "false");
       }
 
       const response = await fetch(`${API_URL}/questions?${params.toString()}`);
@@ -134,6 +174,12 @@ export default function QuestionsPage() {
     loadQuestions();
   };
 
+  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+    // 검색어가 변경되면 자동으로 검색 실행 (디바운싱 없이)
+    setPagination(prev => ({ ...prev, page: 1 }));
+  };
+
   const handleFilterChange = (key: string, value: string) => {
     setFilters(prev => ({ ...prev, [key]: value }));
     setPagination(prev => ({ ...prev, page: 1 }));
@@ -144,16 +190,8 @@ export default function QuestionsPage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const filteredQuestions =
-    filters.status === "all"
-      ? questions
-      : questions.filter(question => {
-          if (filters.status === "answered" && !question.isAnswered)
-            return false;
-          if (filters.status === "unanswered" && question.isAnswered)
-            return false;
-          return true;
-        });
+  // API에서 이미 필터링된 데이터를 받으므로 추가 필터링 불필요
+  const filteredQuestions = questions;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -175,15 +213,14 @@ export default function QuestionsPage() {
           {/* 검색 및 필터 */}
           <div className="space-y-4">
             <form onSubmit={handleSearch} className="flex space-x-4">
-              <div className="flex-1">
-                <Input
-                  type="text"
-                  value={searchTerm}
-                  onChange={e => setSearchTerm(e.target.value)}
-                  placeholder="질문을 검색하세요..."
-                  className="w-full"
-                />
-              </div>
+              <input
+                id="search-query-input"
+                type="text"
+                value={searchTerm}
+                onChange={handleSearchInputChange}
+                placeholder="질문을 검색하세요..."
+                className="flex-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              />
               <Button type="submit">
                 <Search className="w-4 h-4 mr-2" />
                 검색

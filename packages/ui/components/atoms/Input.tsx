@@ -135,9 +135,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     },
     ref
   ) => {
-    // React의 useId 훅 사용 (서버/클라이언트 동일한 ID 생성)
-    const generatedId = React.useId();
-    const inputId = id || generatedId;
+    // ID는 반드시 props로 제공되어야 함 (hydration 불일치 방지)
+    // useId()는 서버/클라이언트에서 다른 값을 생성할 수 있음
 
     // 상태에 따른 variant 결정
     const inputVariant = error
@@ -156,7 +155,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {/* 라벨 */}
         {label && (
           <label
-            htmlFor={inputId}
+            htmlFor={id}
             className="block text-sm font-medium text-foreground"
           >
             {label}
@@ -179,7 +178,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
           {/* 입력 필드 */}
           <input
-            id={inputId}
+            id={id}
             type={type}
             className={cn(
               inputVariants({
@@ -193,7 +192,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             )}
             ref={ref}
             aria-invalid={!!error}
-            aria-describedby={messageText ? `${inputId}-message` : undefined}
+            aria-describedby={messageText && id ? `${id}-message` : undefined}
             {...props}
           />
 
@@ -206,9 +205,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         </div>
 
         {/* 메시지 텍스트 */}
-        {messageText && (
+        {messageText && id && (
           <p
-            id={`${inputId}-message`}
+            id={`${id}-message`}
             className={cn(
               "text-xs",
               error && "text-error-500",
