@@ -95,6 +95,17 @@ Claude Code 작업 가이드 문서입니다.
 - **타입 안전성**: Zod 스키마 검증, TypeScript 타입 정의
 - **패키지 구조**: database 패키지 exports 설정 최적화
 
+#### 버그 수정 및 개선 (2025-10-04)
+
+- **DB 마이그레이션**: Prisma schema 변경 후 `db push --force-reset` 실행
+- **답변 작성 오류 수정**:
+  - User 생성 시 `provider`, `providerId` 필수 필드 추가
+  - AnswerService, AnswerCommentService 임시 사용자 생성 로직 수정
+  - Zod 검증 에러 메시지 개선 (`error.issues` 사용)
+- **UI 개선**:
+  - 질문 작성 페이지 카테고리 선택 아이콘 이모지 적용
+  - 아이콘 매핑: map-pin→📍, utensils→🍴, bed→🛏️, car→🚗, shopping-bag→🛍️, help-circle→❓
+
 ### 📊 시스템 상태
 
 ```

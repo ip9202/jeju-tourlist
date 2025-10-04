@@ -6,6 +6,19 @@ import { Button, Input, Textarea, Heading, Text } from "@jeju-tourlist/ui";
 import { ArrowLeft, AlertCircle, CheckCircle } from "lucide-react";
 import Link from "next/link";
 
+// 아이콘 이름을 이모지로 매핑
+const getIconEmoji = (iconName: string | null): string => {
+  const iconMap: Record<string, string> = {
+    "map-pin": "📍",
+    "utensils": "🍴",
+    "bed": "🛏️",
+    "car": "🚗",
+    "shopping-bag": "🛍️",
+    "help-circle": "❓",
+  };
+  return iconName ? iconMap[iconName] || "📋" : "📋";
+};
+
 interface FormErrors {
   title?: string;
   content?: string;
@@ -362,7 +375,7 @@ export default function NewQuestionPage() {
                   <option value="">카테고리 선택 (선택사항)</option>
                   {categories.map(category => (
                     <option key={category.id} value={category.id}>
-                      {category.icon} {category.name}
+                      {getIconEmoji(category.icon)} {category.name}
                       {category.description ? ` - ${category.description}` : ""}
                     </option>
                   ))}

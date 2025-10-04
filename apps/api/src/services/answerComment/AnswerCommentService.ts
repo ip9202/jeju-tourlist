@@ -258,6 +258,8 @@ export class AnswerCommentService {
           email: "temp@example.com",
           name: "임시사용자",
           nickname: "임시사용자",
+          provider: "credentials",
+          providerId: "temp-user-id",
           avatar: null,
           isVerified: false,
           createdAt: new Date(),

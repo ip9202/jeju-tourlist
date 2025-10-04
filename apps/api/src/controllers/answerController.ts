@@ -50,12 +50,12 @@ export class AnswerController {
       res.status(201).json(response);
     } catch (error) {
       if (error instanceof z.ZodError) {
+        console.error("Zod validation error:", JSON.stringify(error, null, 2));
+        const errorMessages = error.issues?.map(e => `${e.path.join('.')}: ${e.message}`).join(", ");
         const response: ApiResponse = {
           success: false,
           error: "입력 데이터가 올바르지 않습니다.",
-          message:
-            error.errors?.map(e => e.message).join(", ") ||
-            "검증 오류가 발생했습니다.",
+          message: errorMessages || "검증 오류가 발생했습니다.",
           timestamp: new Date().toISOString(),
         };
         return res.status(400).json(response);
