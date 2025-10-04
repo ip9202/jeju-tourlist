@@ -1,4 +1,3 @@
-// @ts-expect-error Prisma client type recognition issue in monorepo
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();

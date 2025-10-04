@@ -80,6 +80,21 @@ Claude Code 작업 가이드 문서입니다.
 - 파일 업로드 시스템 완전 구현
 - 이미지 라이트박스 기능
 
+#### Phase 1.8: 답변 댓글 기능 (2025-10-04 완료)
+
+- **DB 스키마**: AnswerComment, AnswerCommentLike 모델 추가
+- **백엔드**: 댓글 CRUD API 완전 구현
+  - `POST /api/answer-comments` - 댓글 생성
+  - `GET /api/answer-comments/:id` - 댓글 상세 조회
+  - `GET /api/answers/:answerId/comments` - 답변별 댓글 목록
+  - `PUT /api/answer-comments/:id` - 댓글 수정
+  - `DELETE /api/answer-comments/:id` - 댓글 삭제
+  - `POST /api/answer-comments/:id/reaction` - 좋아요/싫어요
+  - `GET /api/answers/:answerId/comments/stats` - 댓글 통계
+- **Repository 패턴**: AnswerCommentRepository, AnswerCommentService
+- **타입 안전성**: Zod 스키마 검증, TypeScript 타입 정의
+- **패키지 구조**: database 패키지 exports 설정 최적화
+
 ### 📊 시스템 상태
 
 ```

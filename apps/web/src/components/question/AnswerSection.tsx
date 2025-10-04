@@ -308,29 +308,70 @@ export const AnswerSection: React.FC<AnswerSectionProps> = ({
   });
 
   const handleAnswerSubmit = async (data: { content: string; category: string }) => {
-    const newAnswer: Answer = {
-      id: Date.now().toString(),
-      content: data.content,
-      author: {
-        id: user?.id || "anonymous",
-        name: user?.name || "익명",
-        profileImage: user?.profileImage,
-        isVerified: false,
-      },
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      likeCount: 0,
-      isLiked: false,
-      isAccepted: false,
-      isAuthor: true,
-      isQuestionAuthor: isQuestionAuthor,
-    };
+    try {
+      // 답변 검증
+      if (!data.content.trim()) {
+        console.error("답변 내용이 비어있습니다.");
+        return;
+      }
 
-    setAnswers(prev => [newAnswer, ...prev]);
-    setShowAnswerForm(false);
+      if (data.content.trim().length < 10) {
+        console.error("답변을 10자 이상 입력해주세요.");
+        return;
+      }
 
-    // TODO: API 호출
-    console.log("답변 작성:", data.content);
+      // API 호출
+      const response = await fetch(`/api/answers`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          content: data.content.trim(),
+          questionId: questionId,
+          authorId: "temp-user-id", // 임시 사용자 ID
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "답변 작성에 실패했습니다.");
+      }
+
+      const result = await response.json();
+      console.log("답변 작성 성공:", result);
+
+      // 새 답변을 목록에 추가
+      if (result.data) {
+        const newAnswer: Answer = {
+          id: result.data.id,
+          content: result.data.content,
+          author: {
+            id: result.data.author?.id || "temp-user-id",
+            name: result.data.author?.name || "임시사용자",
+            profileImage: result.data.author?.profileImage,
+            isVerified: result.data.author?.isVerified || false,
+          },
+          createdAt: result.data.createdAt,
+          updatedAt: result.data.updatedAt,
+          likeCount: result.data.likeCount || 0,
+          isLiked: false,
+          isAccepted: result.data.isAccepted || false,
+          isAuthor: true,
+          isQuestionAuthor: isQuestionAuthor,
+        };
+
+        setAnswers(prev => [newAnswer, ...prev]);
+      }
+
+      setShowAnswerForm(false);
+      setAnswerFormData(prev => ({ ...prev, content: "" }));
+
+    } catch (error) {
+      console.error("답변 작성 실패:", error);
+      // 에러 처리 - 사용자에게 알림
+      alert(error instanceof Error ? error.message : "답변 작성 중 오류가 발생했습니다.");
+    }
   };
 
   const handleAnswerFormChange = (data: Partial<{ content: string; category: string }>) => {

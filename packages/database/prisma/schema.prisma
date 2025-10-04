@@ -45,8 +45,10 @@ model User {
   // 관계
   questions     Question[]
   answers       Answer[]
+  answerComments AnswerComment[]
   questionLikes QuestionLike[]
   answerLikes   AnswerLike[]
+  answerCommentLikes AnswerCommentLike[]
   bookmarks     Bookmark[]
   reports       Report[]
   notifications Notification[]
@@ -186,6 +188,7 @@ model Answer {
   // 통계
   likeCount   Int      @default(0)
   dislikeCount Int     @default(0)
+  commentCount Int     @default(0) // 댓글 수
   
   // 타임스탬프
   createdAt   DateTime @default(now())
@@ -194,6 +197,7 @@ model Answer {
   
   // 관계
   likes       AnswerLike[]
+  comments    AnswerComment[]
   reports     Report[] @relation("ReportAnswer")
   
   // 인덱스
@@ -204,6 +208,36 @@ model Answer {
   @@index([createdAt])
   @@index([likeCount])
   @@map("answers")
+}
+
+model AnswerComment {
+  id        String   @id @default(cuid())
+  content   String
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  answerId  String
+  answer    Answer   @relation(fields: [answerId], references: [id], onDelete: Cascade)
+  
+  // 상태 관리
+  status    AnswerCommentStatus @default(ACTIVE)
+  
+  // 통계
+  likeCount Int      @default(0)
+  
+  // 타임스탬프
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // 관계
+  likes     AnswerCommentLike[]
+  reports   Report[] @relation("ReportAnswerComment")
+  
+  // 인덱스
+  @@index([authorId])
+  @@index([answerId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("answer_comments")
 }
 
 // ===========================================
@@ -239,6 +273,22 @@ model AnswerLike {
   // 유니크 제약
   @@unique([userId, answerId])
   @@map("answer_likes")
+}
+
+model AnswerCommentLike {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  commentId String
+  comment   AnswerComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  isLike    Boolean  // true: 좋아요, false: 싫어요
+  
+  // 타임스탬프
+  createdAt DateTime @default(now())
+  
+  // 유니크 제약
+  @@unique([userId, commentId])
+  @@map("answer_comment_likes")
 }
 
 model Bookmark {
@@ -286,6 +336,7 @@ model Report {
   // 관계 (polymorphic)
   question   Question? @relation("ReportQuestion", fields: [targetId], references: [id], onDelete: Cascade, map: "reports_question_fkey")
   answer     Answer?   @relation("ReportAnswer", fields: [targetId], references: [id], onDelete: Cascade, map: "reports_answer_fkey")
+  answerComment AnswerComment? @relation("ReportAnswerComment", fields: [targetId], references: [id], onDelete: Cascade, map: "reports_answer_comment_fkey")
   
   // 인덱스
   @@index([targetType, targetId])
@@ -417,9 +468,16 @@ enum AnswerStatus {
   HIDDEN
 }
 
+enum AnswerCommentStatus {
+  ACTIVE
+  DELETED
+  HIDDEN
+}
+
 enum ReportTargetType {
   QUESTION
   ANSWER
+  ANSWER_COMMENT
   USER
 }
 

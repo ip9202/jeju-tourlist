@@ -3,7 +3,7 @@ import { z } from "zod";
 // 답변 생성 스키마
 export const CreateAnswerSchema = z.object({
   content: z.string().min(10).max(5000),
-  authorId: z.string().cuid(),
+  authorId: z.string().min(1), // CUID 제약 제거하여 임시 사용자 ID 허용
   questionId: z.string().cuid(),
 });
 

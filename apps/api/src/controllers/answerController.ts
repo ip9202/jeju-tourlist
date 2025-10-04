@@ -32,10 +32,10 @@ export class AnswerController {
       // 요청 데이터 검증
       const validatedData = CreateAnswerSchema.parse(req.body);
 
-      // 사용자 ID 추가 (인증 미들웨어에서 설정됨)
+      // 사용자 ID 추가 (인증 미들웨어에서 설정됨 또는 임시 사용자 ID)
       const dataWithUser = {
         ...validatedData,
-        authorId: req.user?.id || validatedData.authorId,
+        authorId: req.user?.id || validatedData.authorId || "temp-user-id",
       };
 
       const answer = await this.answerService.createAnswer(dataWithUser);

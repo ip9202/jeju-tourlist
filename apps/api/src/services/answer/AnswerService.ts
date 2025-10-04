@@ -50,6 +50,11 @@ export class AnswerService {
       throw new Error("이미 해결된 질문입니다.");
     }
 
+    // 임시 사용자 ID인 경우 사용자 생성 또는 확인
+    if (data.authorId === "temp-user-id") {
+      await this.ensureTempUserExists();
+    }
+
     // 답변 생성
     const answer = await this.answerRepository.create(data);
 
@@ -61,7 +66,46 @@ export class AnswerService {
       console.error
     );
 
-    return answer;
+    // 답변과 함께 author 정보 반환
+    const answerWithAuthor = await this.prisma.answer.findUnique({
+      where: { id: answer.id },
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+            nickname: true,
+            avatar: true,
+          },
+        },
+      },
+    });
+    
+    return answerWithAuthor || answer;
+  }
+
+  /**
+   * 임시 사용자 존재 확인 및 생성
+   */
+  private async ensureTempUserExists() {
+    const tempUser = await this.prisma.user.findUnique({
+      where: { id: "temp-user-id" },
+    });
+
+    if (!tempUser) {
+      await this.prisma.user.create({
+        data: {
+          id: "temp-user-id",
+          email: "temp@example.com",
+          name: "임시사용자",
+          nickname: "임시사용자",
+          avatar: null,
+          isVerified: false,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      });
+    }
   }
 
   /**

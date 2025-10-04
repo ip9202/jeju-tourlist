@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { AnswerController } from "../controllers/answerController";
+import { AnswerCommentController } from "../controllers/answerCommentController";
 import { PrismaClient } from "@prisma/client";
 import { authMiddleware } from "../middleware/auth";
 
@@ -17,6 +18,7 @@ import { authMiddleware } from "../middleware/auth";
 export function createAnswerRouter(prisma: PrismaClient): Router {
   const router = Router();
   const answerController = new AnswerController(prisma);
+  const answerCommentController = new AnswerCommentController(prisma);
 
   /**
    * @route POST /api/answers
@@ -110,6 +112,23 @@ export function createAnswerRouter(prisma: PrismaClient): Router {
    * @param { string } id - 답변 ID
    */
   router.get("/:id/stats", answerController.getAnswerStats);
+
+  /**
+   * @route GET /api/answers/:answerId/comments
+   * @desc 답변별 댓글 목록 조회
+   * @access Public
+   * @param { string } answerId - 답변 ID
+   * @query { page?: number, limit?: number, status?: string, sortBy?: string, sortOrder?: string }
+   */
+  router.get("/:answerId/comments", answerCommentController.getCommentsByAnswerId);
+
+  /**
+   * @route GET /api/answers/:answerId/comments/stats
+   * @desc 답변 댓글 통계 조회
+   * @access Public
+   * @param { string } answerId - 답변 ID
+   */
+  router.get("/:answerId/comments/stats", answerCommentController.getCommentStats);
 
   return router;
 }

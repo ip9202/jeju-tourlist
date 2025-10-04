@@ -52,6 +52,7 @@ import pointRoutes from "./routes/point";
 import { PrismaClient } from "@prisma/client";
 import { createQuestionRouter } from "./routes/question";
 import { createAnswerRouter } from "./routes/answer";
+import { createAnswerCommentRouter } from "./routes/answerComment";
 import { createCategoryRouter } from "./routes/category";
 import uploadRoutes from "./routes/upload";
 import {
@@ -134,6 +135,7 @@ app.use("/api/points", pointRoutes);
 // 질문/답변/카테고리 라우트 활성화
 app.use("/api/questions", createQuestionRouter(prisma));
 app.use("/api/answers", createAnswerRouter(prisma));
+app.use("/api/answer-comments", createAnswerCommentRouter(prisma));
 app.use("/api/categories", createCategoryRouter(prisma));
 
 // 파일 업로드 라우트

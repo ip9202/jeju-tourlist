@@ -2,6 +2,7 @@
 export * from "./user";
 export * from "./question";
 export * from "./answer";
+export * from "./answerComment";
 export * from "./category";
 export * from "./interaction";
 export * from "./moderation";
