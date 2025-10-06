@@ -41,17 +41,20 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
       <Header />
 
       {/* 메인 콘텐츠 영역 */}
-      <div className="flex-1 flex">
-        {/* 사이드바 (데스크톱에서만 표시) */}
-        {showSidebar && (
+      {showSidebar ? (
+        <div className="flex-1 flex">
+          {/* 사이드바 (데스크톱에서만 표시) */}
           <div className="hidden lg:block">
             <Sidebar />
           </div>
-        )}
 
-        {/* 메인 콘텐츠 */}
+          {/* 메인 콘텐츠 */}
+          <main className={`flex-1 ${className}`}>{children}</main>
+        </div>
+      ) : (
+        /* 사이드바 없는 경우 - 서브헤더가 메인헤더 바로 아래에 오도록 */
         <main className={`flex-1 ${className}`}>{children}</main>
-      </div>
+      )}
 
       {/* 푸터 */}
       <Footer />

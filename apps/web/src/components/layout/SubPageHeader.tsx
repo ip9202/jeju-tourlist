@@ -62,7 +62,8 @@ export const SubPageHeader: React.FC<SubPageHeaderProps> = ({
 
   return (
     <header
-      className={`bg-white border-b border-gray-100 sticky top-12 z-40 ${className}`}
+      className={`bg-white border-b border-gray-100 sticky top-16 z-40 ${className}`}
+      data-testid="subpage-header"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-10">

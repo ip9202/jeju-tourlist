@@ -155,7 +155,7 @@ export const EnhancedAnswerCard: React.FC<EnhancedAnswerCardProps> = ({
     const fetchComments = async () => {
       if (!showComments) return;
 
-      setIsLoadingComments(true);
+      // setIsLoadingComments(true);
       try {
         const response = await fetch(
           `/api/answers/${answer.id}/comments?limit=50`
@@ -172,7 +172,7 @@ export const EnhancedAnswerCard: React.FC<EnhancedAnswerCardProps> = ({
       } catch (error) {
         console.error("댓글 로드 실패:", error);
       } finally {
-        setIsLoadingComments(false);
+        // setIsLoadingComments(false);
       }
     };
 
@@ -199,7 +199,7 @@ export const EnhancedAnswerCard: React.FC<EnhancedAnswerCardProps> = ({
    * 댓글 목록 로드
    */
   const loadComments = async () => {
-    setIsLoadingComments(true);
+    // setIsLoadingComments(true);
     try {
       const response = await fetch(`/api/answers/${answer.id}/comments`);
       if (response.ok) {
@@ -209,7 +209,7 @@ export const EnhancedAnswerCard: React.FC<EnhancedAnswerCardProps> = ({
     } catch (error) {
       console.error("댓글 로드 실패:", error);
     } finally {
-      setIsLoadingComments(false);
+      // setIsLoadingComments(false);
     }
   };
 

@@ -3,10 +3,11 @@
 import React, { useState, useEffect, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button, Heading, Text } from "@jeju-tourlist/ui";
-import { Search, Filter } from "lucide-react";
+import { Filter } from "lucide-react";
 import { type Question, type SearchFilters } from "@/hooks/useQuestionSearch";
 import { SubPageHeader } from "@/components/layout/SubPageHeader";
-import { MainLayout } from "@/components/layout/MainLayout";
+import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
 import Link from "next/link";
 
 interface Category {
@@ -36,6 +37,7 @@ function QuestionsPageContent() {
   });
 
   const isLoadingRef = useRef(false);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
     loadCategories();
@@ -44,20 +46,21 @@ function QuestionsPageContent() {
   // URL 파라미터에서 검색어 읽어오기
   useEffect(() => {
     const searchParam = searchParams.get("search");
-    console.log("🔍 URL 검색 파라미터:", searchParam);
     if (searchParam) {
       setSearchTerm(searchParam);
-      console.log("🔍 검색어 설정:", searchParam);
+    } else {
+      setSearchTerm(""); // URL에 검색 파라미터가 없으면 검색어 초기화
     }
+    setIsInitialized(true);
   }, [searchParams]);
 
   // 질문 로드 (검색어, 필터, 페이지 변경 시)
   useEffect(() => {
-    // searchTerm이 설정된 후에만 실행
-    if (searchTerm !== undefined) {
+    // 초기화가 완료된 후에만 실행
+    if (isInitialized) {
       loadQuestions();
     }
-  }, [searchTerm, filters, pagination.page]);
+  }, [searchTerm, filters, pagination.page, isInitialized]);
 
   const loadCategories = async () => {
     try {
@@ -97,7 +100,6 @@ function QuestionsPageContent() {
   const loadQuestions = async () => {
     // 이미 로딩 중이면 중복 호출 방지
     if (isLoadingRef.current) {
-      console.log("🔍 이미 로딩 중이므로 중복 호출 방지");
       return;
     }
 
@@ -106,13 +108,6 @@ function QuestionsPageContent() {
     setError(null);
 
     try {
-      console.log("🔍 질문 로드 시작:", {
-        searchTerm,
-        filters,
-        page: pagination.page,
-        limit: pagination.limit,
-      });
-
       const API_URL =
         process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
 
@@ -145,8 +140,6 @@ function QuestionsPageContent() {
       params.append("limit", pagination.limit.toString());
 
       const url = `${API_URL}/questions?${params.toString()}`;
-      console.log("🔍 API 호출 URL:", url);
-
       const response = await fetch(url);
 
       if (!response.ok) {
@@ -154,7 +147,6 @@ function QuestionsPageContent() {
       }
 
       const data = await response.json();
-      console.log("🔍 API 응답 데이터:", data);
 
       // API 응답 데이터를 Question 인터페이스에 맞게 변환
       const transformedQuestions: Question[] = data.data.map((q: any) => ({
@@ -187,8 +179,6 @@ function QuestionsPageContent() {
         resolvedAt: q.resolvedAt,
       }));
 
-      console.log("🔍 변환된 질문들:", transformedQuestions);
-
       setQuestions(transformedQuestions);
       setPagination(prev => ({
         ...prev,
@@ -204,18 +194,6 @@ function QuestionsPageContent() {
     }
   };
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    setPagination(prev => ({ ...prev, page: 1 }));
-    loadQuestions();
-  };
-
-  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-    // 검색어가 변경되면 자동으로 검색 실행 (디바운싱 없이)
-    setPagination(prev => ({ ...prev, page: 1 }));
-  };
-
   const handleFilterChange = (key: string, value: string) => {
     setFilters(prev => ({ ...prev, [key]: value }));
     setPagination(prev => ({ ...prev, page: 1 }));
@@ -229,19 +207,13 @@ function QuestionsPageContent() {
   // API에서 이미 필터링된 데이터를 받으므로 추가 필터링 불필요
   const filteredQuestions = questions;
 
-  // 디버깅을 위한 로그 (클라이언트에서만 실행)
-  useEffect(() => {
-    console.log("🔍 현재 상태:", {
-      questions: questions.length,
-      searchTerm,
-      loading,
-      error,
-      filteredQuestions: filteredQuestions.length,
-    });
-  }, [questions, searchTerm, loading, error, filteredQuestions]);
-
   return (
-    <MainLayout showSidebar={false}>
+    <div className="min-h-screen bg-gray-50">
+      {/* 메인 헤더 */}
+      <div className="sticky top-0 z-50">
+        <Header />
+      </div>
+
       {/* SubPageHeader */}
       <SubPageHeader
         title="질문 목록"
@@ -250,52 +222,33 @@ function QuestionsPageContent() {
       />
 
       <div className="max-w-6xl mx-auto px-4 py-4">
-        {/* 헤더 - 간소화 */}
-        <div className="mb-6">
-          {/* 검색 및 필터 - 간소화 */}
-          <div className="space-y-3">
-            <form onSubmit={handleSearch} className="flex space-x-2">
-              <input
-                id="search-query-input"
-                type="text"
-                value={searchTerm}
-                onChange={handleSearchInputChange}
-                placeholder="질문 검색..."
-                className="flex-1 h-9 rounded-md border border-input bg-background px-3 py-1 text-sm"
-              />
-              <Button type="submit" size="sm" className="px-3 py-1 text-xs">
-                <Search className="w-3 h-3" />
-              </Button>
-            </form>
-
-            <div className="flex items-center space-x-3 text-xs">
-              <div className="flex items-center space-x-1">
-                <Filter className="w-3 h-3 text-gray-500" />
-                <select
-                  value={filters.categoryId}
-                  onChange={e =>
-                    handleFilterChange("categoryId", e.target.value)
-                  }
-                  className="px-2 py-1 border border-gray-300 rounded text-xs"
-                >
-                  <option value="">전체</option>
-                  {categories.map(category => (
-                    <option key={category.id} value={category.id}>
-                      {category.icon} {category.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
+        {/* 필터만 표시 */}
+        <div className="mb-6 mt-2" data-testid="filters-block">
+          <div className="flex items-center space-x-3 text-xs">
+            <div className="flex items-center space-x-1">
+              <Filter className="w-3 h-3 text-gray-500" />
               <select
-                value={filters.status}
-                onChange={e => handleFilterChange("status", e.target.value)}
+                value={filters.categoryId}
+                onChange={e => handleFilterChange("categoryId", e.target.value)}
                 className="px-2 py-1 border border-gray-300 rounded text-xs"
               >
-                <option value="all">전체</option>
-                <option value="answered">답변완료</option>
-                <option value="unanswered">답변대기</option>
+                <option value="">전체</option>
+                {categories.map(category => (
+                  <option key={category.id} value={category.id}>
+                    {category.icon} {category.name}
+                  </option>
+                ))}
               </select>
             </div>
+            <select
+              value={filters.status}
+              onChange={e => handleFilterChange("status", e.target.value)}
+              className="px-2 py-1 border border-gray-300 rounded text-xs"
+            >
+              <option value="all">전체</option>
+              <option value="answered">답변완료</option>
+              <option value="unanswered">답변대기</option>
+            </select>
           </div>
         </div>
 
@@ -441,7 +394,10 @@ function QuestionsPageContent() {
           </div>
         )}
       </div>
-    </MainLayout>
+
+      {/* Footer */}
+      <Footer />
+    </div>
   );
 }
 
@@ -449,11 +405,9 @@ export default function QuestionsPage() {
   return (
     <Suspense
       fallback={
-        <MainLayout>
-          <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
-          </div>
-        </MainLayout>
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+        </div>
       }
     >
       <QuestionsPageContent />

@@ -105,17 +105,15 @@ export const Sidebar: React.FC = () => {
   /**
    * 카테고리 링크 클릭 핸들러
    */
-  const handleCategoryClick = (categoryId: string) => {
-    // TODO: 카테고리 필터링 로직 구현
-    console.log("선택된 카테고리:", categoryId);
+  const handleCategoryClick = (_categoryId: string) => {
+    // 카테고리 필터링 로직 (구현 필요)
   };
 
   /**
    * 정렬 옵션 변경 핸들러
    */
-  const handleSortChange = (sortValue: string) => {
-    // TODO: 정렬 로직 구현
-    console.log("선택된 정렬:", sortValue);
+  const handleSortChange = (_sortValue: string) => {
+    // 정렬 로직 (구현 필요)
   };
 
   return (

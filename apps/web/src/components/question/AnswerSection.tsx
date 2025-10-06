@@ -2,7 +2,12 @@
 
 import React, { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { AnswerCard, AnswerForm, Button, type AnswerData } from "@jeju-tourlist/ui";
+import {
+  AnswerCard,
+  AnswerForm,
+  Button,
+  type AnswerData,
+} from "@jeju-tourlist/ui";
 import { MessageCircle, SortAsc } from "lucide-react";
 
 /**
@@ -267,8 +272,7 @@ export const AnswerSection: React.FC<AnswerSectionProps> = ({
       }))
     );
 
-    // TODO: API 호출
-    console.log("답변 채택:", answerId);
+    // 답변 채택 기능 (API 연동 필요)
   };
 
   /**
@@ -289,8 +293,7 @@ export const AnswerSection: React.FC<AnswerSectionProps> = ({
       )
     );
 
-    // TODO: API 호출
-    console.log("답변 좋아요:", answerId);
+    // 답변 좋아요 기능 (API 연동 필요)
   };
 
   /**
@@ -307,7 +310,10 @@ export const AnswerSection: React.FC<AnswerSectionProps> = ({
     isAnonymous: false,
   });
 
-  const handleAnswerSubmit = async (data: { content: string; category: string }) => {
+  const handleAnswerSubmit = async (data: {
+    content: string;
+    category: string;
+  }) => {
     try {
       // 답변 검증
       if (!data.content.trim()) {
@@ -366,15 +372,20 @@ export const AnswerSection: React.FC<AnswerSectionProps> = ({
 
       setShowAnswerForm(false);
       setAnswerFormData(prev => ({ ...prev, content: "" }));
-
     } catch (error) {
       console.error("답변 작성 실패:", error);
       // 에러 처리 - 사용자에게 알림
-      alert(error instanceof Error ? error.message : "답변 작성 중 오류가 발생했습니다.");
+      alert(
+        error instanceof Error
+          ? error.message
+          : "답변 작성 중 오류가 발생했습니다."
+      );
     }
   };
 
-  const handleAnswerFormChange = (data: Partial<{ content: string; category: string }>) => {
+  const handleAnswerFormChange = (
+    data: Partial<{ content: string; category: string }>
+  ) => {
     setAnswerFormData(prev => ({ ...prev, ...data }));
   };
 

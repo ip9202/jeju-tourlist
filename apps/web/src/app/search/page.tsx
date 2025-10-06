@@ -49,7 +49,7 @@ function SearchPageContent() {
 
       setQuestions(result.questions);
     } catch (err) {
-      console.error("검색 실패:", err);
+      // 검색 실패 시 에러 상태로 처리
     }
   };
 

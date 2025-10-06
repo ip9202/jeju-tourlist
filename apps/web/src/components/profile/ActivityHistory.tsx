@@ -56,7 +56,7 @@ export const ActivityHistory: React.FC<ActivityHistoryProps> = ({
   const [activeTab, setActiveTab] = useState("questions");
   const [activities, setActivities] = useState<ActivityItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(1);
+  // 페이지 상태는 현재 미사용. API 연동 시 활성화 예정
   const [hasMore, setHasMore] = useState(true);
 
   /**
@@ -189,7 +189,6 @@ export const ActivityHistory: React.FC<ActivityHistoryProps> = ({
    */
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
-    setPage(1);
     setHasMore(true);
   };
 
@@ -197,9 +196,7 @@ export const ActivityHistory: React.FC<ActivityHistoryProps> = ({
    * 더보기 핸들러
    */
   const handleLoadMore = () => {
-    setPage(prev => prev + 1);
-    // TODO: 추가 데이터 로드
-    console.log("더보기:", activeTab, page + 1);
+    // 추가 데이터 로드 (API 연동 필요)
   };
 
   /**

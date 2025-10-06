@@ -52,14 +52,14 @@ export const QuestionPage: React.FC<QuestionPageProps> = ({ questionId }) => {
     const loadQuestion = async () => {
       setLoading(true);
       setError(null);
-      
+
       try {
         // 실제로는 API 호출
         await new Promise(resolve => setTimeout(resolve, 1000));
 
         // 잘못된 ID인 경우 에러 시뮬레이션
-        if (actualQuestionId === 'invalid-id') {
-          throw new Error('질문을 찾을 수 없습니다');
+        if (actualQuestionId === "invalid-id") {
+          throw new Error("질문을 찾을 수 없습니다");
         }
 
         // 목업 데이터
@@ -77,7 +77,9 @@ export const QuestionPage: React.FC<QuestionPageProps> = ({ questionId }) => {
 
         setQuestion(mockQuestion);
       } catch (err) {
-        setError(err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다');
+        setError(
+          err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다"
+        );
       } finally {
         setLoading(false);
       }
@@ -115,8 +117,7 @@ export const QuestionPage: React.FC<QuestionPageProps> = ({ questionId }) => {
    * 북마크 핸들러
    */
   const handleBookmark = () => {
-    // TODO: 북마크 기능 구현
-    console.log("북마크:", actualQuestionId);
+    // 북마크 기능 (API 연동 필요)
   };
 
   if (loading) {
@@ -142,9 +143,7 @@ export const QuestionPage: React.FC<QuestionPageProps> = ({ questionId }) => {
       <MainLayout>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center" data-testid="question-not-found">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">
-              {error}
-            </h1>
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">{error}</h1>
             <p className="text-gray-600 mb-8">
               요청하신 질문이 존재하지 않거나 삭제되었습니다.
             </p>

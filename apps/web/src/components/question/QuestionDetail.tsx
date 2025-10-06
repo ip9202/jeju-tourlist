@@ -2,7 +2,14 @@
 
 import React, { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { Avatar, LikeButton, BookmarkButton, ShareButton, HashtagList, TimestampDisplay } from "@jeju-tourlist/ui";
+import {
+  Avatar,
+  LikeButton,
+  BookmarkButton,
+  ShareButton,
+  HashtagList,
+  TimestampDisplay,
+} from "@jeju-tourlist/ui";
 import {
   MessageCircle,
   Eye,
@@ -137,8 +144,7 @@ export const QuestionDetail: React.FC<QuestionDetailProps> = ({
         : null
     );
 
-    // TODO: API 호출
-    console.log("좋아요 토글:", question.id);
+    // 좋아요 기능 (API 연동 필요)
   };
 
   /**
@@ -156,32 +162,28 @@ export const QuestionDetail: React.FC<QuestionDetailProps> = ({
         : null
     );
 
-    // TODO: API 호출
-    console.log("북마크 토글:", question.id);
+    // 북마크 기능 (API 연동 필요)
   };
 
   /**
    * 공유 핸들러
    */
   const handleShare = () => {
-    // TODO: 공유 기능 구현
-    console.log("공유:", question?.id);
+    // 공유 기능 (구현 필요)
   };
 
   /**
    * 신고 핸들러
    */
   const handleReport = () => {
-    // TODO: 신고 기능 구현
-    console.log("신고:", question?.id);
+    // 신고 기능 (구현 필요)
   };
 
   /**
    * 질문 수정 핸들러
    */
   const handleEdit = () => {
-    // TODO: 질문 수정 페이지로 이동
-    console.log("질문 수정:", question?.id);
+    // 질문 수정 페이지로 이동 (구현 필요)
   };
 
   /**
@@ -189,8 +191,7 @@ export const QuestionDetail: React.FC<QuestionDetailProps> = ({
    */
   const handleDelete = () => {
     if (confirm("정말로 이 질문을 삭제하시겠습니까?")) {
-      // TODO: 질문 삭제 API 호출
-      console.log("질문 삭제:", question?.id);
+      // 질문 삭제 API 호출 (구현 필요)
     }
   };
 
@@ -263,7 +264,13 @@ export const QuestionDetail: React.FC<QuestionDetailProps> = ({
               <span className="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm font-medium">
                 {question.category}
               </span>
-              <HashtagList hashtags={question.tags.map(tag => ({ id: tag, name: tag, text: tag }))} />
+              <HashtagList
+                hashtags={question.tags.map(tag => ({
+                  id: tag,
+                  name: tag,
+                  text: tag,
+                }))}
+              />
             </div>
           </div>
 
@@ -351,11 +358,11 @@ export const QuestionDetail: React.FC<QuestionDetailProps> = ({
               bookmarked={question.isBookmarked}
               onToggle={handleBookmarkToggle}
             />
-            <ShareButton 
-              onShare={handleShare} 
+            <ShareButton
+              onShare={handleShare}
               shareOptions={{
                 url: window.location.href,
-                title: question.title
+                title: question.title,
               }}
             />
           </div>

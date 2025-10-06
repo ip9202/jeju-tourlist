@@ -40,6 +40,7 @@ export const Header: React.FC = () => {
           <nav className="hidden md:flex items-center space-x-6">
             <Link
               href="/questions"
+              onClick={() => setSearchQuery("")}
               className="flex items-center justify-center text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors h-10 px-3 rounded-md hover:bg-gray-50"
             >
               질문
@@ -147,7 +148,10 @@ export const Header: React.FC = () => {
               <Link
                 href="/questions"
                 className="block px-3 py-2 text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={() => {
+                  setSearchQuery("");
+                  setIsMobileMenuOpen(false);
+                }}
               >
                 질문
               </Link>

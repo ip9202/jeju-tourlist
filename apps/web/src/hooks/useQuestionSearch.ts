@@ -69,7 +69,6 @@ export const useQuestionSearch = () => {
     setError(null);
 
     try {
-      console.log("🔍 useQuestionSearch 호출:", options);
       const API_URL =
         process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
 
@@ -108,21 +107,13 @@ export const useQuestionSearch = () => {
       }
 
       const url = `${API_URL}/questions?${params.toString()}`;
-      console.log("🔍 API 호출 URL:", url);
-
       const response = await fetch(url);
 
       if (!response.ok) {
-        console.error(
-          "🔍 API 응답 오류:",
-          response.status,
-          response.statusText
-        );
         throw new Error("검색 중 오류가 발생했습니다");
       }
 
       const data = await response.json();
-      console.log("🔍 API 응답 데이터:", data);
 
       // API 응답 데이터를 Question 인터페이스에 맞게 변환
       const transformedQuestions: Question[] = data.data.map((q: any) => ({

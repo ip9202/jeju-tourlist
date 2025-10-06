@@ -8,7 +8,7 @@ import { Calendar, MapPin, Edit, Settings, CheckCircle } from "lucide-react";
 /**
  * 사용자 프로필 데이터 타입
  */
-interface UserProfile {
+interface UserProfileData {
   id: string;
   name: string;
   email: string;
@@ -61,13 +61,13 @@ export const UserProfile: React.FC<UserProfileProps> = ({
   className = "",
 }) => {
   const { user: currentUser } = useAuth();
-  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [profile, setProfile] = useState<UserProfileData | null>(null);
   const [loading, setLoading] = useState(true);
 
   /**
    * 목업 데이터 (실제로는 API에서 가져올 데이터)
    */
-  const mockProfile: UserProfile = {
+  const mockProfile: UserProfileData = {
     id: userId || currentUser?.id || "user1",
     name: "김제주",
     email: "kimjeju@example.com",
@@ -128,16 +128,14 @@ export const UserProfile: React.FC<UserProfileProps> = ({
    * 프로필 수정 핸들러
    */
   const handleEditProfile = () => {
-    // TODO: 프로필 수정 페이지로 이동
-    console.log("프로필 수정:", profile?.id);
+    // 프로필 수정 페이지로 이동 (구현 필요)
   };
 
   /**
    * 설정 핸들러
    */
   const handleSettings = () => {
-    // TODO: 설정 페이지로 이동
-    console.log("설정:", profile?.id);
+    // 설정 페이지로 이동 (구현 필요)
   };
 
   /**
@@ -247,8 +245,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
               <Button
                 variant="primary"
                 onClick={() => {
-                  // TODO: 팔로우/언팔로우 기능
-                  console.log("팔로우:", profile.id);
+                  // 팔로우/언팔로우 기능 (구현 필요)
                 }}
               >
                 팔로우

@@ -22,7 +22,6 @@ export default function NotificationSettingsPage() {
 
   const handleSave = () => {
     // TODO: 실제 API 호출
-    console.log("설정 저장:", settings);
     alert("설정이 저장되었습니다.");
   };
 
