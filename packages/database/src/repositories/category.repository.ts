@@ -1,4 +1,3 @@
-// @ts-expect-error Prisma client type recognition issue in monorepo
 import { PrismaClient, Category } from "@prisma/client";
 import { BaseRepository } from "./base.repository";
 import {
@@ -124,9 +123,9 @@ export class CategoryRepository
         (category: any) => ({
           id: category.id,
           name: category.name,
-          description: category.description || undefined,
-          color: category.color || undefined,
-          icon: category.icon || undefined,
+          description: category.description ?? null,
+          color: category.color ?? null,
+          icon: category.icon ?? null,
           order: category.order,
           isActive: category.isActive,
           questionCount: category._count.questions,

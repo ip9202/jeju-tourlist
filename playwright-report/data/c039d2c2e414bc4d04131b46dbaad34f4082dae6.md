@@ -1,0 +1,208 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+    - generic [ref=e2]:
+        - banner [ref=e3]:
+            - generic [ref=e4]:
+                - link [ref=e6]:
+                    - /url: /
+                    - img [ref=e7]
+                - button "메뉴 열기" [ref=e11] [cursor=pointer]:
+                    - img [ref=e13] [cursor=pointer]
+        - main [ref=e15]:
+            - generic [ref=e18]:
+                - generic [ref=e19]:
+                    - button [ref=e20] [cursor=pointer]:
+                        - img [ref=e22] [cursor=pointer]
+                    - link [ref=e24]:
+                        - /url: /
+                        - button [ref=e25] [cursor=pointer]:
+                            - img [ref=e27] [cursor=pointer]
+                - heading "질문 목록" [level=1] [ref=e31]
+            - generic [ref=e32]:
+                - generic [ref=e34]:
+                    - generic [ref=e35]:
+                        - textbox "질문 검색..." [active] [ref=e36]
+                        - button [ref=e37] [cursor=pointer]:
+                            - img [ref=e39] [cursor=pointer]
+                    - generic [ref=e42]:
+                        - generic [ref=e43]:
+                            - img [ref=e44]
+                            - combobox [ref=e46]:
+                                - option "전체" [selected]
+                                - option "🗺️ 관광지"
+                                - option "🍽️ 맛집"
+                                - option "🏨 숙박"
+                                - option "🚗 교통"
+                                - option "🛍️ 쇼핑"
+                                - option "💬 기타"
+                        - combobox [ref=e47]:
+                            - option "전체" [selected]
+                            - option "답변완료"
+                            - option "답변대기"
+                - generic [ref=e48]:
+                    - generic [ref=e49]:
+                        - generic [ref=e50]:
+                            - link "신혼부부입니다. 제주도에 놀러가요..." [ref=e51]:
+                                - /url: /questions/cmgcc1v2400078x0w1obvbwc9
+                                - heading "신혼부부입니다. 제주도에 놀러가요..." [level=3] [ref=e52]
+                            - generic [ref=e53]:
+                                - generic [ref=e54]: 숙박
+                                - generic [ref=e55]: 답변대기
+                        - generic [ref=e56]: 둘이 오붓하게 놀수 있는 곳이 필요합니다.
+                        - generic [ref=e57]:
+                            - generic [ref=e58]:
+                                - generic [ref=e59]: "작성자: 임시사용자"
+                                - generic [ref=e60]: 답변 1개
+                                - generic [ref=e61]: 조회 84
+                                - generic [ref=e62]: 좋아요 0
+                            - generic [ref=e63]: 2025. 10. 4.
+                    - generic [ref=e64]:
+                        - generic [ref=e65]:
+                            - link "제주도 렌터카 vs 대중교통 어떤게 좋을까요?" [ref=e66]:
+                                - /url: /questions/cmgcarth4000lek0lgb7e1363
+                                - heading "제주도 렌터카 vs 대중교통 어떤게 좋을까요?" [level=3] [ref=e67]
+                            - generic [ref=e68]:
+                                - generic [ref=e69]: 교통
+                                - generic [ref=e70]: 답변대기
+                        - generic [ref=e71]: 제주도 여행에서 렌터카를 빌릴지 대중교통을 이용할지 고민입니다. 2명이서 2박3일 일정인데 어떤게 더 효율적일까요?
+                        - generic [ref=e72]:
+                            - generic [ref=e73]:
+                                - generic [ref=e74]: "작성자: 박중문"
+                                - generic [ref=e75]: 답변 4개
+                                - generic [ref=e76]: 조회 34
+                                - generic [ref=e77]: 좋아요 5
+                            - generic [ref=e78]: 2025. 10. 4.
+                    - generic [ref=e79]:
+                        - generic [ref=e80]:
+                            - link "제주도 맛집 추천 부탁드려요" [ref=e81]:
+                                - /url: /questions/cmgcarth4000kek0lmddn3qvn
+                                - heading "제주도 맛집 추천 부탁드려요" [level=3] [ref=e82]
+                            - generic [ref=e83]:
+                                - generic [ref=e84]: 맛집
+                                - generic [ref=e85]: 해결됨
+                        - generic [ref=e86]: 제주도에서 꼭 가봐야 할 맛집들을 추천해주세요. 해산물 요리와 제주도 특색 있는 음식 위주로 부탁드려요!
+                        - generic [ref=e87]:
+                            - generic [ref=e88]:
+                                - generic [ref=e89]: "작성자: 이서귀포"
+                                - generic [ref=e90]: 답변 1개
+                                - generic [ref=e91]: 조회 78
+                                - generic [ref=e92]: 좋아요 15
+                            - generic [ref=e93]: 2025. 10. 4.
+                    - generic [ref=e94]:
+                        - generic [ref=e95]:
+                            - link "제주도 3박4일 여행 코스 추천해주세요!" [ref=e96]:
+                                - /url: /questions/cmgcarth4000jek0lnz24xjwl
+                                - heading "제주도 3박4일 여행 코스 추천해주세요!" [level=3] [ref=e97]
+                            - generic [ref=e98]:
+                                - generic [ref=e99]: 관광지
+                                - generic [ref=e100]: 답변대기
+                        - generic [ref=e101]: 처음 제주도 여행을 가는데 3박4일 일정으로 추천해주실 수 있나요? 가족 여행이고 어린이도 있어서 아이들이 좋아할 만한 곳 위주로 알려주세요.
+                        - generic [ref=e102]:
+                            - generic [ref=e103]:
+                                - generic [ref=e104]: "작성자: 김제주"
+                                - generic [ref=e105]: 답변 1개
+                                - generic [ref=e106]: 조회 45
+                                - generic [ref=e107]: 좋아요 8
+                            - generic [ref=e108]: 2025. 10. 4.
+                    - generic [ref=e109]:
+                        - generic [ref=e110]:
+                            - link "제주도 펜션 추천해주세요" [ref=e111]:
+                                - /url: /questions/cmgcarth4000mek0l6tu8jus7
+                                - heading "제주도 펜션 추천해주세요" [level=3] [ref=e112]
+                            - generic [ref=e113]:
+                                - generic [ref=e114]: 숙박
+                                - generic [ref=e115]: 답변대기
+                        - generic [ref=e116]: 제주도에서 바다가 보이는 펜션을 찾고 있습니다. 2명이서 1박2일 일정이고 예산은 20만원 이내로 생각하고 있어요.
+                        - generic [ref=e117]:
+                            - generic [ref=e118]:
+                                - generic [ref=e119]: "작성자: 김제주"
+                                - generic [ref=e120]: 답변 0개
+                                - generic [ref=e121]: 조회 28
+                                - generic [ref=e122]: 좋아요 3
+                            - generic [ref=e123]: 2025. 10. 4.
+                    - generic [ref=e124]:
+                        - generic [ref=e125]:
+                            - link "제주도 기념품 쇼핑 어디서 하면 좋을까요?" [ref=e126]:
+                                - /url: /questions/cmgcarth5000oek0lsn1h5bbb
+                                - heading "제주도 기념품 쇼핑 어디서 하면 좋을까요?" [level=3] [ref=e127]
+                            - generic [ref=e128]:
+                                - generic [ref=e129]: 쇼핑
+                                - generic [ref=e130]: 답변대기
+                        - generic [ref=e131]: 제주도에서 가족들에게 줄 기념품을 사려고 하는데 어디서 사는게 좋을까요? 가격도 합리적이고 품질도 좋은 곳을 찾고 있어요.
+                        - generic [ref=e132]:
+                            - generic [ref=e133]:
+                                - generic [ref=e134]: "작성자: 이서귀포"
+                                - generic [ref=e135]: 답변 0개
+                                - generic [ref=e136]: 조회 19
+                                - generic [ref=e137]: 좋아요 2
+                            - generic [ref=e138]: 2025. 10. 4.
+                - generic [ref=e139]: 전체 개 중 1-NaN개 표시
+        - contentinfo [ref=e140]:
+            - generic [ref=e141]:
+                - generic [ref=e142]:
+                    - generic [ref=e143]:
+                        - generic [ref=e144]:
+                            - img [ref=e145]
+                            - generic [ref=e148]: 동네물어봐
+                        - paragraph [ref=e149]: 제주 여행에 대한 모든 질문과 답변을 공유하는 커뮤니티입니다. 현지인과 여행자들이 함께 만드는 신뢰할 수 있는 여행 정보를 제공합니다.
+                        - generic [ref=e150]:
+                            - link "인스타그램" [ref=e151]:
+                                - /url: https://instagram.com/jeju_tourlist
+                                - img [ref=e152]
+                            - link "페이스북" [ref=e155]:
+                                - /url: https://facebook.com/jeju_tourlist
+                                - img [ref=e156]
+                            - link "트위터" [ref=e158]:
+                                - /url: https://twitter.com/jeju_tourlist
+                                - img [ref=e159]
+                    - generic [ref=e161]:
+                        - heading "서비스" [level=3] [ref=e162]
+                        - list [ref=e163]:
+                            - listitem [ref=e164]:
+                                - link "질문목록" [ref=e165]:
+                                    - /url: /questions
+                            - listitem [ref=e166]:
+                                - link "카테고리" [ref=e167]:
+                                    - /url: /categories
+                            - listitem [ref=e168]:
+                                - link "검색" [ref=e169]:
+                                    - /url: /search
+                            - listitem [ref=e170]:
+                                - link "인기 질문" [ref=e171]:
+                                    - /url: /popular
+                    - generic [ref=e172]:
+                        - heading "지원" [level=3] [ref=e173]
+                        - list [ref=e174]:
+                            - listitem [ref=e175]:
+                                - link "도움말" [ref=e176]:
+                                    - /url: /help
+                            - listitem [ref=e177]:
+                                - link "자주 묻는 질문" [ref=e178]:
+                                    - /url: /faq
+                            - listitem [ref=e179]:
+                                - link "문의하기" [ref=e180]:
+                                    - /url: /contact
+                            - listitem [ref=e181]:
+                                - link "신고하기" [ref=e182]:
+                                    - /url: /report
+                - generic [ref=e184]:
+                    - generic [ref=e185]: © 2025 동네물어봐. All rights reserved.
+                    - generic [ref=e186]:
+                        - link "개인정보처리방침" [ref=e187]:
+                            - /url: /privacy
+                        - link "이용약관" [ref=e188]:
+                            - /url: /terms
+                        - link "쿠키 정책" [ref=e189]:
+                            - /url: /cookies
+                - generic [ref=e191]:
+                    - generic [ref=e192]:
+                        - img [ref=e193]
+                        - generic [ref=e196]: support@dongnemulurowa.com
+                    - generic [ref=e197]:
+                        - img [ref=e198]
+                        - generic [ref=e200]: 1588-0000
+                    - generic [ref=e202]: 제주특별자치도 제주시 연동 123-45
+    - alert [ref=e203]
+```

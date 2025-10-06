@@ -15,10 +15,7 @@
     },
     "preserveOutput": "always",
     "reporter": [
-      [
-        "html",
-        null
-      ],
+      ["html", null],
       [
         "json",
         {
@@ -48,15 +45,8 @@
         "id": "chromium",
         "name": "chromium",
         "testDir": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e",
-        "testIgnore": [
-          "**/node_modules/**",
-          "**/dist/**",
-          "**/.next/**"
-        ],
-        "testMatch": [
-          "**/*.e2e.test.ts",
-          "**/*.e2e.spec.ts"
-        ],
+        "testIgnore": ["**/node_modules/**", "**/dist/**", "**/.next/**"],
+        "testMatch": ["**/e2e/**/*.test.ts", "**/e2e/**/*.spec.ts"],
         "timeout": 30000
       },
       {
@@ -69,15 +59,8 @@
         "id": "firefox",
         "name": "firefox",
         "testDir": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e",
-        "testIgnore": [
-          "**/node_modules/**",
-          "**/dist/**",
-          "**/.next/**"
-        ],
-        "testMatch": [
-          "**/*.e2e.test.ts",
-          "**/*.e2e.spec.ts"
-        ],
+        "testIgnore": ["**/node_modules/**", "**/dist/**", "**/.next/**"],
+        "testMatch": ["**/e2e/**/*.test.ts", "**/e2e/**/*.spec.ts"],
         "timeout": 30000
       },
       {
@@ -90,15 +73,8 @@
         "id": "webkit",
         "name": "webkit",
         "testDir": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e",
-        "testIgnore": [
-          "**/node_modules/**",
-          "**/dist/**",
-          "**/.next/**"
-        ],
-        "testMatch": [
-          "**/*.e2e.test.ts",
-          "**/*.e2e.spec.ts"
-        ],
+        "testIgnore": ["**/node_modules/**", "**/dist/**", "**/.next/**"],
+        "testMatch": ["**/e2e/**/*.test.ts", "**/e2e/**/*.spec.ts"],
         "timeout": 30000
       },
       {
@@ -111,15 +87,8 @@
         "id": "Mobile Chrome",
         "name": "Mobile Chrome",
         "testDir": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e",
-        "testIgnore": [
-          "**/node_modules/**",
-          "**/dist/**",
-          "**/.next/**"
-        ],
-        "testMatch": [
-          "**/*.e2e.test.ts",
-          "**/*.e2e.spec.ts"
-        ],
+        "testIgnore": ["**/node_modules/**", "**/dist/**", "**/.next/**"],
+        "testMatch": ["**/e2e/**/*.test.ts", "**/e2e/**/*.spec.ts"],
         "timeout": 30000
       },
       {
@@ -132,15 +101,8 @@
         "id": "Mobile Safari",
         "name": "Mobile Safari",
         "testDir": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e",
-        "testIgnore": [
-          "**/node_modules/**",
-          "**/dist/**",
-          "**/.next/**"
-        ],
-        "testMatch": [
-          "**/*.e2e.test.ts",
-          "**/*.e2e.spec.ts"
-        ],
+        "testIgnore": ["**/node_modules/**", "**/dist/**", "**/.next/**"],
+        "testMatch": ["**/e2e/**/*.test.ts", "**/e2e/**/*.spec.ts"],
         "timeout": 30000
       },
       {
@@ -153,15 +115,8 @@
         "id": "Mobile Safari iPad",
         "name": "Mobile Safari iPad",
         "testDir": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e",
-        "testIgnore": [
-          "**/node_modules/**",
-          "**/dist/**",
-          "**/.next/**"
-        ],
-        "testMatch": [
-          "**/*.e2e.test.ts",
-          "**/*.e2e.spec.ts"
-        ],
+        "testIgnore": ["**/node_modules/**", "**/dist/**", "**/.next/**"],
+        "testMatch": ["**/e2e/**/*.test.ts", "**/e2e/**/*.spec.ts"],
         "timeout": 30000
       }
     ],
@@ -174,976 +129,1029 @@
   },
   "suites": [
     {
-      "title": "responsive-desktop.e2e.test.ts",
-      "file": "responsive-desktop.e2e.test.ts",
+      "title": "search-functionality.e2e.test.ts",
+      "file": "search-functionality.e2e.test.ts",
       "column": 0,
       "line": 0,
       "specs": [],
       "suites": [
         {
-          "title": "데스크톱 반응형 테스트",
-          "file": "responsive-desktop.e2e.test.ts",
+          "title": "Search Functionality",
+          "file": "search-functionality.e2e.test.ts",
           "line": 3,
           "column": 6,
-          "specs": [],
-          "suites": [
+          "specs": [
             {
-              "title": "데스크톱 (1024x768) - 표준 데스크톱",
-              "file": "responsive-desktop.e2e.test.ts",
-              "line": 9,
-              "column": 8,
-              "specs": [
+              "title": "URL 파라미터로 검색이 작동하는지 확인",
+              "ok": true,
+              "tags": [],
+              "tests": [
                 {
-                  "title": "페이지가 데스크톱 화면에 맞게 조정됨",
-                  "ok": true,
-                  "tags": [],
-                  "tests": [
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
                     {
-                      "timeout": 30000,
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 14838,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-06T12:28:43.981Z",
                       "annotations": [],
-                      "expectedStatus": "passed",
-                      "projectId": "chromium",
-                      "projectName": "chromium",
-                      "results": [
-                        {
-                          "workerIndex": 0,
-                          "parallelIndex": 0,
-                          "status": "passed",
-                          "duration": 11405,
-                          "errors": [],
-                          "stdout": [],
-                          "stderr": [],
-                          "retry": 0,
-                          "startTime": "2025-09-23T11:11:56.137Z",
-                          "annotations": [],
-                          "attachments": []
-                        }
-                      ],
-                      "status": "expected"
+                      "attachments": []
                     }
                   ],
-                  "id": "00b97bdbc362ef549a97-41626066acbb7e65c535",
-                  "file": "responsive-desktop.e2e.test.ts",
-                  "line": 14,
-                  "column": 9
-                },
-                {
-                  "title": "헤더가 데스크톱에 최적화됨",
-                  "ok": true,
-                  "tags": [],
-                  "tests": [
-                    {
-                      "timeout": 30000,
-                      "annotations": [],
-                      "expectedStatus": "passed",
-                      "projectId": "chromium",
-                      "projectName": "chromium",
-                      "results": [
-                        {
-                          "workerIndex": 1,
-                          "parallelIndex": 1,
-                          "status": "passed",
-                          "duration": 11796,
-                          "errors": [],
-                          "stdout": [],
-                          "stderr": [],
-                          "retry": 0,
-                          "startTime": "2025-09-23T11:11:56.146Z",
-                          "annotations": [],
-                          "attachments": []
-                        }
-                      ],
-                      "status": "expected"
-                    }
-                  ],
-                  "id": "00b97bdbc362ef549a97-3ac42095f241374d6aeb",
-                  "file": "responsive-desktop.e2e.test.ts",
-                  "line": 22,
-                  "column": 9
-                },
-                {
-                  "title": "데스크톱 네비게이션이 표시됨",
-                  "ok": true,
-                  "tags": [],
-                  "tests": [
-                    {
-                      "timeout": 30000,
-                      "annotations": [],
-                      "expectedStatus": "passed",
-                      "projectId": "chromium",
-                      "projectName": "chromium",
-                      "results": [
-                        {
-                          "workerIndex": 2,
-                          "parallelIndex": 2,
-                          "status": "passed",
-                          "duration": 11373,
-                          "errors": [],
-                          "stdout": [],
-                          "stderr": [],
-                          "retry": 0,
-                          "startTime": "2025-09-23T11:11:56.162Z",
-                          "annotations": [],
-                          "attachments": []
-                        }
-                      ],
-                      "status": "expected"
-                    }
-                  ],
-                  "id": "00b97bdbc362ef549a97-031e29d43f283a6d2161",
-                  "file": "responsive-desktop.e2e.test.ts",
-                  "line": 31,
-                  "column": 9
-                },
-                {
-                  "title": "카드가 3열로 표시됨",
-                  "ok": true,
-                  "tags": [],
-                  "tests": [
-                    {
-                      "timeout": 30000,
-                      "annotations": [],
-                      "expectedStatus": "passed",
-                      "projectId": "chromium",
-                      "projectName": "chromium",
-                      "results": [
-                        {
-                          "workerIndex": 3,
-                          "parallelIndex": 3,
-                          "status": "passed",
-                          "duration": 11464,
-                          "errors": [],
-                          "stdout": [],
-                          "stderr": [],
-                          "retry": 0,
-                          "startTime": "2025-09-23T11:11:56.143Z",
-                          "annotations": [],
-                          "attachments": []
-                        }
-                      ],
-                      "status": "expected"
-                    }
-                  ],
-                  "id": "00b97bdbc362ef549a97-84dd57dd340b7483ea00",
-                  "file": "responsive-desktop.e2e.test.ts",
-                  "line": 44,
-                  "column": 9
-                },
-                {
-                  "title": "마우스 호버 효과가 작동함",
-                  "ok": true,
-                  "tags": [],
-                  "tests": [
-                    {
-                      "timeout": 30000,
-                      "annotations": [],
-                      "expectedStatus": "passed",
-                      "projectId": "chromium",
-                      "projectName": "chromium",
-                      "results": [
-                        {
-                          "workerIndex": 2,
-                          "parallelIndex": 2,
-                          "status": "passed",
-                          "duration": 7018,
-                          "errors": [],
-                          "stdout": [],
-                          "stderr": [],
-                          "retry": 0,
-                          "startTime": "2025-09-23T11:12:09.395Z",
-                          "annotations": [],
-                          "attachments": []
-                        }
-                      ],
-                      "status": "expected"
-                    }
-                  ],
-                  "id": "00b97bdbc362ef549a97-a7f48d6595e4f5e0a77f",
-                  "file": "responsive-desktop.e2e.test.ts",
-                  "line": 68,
-                  "column": 9
-                },
-                {
-                  "title": "텍스트가 데스크톱에 적절한 크기",
-                  "ok": true,
-                  "tags": [],
-                  "tests": [
-                    {
-                      "timeout": 30000,
-                      "annotations": [],
-                      "expectedStatus": "passed",
-                      "projectId": "chromium",
-                      "projectName": "chromium",
-                      "results": [
-                        {
-                          "workerIndex": 0,
-                          "parallelIndex": 0,
-                          "status": "passed",
-                          "duration": 7188,
-                          "errors": [],
-                          "stdout": [],
-                          "stderr": [],
-                          "retry": 0,
-                          "startTime": "2025-09-23T11:12:09.426Z",
-                          "annotations": [],
-                          "attachments": []
-                        }
-                      ],
-                      "status": "expected"
-                    }
-                  ],
-                  "id": "00b97bdbc362ef549a97-b441ddf72225bbb0e322",
-                  "file": "responsive-desktop.e2e.test.ts",
-                  "line": 94,
-                  "column": 9
-                },
-                {
-                  "title": "콘텐츠가 잘리지 않음",
-                  "ok": true,
-                  "tags": [],
-                  "tests": [
-                    {
-                      "timeout": 30000,
-                      "annotations": [],
-                      "expectedStatus": "passed",
-                      "projectId": "chromium",
-                      "projectName": "chromium",
-                      "results": [
-                        {
-                          "workerIndex": 3,
-                          "parallelIndex": 3,
-                          "status": "passed",
-                          "duration": 7565,
-                          "errors": [],
-                          "stdout": [],
-                          "stderr": [],
-                          "retry": 0,
-                          "startTime": "2025-09-23T11:12:09.462Z",
-                          "annotations": [],
-                          "attachments": []
-                        }
-                      ],
-                      "status": "expected"
-                    }
-                  ],
-                  "id": "00b97bdbc362ef549a97-97fb025b77e6486a9fef",
-                  "file": "responsive-desktop.e2e.test.ts",
-                  "line": 107,
-                  "column": 9
-                },
-                {
-                  "title": "카드 간격이 적절함",
-                  "ok": true,
-                  "tags": [],
-                  "tests": [
-                    {
-                      "timeout": 30000,
-                      "annotations": [],
-                      "expectedStatus": "passed",
-                      "projectId": "chromium",
-                      "projectName": "chromium",
-                      "results": [
-                        {
-                          "workerIndex": 1,
-                          "parallelIndex": 1,
-                          "status": "passed",
-                          "duration": 6790,
-                          "errors": [],
-                          "stdout": [],
-                          "stderr": [],
-                          "retry": 0,
-                          "startTime": "2025-09-23T11:12:09.936Z",
-                          "annotations": [],
-                          "attachments": []
-                        }
-                      ],
-                      "status": "expected"
-                    }
-                  ],
-                  "id": "00b97bdbc362ef549a97-9a0b24c85da75fa69941",
-                  "file": "responsive-desktop.e2e.test.ts",
-                  "line": 117,
-                  "column": 9
+                  "status": "expected"
                 }
-              ]
+              ],
+              "id": "806a7ee54a751adaeaf2-5fe6ecf320e4f126a9a4",
+              "file": "search-functionality.e2e.test.ts",
+              "line": 4,
+              "column": 7
             },
             {
-              "title": "대형 데스크톱 (1920x1080) - FHD 모니터",
-              "file": "responsive-desktop.e2e.test.ts",
-              "line": 135,
-              "column": 8,
-              "specs": [
+              "title": "헤더 검색창으로 검색이 작동하는지 확인",
+              "ok": false,
+              "tags": [],
+              "tests": [
                 {
-                  "title": "카드 레이아웃이 4열로 표시됨",
-                  "ok": true,
-                  "tags": [],
-                  "tests": [
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
                     {
-                      "timeout": 30000,
-                      "annotations": [],
-                      "expectedStatus": "passed",
-                      "projectId": "chromium",
-                      "projectName": "chromium",
-                      "results": [
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 16172,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/.*questions.*search/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost:3000/\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    8 × unexpected value \"http://localhost:3000/\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/.*questions.*search/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost:3000/\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    8 × unexpected value \"http://localhost:3000/\"\u001b[22m\n\n    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts:36:24",
+                        "location": {
+                          "file": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts",
+                          "column": 24,
+                          "line": 36
+                        },
+                        "snippet": "  34 |     \n  35 |     // 질문 페이지로 이동했는지 확인\n> 36 |     await expect(page).toHaveURL(/.*questions.*search/);\n     |                        ^\n  37 |     \n  38 |     // 검색 결과가 표시되는지 확인\n  39 |     await page.waitForTimeout(2000);"
+                      },
+                      "errors": [
                         {
-                          "workerIndex": 2,
-                          "parallelIndex": 2,
-                          "status": "passed",
-                          "duration": 10466,
-                          "errors": [],
-                          "stdout": [],
-                          "stderr": [],
-                          "retry": 0,
-                          "startTime": "2025-09-23T11:12:16.655Z",
-                          "annotations": [],
-                          "attachments": []
+                          "location": {
+                            "file": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts",
+                            "column": 24,
+                            "line": 36
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/.*questions.*search/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost:3000/\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    8 × unexpected value \"http://localhost:3000/\"\u001b[22m\n\n\n  34 |     \n  35 |     // 질문 페이지로 이동했는지 확인\n> 36 |     await expect(page).toHaveURL(/.*questions.*search/);\n     |                        ^\n  37 |     \n  38 |     // 검색 결과가 표시되는지 확인\n  39 |     await page.waitForTimeout(2000);\n    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts:36:24"
                         }
                       ],
-                      "status": "expected"
-                    }
-                  ],
-                  "id": "00b97bdbc362ef549a97-82200ae33c1abbe18214",
-                  "file": "responsive-desktop.e2e.test.ts",
-                  "line": 140,
-                  "column": 9
-                },
-                {
-                  "title": "텍스트가 대형 데스크톱에 적절한 크기",
-                  "ok": true,
-                  "tags": [],
-                  "tests": [
-                    {
-                      "timeout": 30000,
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-06T12:28:43.924Z",
                       "annotations": [],
-                      "expectedStatus": "passed",
-                      "projectId": "chromium",
-                      "projectName": "chromium",
-                      "results": [
+                      "attachments": [
                         {
-                          "workerIndex": 0,
-                          "parallelIndex": 0,
-                          "status": "passed",
-                          "duration": 10163,
-                          "errors": [],
-                          "stdout": [],
-                          "stderr": [],
-                          "retry": 0,
-                          "startTime": "2025-09-23T11:12:16.744Z",
-                          "annotations": [],
-                          "attachments": []
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/ip9202/develop/vibe/jeju-tourlist/test-results/search-functionality.e2e-S-bea23-ality-헤더-검색창으로-검색이-작동하는지-확인-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/ip9202/develop/vibe/jeju-tourlist/test-results/search-functionality.e2e-S-bea23-ality-헤더-검색창으로-검색이-작동하는지-확인-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/ip9202/develop/vibe/jeju-tourlist/test-results/search-functionality.e2e-S-bea23-ality-헤더-검색창으로-검색이-작동하는지-확인-chromium/error-context.md"
                         }
                       ],
-                      "status": "expected"
+                      "errorLocation": {
+                        "file": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts",
+                        "column": 24,
+                        "line": 36
+                      }
                     }
                   ],
-                  "id": "00b97bdbc362ef549a97-1df846fa5983623e985d",
-                  "file": "responsive-desktop.e2e.test.ts",
-                  "line": 166,
-                  "column": 9
-                },
-                {
-                  "title": "버튼들이 충분히 큰 크기",
-                  "ok": true,
-                  "tags": [],
-                  "tests": [
-                    {
-                      "timeout": 30000,
-                      "annotations": [],
-                      "expectedStatus": "passed",
-                      "projectId": "chromium",
-                      "projectName": "chromium",
-                      "results": [
-                        {
-                          "workerIndex": 1,
-                          "parallelIndex": 1,
-                          "status": "passed",
-                          "duration": 10100,
-                          "errors": [],
-                          "stdout": [],
-                          "stderr": [],
-                          "retry": 0,
-                          "startTime": "2025-09-23T11:12:16.853Z",
-                          "annotations": [],
-                          "attachments": []
-                        }
-                      ],
-                      "status": "expected"
-                    }
-                  ],
-                  "id": "00b97bdbc362ef549a97-e6130f34f3178fbad64f",
-                  "file": "responsive-desktop.e2e.test.ts",
-                  "line": 178,
-                  "column": 9
-                },
-                {
-                  "title": "스크롤이 부드럽게 작동함",
-                  "ok": true,
-                  "tags": [],
-                  "tests": [
-                    {
-                      "timeout": 30000,
-                      "annotations": [],
-                      "expectedStatus": "passed",
-                      "projectId": "chromium",
-                      "projectName": "chromium",
-                      "results": [
-                        {
-                          "workerIndex": 3,
-                          "parallelIndex": 3,
-                          "status": "passed",
-                          "duration": 12269,
-                          "errors": [],
-                          "stdout": [],
-                          "stderr": [],
-                          "retry": 0,
-                          "startTime": "2025-09-23T11:12:17.364Z",
-                          "annotations": [],
-                          "attachments": []
-                        }
-                      ],
-                      "status": "expected"
-                    }
-                  ],
-                  "id": "00b97bdbc362ef549a97-c584c029ca2d887189ef",
-                  "file": "responsive-desktop.e2e.test.ts",
-                  "line": 192,
-                  "column": 9
-                },
-                {
-                  "title": "카드 너비가 적절함",
-                  "ok": true,
-                  "tags": [],
-                  "tests": [
-                    {
-                      "timeout": 30000,
-                      "annotations": [],
-                      "expectedStatus": "passed",
-                      "projectId": "chromium",
-                      "projectName": "chromium",
-                      "results": [
-                        {
-                          "workerIndex": 0,
-                          "parallelIndex": 0,
-                          "status": "passed",
-                          "duration": 9445,
-                          "errors": [],
-                          "stdout": [],
-                          "stderr": [],
-                          "retry": 0,
-                          "startTime": "2025-09-23T11:12:26.981Z",
-                          "annotations": [],
-                          "attachments": []
-                        }
-                      ],
-                      "status": "expected"
-                    }
-                  ],
-                  "id": "00b97bdbc362ef549a97-dc3ae987bd084c7408c3",
-                  "file": "responsive-desktop.e2e.test.ts",
-                  "line": 215,
-                  "column": 9
-                },
-                {
-                  "title": "네비게이션이 충분히 넓은 공간을 차지함",
-                  "ok": true,
-                  "tags": [],
-                  "tests": [
-                    {
-                      "timeout": 30000,
-                      "annotations": [],
-                      "expectedStatus": "passed",
-                      "projectId": "chromium",
-                      "projectName": "chromium",
-                      "results": [
-                        {
-                          "workerIndex": 1,
-                          "parallelIndex": 1,
-                          "status": "passed",
-                          "duration": 9410,
-                          "errors": [],
-                          "stdout": [],
-                          "stderr": [],
-                          "retry": 0,
-                          "startTime": "2025-09-23T11:12:27.041Z",
-                          "annotations": [],
-                          "attachments": []
-                        }
-                      ],
-                      "status": "expected"
-                    }
-                  ],
-                  "id": "00b97bdbc362ef549a97-4184ca33002cc2170711",
-                  "file": "responsive-desktop.e2e.test.ts",
-                  "line": 231,
-                  "column": 9
+                  "status": "unexpected"
                 }
-              ]
+              ],
+              "id": "806a7ee54a751adaeaf2-a15211ada0048a28e0d8",
+              "file": "search-functionality.e2e.test.ts",
+              "line": 27,
+              "column": 7
             },
             {
-              "title": "데스크톱 카드 컴포넌트 테스트",
-              "file": "responsive-desktop.e2e.test.ts",
-              "line": 242,
-              "column": 8,
-              "specs": [
+              "title": "질문 페이지 내 검색창으로 검색이 작동하는지 확인",
+              "ok": false,
+              "tags": [],
+              "tests": [
                 {
-                  "title": "QuestionCard 데스크톱 최적화",
-                  "ok": true,
-                  "tags": [],
-                  "tests": [
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
                     {
-                      "timeout": 30000,
-                      "annotations": [],
-                      "expectedStatus": "passed",
-                      "projectId": "chromium",
-                      "projectName": "chromium",
-                      "results": [
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 15151,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost:3000/questions\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    8 × unexpected value \"http://localhost:3000/questions\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost:3000/questions\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    8 × unexpected value \"http://localhost:3000/questions\"\u001b[22m\n\n    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts:54:24",
+                        "location": {
+                          "file": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts",
+                          "column": 24,
+                          "line": 54
+                        },
+                        "snippet": "  52 |     \n  53 |     // URL에 검색 파라미터가 추가되었는지 확인\n> 54 |     await expect(page).toHaveURL(/.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/);\n     |                        ^\n  55 |     \n  56 |     // 검색 결과가 표시되는지 확인\n  57 |     await page.waitForTimeout(2000);"
+                      },
+                      "errors": [
                         {
-                          "workerIndex": 2,
-                          "parallelIndex": 2,
-                          "status": "passed",
-                          "duration": 10063,
-                          "errors": [],
-                          "stdout": [],
-                          "stderr": [],
-                          "retry": 0,
-                          "startTime": "2025-09-23T11:12:27.284Z",
-                          "annotations": [],
-                          "attachments": []
+                          "location": {
+                            "file": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts",
+                            "column": 24,
+                            "line": 54
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost:3000/questions\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    8 × unexpected value \"http://localhost:3000/questions\"\u001b[22m\n\n\n  52 |     \n  53 |     // URL에 검색 파라미터가 추가되었는지 확인\n> 54 |     await expect(page).toHaveURL(/.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/);\n     |                        ^\n  55 |     \n  56 |     // 검색 결과가 표시되는지 확인\n  57 |     await page.waitForTimeout(2000);\n    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts:54:24"
                         }
                       ],
-                      "status": "expected"
-                    }
-                  ],
-                  "id": "00b97bdbc362ef549a97-cfe6f2143db4691ec81a",
-                  "file": "responsive-desktop.e2e.test.ts",
-                  "line": 247,
-                  "column": 9
-                },
-                {
-                  "title": "마우스 인터페이스 최적화",
-                  "ok": true,
-                  "tags": [],
-                  "tests": [
-                    {
-                      "timeout": 30000,
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-06T12:28:43.941Z",
                       "annotations": [],
-                      "expectedStatus": "passed",
-                      "projectId": "chromium",
-                      "projectName": "chromium",
-                      "results": [
+                      "attachments": [
                         {
-                          "workerIndex": 3,
-                          "parallelIndex": 3,
-                          "status": "passed",
-                          "duration": 9439,
-                          "errors": [],
-                          "stdout": [],
-                          "stderr": [],
-                          "retry": 0,
-                          "startTime": "2025-09-23T11:12:29.713Z",
-                          "annotations": [],
-                          "attachments": []
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/ip9202/develop/vibe/jeju-tourlist/test-results/search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/ip9202/develop/vibe/jeju-tourlist/test-results/search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/ip9202/develop/vibe/jeju-tourlist/test-results/search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-chromium/error-context.md"
                         }
                       ],
-                      "status": "expected"
+                      "errorLocation": {
+                        "file": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts",
+                        "column": 24,
+                        "line": 54
+                      }
                     }
                   ],
-                  "id": "00b97bdbc362ef549a97-a862e09d90620b342f12",
-                  "file": "responsive-desktop.e2e.test.ts",
-                  "line": 270,
-                  "column": 9
-                },
-                {
-                  "title": "Pretendard Variable 폰트 적용",
-                  "ok": true,
-                  "tags": [],
-                  "tests": [
-                    {
-                      "timeout": 30000,
-                      "annotations": [],
-                      "expectedStatus": "passed",
-                      "projectId": "chromium",
-                      "projectName": "chromium",
-                      "results": [
-                        {
-                          "workerIndex": 1,
-                          "parallelIndex": 1,
-                          "status": "passed",
-                          "duration": 5385,
-                          "errors": [],
-                          "stdout": [],
-                          "stderr": [],
-                          "retry": 0,
-                          "startTime": "2025-09-23T11:12:36.515Z",
-                          "annotations": [],
-                          "attachments": []
-                        }
-                      ],
-                      "status": "expected"
-                    }
-                  ],
-                  "id": "00b97bdbc362ef549a97-91fc28f6a6d58310e705",
-                  "file": "responsive-desktop.e2e.test.ts",
-                  "line": 287,
-                  "column": 9
-                },
-                {
-                  "title": "카드 그림자와 둥근 모서리",
-                  "ok": true,
-                  "tags": [],
-                  "tests": [
-                    {
-                      "timeout": 30000,
-                      "annotations": [],
-                      "expectedStatus": "passed",
-                      "projectId": "chromium",
-                      "projectName": "chromium",
-                      "results": [
-                        {
-                          "workerIndex": 0,
-                          "parallelIndex": 0,
-                          "status": "passed",
-                          "duration": 5144,
-                          "errors": [],
-                          "stdout": [],
-                          "stderr": [],
-                          "retry": 0,
-                          "startTime": "2025-09-23T11:12:36.529Z",
-                          "annotations": [],
-                          "attachments": []
-                        }
-                      ],
-                      "status": "expected"
-                    }
-                  ],
-                  "id": "00b97bdbc362ef549a97-6a44d0780f224b0abbc8",
-                  "file": "responsive-desktop.e2e.test.ts",
-                  "line": 297,
-                  "column": 9
-                },
-                {
-                  "title": "호버 효과 최적화",
-                  "ok": true,
-                  "tags": [],
-                  "tests": [
-                    {
-                      "timeout": 30000,
-                      "annotations": [],
-                      "expectedStatus": "passed",
-                      "projectId": "chromium",
-                      "projectName": "chromium",
-                      "results": [
-                        {
-                          "workerIndex": 2,
-                          "parallelIndex": 2,
-                          "status": "passed",
-                          "duration": 5526,
-                          "errors": [],
-                          "stdout": [],
-                          "stderr": [],
-                          "retry": 0,
-                          "startTime": "2025-09-23T11:12:37.419Z",
-                          "annotations": [],
-                          "attachments": []
-                        }
-                      ],
-                      "status": "expected"
-                    }
-                  ],
-                  "id": "00b97bdbc362ef549a97-bafe7b41d403fbc65e49",
-                  "file": "responsive-desktop.e2e.test.ts",
-                  "line": 318,
-                  "column": 9
+                  "status": "unexpected"
                 }
-              ]
+              ],
+              "id": "806a7ee54a751adaeaf2-be1567ba7bb33375be39",
+              "file": "search-functionality.e2e.test.ts",
+              "line": 45,
+              "column": 7
             },
             {
-              "title": "데스크톱 성능 테스트",
-              "file": "responsive-desktop.e2e.test.ts",
-              "line": 354,
-              "column": 8,
-              "specs": [
+              "title": "URL 파라미터로 검색이 작동하는지 확인",
+              "ok": true,
+              "tags": [],
+              "tests": [
                 {
-                  "title": "페이지 로딩 성능",
-                  "ok": true,
-                  "tags": [],
-                  "tests": [
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
                     {
-                      "timeout": 30000,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 11011,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-06T12:28:43.965Z",
                       "annotations": [],
-                      "expectedStatus": "passed",
-                      "projectId": "chromium",
-                      "projectName": "chromium",
-                      "results": [
-                        {
-                          "workerIndex": 3,
-                          "parallelIndex": 3,
-                          "status": "passed",
-                          "duration": 9471,
-                          "errors": [],
-                          "stdout": [],
-                          "stderr": [],
-                          "retry": 0,
-                          "startTime": "2025-09-23T11:12:39.221Z",
-                          "annotations": [],
-                          "attachments": []
-                        }
-                      ],
-                      "status": "expected"
+                      "attachments": []
                     }
                   ],
-                  "id": "00b97bdbc362ef549a97-9e666e3c8c979ee8eac1",
-                  "file": "responsive-desktop.e2e.test.ts",
-                  "line": 359,
-                  "column": 9
-                },
-                {
-                  "title": "스크롤 성능",
-                  "ok": true,
-                  "tags": [],
-                  "tests": [
-                    {
-                      "timeout": 30000,
-                      "annotations": [],
-                      "expectedStatus": "passed",
-                      "projectId": "chromium",
-                      "projectName": "chromium",
-                      "results": [
-                        {
-                          "workerIndex": 0,
-                          "parallelIndex": 0,
-                          "status": "passed",
-                          "duration": 5894,
-                          "errors": [],
-                          "stdout": [],
-                          "stderr": [],
-                          "retry": 0,
-                          "startTime": "2025-09-23T11:12:41.740Z",
-                          "annotations": [],
-                          "attachments": []
-                        }
-                      ],
-                      "status": "expected"
-                    }
-                  ],
-                  "id": "00b97bdbc362ef549a97-6f1d0510ae42456855f1",
-                  "file": "responsive-desktop.e2e.test.ts",
-                  "line": 369,
-                  "column": 9
-                },
-                {
-                  "title": "이미지 로딩 성능",
-                  "ok": true,
-                  "tags": [],
-                  "tests": [
-                    {
-                      "timeout": 30000,
-                      "annotations": [],
-                      "expectedStatus": "passed",
-                      "projectId": "chromium",
-                      "projectName": "chromium",
-                      "results": [
-                        {
-                          "workerIndex": 1,
-                          "parallelIndex": 1,
-                          "status": "passed",
-                          "duration": 4933,
-                          "errors": [],
-                          "stdout": [],
-                          "stderr": [],
-                          "retry": 0,
-                          "startTime": "2025-09-23T11:12:41.960Z",
-                          "annotations": [],
-                          "attachments": []
-                        }
-                      ],
-                      "status": "expected"
-                    }
-                  ],
-                  "id": "00b97bdbc362ef549a97-2873de4447a05c731ca3",
-                  "file": "responsive-desktop.e2e.test.ts",
-                  "line": 402,
-                  "column": 9
-                },
-                {
-                  "title": "애니메이션 성능",
-                  "ok": true,
-                  "tags": [],
-                  "tests": [
-                    {
-                      "timeout": 30000,
-                      "annotations": [],
-                      "expectedStatus": "passed",
-                      "projectId": "chromium",
-                      "projectName": "chromium",
-                      "results": [
-                        {
-                          "workerIndex": 2,
-                          "parallelIndex": 2,
-                          "status": "passed",
-                          "duration": 5045,
-                          "errors": [],
-                          "stdout": [],
-                          "stderr": [],
-                          "retry": 0,
-                          "startTime": "2025-09-23T11:12:43.013Z",
-                          "annotations": [],
-                          "attachments": []
-                        }
-                      ],
-                      "status": "expected"
-                    }
-                  ],
-                  "id": "00b97bdbc362ef549a97-e9f35535dc976cd3b3dd",
-                  "file": "responsive-desktop.e2e.test.ts",
-                  "line": 415,
-                  "column": 9
+                  "status": "expected"
                 }
-              ]
+              ],
+              "id": "806a7ee54a751adaeaf2-ae963d102a811840aea7",
+              "file": "search-functionality.e2e.test.ts",
+              "line": 4,
+              "column": 7
             },
             {
-              "title": "데스크톱 접근성 테스트",
-              "file": "responsive-desktop.e2e.test.ts",
-              "line": 439,
-              "column": 8,
-              "specs": [
+              "title": "헤더 검색창으로 검색이 작동하는지 확인",
+              "ok": true,
+              "tags": [],
+              "tests": [
                 {
-                  "title": "키보드 네비게이션",
-                  "ok": true,
-                  "tags": [],
-                  "tests": [
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
                     {
-                      "timeout": 30000,
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 16936,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-06T12:29:05.212Z",
                       "annotations": [],
-                      "expectedStatus": "passed",
-                      "projectId": "chromium",
-                      "projectName": "chromium",
-                      "results": [
-                        {
-                          "workerIndex": 1,
-                          "parallelIndex": 1,
-                          "status": "passed",
-                          "duration": 3772,
-                          "errors": [],
-                          "stdout": [],
-                          "stderr": [],
-                          "retry": 0,
-                          "startTime": "2025-09-23T11:12:47.024Z",
-                          "annotations": [],
-                          "attachments": []
-                        }
-                      ],
-                      "status": "expected"
+                      "attachments": []
                     }
                   ],
-                  "id": "00b97bdbc362ef549a97-07759d911cb613735d6f",
-                  "file": "responsive-desktop.e2e.test.ts",
-                  "line": 444,
-                  "column": 9
-                },
-                {
-                  "title": "ARIA 레이블",
-                  "ok": true,
-                  "tags": [],
-                  "tests": [
-                    {
-                      "timeout": 30000,
-                      "annotations": [],
-                      "expectedStatus": "passed",
-                      "projectId": "chromium",
-                      "projectName": "chromium",
-                      "results": [
-                        {
-                          "workerIndex": 0,
-                          "parallelIndex": 0,
-                          "status": "passed",
-                          "duration": 4460,
-                          "errors": [],
-                          "stdout": [],
-                          "stderr": [],
-                          "retry": 0,
-                          "startTime": "2025-09-23T11:12:47.680Z",
-                          "annotations": [],
-                          "attachments": []
-                        }
-                      ],
-                      "status": "expected"
-                    }
-                  ],
-                  "id": "00b97bdbc362ef549a97-6e8214ee46362419b9f7",
-                  "file": "responsive-desktop.e2e.test.ts",
-                  "line": 453,
-                  "column": 9
-                },
-                {
-                  "title": "색상 대비",
-                  "ok": true,
-                  "tags": [],
-                  "tests": [
-                    {
-                      "timeout": 30000,
-                      "annotations": [],
-                      "expectedStatus": "passed",
-                      "projectId": "chromium",
-                      "projectName": "chromium",
-                      "results": [
-                        {
-                          "workerIndex": 2,
-                          "parallelIndex": 2,
-                          "status": "passed",
-                          "duration": 4174,
-                          "errors": [],
-                          "stdout": [],
-                          "stderr": [],
-                          "retry": 0,
-                          "startTime": "2025-09-23T11:12:48.110Z",
-                          "annotations": [],
-                          "attachments": []
-                        }
-                      ],
-                      "status": "expected"
-                    }
-                  ],
-                  "id": "00b97bdbc362ef549a97-5333956c471140f14e3a",
-                  "file": "responsive-desktop.e2e.test.ts",
-                  "line": 468,
-                  "column": 9
-                },
-                {
-                  "title": "포커스 표시",
-                  "ok": true,
-                  "tags": [],
-                  "tests": [
-                    {
-                      "timeout": 30000,
-                      "annotations": [],
-                      "expectedStatus": "passed",
-                      "projectId": "chromium",
-                      "projectName": "chromium",
-                      "results": [
-                        {
-                          "workerIndex": 3,
-                          "parallelIndex": 3,
-                          "status": "passed",
-                          "duration": 4159,
-                          "errors": [],
-                          "stdout": [],
-                          "stderr": [],
-                          "retry": 0,
-                          "startTime": "2025-09-23T11:12:48.733Z",
-                          "annotations": [],
-                          "attachments": []
-                        }
-                      ],
-                      "status": "expected"
-                    }
-                  ],
-                  "id": "00b97bdbc362ef549a97-f3caeb59174132fc0ffa",
-                  "file": "responsive-desktop.e2e.test.ts",
-                  "line": 486,
-                  "column": 9
+                  "status": "expected"
                 }
-              ]
+              ],
+              "id": "806a7ee54a751adaeaf2-6ed8f317bf69c2ff5cb9",
+              "file": "search-functionality.e2e.test.ts",
+              "line": 27,
+              "column": 7
+            },
+            {
+              "title": "질문 페이지 내 검색창으로 검색이 작동하는지 확인",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 16251,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost:3000/questions\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    8 × unexpected value \"http://localhost:3000/questions\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost:3000/questions\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    8 × unexpected value \"http://localhost:3000/questions\"\u001b[22m\n\n    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts:54:24",
+                        "location": {
+                          "file": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts",
+                          "column": 24,
+                          "line": 54
+                        },
+                        "snippet": "  52 |     \n  53 |     // URL에 검색 파라미터가 추가되었는지 확인\n> 54 |     await expect(page).toHaveURL(/.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/);\n     |                        ^\n  55 |     \n  56 |     // 검색 결과가 표시되는지 확인\n  57 |     await page.waitForTimeout(2000);"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts",
+                            "column": 24,
+                            "line": 54
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost:3000/questions\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    8 × unexpected value \"http://localhost:3000/questions\"\u001b[22m\n\n\n  52 |     \n  53 |     // URL에 검색 파라미터가 추가되었는지 확인\n> 54 |     await expect(page).toHaveURL(/.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/);\n     |                        ^\n  55 |     \n  56 |     // 검색 결과가 표시되는지 확인\n  57 |     await page.waitForTimeout(2000);\n    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts:54:24"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-06T12:29:05.208Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/ip9202/develop/vibe/jeju-tourlist/test-results/search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-firefox/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/ip9202/develop/vibe/jeju-tourlist/test-results/search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-firefox/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/ip9202/develop/vibe/jeju-tourlist/test-results/search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-firefox/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts",
+                        "column": 24,
+                        "line": 54
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "806a7ee54a751adaeaf2-4299d04224aa0048d5e8",
+              "file": "search-functionality.e2e.test.ts",
+              "line": 45,
+              "column": 7
+            },
+            {
+              "title": "URL 파라미터로 검색이 작동하는지 확인",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 14948,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-06T12:29:05.211Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "806a7ee54a751adaeaf2-c73b4f9be0172149f05d",
+              "file": "search-functionality.e2e.test.ts",
+              "line": 4,
+              "column": 7
+            },
+            {
+              "title": "헤더 검색창으로 검색이 작동하는지 확인",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 16454,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-06T12:29:10.021Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "806a7ee54a751adaeaf2-02d96735109c5455c955",
+              "file": "search-functionality.e2e.test.ts",
+              "line": 27,
+              "column": 7
+            },
+            {
+              "title": "질문 페이지 내 검색창으로 검색이 작동하는지 확인",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 14989,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost:3000/questions\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    8 × unexpected value \"http://localhost:3000/questions\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost:3000/questions\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    8 × unexpected value \"http://localhost:3000/questions\"\u001b[22m\n\n    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts:54:24",
+                        "location": {
+                          "file": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts",
+                          "column": 24,
+                          "line": 54
+                        },
+                        "snippet": "  52 |     \n  53 |     // URL에 검색 파라미터가 추가되었는지 확인\n> 54 |     await expect(page).toHaveURL(/.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/);\n     |                        ^\n  55 |     \n  56 |     // 검색 결과가 표시되는지 확인\n  57 |     await page.waitForTimeout(2000);"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts",
+                            "column": 24,
+                            "line": 54
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost:3000/questions\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    8 × unexpected value \"http://localhost:3000/questions\"\u001b[22m\n\n\n  52 |     \n  53 |     // URL에 검색 파라미터가 추가되었는지 확인\n> 54 |     await expect(page).toHaveURL(/.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/);\n     |                        ^\n  55 |     \n  56 |     // 검색 결과가 표시되는지 확인\n  57 |     await page.waitForTimeout(2000);\n    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts:54:24"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-06T12:29:27.982Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/ip9202/develop/vibe/jeju-tourlist/test-results/search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-webkit/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/ip9202/develop/vibe/jeju-tourlist/test-results/search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-webkit/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/ip9202/develop/vibe/jeju-tourlist/test-results/search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-webkit/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts",
+                        "column": 24,
+                        "line": 54
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "806a7ee54a751adaeaf2-84966599ad449cf2954d",
+              "file": "search-functionality.e2e.test.ts",
+              "line": 45,
+              "column": 7
+            },
+            {
+              "title": "URL 파라미터로 검색이 작동하는지 확인",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 9,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 9941,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-06T12:29:28.254Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "806a7ee54a751adaeaf2-a960fc69ceda973ed72f",
+              "file": "search-functionality.e2e.test.ts",
+              "line": 4,
+              "column": 7
+            },
+            {
+              "title": "헤더 검색창으로 검색이 작동하는지 확인",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 19265,
+                      "error": {
+                        "message": "TimeoutError: locator.fill: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('header input[type=\"search\"]')\u001b[22m\n\u001b[2m    - locator resolved to <input value=\"\" type=\"search\" placeholder=\"제주 여행에 대해 질문해보세요...\" class=\"flex-1 h-10 pl-10 pr-12 py-2 text-sm border border-gray-300 rounded-l-lg bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent\"/>\u001b[22m\n\u001b[2m    - fill(\"신혼부부\")\u001b[22m\n\u001b[2m  - attempting fill action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and editable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying fill action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and editable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying fill action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    18 × waiting for element to be visible, enabled and editable\u001b[22m\n\u001b[2m       - element is not visible\u001b[22m\n\u001b[2m     - retrying fill action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n",
+                        "stack": "TimeoutError: locator.fill: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('header input[type=\"search\"]')\u001b[22m\n\u001b[2m    - locator resolved to <input value=\"\" type=\"search\" placeholder=\"제주 여행에 대해 질문해보세요...\" class=\"flex-1 h-10 pl-10 pr-12 py-2 text-sm border border-gray-300 rounded-l-lg bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent\"/>\u001b[22m\n\u001b[2m    - fill(\"신혼부부\")\u001b[22m\n\u001b[2m  - attempting fill action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and editable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying fill action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and editable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying fill action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    18 × waiting for element to be visible, enabled and editable\u001b[22m\n\u001b[2m       - element is not visible\u001b[22m\n\u001b[2m     - retrying fill action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts:32:29",
+                        "location": {
+                          "file": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts",
+                          "column": 29,
+                          "line": 32
+                        },
+                        "snippet": "  30 |     // 헤더의 검색창에 검색어 입력\n  31 |     const headerSearchInput = page.locator('header input[type=\"search\"]');\n> 32 |     await headerSearchInput.fill('신혼부부');\n     |                             ^\n  33 |     await headerSearchInput.press('Enter');\n  34 |     \n  35 |     // 질문 페이지로 이동했는지 확인"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts",
+                            "column": 29,
+                            "line": 32
+                          },
+                          "message": "TimeoutError: locator.fill: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('header input[type=\"search\"]')\u001b[22m\n\u001b[2m    - locator resolved to <input value=\"\" type=\"search\" placeholder=\"제주 여행에 대해 질문해보세요...\" class=\"flex-1 h-10 pl-10 pr-12 py-2 text-sm border border-gray-300 rounded-l-lg bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent\"/>\u001b[22m\n\u001b[2m    - fill(\"신혼부부\")\u001b[22m\n\u001b[2m  - attempting fill action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and editable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying fill action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and editable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying fill action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    18 × waiting for element to be visible, enabled and editable\u001b[22m\n\u001b[2m       - element is not visible\u001b[22m\n\u001b[2m     - retrying fill action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n\n  30 |     // 헤더의 검색창에 검색어 입력\n  31 |     const headerSearchInput = page.locator('header input[type=\"search\"]');\n> 32 |     await headerSearchInput.fill('신혼부부');\n     |                             ^\n  33 |     await headerSearchInput.press('Enter');\n  34 |     \n  35 |     // 질문 페이지로 이동했는지 확인\n    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts:32:29"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-06T12:29:28.395Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/ip9202/develop/vibe/jeju-tourlist/test-results/search-functionality.e2e-S-bea23-ality-헤더-검색창으로-검색이-작동하는지-확인-Mobile-Chrome/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/ip9202/develop/vibe/jeju-tourlist/test-results/search-functionality.e2e-S-bea23-ality-헤더-검색창으로-검색이-작동하는지-확인-Mobile-Chrome/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/ip9202/develop/vibe/jeju-tourlist/test-results/search-functionality.e2e-S-bea23-ality-헤더-검색창으로-검색이-작동하는지-확인-Mobile-Chrome/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts",
+                        "column": 29,
+                        "line": 32
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "806a7ee54a751adaeaf2-f74c79473505b0cae803",
+              "file": "search-functionality.e2e.test.ts",
+              "line": 27,
+              "column": 7
+            },
+            {
+              "title": "질문 페이지 내 검색창으로 검색이 작동하는지 확인",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 11,
+                      "parallelIndex": 3,
+                      "status": "failed",
+                      "duration": 13793,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost:3000/questions\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    9 × unexpected value \"http://localhost:3000/questions\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost:3000/questions\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    9 × unexpected value \"http://localhost:3000/questions\"\u001b[22m\n\n    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts:54:24",
+                        "location": {
+                          "file": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts",
+                          "column": 24,
+                          "line": 54
+                        },
+                        "snippet": "  52 |     \n  53 |     // URL에 검색 파라미터가 추가되었는지 확인\n> 54 |     await expect(page).toHaveURL(/.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/);\n     |                        ^\n  55 |     \n  56 |     // 검색 결과가 표시되는지 확인\n  57 |     await page.waitForTimeout(2000);"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts",
+                            "column": 24,
+                            "line": 54
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost:3000/questions\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    9 × unexpected value \"http://localhost:3000/questions\"\u001b[22m\n\n\n  52 |     \n  53 |     // URL에 검색 파라미터가 추가되었는지 확인\n> 54 |     await expect(page).toHaveURL(/.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/);\n     |                        ^\n  55 |     \n  56 |     // 검색 결과가 표시되는지 확인\n  57 |     await page.waitForTimeout(2000);\n    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts:54:24"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-06T12:29:29.618Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/ip9202/develop/vibe/jeju-tourlist/test-results/search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-Mobile-Chrome/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/ip9202/develop/vibe/jeju-tourlist/test-results/search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-Mobile-Chrome/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/ip9202/develop/vibe/jeju-tourlist/test-results/search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-Mobile-Chrome/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts",
+                        "column": 24,
+                        "line": 54
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "806a7ee54a751adaeaf2-fa57bf36a082189339b8",
+              "file": "search-functionality.e2e.test.ts",
+              "line": 45,
+              "column": 7
+            },
+            {
+              "title": "URL 파라미터로 검색이 작동하는지 확인",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 12,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 5341,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-06T12:29:42.001Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "806a7ee54a751adaeaf2-82ad4b2263f5d461e4c2",
+              "file": "search-functionality.e2e.test.ts",
+              "line": 4,
+              "column": 7
+            },
+            {
+              "title": "헤더 검색창으로 검색이 작동하는지 확인",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 13,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 14568,
+                      "error": {
+                        "message": "TimeoutError: locator.fill: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('header input[type=\"search\"]')\u001b[22m\n",
+                        "stack": "TimeoutError: locator.fill: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('header input[type=\"search\"]')\u001b[22m\n\n    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts:32:29",
+                        "location": {
+                          "file": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts",
+                          "column": 29,
+                          "line": 32
+                        },
+                        "snippet": "  30 |     // 헤더의 검색창에 검색어 입력\n  31 |     const headerSearchInput = page.locator('header input[type=\"search\"]');\n> 32 |     await headerSearchInput.fill('신혼부부');\n     |                             ^\n  33 |     await headerSearchInput.press('Enter');\n  34 |     \n  35 |     // 질문 페이지로 이동했는지 확인"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts",
+                            "column": 29,
+                            "line": 32
+                          },
+                          "message": "TimeoutError: locator.fill: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('header input[type=\"search\"]')\u001b[22m\n\n\n  30 |     // 헤더의 검색창에 검색어 입력\n  31 |     const headerSearchInput = page.locator('header input[type=\"search\"]');\n> 32 |     await headerSearchInput.fill('신혼부부');\n     |                             ^\n  33 |     await headerSearchInput.press('Enter');\n  34 |     \n  35 |     // 질문 페이지로 이동했는지 확인\n    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts:32:29"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-06T12:29:46.130Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/ip9202/develop/vibe/jeju-tourlist/test-results/search-functionality.e2e-S-bea23-ality-헤더-검색창으로-검색이-작동하는지-확인-Mobile-Safari/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/ip9202/develop/vibe/jeju-tourlist/test-results/search-functionality.e2e-S-bea23-ality-헤더-검색창으로-검색이-작동하는지-확인-Mobile-Safari/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/ip9202/develop/vibe/jeju-tourlist/test-results/search-functionality.e2e-S-bea23-ality-헤더-검색창으로-검색이-작동하는지-확인-Mobile-Safari/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts",
+                        "column": 29,
+                        "line": 32
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "806a7ee54a751adaeaf2-c2d2a706f7128bec62b8",
+              "file": "search-functionality.e2e.test.ts",
+              "line": 27,
+              "column": 7
+            },
+            {
+              "title": "질문 페이지 내 검색창으로 검색이 작동하는지 확인",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 14,
+                      "parallelIndex": 3,
+                      "status": "failed",
+                      "duration": 8662,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost:3000/questions\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    8 × unexpected value \"http://localhost:3000/questions\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost:3000/questions\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    8 × unexpected value \"http://localhost:3000/questions\"\u001b[22m\n\n    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts:54:24",
+                        "location": {
+                          "file": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts",
+                          "column": 24,
+                          "line": 54
+                        },
+                        "snippet": "  52 |     \n  53 |     // URL에 검색 파라미터가 추가되었는지 확인\n> 54 |     await expect(page).toHaveURL(/.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/);\n     |                        ^\n  55 |     \n  56 |     // 검색 결과가 표시되는지 확인\n  57 |     await page.waitForTimeout(2000);"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts",
+                            "column": 24,
+                            "line": 54
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost:3000/questions\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    8 × unexpected value \"http://localhost:3000/questions\"\u001b[22m\n\n\n  52 |     \n  53 |     // URL에 검색 파라미터가 추가되었는지 확인\n> 54 |     await expect(page).toHaveURL(/.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/);\n     |                        ^\n  55 |     \n  56 |     // 검색 결과가 표시되는지 확인\n  57 |     await page.waitForTimeout(2000);\n    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts:54:24"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-06T12:29:46.272Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/ip9202/develop/vibe/jeju-tourlist/test-results/search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-Mobile-Safari/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/ip9202/develop/vibe/jeju-tourlist/test-results/search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-Mobile-Safari/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/ip9202/develop/vibe/jeju-tourlist/test-results/search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-Mobile-Safari/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts",
+                        "column": 24,
+                        "line": 54
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "806a7ee54a751adaeaf2-74898bee91ce73c98ad6",
+              "file": "search-functionality.e2e.test.ts",
+              "line": 45,
+              "column": 7
+            },
+            {
+              "title": "URL 파라미터로 검색이 작동하는지 확인",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari iPad",
+                  "projectName": "Mobile Safari iPad",
+                  "results": [
+                    {
+                      "workerIndex": 15,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 11128,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-06T12:29:52.644Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "806a7ee54a751adaeaf2-3036616c19c91280334c",
+              "file": "search-functionality.e2e.test.ts",
+              "line": 4,
+              "column": 7
+            },
+            {
+              "title": "헤더 검색창으로 검색이 작동하는지 확인",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari iPad",
+                  "projectName": "Mobile Safari iPad",
+                  "results": [
+                    {
+                      "workerIndex": 16,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 8970,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/.*questions.*search/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost:3000/\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    8 × unexpected value \"http://localhost:3000/\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/.*questions.*search/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost:3000/\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    8 × unexpected value \"http://localhost:3000/\"\u001b[22m\n\n    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts:36:24",
+                        "location": {
+                          "file": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts",
+                          "column": 24,
+                          "line": 36
+                        },
+                        "snippet": "  34 |     \n  35 |     // 질문 페이지로 이동했는지 확인\n> 36 |     await expect(page).toHaveURL(/.*questions.*search/);\n     |                        ^\n  37 |     \n  38 |     // 검색 결과가 표시되는지 확인\n  39 |     await page.waitForTimeout(2000);"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts",
+                            "column": 24,
+                            "line": 36
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/.*questions.*search/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost:3000/\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    8 × unexpected value \"http://localhost:3000/\"\u001b[22m\n\n\n  34 |     \n  35 |     // 질문 페이지로 이동했는지 확인\n> 36 |     await expect(page).toHaveURL(/.*questions.*search/);\n     |                        ^\n  37 |     \n  38 |     // 검색 결과가 표시되는지 확인\n  39 |     await page.waitForTimeout(2000);\n    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts:36:24"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-06T12:29:56.668Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/ip9202/develop/vibe/jeju-tourlist/test-results/search-functionality.e2e-S-bea23-ality-헤더-검색창으로-검색이-작동하는지-확인-Mobile-Safari-iPad/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/ip9202/develop/vibe/jeju-tourlist/test-results/search-functionality.e2e-S-bea23-ality-헤더-검색창으로-검색이-작동하는지-확인-Mobile-Safari-iPad/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/ip9202/develop/vibe/jeju-tourlist/test-results/search-functionality.e2e-S-bea23-ality-헤더-검색창으로-검색이-작동하는지-확인-Mobile-Safari-iPad/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts",
+                        "column": 24,
+                        "line": 36
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "806a7ee54a751adaeaf2-62fb51ec2ddafaefe1a6",
+              "file": "search-functionality.e2e.test.ts",
+              "line": 27,
+              "column": 7
+            },
+            {
+              "title": "질문 페이지 내 검색창으로 검색이 작동하는지 확인",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari iPad",
+                  "projectName": "Mobile Safari iPad",
+                  "results": [
+                    {
+                      "workerIndex": 17,
+                      "parallelIndex": 3,
+                      "status": "failed",
+                      "duration": 9410,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost:3000/questions\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    9 × unexpected value \"http://localhost:3000/questions\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost:3000/questions\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    9 × unexpected value \"http://localhost:3000/questions\"\u001b[22m\n\n    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts:54:24",
+                        "location": {
+                          "file": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts",
+                          "column": 24,
+                          "line": 54
+                        },
+                        "snippet": "  52 |     \n  53 |     // URL에 검색 파라미터가 추가되었는지 확인\n> 54 |     await expect(page).toHaveURL(/.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/);\n     |                        ^\n  55 |     \n  56 |     // 검색 결과가 표시되는지 확인\n  57 |     await page.waitForTimeout(2000);"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts",
+                            "column": 24,
+                            "line": 54
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost:3000/questions\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    9 × unexpected value \"http://localhost:3000/questions\"\u001b[22m\n\n\n  52 |     \n  53 |     // URL에 검색 파라미터가 추가되었는지 확인\n> 54 |     await expect(page).toHaveURL(/.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/);\n     |                        ^\n  55 |     \n  56 |     // 검색 결과가 표시되는지 확인\n  57 |     await page.waitForTimeout(2000);\n    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts:54:24"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-06T12:30:01.963Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/ip9202/develop/vibe/jeju-tourlist/test-results/search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-Mobile-Safari-iPad/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/ip9202/develop/vibe/jeju-tourlist/test-results/search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-Mobile-Safari-iPad/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/ip9202/develop/vibe/jeju-tourlist/test-results/search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-Mobile-Safari-iPad/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts",
+                        "column": 24,
+                        "line": 54
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "806a7ee54a751adaeaf2-344c6dd742e4a58f7d5e",
+              "file": "search-functionality.e2e.test.ts",
+              "line": 45,
+              "column": 7
             }
           ]
         }
@@ -1152,11 +1160,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-09-23T11:11:55.098Z",
-    "duration": 58007.742000000006,
-    "expected": 27,
+    "startTime": "2025-10-06T12:28:42.666Z",
+    "duration": 91581.84999999999,
+    "expected": 8,
     "skipped": 0,
-    "unexpected": 0,
+    "unexpected": 10,
     "flaky": 0
   }
 }

@@ -51,9 +51,9 @@ export interface CategoryStats {
 export interface CategoryListItem {
   id: string;
   name: string;
-  description?: string;
-  color?: string;
-  icon?: string;
+  description: string | null;
+  color: string | null;
+  icon: string | null;
   order: number;
   isActive: boolean;
   questionCount: number;

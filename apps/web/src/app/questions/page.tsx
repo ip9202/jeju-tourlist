@@ -1,25 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { Button, Input, Heading, Text } from "@jeju-tourlist/ui";
-import { Search, Plus, Filter } from "lucide-react";
+import React, { useState, useEffect, useRef, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+import { Button, Heading, Text } from "@jeju-tourlist/ui";
+import { Search, Filter } from "lucide-react";
+import { type Question, type SearchFilters } from "@/hooks/useQuestionSearch";
+import { SubPageHeader } from "@/components/layout/SubPageHeader";
+import { MainLayout } from "@/components/layout/MainLayout";
 import Link from "next/link";
-
-interface Question {
-  id: string;
-  title: string;
-  content: string;
-  author: {
-    id: string;
-    name: string;
-  };
-  category: string;
-  answerCount: number;
-  createdAt: string;
-  views: number;
-  likes: number;
-  isAnswered: boolean;
-}
 
 interface Category {
   id: string;
@@ -27,14 +15,18 @@ interface Category {
   icon?: string;
 }
 
-export default function QuestionsPage() {
+function QuestionsPageContent() {
+  const searchParams = useSearchParams();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filters, setFilters] = useState({
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [filters, setFilters] = useState<SearchFilters>({
     categoryId: "",
     status: "all",
+    sortBy: "createdAt",
+    sortOrder: "desc",
   });
   const [pagination, setPagination] = useState({
     page: 1,
@@ -43,17 +35,34 @@ export default function QuestionsPage() {
     totalPages: 0,
   });
 
+  const isLoadingRef = useRef(false);
+
   useEffect(() => {
     loadCategories();
   }, []);
 
+  // URL 파라미터에서 검색어 읽어오기
   useEffect(() => {
-    loadQuestions();
-  }, [filters, pagination.page, searchTerm]);
+    const searchParam = searchParams.get("search");
+    console.log("🔍 URL 검색 파라미터:", searchParam);
+    if (searchParam) {
+      setSearchTerm(searchParam);
+      console.log("🔍 검색어 설정:", searchParam);
+    }
+  }, [searchParams]);
+
+  // 질문 로드 (검색어, 필터, 페이지 변경 시)
+  useEffect(() => {
+    // searchTerm이 설정된 후에만 실행
+    if (searchTerm !== undefined) {
+      loadQuestions();
+    }
+  }, [searchTerm, filters, pagination.page]);
 
   const loadCategories = async () => {
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
+      const API_URL =
+        process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
       const response = await fetch(`${API_URL}/categories`);
 
       if (!response.ok) {
@@ -64,14 +73,14 @@ export default function QuestionsPage() {
 
       // 카테고리에 아이콘 매핑
       const iconMap: Record<string, string> = {
-        "관광지": "🗺️",
-        "맛집": "🍽️",
-        "숙박": "🏨",
-        "교통": "🚗",
-        "쇼핑": "🛍️",
-        "기타": "💬",
-        "액티비티": "🏄",
-        "날씨": "🌤️",
+        관광지: "🗺️",
+        맛집: "🍽️",
+        숙박: "🏨",
+        교통: "🚗",
+        쇼핑: "🛍️",
+        기타: "💬",
+        액티비티: "🏄",
+        날씨: "🌤️",
       };
 
       const categoriesWithIcons = data.data.map((cat: Category) => ({
@@ -86,85 +95,112 @@ export default function QuestionsPage() {
   };
 
   const loadQuestions = async () => {
+    // 이미 로딩 중이면 중복 호출 방지
+    if (isLoadingRef.current) {
+      console.log("🔍 이미 로딩 중이므로 중복 호출 방지");
+      return;
+    }
+
+    isLoadingRef.current = true;
     setLoading(true);
+    setError(null);
 
     try {
+      console.log("🔍 질문 로드 시작:", {
+        searchTerm,
+        filters,
+        page: pagination.page,
+        limit: pagination.limit,
+      });
+
       const API_URL =
         process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
 
       // 쿼리 파라미터 구성
-      const params = new URLSearchParams({
-        page: pagination.page.toString(),
-        limit: pagination.limit.toString(),
-      });
-
-      if (filters.categoryId) {
-        params.append("categoryId", filters.categoryId);
-      }
+      const params = new URLSearchParams();
 
       if (searchTerm) {
         params.append("query", searchTerm);
       }
 
-      // 상태 필터링을 API에 전달
+      if (filters.categoryId) {
+        params.append("categoryId", filters.categoryId);
+      }
+
       if (filters.status === "answered") {
         params.append("isResolved", "true");
       } else if (filters.status === "unanswered") {
         params.append("isResolved", "false");
       }
 
-      const response = await fetch(`${API_URL}/questions?${params.toString()}`);
+      if (filters.sortBy) {
+        params.append("sortBy", filters.sortBy);
+      }
+
+      if (filters.sortOrder) {
+        params.append("sortOrder", filters.sortOrder);
+      }
+
+      params.append("page", pagination.page.toString());
+      params.append("limit", pagination.limit.toString());
+
+      const url = `${API_URL}/questions?${params.toString()}`;
+      console.log("🔍 API 호출 URL:", url);
+
+      const response = await fetch(url);
 
       if (!response.ok) {
-        throw new Error("질문 목록을 불러오는데 실패했습니다.");
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const data = await response.json();
+      console.log("🔍 API 응답 데이터:", data);
 
       // API 응답 데이터를 Question 인터페이스에 맞게 변환
-      const transformedQuestions: Question[] = data.data.map(
-        (q: {
-          id: string;
-          title: string;
-          content: string;
-          author: { id: string; name: string };
-          category?: { name: string };
-          answerCount?: number;
-          createdAt: string;
-          viewCount?: number;
-          likeCount?: number;
-          isResolved?: boolean;
-        }) => ({
-          id: q.id,
-          title: q.title,
-          content: q.content,
-          author: {
-            id: q.author.id,
-            name: q.author.name,
-          },
-          category: q.category?.name || "일반",
-          answerCount: q.answerCount || 0,
-          createdAt: q.createdAt,
-          views: q.viewCount || 0,
-          likes: q.likeCount || 0,
-          isAnswered: q.isResolved || (q.answerCount || 0) > 0,
-        })
-      );
+      const transformedQuestions: Question[] = data.data.map((q: any) => ({
+        id: q.id,
+        title: q.title,
+        content: q.content,
+        author: {
+          id: q.author.id,
+          name: q.author.name,
+          nickname: q.author.nickname,
+          avatar: q.author.avatar,
+        },
+        category: q.category
+          ? {
+              id: q.category.id,
+              name: q.category.name,
+              color: q.category.color,
+            }
+          : null,
+        tags: q.tags || [],
+        location: q.location,
+        status: q.status,
+        isResolved: q.isResolved,
+        isPinned: q.isPinned,
+        viewCount: q.viewCount,
+        likeCount: q.likeCount,
+        answerCount: q.answerCount,
+        createdAt: q.createdAt,
+        updatedAt: q.updatedAt,
+        resolvedAt: q.resolvedAt,
+      }));
+
+      console.log("🔍 변환된 질문들:", transformedQuestions);
 
       setQuestions(transformedQuestions);
-
-      // 페이지네이션 정보 업데이트
-      if (data.pagination) {
-        setPagination(prev => ({
-          ...prev,
-          total: data.pagination.total || transformedQuestions.length,
-          totalPages: data.pagination.totalPages,
-        }));
-      }
+      setPagination(prev => ({
+        ...prev,
+        total: data.pagination?.total || transformedQuestions.length,
+        totalPages: data.pagination?.totalPages || 1,
+      }));
     } catch (error) {
       console.error("질문 목록 로드 실패:", error);
+      setError("질문 목록을 불러오는데 실패했습니다.");
     } finally {
       setLoading(false);
+      isLoadingRef.current = false;
     }
   };
 
@@ -193,50 +229,54 @@ export default function QuestionsPage() {
   // API에서 이미 필터링된 데이터를 받으므로 추가 필터링 불필요
   const filteredQuestions = questions;
 
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        {/* 헤더 */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-6">
-            <Heading level={1} className="text-3xl font-bold text-gray-900">
-              질문 목록
-            </Heading>
-            <Link href="/questions/new">
-              <Button>
-                <Plus className="w-4 h-4 mr-2" />
-                질문하기
-              </Button>
-            </Link>
-          </div>
+  // 디버깅을 위한 로그 (클라이언트에서만 실행)
+  useEffect(() => {
+    console.log("🔍 현재 상태:", {
+      questions: questions.length,
+      searchTerm,
+      loading,
+      error,
+      filteredQuestions: filteredQuestions.length,
+    });
+  }, [questions, searchTerm, loading, error, filteredQuestions]);
 
-          {/* 검색 및 필터 */}
-          <div className="space-y-4">
-            <form onSubmit={handleSearch} className="flex space-x-4">
+  return (
+    <MainLayout showSidebar={false}>
+      {/* SubPageHeader */}
+      <SubPageHeader
+        title="질문 목록"
+        showBackButton={true}
+        showHomeButton={true}
+      />
+
+      <div className="max-w-6xl mx-auto px-4 py-4">
+        {/* 헤더 - 간소화 */}
+        <div className="mb-6">
+          {/* 검색 및 필터 - 간소화 */}
+          <div className="space-y-3">
+            <form onSubmit={handleSearch} className="flex space-x-2">
               <input
                 id="search-query-input"
                 type="text"
                 value={searchTerm}
                 onChange={handleSearchInputChange}
-                placeholder="질문을 검색하세요..."
-                className="flex-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                placeholder="질문 검색..."
+                className="flex-1 h-9 rounded-md border border-input bg-background px-3 py-1 text-sm"
               />
-              <Button type="submit">
-                <Search className="w-4 h-4 mr-2" />
-                검색
+              <Button type="submit" size="sm" className="px-3 py-1 text-xs">
+                <Search className="w-3 h-3" />
               </Button>
             </form>
 
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <Filter className="w-4 h-4 text-gray-500" />
-                <span className="text-sm text-gray-600">카테고리:</span>
+            <div className="flex items-center space-x-3 text-xs">
+              <div className="flex items-center space-x-1">
+                <Filter className="w-3 h-3 text-gray-500" />
                 <select
                   value={filters.categoryId}
                   onChange={e =>
                     handleFilterChange("categoryId", e.target.value)
                   }
-                  className="px-3 py-1 border border-gray-300 rounded-md text-sm"
+                  className="px-2 py-1 border border-gray-300 rounded text-xs"
                 >
                   <option value="">전체</option>
                   {categories.map(category => (
@@ -246,18 +286,15 @@ export default function QuestionsPage() {
                   ))}
                 </select>
               </div>
-              <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-600">상태:</span>
-                <select
-                  value={filters.status}
-                  onChange={e => handleFilterChange("status", e.target.value)}
-                  className="px-3 py-1 border border-gray-300 rounded-md text-sm"
-                >
-                  <option value="all">전체</option>
-                  <option value="answered">답변완료</option>
-                  <option value="unanswered">답변대기</option>
-                </select>
-              </div>
+              <select
+                value={filters.status}
+                onChange={e => handleFilterChange("status", e.target.value)}
+                className="px-2 py-1 border border-gray-300 rounded text-xs"
+              >
+                <option value="all">전체</option>
+                <option value="answered">답변완료</option>
+                <option value="unanswered">답변대기</option>
+              </select>
             </div>
           </div>
         </div>
@@ -271,13 +308,20 @@ export default function QuestionsPage() {
             </div>
           )}
 
-          {!loading && filteredQuestions.length === 0 && (
+          {error && (
+            <div className="text-center py-8">
+              <Text className="text-red-600">{error}</Text>
+            </div>
+          )}
+
+          {!loading && !error && filteredQuestions.length === 0 && (
             <div className="text-center py-8">
               <Text className="text-gray-600">질문이 없습니다.</Text>
             </div>
           )}
 
           {!loading &&
+            !error &&
             filteredQuestions.map(question => (
               <div
                 key={question.id}
@@ -293,12 +337,14 @@ export default function QuestionsPage() {
                     </Heading>
                   </Link>
                   <div className="flex items-center space-x-2 ml-4">
-                    <span className="px-2 py-1 text-xs font-medium rounded-full bg-indigo-100 text-indigo-800">
-                      {question.category}
-                    </span>
-                    {question.isAnswered ? (
+                    {question.category && (
+                      <span className="px-2 py-1 text-xs font-medium rounded-full bg-indigo-100 text-indigo-800">
+                        {question.category.name}
+                      </span>
+                    )}
+                    {question.isResolved ? (
                       <span className="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
-                        답변완료
+                        해결됨
                       </span>
                     ) : (
                       <span className="px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">
@@ -316,8 +362,8 @@ export default function QuestionsPage() {
                   <div className="flex items-center space-x-4">
                     <span>작성자: {question.author.name}</span>
                     <span>답변 {question.answerCount}개</span>
-                    <span>조회 {question.views}</span>
-                    <span>좋아요 {question.likes}</span>
+                    <span>조회 {question.viewCount}</span>
+                    <span>좋아요 {question.likeCount}</span>
                   </div>
                   <span>
                     {new Date(question.createdAt).toLocaleDateString("ko-KR")}
@@ -395,6 +441,22 @@ export default function QuestionsPage() {
           </div>
         )}
       </div>
-    </div>
+    </MainLayout>
+  );
+}
+
+export default function QuestionsPage() {
+  return (
+    <Suspense
+      fallback={
+        <MainLayout>
+          <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+          </div>
+        </MainLayout>
+      }
+    >
+      <QuestionsPageContent />
+    </Suspense>
   );
 }

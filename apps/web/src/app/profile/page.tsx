@@ -4,6 +4,8 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { ProtectedRoute } from "../../components/auth/ProtectedRoute";
 import { Button } from "../../components/ui/button";
+import { SubPageHeader } from "../../components/layout/SubPageHeader";
+import { Header } from "@/components/layout/Header";
 import { User, Settings, Edit3, Save, X } from "lucide-react";
 
 /**
@@ -77,9 +79,17 @@ export default function ProfilePage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gray-50 py-8">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* 헤더 */}
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        {/* 간결한 헤더 */}
+        <SubPageHeader
+          title="프로필"
+          showBackButton={true}
+          showHomeButton={true}
+        />
+
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {/* 프로필 정보 */}
           <div className="bg-white rounded-lg shadow-md p-6 mb-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center">

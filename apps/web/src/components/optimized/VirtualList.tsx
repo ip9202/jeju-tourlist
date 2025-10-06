@@ -7,8 +7,8 @@
  * - SRP: 리스트 가상화와 렌더링만 담당
  */
 
-import React, { useMemo, useCallback, useRef, useEffect } from "react";
-import { useVirtualList } from "@/lib/performance";
+import React, { useMemo, useCallback, useRef, useState } from "react";
+import { calculateVirtualScroll } from "@/lib/performance";
 
 interface VirtualListProps<T> {
   /** 리스트 아이템들 */
@@ -72,53 +72,59 @@ export function VirtualList<T>({
   overscan = 5,
 }: VirtualListProps<T>) {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [scrollTop, setScrollTop] = React.useState(0);
+  const [scrollTop, setScrollTop] = useState(0);
 
-  // 가상화 리스트 훅 사용
-  const {
-    visibleItems,
-    totalHeight,
-    offsetY,
-    handleScroll: virtualHandleScroll,
-    startIndex,
-  } = useVirtualList(items, itemHeight, containerHeight);
+  // 가상화 계산
+  const { start, end, offsetY } = calculateVirtualScroll(scrollTop, {
+    itemHeight,
+    containerHeight,
+    overscan,
+  });
+
+  const visibleItems = useMemo(() => {
+    return items.slice(start, end).map((item, index) => ({
+      item,
+      index: start + index,
+    }));
+  }, [items, start, end]);
+
+  const totalHeight = items.length * itemHeight;
 
   // 스크롤 이벤트 핸들러
   const handleScroll = useCallback(
     (e: React.UIEvent<HTMLDivElement>) => {
       const newScrollTop = e.currentTarget.scrollTop;
       setScrollTop(newScrollTop);
-      virtualHandleScroll(e);
       onScroll?.(newScrollTop);
     },
-    [virtualHandleScroll, onScroll]
+    [onScroll]
   );
 
-  // 스크롤 위치 복원
-  const restoreScrollPosition = useCallback((position: number) => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = position;
-    }
-  }, []);
+  // 스크롤 위치 복원 - 사용하지 않음
+  // const restoreScrollPosition = useCallback((position: number) => {
+  //   if (scrollRef.current) {
+  //     scrollRef.current.scrollTop = position;
+  //   }
+  // }, []);
 
-  // 스크롤 위치 저장
-  const saveScrollPosition = useCallback(() => {
-    return scrollTop;
-  }, [scrollTop]);
+  // 스크롤 위치 저장 - 사용하지 않음
+  // const saveScrollPosition = useCallback(() => {
+  //   return scrollTop;
+  // }, [scrollTop]);
 
-  // 특정 아이템으로 스크롤
-  const scrollToItem = useCallback(
-    (index: number) => {
-      if (scrollRef.current) {
-        const targetScrollTop = index * itemHeight;
-        scrollRef.current.scrollTo({
-          top: targetScrollTop,
-          behavior: "smooth",
-        });
-      }
-    },
-    [itemHeight]
-  );
+  // 특정 아이템으로 스크롤 - 사용하지 않음
+  // const scrollToItem = useCallback(
+  //   (index: number) => {
+  //     if (scrollRef.current) {
+  //       const targetScrollTop = index * itemHeight;
+  //       scrollRef.current.scrollTo({
+  //         top: targetScrollTop,
+  //         behavior: "smooth",
+  //       });
+  //     }
+  //   },
+  //   [itemHeight]
+  // );
 
   // 빈 리스트 처리
   if (!isLoading && items.length === 0) {
@@ -186,14 +192,14 @@ export function VirtualList<T>({
         >
           {visibleItems.map((item, index) => (
             <div
-              key={startIndex + index}
+              key={start + index}
               className={itemClassName}
               style={{
                 height: itemHeight,
                 minHeight: itemHeight,
               }}
             >
-              {renderItem(item, startIndex + index)}
+              {renderItem(item.item, start + index)}
             </div>
           ))}
         </div>

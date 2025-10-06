@@ -1,0 +1,364 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+    - alert [ref=e2]
+    - generic [ref=e3]:
+        - banner [ref=e4]:
+            - generic [ref=e5]:
+                - link [ref=e7] [cursor=pointer]:
+                    - /url: /
+                    - img [ref=e8] [cursor=pointer]
+                - button "메뉴 열기" [ref=e12] [cursor=pointer]:
+                    - img [ref=e14] [cursor=pointer]
+        - main [ref=e16]:
+            - generic [ref=e17]:
+                - generic [ref=e18]:
+                    - generic [ref=e19]:
+                        - heading "제주 여행, 궁금한 게 있으신가요?" [level=1] [ref=e20]
+                        - paragraph [ref=e21]:
+                            - text: 제주도 현지인과 여행자들이 함께 만드는
+                            - text: 가장 신뢰할 수 있는 여행 정보 커뮤니티
+                        - generic [ref=e24]:
+                            - generic:
+                                - img
+                            - textbox "제주 여행에 대해 질문해보세요..." [ref=e27]
+                            - button "검색" [ref=e28] [cursor=pointer]:
+                                - img [ref=e29] [cursor=pointer]
+                                - text: 검색
+                    - generic [ref=e32]:
+                        - generic [ref=e33]:
+                            - img [ref=e35]
+                            - heading "1,234" [level=3] [ref=e37]
+                            - paragraph [ref=e38]: 총 질문 수
+                        - generic [ref=e39]:
+                            - img [ref=e41]
+                            - heading "5,678" [level=3] [ref=e46]
+                            - paragraph [ref=e47]: 활성 사용자
+                        - generic [ref=e48]:
+                            - img [ref=e50]
+                            - heading "9,012" [level=3] [ref=e53]
+                            - paragraph [ref=e54]: 총 답변 수
+                - generic [ref=e55]:
+                    - generic [ref=e56]:
+                        - generic [ref=e57]:
+                            - img [ref=e59]
+                            - heading "실시간 질문" [level=3] [ref=e61]
+                        - generic [ref=e64]: LIVE
+                    - link "맛집 12분 전 제주도 맛집 추천해주세요! 최맛집 12 답변" [ref=e66] [cursor=pointer]:
+                        - /url: /questions/4
+                        - generic [ref=e67] [cursor=pointer]:
+                            - generic [ref=e68] [cursor=pointer]:
+                                - generic [ref=e69] [cursor=pointer]:
+                                    - generic [ref=e70] [cursor=pointer]: 맛집
+                                    - generic [ref=e71] [cursor=pointer]:
+                                        - img [ref=e72] [cursor=pointer]
+                                        - generic [ref=e75] [cursor=pointer]: 12분 전
+                                - heading "제주도 맛집 추천해주세요!" [level=4] [ref=e76] [cursor=pointer]
+                                - generic [ref=e77] [cursor=pointer]:
+                                    - img [ref=e78] [cursor=pointer]
+                                    - generic [ref=e81] [cursor=pointer]: 최맛집
+                            - generic [ref=e82] [cursor=pointer]:
+                                - generic [ref=e83] [cursor=pointer]: "12"
+                                - generic [ref=e84] [cursor=pointer]: 답변
+                    - generic [ref=e85]:
+                        - button "질문 1로 이동" [ref=e86] [cursor=pointer]
+                        - button "질문 2로 이동" [ref=e87] [cursor=pointer]
+                        - button "질문 3로 이동" [ref=e88] [cursor=pointer]
+                        - button "질문 4로 이동" [ref=e89] [cursor=pointer]
+                        - button "질문 5로 이동" [ref=e90] [cursor=pointer]
+                - generic [ref=e91]:
+                    - generic [ref=e92]:
+                        - heading "왜 동네물어봐일까요?" [level=2] [ref=e93]
+                        - paragraph [ref=e94]:
+                            - text: 제주 여행에 특화된 전문 커뮤니티로
+                            - text: 더 정확하고 신뢰할 수 있는 정보를 제공합니다
+                    - generic [ref=e95]:
+                        - generic [ref=e96]:
+                            - img [ref=e98]
+                            - heading "실시간 Q&A" [level=3] [ref=e100]
+                            - paragraph [ref=e101]: 제주 여행에 대한 모든 질문을 실시간으로 답변받으세요. 현지인과 여행자들이 함께 도움을 드립니다.
+                        - generic [ref=e102]:
+                            - img [ref=e104]
+                            - heading "현지인 커뮤니티" [level=3] [ref=e109]
+                            - paragraph [ref=e110]: 제주도 현지인들의 생생한 정보와 추천을 만나보세요. 가장 정확하고 최신의 정보를 제공합니다.
+                        - generic [ref=e111]:
+                            - img [ref=e113]
+                            - heading "검증된 정보" [level=3] [ref=e115]
+                            - paragraph [ref=e116]: 커뮤니티가 검증한 신뢰할 수 있는 여행 정보만 제공합니다. 가짜 정보는 차단하고 품질을 보장합니다.
+                        - generic [ref=e117]:
+                            - img [ref=e119]
+                            - heading "안전한 커뮤니티" [level=3] [ref=e121]
+                            - paragraph [ref=e122]: 건전하고 안전한 커뮤니티 환경을 위해 지속적으로 관리하고 있습니다. 신고 기능으로 함께 지켜주세요.
+                        - generic [ref=e123]:
+                            - img [ref=e125]
+                            - heading "빠른 답변" [level=3] [ref=e127]
+                            - paragraph [ref=e128]: 평균 30분 이내의 빠른 답변을 제공합니다. 급한 질문도 빠르게 해결할 수 있습니다.
+                        - generic [ref=e129]:
+                            - img [ref=e131]
+                            - heading "따뜻한 소통" [level=3] [ref=e133]
+                            - paragraph [ref=e134]: 서로를 존중하고 도움을 주는 따뜻한 커뮤니티입니다. 함께 만들어가는 제주 여행 정보 공유 공간입니다.
+                - generic [ref=e135]:
+                    - generic [ref=e136]:
+                        - generic [ref=e137]:
+                            - heading "인기 질문" [level=3] [ref=e138]:
+                                - img [ref=e139]
+                                - text: 인기 질문
+                            - link "전체보기" [ref=e142] [cursor=pointer]:
+                                - /url: /questions?sort=popular
+                                - button "전체보기" [ref=e143] [cursor=pointer]:
+                                    - generic [ref=e144] [cursor=pointer]: 전체보기
+                        - generic [ref=e145]:
+                            - button "인기순" [ref=e146] [cursor=pointer]
+                            - button "최신순" [ref=e147] [cursor=pointer]
+                            - button "답변완료" [ref=e148] [cursor=pointer]
+                    - generic [ref=e150]:
+                        - 'link "제주도 3박 4일 여행 코스 추천해주세요 김 김제주 630일 전 여행 제주도 3박 4일 여행을 계획하고 있는데, 어떤 코스가 좋을까요? 가족 여행이고 아이가 5살입니다. #3박4일 #가족여행 #코스추천 1,250 12 45" [ref=e152] [cursor=pointer]':
+                            - /url: /questions/1
+                            - generic [ref=e154] [cursor=pointer]:
+                                - generic [ref=e155] [cursor=pointer]:
+                                    - generic [ref=e156] [cursor=pointer]:
+                                        - heading "제주도 3박 4일 여행 코스 추천해주세요" [level=3] [ref=e157] [cursor=pointer]
+                                        - generic [ref=e158] [cursor=pointer]:
+                                            - generic [ref=e160] [cursor=pointer]: 김
+                                            - generic [ref=e161] [cursor=pointer]: 김제주
+                                            - img [ref=e162] [cursor=pointer]
+                                            - generic [ref=e165] [cursor=pointer]: 630일 전
+                                    - generic [ref=e166] [cursor=pointer]:
+                                        - generic [ref=e167] [cursor=pointer]: 여행
+                                        - img [ref=e168] [cursor=pointer]
+                                - paragraph [ref=e171] [cursor=pointer]: 제주도 3박 4일 여행을 계획하고 있는데, 어떤 코스가 좋을까요? 가족 여행이고 아이가 5살입니다.
+                                - generic [ref=e172] [cursor=pointer]:
+                                    - generic [ref=e173] [cursor=pointer]: "#3박4일"
+                                    - generic [ref=e174] [cursor=pointer]: "#가족여행"
+                                    - generic [ref=e175] [cursor=pointer]: "#코스추천"
+                                - generic [ref=e176] [cursor=pointer]:
+                                    - generic [ref=e177] [cursor=pointer]:
+                                        - generic [ref=e178] [cursor=pointer]:
+                                            - img [ref=e179] [cursor=pointer]
+                                            - generic [ref=e182] [cursor=pointer]: 1,250
+                                        - generic [ref=e183] [cursor=pointer]:
+                                            - img [ref=e184] [cursor=pointer]
+                                            - generic [ref=e186] [cursor=pointer]: "12"
+                                        - generic [ref=e187] [cursor=pointer]:
+                                            - img [ref=e188] [cursor=pointer]
+                                            - generic [ref=e190] [cursor=pointer]: "45"
+                                    - generic [ref=e191] [cursor=pointer]:
+                                        - button [ref=e192] [cursor=pointer]:
+                                            - img [ref=e194] [cursor=pointer]
+                                        - button [ref=e196] [cursor=pointer]:
+                                            - img [ref=e198] [cursor=pointer]
+                                        - button [ref=e200] [cursor=pointer]:
+                                            - img [ref=e202] [cursor=pointer]
+                        - 'link "제주도 렌터카 vs 대중교통 어떤 게 좋을까요? 박 박여행 630일 전 교통 제주도 여행에서 렌터카를 빌릴지 대중교통을 이용할지 고민입니다. 비용과 편의성을 고려해서 추천해주세요. #렌터카 #대중교통 #비용 2,100 18 67" [ref=e209] [cursor=pointer]':
+                            - /url: /questions/2
+                            - generic [ref=e211] [cursor=pointer]:
+                                - generic [ref=e212] [cursor=pointer]:
+                                    - generic [ref=e213] [cursor=pointer]:
+                                        - heading "제주도 렌터카 vs 대중교통 어떤 게 좋을까요?" [level=3] [ref=e214] [cursor=pointer]
+                                        - generic [ref=e215] [cursor=pointer]:
+                                            - generic [ref=e217] [cursor=pointer]: 박
+                                            - generic [ref=e218] [cursor=pointer]: 박여행
+                                            - generic [ref=e219] [cursor=pointer]: 630일 전
+                                    - generic [ref=e220] [cursor=pointer]:
+                                        - generic [ref=e221] [cursor=pointer]: 교통
+                                        - img [ref=e222] [cursor=pointer]
+                                - paragraph [ref=e225] [cursor=pointer]: 제주도 여행에서 렌터카를 빌릴지 대중교통을 이용할지 고민입니다. 비용과 편의성을 고려해서 추천해주세요.
+                                - generic [ref=e226] [cursor=pointer]:
+                                    - generic [ref=e227] [cursor=pointer]: "#렌터카"
+                                    - generic [ref=e228] [cursor=pointer]: "#대중교통"
+                                    - generic [ref=e229] [cursor=pointer]: "#비용"
+                                - generic [ref=e230] [cursor=pointer]:
+                                    - generic [ref=e231] [cursor=pointer]:
+                                        - generic [ref=e232] [cursor=pointer]:
+                                            - img [ref=e233] [cursor=pointer]
+                                            - generic [ref=e236] [cursor=pointer]: 2,100
+                                        - generic [ref=e237] [cursor=pointer]:
+                                            - img [ref=e238] [cursor=pointer]
+                                            - generic [ref=e240] [cursor=pointer]: "18"
+                                        - generic [ref=e241] [cursor=pointer]:
+                                            - img [ref=e242] [cursor=pointer]
+                                            - generic [ref=e244] [cursor=pointer]: "67"
+                                    - generic [ref=e245] [cursor=pointer]:
+                                        - button [ref=e246] [cursor=pointer]:
+                                            - img [ref=e248] [cursor=pointer]
+                                        - button [ref=e250] [cursor=pointer]:
+                                            - img [ref=e252] [cursor=pointer]
+                                        - button [ref=e254] [cursor=pointer]:
+                                            - img [ref=e256] [cursor=pointer]
+                        - 'link "제주도 날씨 12월에 어떤가요? 이 이현지 630일 전 일반 12월에 제주도 여행을 가려고 하는데, 날씨가 어떤지 궁금합니다. 옷차림은 어떻게 하면 좋을까요? #12월 #날씨 #옷차림 980 8 23" [ref=e263] [cursor=pointer]':
+                            - /url: /questions/3
+                            - generic [ref=e265] [cursor=pointer]:
+                                - generic [ref=e266] [cursor=pointer]:
+                                    - generic [ref=e267] [cursor=pointer]:
+                                        - heading "제주도 날씨 12월에 어떤가요?" [level=3] [ref=e268] [cursor=pointer]
+                                        - generic [ref=e269] [cursor=pointer]:
+                                            - generic [ref=e271] [cursor=pointer]: 이
+                                            - generic [ref=e272] [cursor=pointer]: 이현지
+                                            - img [ref=e273] [cursor=pointer]
+                                            - generic [ref=e276] [cursor=pointer]: 630일 전
+                                    - generic [ref=e277] [cursor=pointer]:
+                                        - generic [ref=e278] [cursor=pointer]: 일반
+                                        - img [ref=e279] [cursor=pointer]
+                                - paragraph [ref=e282] [cursor=pointer]: 12월에 제주도 여행을 가려고 하는데, 날씨가 어떤지 궁금합니다. 옷차림은 어떻게 하면 좋을까요?
+                                - generic [ref=e283] [cursor=pointer]:
+                                    - generic [ref=e284] [cursor=pointer]: "#12월"
+                                    - generic [ref=e285] [cursor=pointer]: "#날씨"
+                                    - generic [ref=e286] [cursor=pointer]: "#옷차림"
+                                - generic [ref=e287] [cursor=pointer]:
+                                    - generic [ref=e288] [cursor=pointer]:
+                                        - generic [ref=e289] [cursor=pointer]:
+                                            - img [ref=e290] [cursor=pointer]
+                                            - generic [ref=e293] [cursor=pointer]: "980"
+                                        - generic [ref=e294] [cursor=pointer]:
+                                            - img [ref=e295] [cursor=pointer]
+                                            - generic [ref=e297] [cursor=pointer]: "8"
+                                        - generic [ref=e298] [cursor=pointer]:
+                                            - img [ref=e299] [cursor=pointer]
+                                            - generic [ref=e301] [cursor=pointer]: "23"
+                                    - generic [ref=e302] [cursor=pointer]:
+                                        - button [ref=e303] [cursor=pointer]:
+                                            - img [ref=e305] [cursor=pointer]
+                                        - button [ref=e307] [cursor=pointer]:
+                                            - img [ref=e309] [cursor=pointer]
+                                        - button [ref=e311] [cursor=pointer]:
+                                            - img [ref=e313] [cursor=pointer]
+                        - 'link "제주도 맛집 추천해주세요! 최 최맛집 630일 전 맛집 제주도에서 꼭 가봐야 할 맛집들을 추천해주세요. 해산물과 흑돼지 관련 맛집이 특히 궁금합니다. #맛집 #해산물 #흑돼지 3,200 25 89" [ref=e320] [cursor=pointer]':
+                            - /url: /questions/4
+                            - generic [ref=e322] [cursor=pointer]:
+                                - generic [ref=e323] [cursor=pointer]:
+                                    - generic [ref=e324] [cursor=pointer]:
+                                        - heading "제주도 맛집 추천해주세요!" [level=3] [ref=e325] [cursor=pointer]
+                                        - generic [ref=e326] [cursor=pointer]:
+                                            - generic [ref=e328] [cursor=pointer]: 최
+                                            - generic [ref=e329] [cursor=pointer]: 최맛집
+                                            - img [ref=e330] [cursor=pointer]
+                                            - generic [ref=e333] [cursor=pointer]: 630일 전
+                                    - generic [ref=e334] [cursor=pointer]:
+                                        - generic [ref=e335] [cursor=pointer]: 맛집
+                                        - img [ref=e336] [cursor=pointer]
+                                - paragraph [ref=e339] [cursor=pointer]: 제주도에서 꼭 가봐야 할 맛집들을 추천해주세요. 해산물과 흑돼지 관련 맛집이 특히 궁금합니다.
+                                - generic [ref=e340] [cursor=pointer]:
+                                    - generic [ref=e341] [cursor=pointer]: "#맛집"
+                                    - generic [ref=e342] [cursor=pointer]: "#해산물"
+                                    - generic [ref=e343] [cursor=pointer]: "#흑돼지"
+                                - generic [ref=e344] [cursor=pointer]:
+                                    - generic [ref=e345] [cursor=pointer]:
+                                        - generic [ref=e346] [cursor=pointer]:
+                                            - img [ref=e347] [cursor=pointer]
+                                            - generic [ref=e350] [cursor=pointer]: 3,200
+                                        - generic [ref=e351] [cursor=pointer]:
+                                            - img [ref=e352] [cursor=pointer]
+                                            - generic [ref=e354] [cursor=pointer]: "25"
+                                        - generic [ref=e355] [cursor=pointer]:
+                                            - img [ref=e356] [cursor=pointer]
+                                            - generic [ref=e358] [cursor=pointer]: "89"
+                                    - generic [ref=e359] [cursor=pointer]:
+                                        - button [ref=e360] [cursor=pointer]:
+                                            - img [ref=e362] [cursor=pointer]
+                                        - button [ref=e364] [cursor=pointer]:
+                                            - img [ref=e366] [cursor=pointer]
+                                        - button [ref=e368] [cursor=pointer]:
+                                            - img [ref=e370] [cursor=pointer]
+                        - 'link "제주도 포토스팟 어디가 좋을까요? 정 정포토 631일 전 포토스팟 제주도에서 인스타그램에 올릴 만한 예쁜 포토스팟을 찾고 있습니다. 특히 일몰 명소가 좋아요. #포토스팟 #일몰 #인스타그램 1,800 15 56" [ref=e377] [cursor=pointer]':
+                            - /url: /questions/5
+                            - generic [ref=e379] [cursor=pointer]:
+                                - generic [ref=e380] [cursor=pointer]:
+                                    - generic [ref=e381] [cursor=pointer]:
+                                        - heading "제주도 포토스팟 어디가 좋을까요?" [level=3] [ref=e382] [cursor=pointer]
+                                        - generic [ref=e383] [cursor=pointer]:
+                                            - generic [ref=e385] [cursor=pointer]: 정
+                                            - generic [ref=e386] [cursor=pointer]: 정포토
+                                            - generic [ref=e387] [cursor=pointer]: 631일 전
+                                    - generic [ref=e388] [cursor=pointer]:
+                                        - generic [ref=e389] [cursor=pointer]: 포토스팟
+                                        - img [ref=e390] [cursor=pointer]
+                                - paragraph [ref=e393] [cursor=pointer]: 제주도에서 인스타그램에 올릴 만한 예쁜 포토스팟을 찾고 있습니다. 특히 일몰 명소가 좋아요.
+                                - generic [ref=e394] [cursor=pointer]:
+                                    - generic [ref=e395] [cursor=pointer]: "#포토스팟"
+                                    - generic [ref=e396] [cursor=pointer]: "#일몰"
+                                    - generic [ref=e397] [cursor=pointer]: "#인스타그램"
+                                - generic [ref=e398] [cursor=pointer]:
+                                    - generic [ref=e399] [cursor=pointer]:
+                                        - generic [ref=e400] [cursor=pointer]:
+                                            - img [ref=e401] [cursor=pointer]
+                                            - generic [ref=e404] [cursor=pointer]: 1,800
+                                        - generic [ref=e405] [cursor=pointer]:
+                                            - img [ref=e406] [cursor=pointer]
+                                            - generic [ref=e408] [cursor=pointer]: "15"
+                                        - generic [ref=e409] [cursor=pointer]:
+                                            - img [ref=e410] [cursor=pointer]
+                                            - generic [ref=e412] [cursor=pointer]: "56"
+                                    - generic [ref=e413] [cursor=pointer]:
+                                        - button [ref=e414] [cursor=pointer]:
+                                            - img [ref=e416] [cursor=pointer]
+                                        - button [ref=e418] [cursor=pointer]:
+                                            - img [ref=e420] [cursor=pointer]
+                                        - button [ref=e422] [cursor=pointer]:
+                                            - img [ref=e424] [cursor=pointer]
+        - contentinfo [ref=e430]:
+            - generic [ref=e431]:
+                - generic [ref=e432]:
+                    - generic [ref=e433]:
+                        - generic [ref=e434]:
+                            - img [ref=e435]
+                            - generic [ref=e438]: 동네물어봐
+                        - paragraph [ref=e439]: 제주 여행에 대한 모든 질문과 답변을 공유하는 커뮤니티입니다. 현지인과 여행자들이 함께 만드는 신뢰할 수 있는 여행 정보를 제공합니다.
+                        - generic [ref=e440]:
+                            - link "인스타그램" [ref=e441] [cursor=pointer]:
+                                - /url: https://instagram.com/jeju_tourlist
+                                - img [ref=e442] [cursor=pointer]
+                            - link "페이스북" [ref=e445] [cursor=pointer]:
+                                - /url: https://facebook.com/jeju_tourlist
+                                - img [ref=e446] [cursor=pointer]
+                            - link "트위터" [ref=e448] [cursor=pointer]:
+                                - /url: https://twitter.com/jeju_tourlist
+                                - img [ref=e449] [cursor=pointer]
+                    - generic [ref=e451]:
+                        - heading "서비스" [level=3] [ref=e452]
+                        - list [ref=e453]:
+                            - listitem [ref=e454]:
+                                - link "질문목록" [ref=e455] [cursor=pointer]:
+                                    - /url: /questions
+                            - listitem [ref=e456]:
+                                - link "카테고리" [ref=e457] [cursor=pointer]:
+                                    - /url: /categories
+                            - listitem [ref=e458]:
+                                - link "검색" [ref=e459] [cursor=pointer]:
+                                    - /url: /search
+                            - listitem [ref=e460]:
+                                - link "인기 질문" [ref=e461] [cursor=pointer]:
+                                    - /url: /popular
+                    - generic [ref=e462]:
+                        - heading "지원" [level=3] [ref=e463]
+                        - list [ref=e464]:
+                            - listitem [ref=e465]:
+                                - link "도움말" [ref=e466] [cursor=pointer]:
+                                    - /url: /help
+                            - listitem [ref=e467]:
+                                - link "자주 묻는 질문" [ref=e468] [cursor=pointer]:
+                                    - /url: /faq
+                            - listitem [ref=e469]:
+                                - link "문의하기" [ref=e470] [cursor=pointer]:
+                                    - /url: /contact
+                            - listitem [ref=e471]:
+                                - link "신고하기" [ref=e472] [cursor=pointer]:
+                                    - /url: /report
+                - generic [ref=e474]:
+                    - generic [ref=e475]: © 2025 동네물어봐. All rights reserved.
+                    - generic [ref=e476]:
+                        - link "개인정보처리방침" [ref=e477] [cursor=pointer]:
+                            - /url: /privacy
+                        - link "이용약관" [ref=e478] [cursor=pointer]:
+                            - /url: /terms
+                        - link "쿠키 정책" [ref=e479] [cursor=pointer]:
+                            - /url: /cookies
+                - generic [ref=e481]:
+                    - generic [ref=e482]:
+                        - img [ref=e483]
+                        - generic [ref=e486]: support@dongnemulurowa.com
+                    - generic [ref=e487]:
+                        - img [ref=e488]
+                        - generic [ref=e490]: 1588-0000
+                    - generic [ref=e492]: 제주특별자치도 제주시 연동 123-45
+```

@@ -41,8 +41,8 @@ function validateEnv() {
   return { success: true, error: null };
 }
 import { ErrorHandler } from "./middleware/errorHandler";
-import { generalLimiter } from "./middleware/rateLimiter";
-import { sanitizeInput } from "./middleware/validation";
+// import { generalLimiter } from "./middleware/rateLimiter";
+// import { sanitizeInput } from "./middleware/validation";
 import { swaggerSpec, swaggerUiOptions } from "./config/swagger";
 import healthRoutes from "./routes/health";
 import pointRoutes from "./routes/point";
@@ -108,13 +108,13 @@ app.use(morgan("combined"));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
-// Rate Limiting 적용
-app.use(generalLimiter);
+// Rate Limiting 적용 (개발 환경에서 비활성화)
+// app.use(generalLimiter);
 
-// 입력값 정제 (XSS 방지)
-app.use(
-  sanitizeInput(["title", "content", "name", "nickname", "bio", "location"])
-);
+// 입력값 정제 (XSS 방지) - 임시 비활성화
+// app.use(
+//   sanitizeInput(["title", "content", "name", "nickname", "bio", "location"])
+// );
 
 // Swagger API 문서
 app.use(

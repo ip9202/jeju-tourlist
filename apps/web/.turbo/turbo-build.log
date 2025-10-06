@@ -1,5 +1,10 @@
 
-> @jeju-tourlist/web@0.1.0 build /Users/ip9202/develop/vibe/jeju-tourlist/apps/web
+> @jeju-tourlist/web@1.0.0 build /Users/ip9202/develop/vibe/jeju-tourlist/apps/web
 > next build
 
- ELIFECYCLE  Command failed.
+  ▲ Next.js 14.2.32
+  - Environments: .env.local
+  - Experiments (use with caution):
+    · memoryBasedWorkersCount
+
+   Creating an optimized production build ...

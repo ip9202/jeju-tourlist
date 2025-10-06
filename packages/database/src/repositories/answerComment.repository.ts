@@ -1,4 +1,3 @@
-// @ts-expect-error Prisma client type recognition issue in monorepo
 import { PrismaClient, AnswerComment } from "@prisma/client";
 import { BaseRepository } from "./base.repository";
 import {
@@ -108,7 +107,9 @@ export class AnswerCommentRepository
     }
   }
 
-  async findMany(options: AnswerCommentSearchOptions = {}): Promise<AnswerComment[]> {
+  async findMany(
+    options: AnswerCommentSearchOptions = {}
+  ): Promise<AnswerComment[]> {
     try {
       const where = this.buildWhereClause(options);
       const orderBy = this.buildOrderByClause(
@@ -187,7 +188,10 @@ export class AnswerCommentRepository
     }
   }
 
-  async update(id: string, data: UpdateAnswerCommentData): Promise<AnswerComment> {
+  async update(
+    id: string,
+    data: UpdateAnswerCommentData
+  ): Promise<AnswerComment> {
     try {
       return await this.prisma.answerComment.update({
         where: { id },

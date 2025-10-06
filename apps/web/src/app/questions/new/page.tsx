@@ -2,17 +2,18 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Button, Input, Textarea, Heading, Text } from "@jeju-tourlist/ui";
-import { ArrowLeft, AlertCircle, CheckCircle } from "lucide-react";
-import Link from "next/link";
+import { Button, Input, Textarea, Text } from "@jeju-tourlist/ui";
+import { AlertCircle, CheckCircle } from "lucide-react";
+import { SubPageHeader } from "@/components/layout/SubPageHeader";
+import { Header } from "@/components/layout/Header";
 
 // 아이콘 이름을 이모지로 매핑
 const getIconEmoji = (iconName: string | null): string => {
   const iconMap: Record<string, string> = {
     "map-pin": "📍",
-    "utensils": "🍴",
-    "bed": "🛏️",
-    "car": "🚗",
+    utensils: "🍴",
+    bed: "🛏️",
+    car: "🚗",
     "shopping-bag": "🛍️",
     "help-circle": "❓",
   };
@@ -246,23 +247,18 @@ export default function NewQuestionPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Header />
+      {/* 간결한 헤더 */}
+      <SubPageHeader
+        title="새 질문 작성"
+        showBackButton={true}
+        showHomeButton={true}
+      />
+
       <div className="max-w-4xl mx-auto px-4 py-8">
-        {/* 헤더 */}
-        <div className="mb-8">
-          <Link
-            href="/questions"
-            className="inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors mb-4"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            질문 목록으로 돌아가기
-          </Link>
-          <Heading level={1} className="text-3xl font-bold text-gray-900">
-            새로운 질문 작성
-          </Heading>
-          <Text className="text-gray-600 mt-2">
-            제주 여행에 대한 질문을 작성해주세요.
-          </Text>
-        </div>
+        <Text className="text-gray-600 mt-2">
+          제주 여행에 대한 질문을 작성해주세요.
+        </Text>
 
         {/* 질문 작성 폼 */}
         <div className="bg-white rounded-lg shadow-md p-8">

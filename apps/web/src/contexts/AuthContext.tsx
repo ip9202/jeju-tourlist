@@ -2,7 +2,11 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { User, UserRole, AuthProvider as AuthProviderEnum } from "@jeju-tourlist/types";
+import {
+  User,
+  UserRole,
+  AuthProvider as AuthProviderEnum,
+} from "@jeju-tourlist/types";
 
 /**
  * 인증 컨텍스트 타입 정의
@@ -33,8 +37,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // NextAuth 세션을 User 타입으로 변환
   useEffect(() => {
+    // 🔧 개발 환경: 항상 테스트 사용자로 로그인 (임시)
+    if (process.env.NODE_ENV === "development") {
+      const testUser: User = {
+        id: "test-user-id",
+        email: "test@example.com",
+        name: "테스트사용자",
+        profileImage: undefined,
+        provider: AuthProviderEnum.LOCAL,
+        providerId: "test-user-id",
+        role: UserRole.USER,
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+      setUser(testUser);
+      setIsLoading(false);
+      return;
+    }
+
     // 테스트 환경에서 인증 상태 강제 설정
-    if (typeof window !== 'undefined' && window.__AUTH_STATE__) {
+    if (typeof window !== "undefined" && window.__AUTH_STATE__) {
       const testAuthState = window.__AUTH_STATE__;
       if (testAuthState.isAuthenticated && testAuthState.user) {
         const userData: User = {

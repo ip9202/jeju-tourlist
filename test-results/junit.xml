@@ -1,58 +1,483 @@
-<testsuites id="" name="" tests="27" failures="0" skipped="0" errors="0" time="58.00774200000001">
-<testsuite name="responsive-desktop.e2e.test.ts" timestamp="2025-09-23T11:11:55.253Z" hostname="chromium" tests="27" failures="0" skipped="0" time="213.917" errors="0">
-<testcase name="데스크톱 반응형 테스트 › 데스크톱 (1024x768) - 표준 데스크톱 › 페이지가 데스크톱 화면에 맞게 조정됨" classname="responsive-desktop.e2e.test.ts" time="11.405">
+<testsuites id="" name="" tests="18" failures="10" skipped="0" errors="0" time="91.58184999999999">
+<testsuite name="search-functionality.e2e.test.ts" timestamp="2025-10-06T12:28:42.777Z" hostname="chromium" tests="3" failures="2" skipped="0" time="46.161" errors="0">
+<testcase name="Search Functionality › URL 파라미터로 검색이 작동하는지 확인" classname="search-functionality.e2e.test.ts" time="14.838">
 </testcase>
-<testcase name="데스크톱 반응형 테스트 › 데스크톱 (1024x768) - 표준 데스크톱 › 헤더가 데스크톱에 최적화됨" classname="responsive-desktop.e2e.test.ts" time="11.796">
+<testcase name="Search Functionality › 헤더 검색창으로 검색이 작동하는지 확인" classname="search-functionality.e2e.test.ts" time="16.172">
+<failure message="search-functionality.e2e.test.ts:27:7 헤더 검색창으로 검색이 작동하는지 확인" type="FAILURE">
+<![CDATA[  [chromium] › search-functionality.e2e.test.ts:27:7 › Search Functionality › 헤더 검색창으로 검색이 작동하는지 확인 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /.*questions.*search/
+    Received string:  "http://localhost:3000/"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        8 × unexpected value "http://localhost:3000/"
+
+
+      34 |     
+      35 |     // 질문 페이지로 이동했는지 확인
+    > 36 |     await expect(page).toHaveURL(/.*questions.*search/);
+         |                        ^
+      37 |     
+      38 |     // 검색 결과가 표시되는지 확인
+      39 |     await page.waitForTimeout(2000);
+        at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts:36:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../../test-results/search-functionality.e2e-S-bea23-ality-헤더-검색창으로-검색이-작동하는지-확인-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../../../../test-results/search-functionality.e2e-S-bea23-ality-헤더-검색창으로-검색이-작동하는지-확인-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../../test-results/search-functionality.e2e-S-bea23-ality-헤더-검색창으로-검색이-작동하는지-확인-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|search-functionality.e2e-S-bea23-ality-헤더-검색창으로-검색이-작동하는지-확인-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|search-functionality.e2e-S-bea23-ality-헤더-검색창으로-검색이-작동하는지-확인-chromium/video.webm]]
+
+[[ATTACHMENT|search-functionality.e2e-S-bea23-ality-헤더-검색창으로-검색이-작동하는지-확인-chromium/error-context.md]]
+]]>
+</system-out>
 </testcase>
-<testcase name="데스크톱 반응형 테스트 › 데스크톱 (1024x768) - 표준 데스크톱 › 데스크톱 네비게이션이 표시됨" classname="responsive-desktop.e2e.test.ts" time="11.373">
+<testcase name="Search Functionality › 질문 페이지 내 검색창으로 검색이 작동하는지 확인" classname="search-functionality.e2e.test.ts" time="15.151">
+<failure message="search-functionality.e2e.test.ts:45:7 질문 페이지 내 검색창으로 검색이 작동하는지 확인" type="FAILURE">
+<![CDATA[  [chromium] › search-functionality.e2e.test.ts:45:7 › Search Functionality › 질문 페이지 내 검색창으로 검색이 작동하는지 확인 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/
+    Received string:  "http://localhost:3000/questions"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        8 × unexpected value "http://localhost:3000/questions"
+
+
+      52 |     
+      53 |     // URL에 검색 파라미터가 추가되었는지 확인
+    > 54 |     await expect(page).toHaveURL(/.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/);
+         |                        ^
+      55 |     
+      56 |     // 검색 결과가 표시되는지 확인
+      57 |     await page.waitForTimeout(2000);
+        at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts:54:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../../test-results/search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../../../../test-results/search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../../test-results/search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-chromium/video.webm]]
+
+[[ATTACHMENT|search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-chromium/error-context.md]]
+]]>
+</system-out>
 </testcase>
-<testcase name="데스크톱 반응형 테스트 › 데스크톱 (1024x768) - 표준 데스크톱 › 카드가 3열로 표시됨" classname="responsive-desktop.e2e.test.ts" time="11.464">
+</testsuite>
+<testsuite name="search-functionality.e2e.test.ts" timestamp="2025-10-06T12:28:42.777Z" hostname="firefox" tests="3" failures="1" skipped="0" time="44.198" errors="0">
+<testcase name="Search Functionality › URL 파라미터로 검색이 작동하는지 확인" classname="search-functionality.e2e.test.ts" time="11.011">
 </testcase>
-<testcase name="데스크톱 반응형 테스트 › 데스크톱 (1024x768) - 표준 데스크톱 › 마우스 호버 효과가 작동함" classname="responsive-desktop.e2e.test.ts" time="7.018">
+<testcase name="Search Functionality › 헤더 검색창으로 검색이 작동하는지 확인" classname="search-functionality.e2e.test.ts" time="16.936">
 </testcase>
-<testcase name="데스크톱 반응형 테스트 › 데스크톱 (1024x768) - 표준 데스크톱 › 텍스트가 데스크톱에 적절한 크기" classname="responsive-desktop.e2e.test.ts" time="7.188">
+<testcase name="Search Functionality › 질문 페이지 내 검색창으로 검색이 작동하는지 확인" classname="search-functionality.e2e.test.ts" time="16.251">
+<failure message="search-functionality.e2e.test.ts:45:7 질문 페이지 내 검색창으로 검색이 작동하는지 확인" type="FAILURE">
+<![CDATA[  [firefox] › search-functionality.e2e.test.ts:45:7 › Search Functionality › 질문 페이지 내 검색창으로 검색이 작동하는지 확인 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/
+    Received string:  "http://localhost:3000/questions"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        8 × unexpected value "http://localhost:3000/questions"
+
+
+      52 |     
+      53 |     // URL에 검색 파라미터가 추가되었는지 확인
+    > 54 |     await expect(page).toHaveURL(/.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/);
+         |                        ^
+      55 |     
+      56 |     // 검색 결과가 표시되는지 확인
+      57 |     await page.waitForTimeout(2000);
+        at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts:54:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../../test-results/search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-firefox/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../../../../test-results/search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-firefox/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../../test-results/search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-firefox/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-firefox/test-failed-1.png]]
+
+[[ATTACHMENT|search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-firefox/video.webm]]
+
+[[ATTACHMENT|search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-firefox/error-context.md]]
+]]>
+</system-out>
 </testcase>
-<testcase name="데스크톱 반응형 테스트 › 데스크톱 (1024x768) - 표준 데스크톱 › 콘텐츠가 잘리지 않음" classname="responsive-desktop.e2e.test.ts" time="7.565">
+</testsuite>
+<testsuite name="search-functionality.e2e.test.ts" timestamp="2025-10-06T12:28:42.777Z" hostname="webkit" tests="3" failures="1" skipped="0" time="46.391" errors="0">
+<testcase name="Search Functionality › URL 파라미터로 검색이 작동하는지 확인" classname="search-functionality.e2e.test.ts" time="14.948">
 </testcase>
-<testcase name="데스크톱 반응형 테스트 › 데스크톱 (1024x768) - 표준 데스크톱 › 카드 간격이 적절함" classname="responsive-desktop.e2e.test.ts" time="6.79">
+<testcase name="Search Functionality › 헤더 검색창으로 검색이 작동하는지 확인" classname="search-functionality.e2e.test.ts" time="16.454">
 </testcase>
-<testcase name="데스크톱 반응형 테스트 › 대형 데스크톱 (1920x1080) - FHD 모니터 › 카드 레이아웃이 4열로 표시됨" classname="responsive-desktop.e2e.test.ts" time="10.466">
+<testcase name="Search Functionality › 질문 페이지 내 검색창으로 검색이 작동하는지 확인" classname="search-functionality.e2e.test.ts" time="14.989">
+<failure message="search-functionality.e2e.test.ts:45:7 질문 페이지 내 검색창으로 검색이 작동하는지 확인" type="FAILURE">
+<![CDATA[  [webkit] › search-functionality.e2e.test.ts:45:7 › Search Functionality › 질문 페이지 내 검색창으로 검색이 작동하는지 확인 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/
+    Received string:  "http://localhost:3000/questions"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        8 × unexpected value "http://localhost:3000/questions"
+
+
+      52 |     
+      53 |     // URL에 검색 파라미터가 추가되었는지 확인
+    > 54 |     await expect(page).toHaveURL(/.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/);
+         |                        ^
+      55 |     
+      56 |     // 검색 결과가 표시되는지 확인
+      57 |     await page.waitForTimeout(2000);
+        at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts:54:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../../test-results/search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-webkit/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../../../../test-results/search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-webkit/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../../test-results/search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-webkit/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-webkit/test-failed-1.png]]
+
+[[ATTACHMENT|search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-webkit/video.webm]]
+
+[[ATTACHMENT|search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-webkit/error-context.md]]
+]]>
+</system-out>
 </testcase>
-<testcase name="데스크톱 반응형 테스트 › 대형 데스크톱 (1920x1080) - FHD 모니터 › 텍스트가 대형 데스크톱에 적절한 크기" classname="responsive-desktop.e2e.test.ts" time="10.163">
+</testsuite>
+<testsuite name="search-functionality.e2e.test.ts" timestamp="2025-10-06T12:28:42.777Z" hostname="Mobile Chrome" tests="3" failures="2" skipped="0" time="42.999" errors="0">
+<testcase name="Search Functionality › URL 파라미터로 검색이 작동하는지 확인" classname="search-functionality.e2e.test.ts" time="9.941">
 </testcase>
-<testcase name="데스크톱 반응형 테스트 › 대형 데스크톱 (1920x1080) - FHD 모니터 › 버튼들이 충분히 큰 크기" classname="responsive-desktop.e2e.test.ts" time="10.1">
+<testcase name="Search Functionality › 헤더 검색창으로 검색이 작동하는지 확인" classname="search-functionality.e2e.test.ts" time="19.265">
+<failure message="search-functionality.e2e.test.ts:27:7 헤더 검색창으로 검색이 작동하는지 확인" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › search-functionality.e2e.test.ts:27:7 › Search Functionality › 헤더 검색창으로 검색이 작동하는지 확인 
+
+    TimeoutError: locator.fill: Timeout 10000ms exceeded.
+    Call log:
+      - waiting for locator('header input[type="search"]')
+        - locator resolved to <input value="" type="search" placeholder="제주 여행에 대해 질문해보세요..." class="flex-1 h-10 pl-10 pr-12 py-2 text-sm border border-gray-300 rounded-l-lg bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"/>
+        - fill("신혼부부")
+      - attempting fill action
+        2 × waiting for element to be visible, enabled and editable
+          - element is not visible
+        - retrying fill action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and editable
+          - element is not visible
+        - retrying fill action
+          - waiting 100ms
+        18 × waiting for element to be visible, enabled and editable
+           - element is not visible
+         - retrying fill action
+           - waiting 500ms
+
+
+      30 |     // 헤더의 검색창에 검색어 입력
+      31 |     const headerSearchInput = page.locator('header input[type="search"]');
+    > 32 |     await headerSearchInput.fill('신혼부부');
+         |                             ^
+      33 |     await headerSearchInput.press('Enter');
+      34 |     
+      35 |     // 질문 페이지로 이동했는지 확인
+        at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts:32:29
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../../test-results/search-functionality.e2e-S-bea23-ality-헤더-검색창으로-검색이-작동하는지-확인-Mobile-Chrome/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../../../../test-results/search-functionality.e2e-S-bea23-ality-헤더-검색창으로-검색이-작동하는지-확인-Mobile-Chrome/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../../test-results/search-functionality.e2e-S-bea23-ality-헤더-검색창으로-검색이-작동하는지-확인-Mobile-Chrome/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|search-functionality.e2e-S-bea23-ality-헤더-검색창으로-검색이-작동하는지-확인-Mobile-Chrome/test-failed-1.png]]
+
+[[ATTACHMENT|search-functionality.e2e-S-bea23-ality-헤더-검색창으로-검색이-작동하는지-확인-Mobile-Chrome/video.webm]]
+
+[[ATTACHMENT|search-functionality.e2e-S-bea23-ality-헤더-검색창으로-검색이-작동하는지-확인-Mobile-Chrome/error-context.md]]
+]]>
+</system-out>
 </testcase>
-<testcase name="데스크톱 반응형 테스트 › 대형 데스크톱 (1920x1080) - FHD 모니터 › 스크롤이 부드럽게 작동함" classname="responsive-desktop.e2e.test.ts" time="12.269">
+<testcase name="Search Functionality › 질문 페이지 내 검색창으로 검색이 작동하는지 확인" classname="search-functionality.e2e.test.ts" time="13.793">
+<failure message="search-functionality.e2e.test.ts:45:7 질문 페이지 내 검색창으로 검색이 작동하는지 확인" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › search-functionality.e2e.test.ts:45:7 › Search Functionality › 질문 페이지 내 검색창으로 검색이 작동하는지 확인 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/
+    Received string:  "http://localhost:3000/questions"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        9 × unexpected value "http://localhost:3000/questions"
+
+
+      52 |     
+      53 |     // URL에 검색 파라미터가 추가되었는지 확인
+    > 54 |     await expect(page).toHaveURL(/.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/);
+         |                        ^
+      55 |     
+      56 |     // 검색 결과가 표시되는지 확인
+      57 |     await page.waitForTimeout(2000);
+        at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts:54:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../../test-results/search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-Mobile-Chrome/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../../../../test-results/search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-Mobile-Chrome/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../../test-results/search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-Mobile-Chrome/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-Mobile-Chrome/test-failed-1.png]]
+
+[[ATTACHMENT|search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-Mobile-Chrome/video.webm]]
+
+[[ATTACHMENT|search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-Mobile-Chrome/error-context.md]]
+]]>
+</system-out>
 </testcase>
-<testcase name="데스크톱 반응형 테스트 › 대형 데스크톱 (1920x1080) - FHD 모니터 › 카드 너비가 적절함" classname="responsive-desktop.e2e.test.ts" time="9.445">
+</testsuite>
+<testsuite name="search-functionality.e2e.test.ts" timestamp="2025-10-06T12:28:42.777Z" hostname="Mobile Safari" tests="3" failures="2" skipped="0" time="28.571" errors="0">
+<testcase name="Search Functionality › URL 파라미터로 검색이 작동하는지 확인" classname="search-functionality.e2e.test.ts" time="5.341">
 </testcase>
-<testcase name="데스크톱 반응형 테스트 › 대형 데스크톱 (1920x1080) - FHD 모니터 › 네비게이션이 충분히 넓은 공간을 차지함" classname="responsive-desktop.e2e.test.ts" time="9.41">
+<testcase name="Search Functionality › 헤더 검색창으로 검색이 작동하는지 확인" classname="search-functionality.e2e.test.ts" time="14.568">
+<failure message="search-functionality.e2e.test.ts:27:7 헤더 검색창으로 검색이 작동하는지 확인" type="FAILURE">
+<![CDATA[  [Mobile Safari] › search-functionality.e2e.test.ts:27:7 › Search Functionality › 헤더 검색창으로 검색이 작동하는지 확인 
+
+    TimeoutError: locator.fill: Timeout 10000ms exceeded.
+    Call log:
+      - waiting for locator('header input[type="search"]')
+
+
+      30 |     // 헤더의 검색창에 검색어 입력
+      31 |     const headerSearchInput = page.locator('header input[type="search"]');
+    > 32 |     await headerSearchInput.fill('신혼부부');
+         |                             ^
+      33 |     await headerSearchInput.press('Enter');
+      34 |     
+      35 |     // 질문 페이지로 이동했는지 확인
+        at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts:32:29
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../../test-results/search-functionality.e2e-S-bea23-ality-헤더-검색창으로-검색이-작동하는지-확인-Mobile-Safari/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../../../../test-results/search-functionality.e2e-S-bea23-ality-헤더-검색창으로-검색이-작동하는지-확인-Mobile-Safari/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../../test-results/search-functionality.e2e-S-bea23-ality-헤더-검색창으로-검색이-작동하는지-확인-Mobile-Safari/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|search-functionality.e2e-S-bea23-ality-헤더-검색창으로-검색이-작동하는지-확인-Mobile-Safari/test-failed-1.png]]
+
+[[ATTACHMENT|search-functionality.e2e-S-bea23-ality-헤더-검색창으로-검색이-작동하는지-확인-Mobile-Safari/video.webm]]
+
+[[ATTACHMENT|search-functionality.e2e-S-bea23-ality-헤더-검색창으로-검색이-작동하는지-확인-Mobile-Safari/error-context.md]]
+]]>
+</system-out>
 </testcase>
-<testcase name="데스크톱 반응형 테스트 › 데스크톱 카드 컴포넌트 테스트 › QuestionCard 데스크톱 최적화" classname="responsive-desktop.e2e.test.ts" time="10.063">
+<testcase name="Search Functionality › 질문 페이지 내 검색창으로 검색이 작동하는지 확인" classname="search-functionality.e2e.test.ts" time="8.662">
+<failure message="search-functionality.e2e.test.ts:45:7 질문 페이지 내 검색창으로 검색이 작동하는지 확인" type="FAILURE">
+<![CDATA[  [Mobile Safari] › search-functionality.e2e.test.ts:45:7 › Search Functionality › 질문 페이지 내 검색창으로 검색이 작동하는지 확인 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/
+    Received string:  "http://localhost:3000/questions"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        8 × unexpected value "http://localhost:3000/questions"
+
+
+      52 |     
+      53 |     // URL에 검색 파라미터가 추가되었는지 확인
+    > 54 |     await expect(page).toHaveURL(/.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/);
+         |                        ^
+      55 |     
+      56 |     // 검색 결과가 표시되는지 확인
+      57 |     await page.waitForTimeout(2000);
+        at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts:54:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../../test-results/search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-Mobile-Safari/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../../../../test-results/search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-Mobile-Safari/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../../test-results/search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-Mobile-Safari/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-Mobile-Safari/test-failed-1.png]]
+
+[[ATTACHMENT|search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-Mobile-Safari/video.webm]]
+
+[[ATTACHMENT|search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-Mobile-Safari/error-context.md]]
+]]>
+</system-out>
 </testcase>
-<testcase name="데스크톱 반응형 테스트 › 데스크톱 카드 컴포넌트 테스트 › 마우스 인터페이스 최적화" classname="responsive-desktop.e2e.test.ts" time="9.439">
+</testsuite>
+<testsuite name="search-functionality.e2e.test.ts" timestamp="2025-10-06T12:28:42.777Z" hostname="Mobile Safari iPad" tests="3" failures="2" skipped="0" time="29.508" errors="0">
+<testcase name="Search Functionality › URL 파라미터로 검색이 작동하는지 확인" classname="search-functionality.e2e.test.ts" time="11.128">
 </testcase>
-<testcase name="데스크톱 반응형 테스트 › 데스크톱 카드 컴포넌트 테스트 › Pretendard Variable 폰트 적용" classname="responsive-desktop.e2e.test.ts" time="5.385">
+<testcase name="Search Functionality › 헤더 검색창으로 검색이 작동하는지 확인" classname="search-functionality.e2e.test.ts" time="8.97">
+<failure message="search-functionality.e2e.test.ts:27:7 헤더 검색창으로 검색이 작동하는지 확인" type="FAILURE">
+<![CDATA[  [Mobile Safari iPad] › search-functionality.e2e.test.ts:27:7 › Search Functionality › 헤더 검색창으로 검색이 작동하는지 확인 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /.*questions.*search/
+    Received string:  "http://localhost:3000/"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        8 × unexpected value "http://localhost:3000/"
+
+
+      34 |     
+      35 |     // 질문 페이지로 이동했는지 확인
+    > 36 |     await expect(page).toHaveURL(/.*questions.*search/);
+         |                        ^
+      37 |     
+      38 |     // 검색 결과가 표시되는지 확인
+      39 |     await page.waitForTimeout(2000);
+        at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts:36:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../../test-results/search-functionality.e2e-S-bea23-ality-헤더-검색창으로-검색이-작동하는지-확인-Mobile-Safari-iPad/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../../../../test-results/search-functionality.e2e-S-bea23-ality-헤더-검색창으로-검색이-작동하는지-확인-Mobile-Safari-iPad/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../../test-results/search-functionality.e2e-S-bea23-ality-헤더-검색창으로-검색이-작동하는지-확인-Mobile-Safari-iPad/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|search-functionality.e2e-S-bea23-ality-헤더-검색창으로-검색이-작동하는지-확인-Mobile-Safari-iPad/test-failed-1.png]]
+
+[[ATTACHMENT|search-functionality.e2e-S-bea23-ality-헤더-검색창으로-검색이-작동하는지-확인-Mobile-Safari-iPad/video.webm]]
+
+[[ATTACHMENT|search-functionality.e2e-S-bea23-ality-헤더-검색창으로-검색이-작동하는지-확인-Mobile-Safari-iPad/error-context.md]]
+]]>
+</system-out>
 </testcase>
-<testcase name="데스크톱 반응형 테스트 › 데스크톱 카드 컴포넌트 테스트 › 카드 그림자와 둥근 모서리" classname="responsive-desktop.e2e.test.ts" time="5.144">
-</testcase>
-<testcase name="데스크톱 반응형 테스트 › 데스크톱 카드 컴포넌트 테스트 › 호버 효과 최적화" classname="responsive-desktop.e2e.test.ts" time="5.526">
-</testcase>
-<testcase name="데스크톱 반응형 테스트 › 데스크톱 성능 테스트 › 페이지 로딩 성능" classname="responsive-desktop.e2e.test.ts" time="9.471">
-</testcase>
-<testcase name="데스크톱 반응형 테스트 › 데스크톱 성능 테스트 › 스크롤 성능" classname="responsive-desktop.e2e.test.ts" time="5.894">
-</testcase>
-<testcase name="데스크톱 반응형 테스트 › 데스크톱 성능 테스트 › 이미지 로딩 성능" classname="responsive-desktop.e2e.test.ts" time="4.933">
-</testcase>
-<testcase name="데스크톱 반응형 테스트 › 데스크톱 성능 테스트 › 애니메이션 성능" classname="responsive-desktop.e2e.test.ts" time="5.045">
-</testcase>
-<testcase name="데스크톱 반응형 테스트 › 데스크톱 접근성 테스트 › 키보드 네비게이션" classname="responsive-desktop.e2e.test.ts" time="3.772">
-</testcase>
-<testcase name="데스크톱 반응형 테스트 › 데스크톱 접근성 테스트 › ARIA 레이블" classname="responsive-desktop.e2e.test.ts" time="4.46">
-</testcase>
-<testcase name="데스크톱 반응형 테스트 › 데스크톱 접근성 테스트 › 색상 대비" classname="responsive-desktop.e2e.test.ts" time="4.174">
-</testcase>
-<testcase name="데스크톱 반응형 테스트 › 데스크톱 접근성 테스트 › 포커스 표시" classname="responsive-desktop.e2e.test.ts" time="4.159">
+<testcase name="Search Functionality › 질문 페이지 내 검색창으로 검색이 작동하는지 확인" classname="search-functionality.e2e.test.ts" time="9.41">
+<failure message="search-functionality.e2e.test.ts:45:7 질문 페이지 내 검색창으로 검색이 작동하는지 확인" type="FAILURE">
+<![CDATA[  [Mobile Safari iPad] › search-functionality.e2e.test.ts:45:7 › Search Functionality › 질문 페이지 내 검색창으로 검색이 작동하는지 확인 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/
+    Received string:  "http://localhost:3000/questions"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        9 × unexpected value "http://localhost:3000/questions"
+
+
+      52 |     
+      53 |     // URL에 검색 파라미터가 추가되었는지 확인
+    > 54 |     await expect(page).toHaveURL(/.*search=.*%EC%8B%A0%ED%98%BC%EB%B6%80%EB%B6%80/);
+         |                        ^
+      55 |     
+      56 |     // 검색 결과가 표시되는지 확인
+      57 |     await page.waitForTimeout(2000);
+        at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e/search-functionality.e2e.test.ts:54:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../../../../test-results/search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-Mobile-Safari-iPad/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../../../../test-results/search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-Mobile-Safari-iPad/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../../../../test-results/search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-Mobile-Safari-iPad/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-Mobile-Safari-iPad/test-failed-1.png]]
+
+[[ATTACHMENT|search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-Mobile-Safari-iPad/video.webm]]
+
+[[ATTACHMENT|search-functionality.e2e-S-993c7-질문-페이지-내-검색창으로-검색이-작동하는지-확인-Mobile-Safari-iPad/error-context.md]]
+]]>
+</system-out>
 </testcase>
 </testsuite>
 </testsuites>

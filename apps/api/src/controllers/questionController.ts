@@ -78,6 +78,8 @@ export class QuestionController {
    */
   getQuestions = async (req: Request, res: Response) => {
     try {
+      console.log("🔍 질문 검색 요청:", req.query);
+
       const {
         page = 1,
         limit = 10,
@@ -135,6 +137,8 @@ export class QuestionController {
 
       res.json(response);
     } catch (error) {
+      console.error("❌ 질문 검색 에러:", error);
+
       const response: ApiResponse = {
         success: false,
         error:

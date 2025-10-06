@@ -1,0 +1,127 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+    - generic [ref=e2]:
+        - banner [ref=e3]:
+            - generic [ref=e4]:
+                - link [ref=e6] [cursor=pointer]:
+                    - /url: /
+                    - img [ref=e7] [cursor=pointer]
+                - button "메뉴 열기" [ref=e11] [cursor=pointer]:
+                    - img [ref=e13] [cursor=pointer]
+        - main [ref=e15]:
+            - generic [ref=e18]:
+                - generic [ref=e19]:
+                    - button [ref=e20] [cursor=pointer]:
+                        - img [ref=e22] [cursor=pointer]
+                    - link [ref=e24] [cursor=pointer]:
+                        - /url: /
+                        - button [ref=e25] [cursor=pointer]:
+                            - img [ref=e27] [cursor=pointer]
+                - heading "질문 목록" [level=1] [ref=e31]
+            - generic [ref=e32]:
+                - generic [ref=e34]:
+                    - generic [ref=e35]:
+                        - textbox "질문 검색..." [active] [ref=e36]: 신혼부부
+                        - button [ref=e37] [cursor=pointer]:
+                            - img [ref=e39] [cursor=pointer]
+                    - generic [ref=e42]:
+                        - generic [ref=e43]:
+                            - img [ref=e44]
+                            - combobox [ref=e46]:
+                                - option "전체" [selected]
+                                - option "🗺️ 관광지"
+                                - option "🍽️ 맛집"
+                                - option "🏨 숙박"
+                                - option "🚗 교통"
+                                - option "🛍️ 쇼핑"
+                                - option "💬 기타"
+                        - combobox [ref=e47]:
+                            - option "전체" [selected]
+                            - option "답변완료"
+                            - option "답변대기"
+                - generic [ref=e49]:
+                    - generic [ref=e50]:
+                        - link "신혼부부입니다. 제주도에 놀러가요..." [ref=e51] [cursor=pointer]:
+                            - /url: /questions/cmgcc1v2400078x0w1obvbwc9
+                            - heading "신혼부부입니다. 제주도에 놀러가요..." [level=3] [ref=e52] [cursor=pointer]
+                        - generic [ref=e53]:
+                            - generic [ref=e54]: 숙박
+                            - generic [ref=e55]: 답변대기
+                    - generic [ref=e56]: 둘이 오붓하게 놀수 있는 곳이 필요합니다.
+                    - generic [ref=e57]:
+                        - generic [ref=e58]:
+                            - generic [ref=e59]: "작성자: 임시사용자"
+                            - generic [ref=e60]: 답변 1개
+                            - generic [ref=e61]: 조회 84
+                            - generic [ref=e62]: 좋아요 0
+                        - generic [ref=e63]: 2025. 10. 4.
+                - generic [ref=e64]: 전체 개 중 1-NaN개 표시
+        - contentinfo [ref=e65]:
+            - generic [ref=e66]:
+                - generic [ref=e67]:
+                    - generic [ref=e68]:
+                        - generic [ref=e69]:
+                            - img [ref=e70]
+                            - generic [ref=e73]: 동네물어봐
+                        - paragraph [ref=e74]: 제주 여행에 대한 모든 질문과 답변을 공유하는 커뮤니티입니다. 현지인과 여행자들이 함께 만드는 신뢰할 수 있는 여행 정보를 제공합니다.
+                        - generic [ref=e75]:
+                            - link "인스타그램" [ref=e76] [cursor=pointer]:
+                                - /url: https://instagram.com/jeju_tourlist
+                                - img [ref=e77] [cursor=pointer]
+                            - link "페이스북" [ref=e80] [cursor=pointer]:
+                                - /url: https://facebook.com/jeju_tourlist
+                                - img [ref=e81] [cursor=pointer]
+                            - link "트위터" [ref=e83] [cursor=pointer]:
+                                - /url: https://twitter.com/jeju_tourlist
+                                - img [ref=e84] [cursor=pointer]
+                    - generic [ref=e86]:
+                        - heading "서비스" [level=3] [ref=e87]
+                        - list [ref=e88]:
+                            - listitem [ref=e89]:
+                                - link "질문목록" [ref=e90] [cursor=pointer]:
+                                    - /url: /questions
+                            - listitem [ref=e91]:
+                                - link "카테고리" [ref=e92] [cursor=pointer]:
+                                    - /url: /categories
+                            - listitem [ref=e93]:
+                                - link "검색" [ref=e94] [cursor=pointer]:
+                                    - /url: /search
+                            - listitem [ref=e95]:
+                                - link "인기 질문" [ref=e96] [cursor=pointer]:
+                                    - /url: /popular
+                    - generic [ref=e97]:
+                        - heading "지원" [level=3] [ref=e98]
+                        - list [ref=e99]:
+                            - listitem [ref=e100]:
+                                - link "도움말" [ref=e101] [cursor=pointer]:
+                                    - /url: /help
+                            - listitem [ref=e102]:
+                                - link "자주 묻는 질문" [ref=e103] [cursor=pointer]:
+                                    - /url: /faq
+                            - listitem [ref=e104]:
+                                - link "문의하기" [ref=e105] [cursor=pointer]:
+                                    - /url: /contact
+                            - listitem [ref=e106]:
+                                - link "신고하기" [ref=e107] [cursor=pointer]:
+                                    - /url: /report
+                - generic [ref=e109]:
+                    - generic [ref=e110]: © 2025 동네물어봐. All rights reserved.
+                    - generic [ref=e111]:
+                        - link "개인정보처리방침" [ref=e112] [cursor=pointer]:
+                            - /url: /privacy
+                        - link "이용약관" [ref=e113] [cursor=pointer]:
+                            - /url: /terms
+                        - link "쿠키 정책" [ref=e114] [cursor=pointer]:
+                            - /url: /cookies
+                - generic [ref=e116]:
+                    - generic [ref=e117]:
+                        - img [ref=e118]
+                        - generic [ref=e121]: support@dongnemulurowa.com
+                    - generic [ref=e122]:
+                        - img [ref=e123]
+                        - generic [ref=e125]: 1588-0000
+                    - generic [ref=e127]: 제주특별자치도 제주시 연동 123-45
+    - alert [ref=e128]
+```

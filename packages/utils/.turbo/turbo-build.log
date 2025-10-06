@@ -1,0 +1,9 @@
+
+> @jeju-tourlist/utils@1.0.0 build /Users/ip9202/develop/vibe/jeju-tourlist/packages/utils
+> tsc
+
+src/function.ts(48,18): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+src/function.ts(86,18): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+src/function.ts(93,22): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+ ELIFECYCLE  Command failed with exit code 1.
+ WARN   Local package.json exists, but node_modules missing, did you mean to install?

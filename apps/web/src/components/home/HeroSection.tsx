@@ -1,9 +1,6 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
-import { useAuth } from "@/contexts/AuthContext";
-import { Button, Avatar } from "@jeju-tourlist/ui";
 import { SearchBar } from "../search/SearchBar";
 import { MessageCircle, TrendingUp, Users } from "lucide-react";
 
@@ -29,8 +26,6 @@ interface HeroSectionProps {
  * ```
  */
 export const HeroSection: React.FC<HeroSectionProps> = ({ className = "" }) => {
-  const { user, isAuthenticated } = useAuth();
-
   return (
     <section className={`text-center py-16 ${className}`}>
       {/* 메인 제목 및 설명 */}
@@ -52,80 +47,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className = "" }) => {
           />
         </div>
       </div>
-
-      {/* 인증된 사용자 섹션 */}
-      {isAuthenticated ? (
-        <div className="bg-white rounded-2xl shadow-xl p-4 sm:p-8 max-w-2xl mx-auto mb-12 mx-4">
-          <div className="flex flex-col md:flex-row items-center justify-center mb-6">
-            <div className="flex items-center mb-4 md:mb-0 md:mr-6">
-              <Avatar
-                src={user?.profileImage}
-                alt={user?.name || "사용자"}
-                size="lg"
-                className="mr-4"
-              />
-              <div className="text-left">
-                <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 break-words">
-                  안녕하세요, {user?.name}님!
-                </h2>
-                <p className="text-sm sm:text-base text-gray-600 break-words">
-                  제주 여행에 대해 질문해보세요
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/questions/new">
-              <Button variant="primary" size="lg" className="w-full sm:w-auto">
-                <MessageCircle className="w-5 h-5 mr-2" />
-                질문하기
-              </Button>
-            </Link>
-            <Link href="/questions">
-              <Button variant="outline" size="lg" className="w-full sm:w-auto">
-                <TrendingUp className="w-5 h-5 mr-2" />
-                인기 질문 보기
-              </Button>
-            </Link>
-          </div>
-        </div>
-      ) : (
-        /* 비인증 사용자 섹션 */
-        <div className="space-y-6 mb-12 px-4">
-          <div className="bg-white rounded-2xl shadow-xl p-4 sm:p-8 max-w-2xl mx-auto">
-            <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-4 break-words">
-              지금 시작해보세요!
-            </h2>
-            <p className="text-sm sm:text-base text-gray-600 mb-6 break-words">
-              로그인하고 제주 여행 정보를 공유하고 받아보세요
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button
-                variant="primary"
-                size="lg"
-                className="w-full sm:w-auto"
-                onClick={() => {
-                  window.location.href = "/auth/signin";
-                }}
-              >
-                시작하기
-              </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                className="w-full sm:w-auto"
-                onClick={() => {
-                  window.location.href = "/questions";
-                }}
-              >
-                <Users className="w-5 h-5 mr-2" />
-                둘러보기
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* 통계 섹션 */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">

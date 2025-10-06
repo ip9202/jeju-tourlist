@@ -1,4 +1,4 @@
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig, devices } from "@playwright/test";
 
 /**
  * Playwright E2E 테스트 설정
@@ -11,7 +11,7 @@ import { defineConfig, devices } from '@playwright/test';
  */
 
 export default defineConfig({
-  testDir: './apps/web/src/__tests__/e2e',
+  testDir: "./apps/web/src/__tests__/e2e",
 
   /* 병렬 테스트 실행 설정 */
   fullyParallel: true,
@@ -27,9 +27,9 @@ export default defineConfig({
 
   /* 테스트 리포터 설정 */
   reporter: [
-    ['html'],
-    ['json', { outputFile: 'test-results/results.json' }],
-    ['junit', { outputFile: 'test-results/junit.xml' }]
+    ["html"],
+    ["json", { outputFile: "test-results/results.json" }],
+    ["junit", { outputFile: "test-results/junit.xml" }],
   ],
 
   /* 전역 테스트 설정 */
@@ -41,57 +41,57 @@ export default defineConfig({
     navigationTimeout: 30000,
 
     /* 베이스 URL 설정 */
-    baseURL: process.env.E2E_BASE_URL || 'http://localhost:3000',
+    baseURL: process.env.E2E_BASE_URL || "http://localhost:3000",
 
     /* 실패 시 스크린샷 캡처 */
-    screenshot: 'only-on-failure',
+    screenshot: "only-on-failure",
 
     /* 실패 시 비디오 녹화 */
-    video: 'retain-on-failure',
+    video: "retain-on-failure",
 
     /* 추적 정보 수집 */
-    trace: 'on-first-retry',
+    trace: "on-first-retry",
 
     /* 콘솔 로그 수집 */
     contextOptions: {
       recordVideo: {
-        mode: 'retain-on-failure',
-        size: { width: 1280, height: 720 }
-      }
-    }
+        mode: "retain-on-failure",
+        size: { width: 1280, height: 720 },
+      },
+    },
   },
 
   /* 프로젝트별 테스트 설정 */
   projects: [
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      name: "chromium",
+      use: { ...devices["Desktop Chrome"] },
     },
 
     {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
+      name: "firefox",
+      use: { ...devices["Desktop Firefox"] },
     },
 
     {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
+      name: "webkit",
+      use: { ...devices["Desktop Safari"] },
     },
 
     /* 모바일 테스트 */
     {
-      name: 'Mobile Chrome',
-      use: { ...devices['Pixel 5'] },
+      name: "Mobile Chrome",
+      use: { ...devices["Pixel 5"] },
     },
     {
-      name: 'Mobile Safari',
-      use: { ...devices['iPhone 12'] },
+      name: "Mobile Safari",
+      use: { ...devices["iPhone 12"] },
     },
 
     /* 태블릿 테스트 */
     {
-      name: 'Mobile Safari iPad',
-      use: { ...devices['iPad Pro'] },
+      name: "Mobile Safari iPad",
+      use: { ...devices["iPad Pro"] },
     },
   ],
 
@@ -108,7 +108,7 @@ export default defineConfig({
   // },
 
   /* 테스트 결과 출력 디렉토리 */
-  outputDir: 'test-results/',
+  outputDir: "test-results/",
 
   /* 테스트 타임아웃 설정 (30초) */
   timeout: 30000,
@@ -118,17 +118,10 @@ export default defineConfig({
   // globalTeardown: require.resolve('./apps/web/src/__tests__/global-teardown.ts'),
 
   /* 테스트 매칭 패턴 */
-  testMatch: [
-    '**/*.e2e.test.ts',
-    '**/*.e2e.spec.ts'
-  ],
+  testMatch: ["**/e2e/**/*.test.ts", "**/e2e/**/*.spec.ts"],
 
   /* 무시할 파일 패턴 */
-  testIgnore: [
-    '**/node_modules/**',
-    '**/dist/**',
-    '**/.next/**'
-  ],
+  testIgnore: ["**/node_modules/**", "**/dist/**", "**/.next/**"],
 
   /* 환경변수 설정 */
   expect: {
@@ -137,6 +130,6 @@ export default defineConfig({
 
     /* 스크린샷 비교 임계값 */
     toHaveScreenshot: { threshold: 0.2 },
-    toMatchSnapshot: { threshold: 0.2 }
-  }
+    toMatchSnapshot: { threshold: 0.2 },
+  },
 });

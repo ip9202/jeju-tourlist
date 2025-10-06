@@ -100,6 +100,7 @@ export const EnhancedAnswerCard: React.FC<EnhancedAnswerCardProps> = ({
 }) => {
   const [comments, setComments] = useState<HierarchicalComment[]>([]);
   const [showCommentForm, setShowCommentForm] = useState(false);
+  // const [isLoadingComments, setIsLoadingComments] = useState(false);
 
   /**
    * Flat 댓글 배열을 계층구조로 변환
@@ -112,8 +113,15 @@ export const EnhancedAnswerCard: React.FC<EnhancedAnswerCardProps> = ({
 
     // 1단계: 모든 댓글을 Map에 저장하고 replies 배열 초기화
     flatComments.forEach(comment => {
-      commentMap.set(comment.id, {
-        ...comment,
+      commentMap.set(comment.id as string, {
+        id: comment.id as string,
+        content: comment.content as string,
+        author: comment.author as { id: string; name: string; avatar?: string },
+        likeCount: comment.likeCount as number,
+        createdAt: comment.createdAt as string,
+        updatedAt: comment.updatedAt as string,
+        parentId: comment.parentId as string | undefined,
+        depth: comment.depth as number,
         replies: [],
         replyCount: 0,
       });

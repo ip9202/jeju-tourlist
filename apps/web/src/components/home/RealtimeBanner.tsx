@@ -45,7 +45,7 @@ export const RealtimeBanner: React.FC<RealtimeBannerProps> = ({
   const [currentIndex, setCurrentIndex] = useState(0);
 
   /**
-   * 목업 데이터 (실제로는 API에서 가져올 데이터)
+   * 목업 데이터 (실제로는 API에서 최신순으로 가져올 데이터)
    */
   const mockQuestions: RealtimeQuestion[] = [
     {
@@ -55,7 +55,7 @@ export const RealtimeBanner: React.FC<RealtimeBannerProps> = ({
       authorAvatar: "/avatars/kim-jeju.jpg",
       createdAt: "2분 전",
       category: "여행",
-      answerCount: 3,
+      answerCount: 2,
     },
     {
       id: "2",
@@ -64,7 +64,7 @@ export const RealtimeBanner: React.FC<RealtimeBannerProps> = ({
       authorAvatar: "/avatars/park-travel.jpg",
       createdAt: "5분 전",
       category: "교통",
-      answerCount: 7,
+      answerCount: 5,
     },
     {
       id: "3",
@@ -73,7 +73,7 @@ export const RealtimeBanner: React.FC<RealtimeBannerProps> = ({
       authorAvatar: "/avatars/lee-local.jpg",
       createdAt: "8분 전",
       category: "일반",
-      answerCount: 5,
+      answerCount: 8,
     },
     {
       id: "4",
@@ -91,7 +91,7 @@ export const RealtimeBanner: React.FC<RealtimeBannerProps> = ({
       authorAvatar: "/avatars/jung-photo.jpg",
       createdAt: "15분 전",
       category: "포토스팟",
-      answerCount: 8,
+      answerCount: 15,
     },
   ];
 
@@ -148,56 +148,43 @@ export const RealtimeBanner: React.FC<RealtimeBannerProps> = ({
         </div>
       </div>
 
-      <div className="relative overflow-hidden">
-        <div
-          className="transition-all duration-500 ease-in-out"
-          style={{
-            transform: `translateX(-${currentIndex * 100}%)`,
-            display: "flex",
-            width: `${questions.length * 100}%`,
-          }}
+      <div className="relative overflow-hidden min-h-[120px]">
+        <Link
+          href={`/questions/${currentQuestion.id}`}
+          className="block hover:opacity-90 transition-opacity"
         >
-          {questions.map((question, _index) => (
-            <div
-              key={question.id}
-              className="w-full flex-shrink-0"
-              style={{ width: `${100 / questions.length}%` }}
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <Link
-                    href={`/questions/${question.id}`}
-                    className="block hover:opacity-90 transition-opacity"
-                  >
-                    <h4 className="text-lg font-medium mb-2 line-clamp-2">
-                      {question.title}
-                    </h4>
-                    <div className="flex items-center text-sm text-white/80">
-                      <div className="flex items-center mr-4">
-                        <User className="h-4 w-4 mr-1" />
-                        <span>{question.author}</span>
-                      </div>
-                      <div className="flex items-center mr-4">
-                        <Clock className="h-4 w-4 mr-1" />
-                        <span>{formatTime(question.createdAt)}</span>
-                      </div>
-                      <span className="bg-white/20 px-2 py-1 rounded-full text-xs">
-                        {question.category}
-                      </span>
-                    </div>
-                  </Link>
-                </div>
-
-                <div className="ml-4 text-right">
-                  <div className="text-2xl font-bold">
-                    {question.answerCount}
-                  </div>
-                  <div className="text-sm text-white/80">답변</div>
+          <div className="flex items-start justify-between gap-6">
+            {/* 질문 내용 */}
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="bg-white/20 px-3 py-1 rounded-full text-sm font-medium">
+                  {currentQuestion.category}
+                </span>
+                <div className="flex items-center text-sm text-white/80">
+                  <Clock className="h-4 w-4 mr-1" />
+                  <span>{formatTime(currentQuestion.createdAt)}</span>
                 </div>
               </div>
+
+              <h4 className="text-2xl font-semibold mb-3 line-clamp-2">
+                {currentQuestion.title}
+              </h4>
+
+              <div className="flex items-center text-sm text-white/90">
+                <User className="h-4 w-4 mr-1" />
+                <span>{currentQuestion.author}</span>
+              </div>
             </div>
-          ))}
-        </div>
+
+            {/* 답변 수 */}
+            <div className="flex flex-col items-center justify-center bg-white/10 rounded-2xl px-8 py-6 min-w-[120px]">
+              <div className="text-5xl font-bold leading-none mb-2">
+                {currentQuestion.answerCount}
+              </div>
+              <div className="text-sm text-white/90 font-medium">답변</div>
+            </div>
+          </div>
+        </Link>
       </div>
 
       {/* 인디케이터 */}

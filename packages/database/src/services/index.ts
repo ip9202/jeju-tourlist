@@ -27,7 +27,7 @@ export class DatabaseServiceFactory {
   private constructor(prisma: PrismaClient) {
     this.prisma = prisma;
     this.cacheService = new RedisCacheService();
-    this.repositoryFactory = RepositoryFactory.getInstance(prisma);
+    this.repositoryFactory = RepositoryFactory.getInstance(prisma as any);
     this.searchService = new SearchService(prisma);
     this.cachedRepositoryService = new CachedRepositoryService(
       prisma,

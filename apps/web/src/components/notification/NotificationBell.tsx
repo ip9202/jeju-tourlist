@@ -11,31 +11,29 @@ interface Notification {
   type: "answer" | "like" | "accept" | "system";
 }
 
+// 서버/클라이언트에서 동일한 초기 알림 데이터 (Hydration 에러 방지)
+const INITIAL_NOTIFICATIONS: Notification[] = [
+  {
+    id: "1",
+    message: "새로운 답변이 등록되었습니다.",
+    read: false,
+    timestamp: "2025-10-06T10:00:00.000Z", // 고정된 timestamp
+    type: "answer",
+  },
+];
+
 export const NotificationBell: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [notifications, setNotifications] = useState<Notification[]>(
+    INITIAL_NOTIFICATIONS
+  );
+  const [isMounted, setIsMounted] = useState(false);
 
   const unreadCount = notifications.filter(n => !n.read).length;
 
   useEffect(() => {
-    // 목업 알림 데이터
-    const mockNotifications: Notification[] = [
-      {
-        id: "1",
-        message: "새로운 답변이 등록되었습니다.",
-        read: false,
-        timestamp: new Date().toISOString(),
-        type: "answer",
-      },
-      {
-        id: "2",
-        message: "누군가 내 답변에 좋아요를 눌렀습니다.",
-        read: true,
-        timestamp: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
-        type: "like",
-      },
-    ];
-    setNotifications(mockNotifications);
+    setIsMounted(true);
+    // 실제 알림 데이터는 API에서 가져오기 (향후 구현)
   }, []);
 
   const handleBellClick = () => {
@@ -83,6 +81,11 @@ export const NotificationBell: React.FC = () => {
   };
 
   const formatTime = (timestamp: string) => {
+    // 클라이언트에서만 시간 계산 (Hydration 에러 방지)
+    if (!isMounted) {
+      return "방금 전"; // 서버 렌더링 시 고정된 값
+    }
+
     const date = new Date(timestamp);
     const now = new Date();
     const diffInMinutes = Math.floor(
@@ -97,26 +100,19 @@ export const NotificationBell: React.FC = () => {
   };
 
   return (
-    <div className="relative flex items-center">
+    <div className="relative">
       {/* 알림 벨 버튼 */}
       <button
         onClick={handleBellClick}
-        className="relative p-2 text-gray-600 hover:text-gray-900 transition-colors flex items-center justify-center"
+        className="relative px-3 py-2 text-gray-600 hover:text-indigo-600 hover:bg-gray-50 rounded-md transition-colors"
         data-testid="notification-bell"
         data-unread={unreadCount > 0 ? "true" : "false"}
-        style={{ margin: "8px" }} // 충분한 마진으로 배지 공간 확보
       >
-        <Bell size={16} />
+        <Bell size={18} />
         {unreadCount > 0 && (
           <span
-            className="absolute bg-red-500 text-white rounded-full h-5 w-5 flex items-center justify-center text-[10px] font-bold leading-none border-2 border-white shadow-lg"
+            className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full min-w-[18px] h-[18px] flex items-center justify-center text-[10px] font-bold border-2 border-white"
             data-testid="notification-badge"
-            style={{
-              top: "-8px",
-              right: "-8px",
-              zIndex: 9999,
-              position: "absolute",
-            }}
           >
             {unreadCount > 99 ? "99+" : unreadCount}
           </span>

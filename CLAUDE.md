@@ -1,5 +1,9 @@
 # CLAUDE.md
 
+## 사용자 가이드
+
+- 모든 답변 및 주석은 한글로 한다.
+
 Claude Code 작업 가이드 문서입니다.
 
 ## 프로젝트 개요
@@ -56,7 +60,7 @@ Claude Code 작업 가이드 문서입니다.
 4. **확장성**: 멀티리전 고려
 5. **데이터**: AI 서비스용 데이터 구조화
 
-## 현재 상태 (2025-10-05)
+## 현재 상태 (2025-10-06)
 
 ### ✅ 완료된 작업
 
@@ -166,31 +170,100 @@ Claude Code 작업 가이드 문서입니다.
   - 실시간 UI 업데이트 정상 작동
   - 0 런타임 에러
 
+#### Phase 1.12: 검색 기능 통합 및 헤더 최적화 (2025-10-06 진행 중)
+
+- **검색 기능 통합**:
+  - `useQuestionSearch` 훅 생성으로 검색 로직 통합
+  - `/search` 페이지와 `/questions` 페이지 검색 로직 일치
+  - API 서버 검색 기능 정상 작동 확인
+  - Prisma 검색 로직 검증 완료
+- **헤더 최적화**:
+  - 3-column 레이아웃 적용 (로고+네비게이션 | 검색 | 액션+모바일메뉴)
+  - "질문", "카테고리" 링크 수직 중앙 정렬 완료
+  - 검색창에 전용 검색 버튼 추가 (Enter 키 + 버튼 클릭 모두 지원)
+  - 모바일 반응형 메뉴 개선
+- **Playwright E2E 테스트**:
+  - `header.e2e.test.ts` 생성으로 헤더 기능 검증
+  - 레이아웃, 반응형, 검색 기능 테스트 완료
+  - strict mode violation 해결
+
+### 🚨 현재 문제 (2025-10-06)
+
+#### 검색 기능 무한 루프 문제
+
+- **문제**: `useEffect` 무한 루프로 인한 API 서버 과부하
+- **증상**:
+  - 터미널에서 수천 개의 검색 요청 로그 확인
+  - `🔍 질문 검색 요청` 무한 반복
+  - API 서버 429 Too Many Requests 에러 발생
+- **원인**:
+  - `useEffect` 의존성 배열에 `searchTerm`, `filters`, `pagination.page` 포함
+  - `loadQuestions` 함수가 상태를 변경하면서 다시 `useEffect` 트리거
+  - `useRef`로 중복 호출 방지 시도했으나 근본적 해결 안됨
+- **현재 상태**:
+  - API 서버: ✅ 정상 작동 (검색 결과 정상 반환)
+  - 프론트엔드: ❌ 무한 루프로 인한 과부하
+  - 검색 결과: ❌ UI에 표시되지 않음
+
+#### Hydration 에러
+
+- **문제**: 서버와 클라이언트 렌더링 불일치
+- **증상**:
+  - `Expected server HTML to contain a matching <div> in <body>` 에러
+  - `Hydration failed because the initial UI does not match what was rendered on the server` 에러
+- **원인**:
+  - `useSearchParams()` 사용으로 인한 SSR/CSR 불일치
+  - `Suspense` 경계 설정 필요
+- **현재 상태**: 기능상 문제없지만 콘솔 에러 발생
+
+### 🔧 해결 필요 사항
+
+1. **검색 기능 무한 루프 해결**:
+   - `useEffect` 의존성 배열 재설계
+   - 상태 업데이트 로직 분리
+   - `useCallback` 또는 `useMemo` 적절한 사용
+
+2. **Hydration 에러 해결**:
+   - `Suspense` 경계 적절한 설정
+   - 서버/클라이언트 렌더링 일치 보장
+
+3. **Rate Limiter 재활성화**:
+   - 개발 환경에서 비활성화된 Rate Limiter 재활성화
+   - 프로덕션 환경 대비
+
 ### 📊 시스템 상태
 
 ```
-✅ Web Server (localhost:3000)
+⚠️ Web Server (localhost:3000)
    ├── Next.js 14.2.32 + TypeScript
    ├── shadcn/ui + Tailwind CSS v3.4.18
    ├── NextAuth 정상 작동
-   └── 0 에러
+   ├── Hydration 에러 발생
+   └── 검색 기능 무한 루프
 
 ✅ API Server (localhost:4000)
    ├── Express.js + Socket.io
    ├── 파일 업로드 시스템
    ├── 실시간 통계 브로드캐스트
-   └── Health Check 정상
+   ├── Health Check 정상
+   └── Rate Limiter 비활성화 (개발 환경)
 ```
 
 ### 🎯 품질 지표
 
-- **에러**: 0개 (런타임/컴파일/Hydration)
-- **API 응답률**: 100%
-- **개발 서버 안정성**: 100%
+- **에러**: 2개 (Hydration 에러, 무한 루프)
+- **API 응답률**: 100% (과부하로 인한 429 에러 발생)
+- **개발 서버 안정성**: 80% (무한 루프로 인한 불안정)
 - **E2E 테스트**: 100% 통과 (Phase 1.x)
 - **디자인 일관성**: shadcn/ui + 제주 브랜드 완벽 통합
 
 ## 다음 단계
+
+### Phase 1.13: 검색 기능 안정화 (우선순위 1)
+
+- `useEffect` 무한 루프 해결
+- Hydration 에러 해결
+- Rate Limiter 재활성화
 
 ### Phase 2.0: 고급 기능
 
@@ -247,5 +320,5 @@ curl http://localhost:4000/health            # API
 ---
 
 **마지막 업데이트**: 2025-10-06
-**현재 상태**: 프로덕션 준비 완료 🚀
-**검증 상태**: 모든 시스템 정상 작동 확인 완료
+**현재 상태**: 검색 기능 안정화 필요 ⚠️
+**검증 상태**: API 서버 정상, 프론트엔드 무한 루프 문제 해결 필요

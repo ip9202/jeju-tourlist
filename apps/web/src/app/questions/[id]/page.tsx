@@ -12,6 +12,8 @@ import {
 } from "lucide-react";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { EnhancedAnswerCard } from "@/components/question/EnhancedAnswerCard";
+import { SubPageHeader } from "@/components/layout/SubPageHeader";
+import { Header } from "@/components/layout/Header";
 
 interface Question {
   id: string;
@@ -360,9 +362,23 @@ export default function QuestionDetailPage() {
   /**
    * 공유 핸들러
    */
-  const handleShare = (answerId: string) => {
-    console.log("공유:", answerId);
+  const handleShare = (answerId?: string) => {
+    console.log("공유:", answerId || question?.id);
     // 실제로는 공유 기능 구현
+  };
+
+  /**
+   * 헤더 공유 버튼 핸들러
+   */
+  const handleHeaderShare = () => {
+    handleShare();
+  };
+
+  /**
+   * 헤더 북마크 버튼 핸들러
+   */
+  const handleHeaderBookmark = () => {
+    handleBookmark(question?.id || "");
   };
 
   if (loading) {
@@ -423,65 +439,65 @@ export default function QuestionDetailPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        {/* 뒤로가기 버튼 */}
-        <div className="mb-6">
-          <Button
-            variant="secondary"
-            onClick={() => window.history.back()}
-            className="mb-4"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            뒤로가기
-          </Button>
-        </div>
+      <Header />
+      {/* 간결한 헤더 */}
+      <SubPageHeader
+        title={question?.title || "질문 상세"}
+        showBackButton={true}
+        showHomeButton={true}
+        actions={
+          <div className="flex items-center space-x-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleHeaderShare}
+              className="text-gray-600 hover:text-gray-900"
+            >
+              <Share2 className="w-4 h-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleHeaderBookmark}
+              className="text-gray-600 hover:text-gray-900"
+            >
+              <Bookmark className="w-4 h-4" />
+            </Button>
+          </div>
+        }
+      />
 
+      <div className="max-w-4xl mx-auto px-4 py-8">
         {/* 질문 상세 */}
         <div className="bg-white rounded-lg shadow-md p-8 mb-8">
-          <div className="flex justify-between items-start mb-6">
-            <div className="flex-1">
-              <Heading
-                level={1}
-                className="text-2xl font-bold text-gray-900 mb-4"
-              >
-                {question.title}
-              </Heading>
-              <div className="flex items-center space-x-4 text-sm text-gray-500 mb-4">
-                <span>조회 {question.viewCount}</span>
-                <span>좋아요 {question.likeCount}</span>
-                <span>답변 {question.answerCount}</span>
-                <span>
-                  {new Date(question.createdAt).toLocaleString("ko-KR")}
-                </span>
-              </div>
-              {question.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {question.tags.map((tag, index) => (
-                    <span
-                      key={index}
-                      className="px-3 py-1 bg-blue-100 text-blue-700 text-sm rounded-full"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              )}
+          <div className="mb-6">
+            <div className="flex items-center space-x-4 text-xs text-gray-500 mb-3">
+              <span>조회 {question.viewCount}</span>
+              <span>좋아요 {question.likeCount}</span>
+              <span>답변 {question.answerCount}</span>
+              <span>
+                {new Date(question.createdAt).toLocaleString("ko-KR")}
+              </span>
             </div>
+            {question.tags.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-3">
+                {question.tags.map((tag, index) => (
+                  <span
+                    key={index}
+                    className="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs rounded-full"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
+            {/* 작성자만 표시 - 임시로 모든 사용자에게 표시 */}
             <div className="flex space-x-2">
-              <Button variant="outline" size="sm">
-                <Share2 className="w-4 h-4 mr-2" />
-                공유
-              </Button>
-              <Button variant="outline" size="sm">
-                <Bookmark className="w-4 h-4 mr-2" />
-                북마크
-              </Button>
-              {/* 작성자만 표시 - 임시로 모든 사용자에게 표시 */}
               <Button
                 variant="outline"
                 size="sm"
                 onClick={handleDeleteQuestion}
-                className="text-red-600 hover:bg-red-50"
+                className="text-red-600 hover:bg-red-50 text-xs px-2 py-1"
                 data-testid="delete-question-button"
               >
                 삭제
