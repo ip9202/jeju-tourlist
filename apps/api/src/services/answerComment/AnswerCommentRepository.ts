@@ -1,4 +1,4 @@
-import { PrismaClient, AnswerComment, AnswerCommentStatus, Prisma } from "@prisma/client";
+import { PrismaClient, AnswerComment, Prisma } from "@prisma/client";
 import {
   CreateAnswerCommentData,
   UpdateAnswerCommentData,
@@ -6,7 +6,6 @@ import {
   AnswerCommentListItem,
   AnswerCommentReactionData,
 } from "@jeju-tourlist/database/types/answerComment";
-import { PaginationParams } from "../../types";
 
 /**
  * 답변 댓글 Repository 클래스
@@ -39,6 +38,8 @@ export class AnswerCommentRepository {
           content: data.content,
           authorId: data.authorId,
           answerId: data.answerId,
+          parentId: data.parentId || null,
+          depth: data.depth || 0,
           status: "ACTIVE",
         },
         include: {
@@ -248,7 +249,10 @@ export class AnswerCommentRepository {
    * @param data - 수정 데이터
    * @returns 수정된 답변 댓글 정보
    */
-  async update(id: string, data: UpdateAnswerCommentData): Promise<AnswerComment> {
+  async update(
+    id: string,
+    data: UpdateAnswerCommentData
+  ): Promise<AnswerComment> {
     try {
       return await this.prisma.answerComment.update({
         where: { id },

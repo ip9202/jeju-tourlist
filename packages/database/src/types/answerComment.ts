@@ -5,6 +5,8 @@ export const CreateAnswerCommentSchema = z.object({
   content: z.string().min(1).max(1000),
   authorId: z.string().min(1), // CUID 제약 제거하여 임시 사용자 ID 허용
   answerId: z.string().cuid(),
+  parentId: z.string().cuid().nullable().optional(), // 부모 댓글 ID (답글인 경우)
+  depth: z.number().int().min(0).max(10).optional(), // 계층 깊이 (0~10)
 });
 
 export type CreateAnswerCommentData = z.infer<typeof CreateAnswerCommentSchema>;
@@ -54,4 +56,6 @@ export const AnswerCommentReactionSchema = z.object({
   isLike: z.boolean(),
 });
 
-export type AnswerCommentReactionData = z.infer<typeof AnswerCommentReactionSchema>;
+export type AnswerCommentReactionData = z.infer<
+  typeof AnswerCommentReactionSchema
+>;

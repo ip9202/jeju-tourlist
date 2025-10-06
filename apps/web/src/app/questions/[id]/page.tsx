@@ -11,6 +11,7 @@ import {
   MessageCircle,
 } from "lucide-react";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
+import { EnhancedAnswerCard } from "@/components/question/EnhancedAnswerCard";
 
 interface Question {
   id: string;
@@ -47,7 +48,13 @@ interface Answer {
   };
   createdAt: string;
   likeCount: number;
+  dislikeCount: number;
+  commentCount: number;
   isAccepted: boolean;
+  isLiked?: boolean;
+  isDisliked?: boolean;
+  isAuthor?: boolean;
+  isQuestionAuthor?: boolean;
 }
 
 export default function QuestionDetailPage() {
@@ -195,6 +202,167 @@ export default function QuestionDetailPage() {
           : "질문 삭제 중 오류가 발생했습니다."
       );
     }
+  };
+
+  /**
+   * 답변 좋아요 핸들러
+   */
+  const handleAnswerLike = async (answerId: string) => {
+    try {
+      const response = await fetch(`/api/answers/${answerId}/reaction`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          isLike: true,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("좋아요 처리에 실패했습니다");
+      }
+
+      // 로컬 상태 업데이트
+      setAnswers(prev =>
+        prev.map(answer =>
+          answer.id === answerId
+            ? {
+                ...answer,
+                isLiked: !answer.isLiked,
+                likeCount: answer.isLiked
+                  ? answer.likeCount - 1
+                  : answer.likeCount + 1,
+              }
+            : answer
+        )
+      );
+    } catch (error) {
+      console.error("답변 좋아요 실패:", error);
+    }
+  };
+
+  /**
+   * 답변 싫어요 핸들러
+   */
+  const handleAnswerDislike = async (answerId: string) => {
+    try {
+      const response = await fetch(`/api/answers/${answerId}/reaction`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          isLike: false,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("싫어요 처리에 실패했습니다");
+      }
+
+      // 로컬 상태 업데이트
+      setAnswers(prev =>
+        prev.map(answer =>
+          answer.id === answerId
+            ? {
+                ...answer,
+                isDisliked: !answer.isDisliked,
+                dislikeCount: answer.isDisliked
+                  ? answer.dislikeCount - 1
+                  : answer.dislikeCount + 1,
+              }
+            : answer
+        )
+      );
+    } catch (error) {
+      console.error("답변 싫어요 실패:", error);
+    }
+  };
+
+  /**
+   * 답변 채택 핸들러
+   */
+  const handleAnswerAccept = async (answerId: string) => {
+    try {
+      const response = await fetch(`/api/answers/${answerId}/accept`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          questionId: params.id,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("답변 채택에 실패했습니다");
+      }
+
+      // 로컬 상태 업데이트 - 다른 답변들의 채택 해제
+      setAnswers(prev =>
+        prev.map(answer => ({
+          ...answer,
+          isAccepted: answer.id === answerId,
+        }))
+      );
+    } catch (error) {
+      console.error("답변 채택 실패:", error);
+    }
+  };
+
+  /**
+   * 답변 수정 핸들러
+   */
+  const handleAnswerEdit = (answerId: string) => {
+    console.log("답변 수정:", answerId);
+    // 실제로는 수정 모달이나 페이지로 이동
+  };
+
+  /**
+   * 답변 삭제 핸들러
+   */
+  const handleAnswerDelete = async (answerId: string) => {
+    if (!window.confirm("답변을 삭제하시겠습니까?")) return;
+
+    try {
+      const response = await fetch(`/api/answers/${answerId}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("답변 삭제에 실패했습니다");
+      }
+
+      // 로컬 상태에서 제거
+      setAnswers(prev => prev.filter(answer => answer.id !== answerId));
+
+      // 답변 개수 업데이트
+      if (question) {
+        setQuestion({
+          ...question,
+          answerCount: question.answerCount - 1,
+        });
+      }
+    } catch (error) {
+      console.error("답변 삭제 실패:", error);
+    }
+  };
+
+  /**
+   * 북마크 핸들러
+   */
+  const handleBookmark = async (answerId: string) => {
+    console.log("북마크:", answerId);
+    // 실제로는 북마크 API 호출
+  };
+
+  /**
+   * 공유 핸들러
+   */
+  const handleShare = (answerId: string) => {
+    console.log("공유:", answerId);
+    // 실제로는 공유 기능 구현
   };
 
   if (loading) {
@@ -412,56 +580,38 @@ export default function QuestionDetailPage() {
           {/* 답변 목록 */}
           <div className="space-y-6" data-testid="answer-list">
             {answers.map(answer => (
-              <div
+              <EnhancedAnswerCard
                 key={answer.id}
-                className="border-b border-gray-200 pb-6 last:border-b-0"
-                data-testid="answer-item"
-              >
-                <div className="flex items-start justify-between mb-4">
-                  <div
-                    className="flex items-center space-x-3"
-                    data-testid="answer-author"
-                  >
-                    <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
-                      <span className="text-sm font-medium text-gray-600">
-                        {answer.author.name.charAt(0)}
-                      </span>
-                    </div>
-                    <div>
-                      <div className="font-medium text-gray-900">
-                        {answer.author.name}
-                        <span className="ml-2 text-sm text-gray-500">
-                          @{answer.author.nickname}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-sm text-gray-500">
-                      {new Date(answer.createdAt).toLocaleDateString("ko-KR")}
-                    </span>
-                    {answer.isAccepted && (
-                      <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
-                        채택됨
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                <div className="text-gray-700 leading-relaxed whitespace-pre-line mb-4">
-                  {answer.content}
-                </div>
-
-                <div className="flex items-center space-x-4">
-                  <Button variant="outline" size="sm">
-                    <Heart className="w-4 h-4 mr-2" />
-                    좋아요 {answer.likeCount}
-                  </Button>
-                  <Button variant="outline" size="sm">
-                    답변하기
-                  </Button>
-                </div>
-              </div>
+                answer={{
+                  id: answer.id,
+                  content: answer.content,
+                  author: {
+                    id: answer.author.id,
+                    name: answer.author.name,
+                    avatar: answer.author.avatar || undefined,
+                  },
+                  likeCount: answer.likeCount,
+                  dislikeCount: answer.dislikeCount || 0,
+                  commentCount: answer.commentCount || 0,
+                  createdAt: answer.createdAt,
+                  updatedAt: answer.createdAt,
+                  isAccepted: answer.isAccepted,
+                  isLiked: answer.isLiked,
+                  isDisliked: answer.isDisliked,
+                  isAuthor: answer.isAuthor,
+                  isQuestionAuthor: answer.isQuestionAuthor,
+                }}
+                onLike={handleAnswerLike}
+                onDislike={handleAnswerDislike}
+                onAccept={handleAnswerAccept}
+                onEdit={handleAnswerEdit}
+                onDelete={handleAnswerDelete}
+                onBookmark={handleBookmark}
+                onShare={handleShare}
+                showComments={true}
+                maxComments={5}
+                className="border border-gray-200"
+              />
             ))}
           </div>
         </div>

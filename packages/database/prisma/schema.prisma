@@ -217,24 +217,31 @@ model AnswerComment {
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   answerId  String
   answer    Answer   @relation(fields: [answerId], references: [id], onDelete: Cascade)
-  
+
+  // 계층구조 (답글 시스템)
+  parentId  String?  // 부모 댓글 ID (null: 최상위 댓글)
+  parent    AnswerComment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies   AnswerComment[] @relation("CommentReplies")
+  depth     Int      @default(0) // 계층 깊이 (0: 최상위, 1: 답글, 2: 답글의 답글)
+
   // 상태 관리
   status    AnswerCommentStatus @default(ACTIVE)
-  
+
   // 통계
   likeCount Int      @default(0)
-  
+
   // 타임스탬프
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
+
   // 관계
   likes     AnswerCommentLike[]
   reports   Report[] @relation("ReportAnswerComment")
-  
+
   // 인덱스
   @@index([authorId])
   @@index([answerId])
+  @@index([parentId])
   @@index([status])
   @@index([createdAt])
   @@map("answer_comments")
