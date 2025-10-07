@@ -60,7 +60,7 @@ Claude Code 작업 가이드 문서입니다.
 4. **확장성**: 멀티리전 고려
 5. **데이터**: AI 서비스용 데이터 구조화
 
-## 현재 상태 (2025-10-06)
+## 현재 상태 (2025-10-07)
 
 ### ✅ 완료된 작업
 
@@ -204,81 +204,132 @@ Claude Code 작업 가이드 문서입니다.
   - 서브헤더와 필터 간 간격 8px 수준으로 축소, 겹침 없음
   - 질문 목록 상단 레이아웃 일관성 및 가독성 향상
 
-### 🚨 현재 문제 (2025-10-06)
+#### Phase 1.13: Docker 컨테이너화 작업 (2025-10-07 진행 중)
 
-#### 검색 기능 무한 루프 문제
+**목표**: 전체 서비스를 Docker로 실행하여 배포 환경 표준화
+
+**완료된 작업**:
+
+- ✅ Docker 환경 분석 및 실행 가능성 확인
+- ✅ `.dockerignore` 파일 생성
+- ✅ `docker-compose.yml` 오케스트레이션 파일 작성
+  - PostgreSQL 15 (포트 5433, 로컬 5432 충돌 회피)
+  - Redis 7 (포트 6379)
+  - API Server (포트 4000)
+  - Web Server (포트 3000)
+- ✅ `.env.docker` 및 `.env.docker.example` 환경 변수 파일 생성
+- ✅ `DOCKER.md` 문서화 완료
+- ✅ Web Dockerfile 작성 및 빌드 성공
+- ✅ API Dockerfile 작성 (multi-stage build)
+- ✅ PostgreSQL, Redis 컨테이너 정상 작동
+
+**현재 진행 중인 문제**:
+
+1. **Prisma Binary Target 이슈**
+   - **문제**: Prisma Client가 플랫폼별 바이너리 엔진 필요
+   - **증상**:
+     ```
+     PrismaClientInitializationError: Prisma Client could not locate
+     the Query Engine for runtime "linux-musl-arm64-openssl-1.1.x"
+     ```
+   - **원인**:
+     - 로컬 Mac (darwin-arm64) vs Docker Linux (linux-musl-arm64)
+     - Alpine Linux는 OpenSSL 3.x 사용하나 Prisma가 1.1.x 감지
+   - **시도한 해결 방법**:
+     - ❌ schema.prisma에 `binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]` 추가
+     - ❌ 런타임 Prisma generate (start.sh 스크립트)
+     - ❌ 빌드 타임 Prisma generate (`RUN npx prisma generate`)
+     - ❌ 환경 변수로 엔진 경로 지정 (`PRISMA_QUERY_ENGINE_LIBRARY`)
+   - **차단 요인**:
+     - Docker 빌드 시 네트워크 타임아웃 반복 발생
+     - Prisma 바이너리 다운로드 중 ECONNRESET 에러
+
+2. **빌드 성능 이슈**
+   - `npm install -g tsx` 단계에서 3-10분 소요
+   - `npx prisma generate` 바이너리 다운로드 타임아웃
+   - 네트워크 불안정으로 재현성 낮음
+
+**현재 파일 상태**:
+
+- `/apps/api/Dockerfile`: 최신 버전 (OpenSSL 3 설치, 빌드 타임 Prisma generate)
+- `/apps/web/Dockerfile`: 빌드 성공
+- `/docker-compose.yml`: Health check 90초 대기 시간 설정
+- `/packages/database/prisma/schema.prisma`: `binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]`
+
+**다음 작업 계획**:
+
+- Option 1: 네트워크 안정 환경에서 재시도 (AWS/GCP)
+- Option 2: Pre-built Prisma binary를 이미지에 포함
+- Option 3: 로컬 개발 우선, Production 배포 시 재검토
+
+### 🚨 기존 문제 (백로그)
+
+#### 검색 기능 무한 루프 문제 (보류)
 
 - **문제**: `useEffect` 무한 루프로 인한 API 서버 과부하
-- **증상**:
-  - 터미널에서 수천 개의 검색 요청 로그 확인
-  - `🔍 질문 검색 요청` 무한 반복
-  - API 서버 429 Too Many Requests 에러 발생
-- **원인**:
-  - `useEffect` 의존성 배열에 `searchTerm`, `filters`, `pagination.page` 포함
-  - `loadQuestions` 함수가 상태를 변경하면서 다시 `useEffect` 트리거
-  - `useRef`로 중복 호출 방지 시도했으나 근본적 해결 안됨
-- **현재 상태**:
-  - API 서버: ✅ 정상 작동 (검색 결과 정상 반환)
-  - 프론트엔드: ❌ 무한 루프로 인한 과부하
-  - 검색 결과: ❌ UI에 표시되지 않음
+- **현재 상태**: Docker 작업 우선순위로 보류
 
-#### Hydration 에러
+#### Hydration 에러 (보류)
 
 - **문제**: 서버와 클라이언트 렌더링 불일치
-- **증상**:
-  - `Expected server HTML to contain a matching <div> in <body>` 에러
-  - `Hydration failed because the initial UI does not match what was rendered on the server` 에러
-- **원인**:
-  - `useSearchParams()` 사용으로 인한 SSR/CSR 불일치
-  - `Suspense` 경계 설정 필요
-- **현재 상태**: 기능상 문제없지만 콘솔 에러 발생
-
-### 🔧 해결 필요 사항
-
-1. **검색 기능 무한 루프 해결**:
-   - `useEffect` 의존성 배열 재설계
-   - 상태 업데이트 로직 분리
-   - `useCallback` 또는 `useMemo` 적절한 사용
-
-2. **Hydration 에러 해결**:
-   - `Suspense` 경계 적절한 설정
-   - 서버/클라이언트 렌더링 일치 보장
-
-3. **Rate Limiter 재활성화**:
-   - 개발 환경에서 비활성화된 Rate Limiter 재활성화
-   - 프로덕션 환경 대비
+- **현재 상태**: 기능상 문제없어 보류
 
 ### 📊 시스템 상태
 
+**로컬 개발 환경** (정상 작동):
+
 ```
-⚠️ Web Server (localhost:3000)
+✅ Web Server (localhost:3000)
    ├── Next.js 14.2.32 + TypeScript
    ├── shadcn/ui + Tailwind CSS v3.4.18
    ├── NextAuth 정상 작동
-   ├── Hydration 에러 발생
-   └── 검색 기능 무한 루프
+   └── 기능 100% 작동
 
 ✅ API Server (localhost:4000)
    ├── Express.js + Socket.io
+   ├── Prisma ORM + PostgreSQL
    ├── 파일 업로드 시스템
    ├── 실시간 통계 브로드캐스트
-   ├── Health Check 정상
-   └── Rate Limiter 비활성화 (개발 환경)
+   └── Health Check 정상
+
+✅ Database
+   ├── PostgreSQL 15 (로컬)
+   └── Redis 7 (로컬)
+```
+
+**Docker 환경** (진행 중):
+
+```
+⚠️ Docker Compose Services
+   ✅ PostgreSQL 15 (포트 5433) - 정상
+   ✅ Redis 7 (포트 6379) - 정상
+   ⚠️ API Server (포트 4000) - Prisma 바이너리 문제
+   ⏸️ Web Server (포트 3000) - API 대기 중
 ```
 
 ### 🎯 품질 지표
 
-- **에러**: 2개 (Hydration 에러, 무한 루프)
-- **API 응답률**: 100% (과부하로 인한 429 에러 발생)
-- **개발 서버 안정성**: 80% (무한 루프로 인한 불안정)
+- **로컬 개발**: 100% 작동
+- **Docker 완성도**: 70% (DB 정상, API 차단, Web 대기)
 - **E2E 테스트**: 100% 통과 (Phase 1.x)
 - **디자인 일관성**: shadcn/ui + 제주 브랜드 완벽 통합
+- **코드 품질**: TypeScript strict mode, Zod 검증
 
 ## 다음 단계
 
-### Phase 1.13: 검색 기능 안정화 (우선순위 1)
+### Phase 1.13 (계속): Docker 컨테이너화 완성
 
-- `useEffect` 무한 루프 해결
+**우선순위**:
+
+1. Prisma 바이너리 문제 해결
+   - 네트워크 안정 환경에서 재시도
+   - 또는 Pre-built binary 포함 방식 검토
+2. 전체 스택 Docker 실행 검증
+3. Docker 문서 업데이트
+
+### Phase 1.14: 기존 문제 해결 (백로그)
+
+- 검색 기능 무한 루프 해결
 - Hydration 에러 해결
 - Rate Limiter 재활성화
 
@@ -336,6 +387,7 @@ curl http://localhost:4000/health            # API
 
 ---
 
-**마지막 업데이트**: 2025-10-06
-**현재 상태**: 검색 기능 안정화 필요 ⚠️
-**검증 상태**: API 서버 정상, 프론트엔드 무한 루프 문제 해결 필요
+**마지막 업데이트**: 2025-10-07
+**현재 작업**: Docker 컨테이너화 (Phase 1.13) ⚠️
+**차단 사항**: Prisma 바이너리 네트워크 타임아웃
+**로컬 개발**: 100% 정상 작동 ✅
