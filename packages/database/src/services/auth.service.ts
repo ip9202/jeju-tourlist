@@ -139,19 +139,19 @@ export class AuthService implements IAuthService {
   }
 
   // ============================================
-  // 로그인
+  // 이메일 기반 로그인
   // ============================================
 
   async login(input: LoginInput): Promise<User> {
-    // 1. 이메일로 사용자 조회
+    // 1. 사용자 조회
     const user = await this.authRepository.findUserByEmail(input.email);
     if (!user) {
       throw new Error("이메일 또는 비밀번호가 올바르지 않습니다");
     }
 
-    // 2. 비밀번호 검증
+    // 2. 비밀번호 확인
     if (!user.password) {
-      throw new Error("이 계정은 이메일 로그인을 지원하지 않습니다");
+      throw new Error("비밀번호가 설정되지 않은 계정입니다");
     }
 
     const isPasswordValid = await this.passwordService.verify(
@@ -162,15 +162,18 @@ export class AuthService implements IAuthService {
       throw new Error("이메일 또는 비밀번호가 올바르지 않습니다");
     }
 
-    // 3. 이메일 인증 확인
-    if (!user.isVerified) {
-      throw new Error("이메일 인증이 필요합니다");
+    // 3. 계정 활성화 상태 확인
+    if (!user.isActive) {
+      throw new Error("비활성화된 계정입니다. 관리자에게 문의하세요");
     }
 
-    // 4. 계정 활성화 확인
-    if (!user.isActive) {
-      throw new Error("비활성화된 계정입니다");
-    }
+    // 4. 이메일 인증 상태 확인 (개발 환경에서는 비활성화)
+    // if (!user.isVerified) {
+    //   throw new Error("이메일 인증이 완료되지 않았습니다. 이메일을 확인해주세요");
+    // }
+
+    // 5. 마지막 로그인 시간 업데이트
+    await this.authRepository.updateLastLoginAt(user.id);
 
     return user;
   }

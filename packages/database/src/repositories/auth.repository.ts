@@ -55,6 +55,13 @@ export interface IAuthRepository {
    */
   markEmailAsVerified(userId: string): Promise<User>;
 
+  /**
+   * 마지막 로그인 시간 업데이트
+   * @param userId 사용자 ID
+   * @returns Promise<void>
+   */
+  updateLastLoginAt(userId: string): Promise<void>;
+
   // ============================================
   // EmailVerificationToken 관련 메서드
   // ============================================
@@ -183,6 +190,15 @@ export class AuthRepository implements IAuthRepository {
       data: {
         isVerified: true,
         emailVerified: new Date(),
+      },
+    });
+  }
+
+  async updateLastLoginAt(userId: string): Promise<void> {
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        lastLoginAt: new Date(),
       },
     });
   }
