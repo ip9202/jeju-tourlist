@@ -1,5 +1,5 @@
 
-> @jeju-tourlist/database@1.0.0 lint /Users/ip9202/develop/vibe/jeju-tourlist/packages/database
+> @jeju-tourlist/utils@1.0.0 lint /Users/ip9202/develop/vibe/jeju-tourlist/packages/utils
 > eslint src --ext .ts
 
 Invalid option '--ext' - perhaps you meant '-c'?

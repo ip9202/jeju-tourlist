@@ -24,7 +24,7 @@
  * const debouncedSearch = debounce((query: string) => {
  *   searchAPI(query);
  * }, 300);
- * 
+ *
  * // 연속 호출 시 마지막 호출만 실행
  * debouncedSearch("a");
  * debouncedSearch("ab");
@@ -37,7 +37,7 @@ export function debounce<T extends (...args: any[]) => any>(
 ): (...args: Parameters<T>) => void {
   let timeoutId: NodeJS.Timeout | null = null;
 
-  return (...args: Parameters<T>) => {
+  return function (this: unknown, ...args: Parameters<T>) {
     // 이전 타이머 취소
     if (timeoutId) {
       clearTimeout(timeoutId);
@@ -68,7 +68,7 @@ export function debounce<T extends (...args: any[]) => any>(
  * const throttledScroll = throttle((event: Event) => {
  *   handleScroll(event);
  * }, 100);
- * 
+ *
  * window.addEventListener('scroll', throttledScroll);
  * ```
  */
@@ -79,7 +79,7 @@ export function throttle<T extends (...args: any[]) => any>(
   let inThrottle: boolean = false;
   let lastArgs: Parameters<T> | null = null;
 
-  return (...args: Parameters<T>) => {
+  return function (this: unknown, ...args: Parameters<T>) {
     lastArgs = args;
 
     if (!inThrottle) {
@@ -115,7 +115,7 @@ export function throttle<T extends (...args: any[]) => any>(
  * const result = measureTime(() => {
  *   return expensiveCalculation();
  * }, "Expensive Calculation");
- * 
+ *
  * console.log(result.duration); // 실행 시간 (ms)
  * console.log(result.result); // 함수 결과
  * ```
@@ -246,9 +246,7 @@ export function memoize<T extends (...args: any[]) => any>(
   const cache = new Map<string, ReturnType<T>>();
 
   return ((...args: Parameters<T>) => {
-    const key = keyGenerator 
-      ? keyGenerator(...args)
-      : JSON.stringify(args);
+    const key = keyGenerator ? keyGenerator(...args) : JSON.stringify(args);
 
     if (cache.has(key)) {
       return cache.get(key);
@@ -291,7 +289,7 @@ export function rateLimit<T extends (...args: any[]) => any>(
 
   return ((...args: Parameters<T>) => {
     const now = Date.now();
-    
+
     // 시간 윈도우 밖의 호출 기록 제거
     while (calls.length > 0 && calls[0] <= now - timeWindow) {
       calls.shift();
@@ -299,12 +297,14 @@ export function rateLimit<T extends (...args: any[]) => any>(
 
     // 호출 횟수 제한 확인
     if (calls.length >= maxCalls) {
-      throw new Error(`Rate limit exceeded: ${maxCalls} calls per ${timeWindow}ms`);
+      throw new Error(
+        `Rate limit exceeded: ${maxCalls} calls per ${timeWindow}ms`
+      );
     }
 
     // 호출 기록 추가
     calls.push(now);
-    
+
     return func(...args);
   }) as T;
 }
@@ -349,7 +349,7 @@ export function cache<T extends (...args: any[]) => any>(
     const result = func(...args);
     cache.set(key, {
       result,
-      expiry: now + ttl
+      expiry: now + ttl,
     });
 
     // 만료된 캐시 정리

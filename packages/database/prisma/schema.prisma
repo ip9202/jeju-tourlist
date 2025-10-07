@@ -18,27 +18,29 @@ datasource db {
 
 model User {
   id        String   @id @default(cuid())
-  email     String   @unique
+  email     String?  @unique // 이메일 로그인용 (nullable, OAuth 사용자는 null 가능)
   name      String
   nickname  String   @unique
   avatar    String?
-  provider  String   // 'kakao', 'naver', 'google'
-  providerId String  // OAuth provider의 사용자 ID
-  
+  password  String?  // 이메일 로그인용 해시된 비밀번호
+  provider  String?  // 'kakao', 'naver', 'google', 'email' (nullable)
+  providerId String? // OAuth provider의 사용자 ID (nullable)
+
   // 프로필 정보
   bio       String?
   location  String?
   website   String?
-  
+
   // 상태 관리
   isActive  Boolean  @default(true)
-  isVerified Boolean @default(false)
+  isVerified Boolean @default(false) // 이메일 인증 여부
+  emailVerified DateTime? // 이메일 인증 완료 시각
   lastLoginAt DateTime?
-  
+
   // 통계 정보
   points    Int      @default(0)
   level     Int      @default(1)
-  
+
   // 타임스탬프
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -56,7 +58,9 @@ model User {
   userBadges    UserBadge[]
   userProfile   UserProfile?
   pointTransactions PointTransaction[]
-  
+  emailVerificationTokens EmailVerificationToken[]
+  passwordResetTokens PasswordResetToken[]
+
   // 인덱스
   @@index([email])
   @@index([provider, providerId])
@@ -69,26 +73,29 @@ model UserProfile {
   id          String   @id @default(cuid())
   userId      String   @unique
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+
   // 상세 프로필 정보
+  displayName String?  // 표시 이름 (nickname과 별도)
+  bio         String?  // 자기소개
   birthDate   DateTime?
   gender      String?  // 'male', 'female', 'other', 'prefer_not_to_say'
   phone       String?
-  
+
   // 제주 관련 정보
   isJejuResident Boolean @default(false)
+  isLocalExpert  Boolean @default(false) // 현지인 전문가 여부
   jejuDistrict   String? // 제주시, 서귀포시, 제주도 등
   interests      String[] // 관심사 배열
-  
+
   // 알림 설정
   emailNotifications Boolean @default(true)
   pushNotifications  Boolean @default(true)
   marketingEmails    Boolean @default(false)
-  
+
   // 타임스탬프
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
+
   @@map("user_profiles")
 }
 
@@ -516,4 +523,54 @@ enum PointTransactionType {
   SYSTEM_REWARD
   SYSTEM_PENALTY
   ADMIN_ADJUSTMENT
+}
+
+// ===========================================
+// 인증 관련 모델 (Authentication Domain)
+// ===========================================
+
+model EmailVerificationToken {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique // 이메일 인증 토큰
+  email     String   // 인증할 이메일 주소
+
+  // 상태
+  isUsed    Boolean  @default(false)
+
+  // 타임스탬프
+  createdAt DateTime @default(now())
+  expiresAt DateTime // 토큰 만료 시간 (24시간)
+  usedAt    DateTime?
+
+  // 인덱스
+  @@index([userId])
+  @@index([token])
+  @@index([email])
+  @@index([expiresAt])
+  @@map("email_verification_tokens")
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique // 비밀번호 재설정 토큰
+  email     String   // 비밀번호를 재설정할 이메일 주소
+
+  // 상태
+  isUsed    Boolean  @default(false)
+
+  // 타임스탬프
+  createdAt DateTime @default(now())
+  expiresAt DateTime // 토큰 만료 시간 (1시간)
+  usedAt    DateTime?
+
+  // 인덱스
+  @@index([userId])
+  @@index([token])
+  @@index([email])
+  @@index([expiresAt])
+  @@map("password_reset_tokens")
 }

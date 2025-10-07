@@ -55,7 +55,7 @@ Claude Code 작업 가이드 문서입니다.
 ## 개발 우선순위
 
 1. **답변자 중심**: 현지 주민 참여 동기 부여
-2. **실시간**: 빠른 응답 시간 보장
+2. **실���간**: 빠른 응답 시간 보장
 3. **신뢰성**: 사용자 검증 및 품질 관리
 4. **확장성**: 멀티리전 고려
 5. **데이터**: AI 서비스용 데이터 구조화
@@ -317,9 +317,43 @@ Claude Code 작업 가이드 문서입니다.
 
 ## 다음 단계
 
-### Phase 1.13 (계속): Docker 컨테이너화 완성
+#### Phase 1.14: 이메일 기반 로그인 시스템 - Step 1 완료 (2025-10-07)
 
-**우선순위**:
+**목표**: 기존 OAuth 시스템에 이메일 기반 인증 추가
+
+**Step 1: 데이터베이스 준비 완료** ✅
+
+- **User 모델 확장**:
+  - `email`: `String` → `String?` (nullable, 이메일 로그인용)
+  - `password`: `String?` 추가 (bcrypt 해시값 저장용)
+  - `provider`: `String` → `String?` (nullable, 'email' 추가)
+  - `providerId`: `String` → `String?` (nullable, OAuth용)
+  - `emailVerified`: `DateTime?` 추가 (이메일 인증 시각)
+
+- **UserProfile 모델 확장**:
+  - `displayName`: `String?` 추가 (표시 이름)
+  - `bio`: `String?` 추가 (자기소개)
+  - `isLocalExpert`: `Boolean` 추가 (현지인 전문가 여부)
+
+- **인증 토큰 모델 추가**:
+  - `EmailVerificationToken`: 이메일 인증용 (24시간 만료)
+  - `PasswordResetToken`: 비밀번호 재설정용 (1시간 만료)
+
+- **타입 정의 업데이트**:
+  - `CreateUserSchema`: email, password, provider nullable 지원
+  - `CreateUserProfileSchema`: displayName, bio, isLocalExpert 추가
+
+- **품질 검증**:
+  - Prisma Client 재생성 완료
+  - TypeScript 타입 검사 통과
+  - User 관련 nullable 타입 에러 모두 해결
+  - utils 패키지 `this` 타입 에러 수정
+
+**다음 단계**: Step 2 (백엔드 회원가입 API 구현)
+
+### Phase 1.13 (보류): Docker 컨테이너화
+
+**우선순위**: Phase 1.14 (이메일 로그인) 우선 진행 후 재검토
 
 1. Prisma 바이너리 문제 해결
    - 네트워크 안정 환경에서 재시도
@@ -327,7 +361,7 @@ Claude Code 작업 가이드 문서입니다.
 2. 전체 스택 Docker 실행 검증
 3. Docker 문서 업데이트
 
-### Phase 1.14: 기존 문제 해결 (백로그)
+### Phase 1.15: 기존 문제 해결 (백로그)
 
 - 검색 기능 무한 루프 해결
 - Hydration 에러 해결
@@ -388,6 +422,7 @@ curl http://localhost:4000/health            # API
 ---
 
 **마지막 업데이트**: 2025-10-07
-**현재 작업**: Docker 컨테이너화 (Phase 1.13) ⚠️
-**차단 사항**: Prisma 바이너리 네트워크 타임아웃
+**현재 작업**: 이메일 기반 로그인 시스템 (Phase 1.14) 🚀
+**완료 사항**: Step 1 - 데이터베이스 준비 완료 ✅
+**다음 단계**: Step 2 - 백엔드 회원가입 API 구현
 **로컬 개발**: 100% 정상 작동 ✅
