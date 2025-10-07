@@ -8,6 +8,7 @@ export * from "./interaction";
 export * from "./moderation";
 export * from "./notification";
 export * from "./badge";
+export * from "./auth";
 
 // Prisma 클라이언트 타입 (간단한 타입 정의)
 export type User = any;

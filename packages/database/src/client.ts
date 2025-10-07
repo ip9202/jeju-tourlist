@@ -1,4 +1,4 @@
-import { PrismaClient } from "../node_modules/.prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { env } from "@jeju-tourlist/config";
 
 // Prisma 클라이언트 인스턴스 생성
@@ -61,7 +61,12 @@ export async function disconnectDatabase(): Promise<void> {
 
 // 트랜잭션 헬퍼
 export async function withTransaction<T>(
-  fn: (tx: Omit<PrismaClient, "$connect" | "$disconnect" | "$on" | "$transaction" | "$use" | "$extends">) => Promise<T>
+  fn: (
+    tx: Omit<
+      PrismaClient,
+      "$connect" | "$disconnect" | "$on" | "$transaction" | "$use" | "$extends"
+    >
+  ) => Promise<T>
 ): Promise<T> {
   return await prisma.$transaction(fn);
 }

@@ -8,6 +8,8 @@ export * from "./badge.service";
 export * from "./notification.service";
 export * from "./admin.service";
 export * from "./moderation.service";
+export * from "./password.service";
+export * from "./auth.service";
 
 // 데이터베이스 서비스 팩토리
 import { PrismaClient } from "../../node_modules/.prisma/client";

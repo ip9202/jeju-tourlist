@@ -4,6 +4,7 @@ export * from "./user.repository";
 export * from "./question.repository";
 export * from "./answer.repository";
 export * from "./category.repository";
+export * from "./auth.repository";
 
 // Repository 팩토리 클래스 (DIP - Dependency Inversion Principle)
 import { PrismaClient } from "@prisma/client";
@@ -11,6 +12,7 @@ import { IUserRepository, UserRepository } from "./user.repository";
 import { IQuestionRepository, QuestionRepository } from "./question.repository";
 import { IAnswerRepository, AnswerRepository } from "./answer.repository";
 import { ICategoryRepository, CategoryRepository } from "./category.repository";
+import { IAuthRepository, AuthRepository } from "./auth.repository";
 
 export class RepositoryFactory {
   private static instance: RepositoryFactory;
@@ -21,6 +23,7 @@ export class RepositoryFactory {
   private _questionRepository: IQuestionRepository | null = null;
   private _answerRepository: IAnswerRepository | null = null;
   private _categoryRepository: ICategoryRepository | null = null;
+  private _authRepository: IAuthRepository | null = null;
 
   private constructor(prisma: PrismaClient) {
     this.prisma = prisma;
@@ -63,12 +66,20 @@ export class RepositoryFactory {
     return this._categoryRepository;
   }
 
+  public get authRepository(): IAuthRepository {
+    if (!this._authRepository) {
+      this._authRepository = new AuthRepository(this.prisma);
+    }
+    return this._authRepository;
+  }
+
   // 모든 Repository 초기화
   public initializeAll(): void {
     this._userRepository = new UserRepository(this.prisma);
     this._questionRepository = new QuestionRepository(this.prisma);
     this._answerRepository = new AnswerRepository(this.prisma);
     this._categoryRepository = new CategoryRepository(this.prisma);
+    this._authRepository = new AuthRepository(this.prisma);
   }
 
   // 모든 Repository 정리
@@ -77,5 +88,6 @@ export class RepositoryFactory {
     this._questionRepository = null;
     this._answerRepository = null;
     this._categoryRepository = null;
+    this._authRepository = null;
   }
 }
