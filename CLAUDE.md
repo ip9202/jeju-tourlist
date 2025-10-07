@@ -326,7 +326,7 @@ Claude Code 작업 가이드 문서입니다.
 
 ## 다음 단계
 
-#### Phase 1.14: 이메일 기반 로그인 시스템 - Step 1~2 완료 (2025-10-07)
+#### Phase 1.14: 이메일 기반 로그인 시스템 - Step 1~3 완료 (2025-10-07)
 
 **목표**: 기존 OAuth 시스템에 이메일 기반 인증 추가
 
@@ -383,7 +383,26 @@ Claude Code 작업 가이드 문서입니다.
   - ✅ 중복 이메일 검증 작동 (409 Conflict)
   - ✅ DB에 사용자 정상 생성 (`provider='email'`, `has_password=true`)
 
-**다음 단계**: Step 3 (프론트엔드 회원가입 페이지 구현)
+**Step 3: 백엔드 로그인 API 완료** ✅
+
+- **AuthService 로그인 메서드 구현**:
+  - `login(input: LoginInput): Promise<User>` 메서드 추가
+  - 비밀번호 검증, 계정 활성화 상태 확인 로직
+  - `updateLastLoginAt` 메서드 추가 (마지막 로그인 시간 업데이트)
+
+- **NextAuth CredentialsProvider 설정** ([apps/web/src/lib/auth.ts](apps/web/src/lib/auth.ts)):
+  - `CredentialsProvider` 추가 (이메일/비밀번호 로그인)
+  - API 서버 `/api/auth/email/login` 호출하는 `authorize` 콜백
+  - OAuth와 통합된 인증 시스템 (OCP 원칙 준수)
+  - JWT 콜백에서 Credentials 로그인 처리
+
+- **통합 테스트 성공**:
+  - ✅ 이메일 로그인 API 정상 작동 (200 OK)
+  - ✅ 잘못된 비밀번호 에러 처리 (401 Unauthorized)
+  - ✅ Docker 환경에서 정상 작동
+  - ✅ NextAuth 세션 관리 정상 작동
+
+**다음 단계**: Step 4 (프론트엔드 회원가입 페이지 구현)
 
 ### Phase 1.13 (보류): Docker 컨테이너화
 
