@@ -4,6 +4,15 @@
 
 - 모든 답변 및 주석은 한글로 한다.
 
+## 🐳 Docker 우선 실행 정책
+
+**⚠️ 중요: 모든 서비스는 Docker를 이용해서 실행합니다.**
+
+- 로컬 개발 환경보다 Docker 컨테이너 실행을 우선시
+- `docker-compose up -d` 명령어로 전체 스택 실행
+- API 서버, 웹 서버, 데이터베이스 모두 Docker 컨테이너에서 실행
+- 개발 및 테스트 시 Docker 환경에서 진행
+
 Claude Code 작업 가이드 문서입니다.
 
 ## 프로젝트 개요
@@ -317,7 +326,7 @@ Claude Code 작업 가이드 문서입니다.
 
 ## 다음 단계
 
-#### Phase 1.14: 이메일 기반 로그인 시스템 - Step 1 완료 (2025-10-07)
+#### Phase 1.14: 이메일 기반 로그인 시스템 - Step 1~2 완료 (2025-10-07)
 
 **목표**: 기존 OAuth 시스템에 이메일 기반 인증 추가
 
@@ -339,17 +348,42 @@ Claude Code 작업 가이드 문서입니다.
   - `EmailVerificationToken`: 이메일 인증용 (24시간 만료)
   - `PasswordResetToken`: 비밀번호 재설정용 (1시간 만료)
 
-- **타입 정의 업데이트**:
-  - `CreateUserSchema`: email, password, provider nullable 지원
-  - `CreateUserProfileSchema`: displayName, bio, isLocalExpert 추가
+**Step 2: 백엔드 회원가입 API 완료** ✅
 
-- **품질 검증**:
-  - Prisma Client 재생성 완료
-  - TypeScript 타입 검사 통과
-  - User 관련 nullable 타입 에러 모두 해결
-  - utils 패키지 `this` 타입 에러 수정
+- **Zod 스키마 정의** ([packages/database/src/types/auth.ts](packages/database/src/types/auth.ts)):
+  - `RegisterSchema`: 회원가입 검증
+  - `LoginSchema`, `PasswordResetRequestSchema`, `PasswordResetConfirmSchema`
+  - `EmailVerificationSchema`, `ResendVerificationSchema`
 
-**다음 단계**: Step 2 (백엔드 회원가입 API 구현)
+- **PasswordService 구현** ([packages/database/src/services/password.service.ts](packages/database/src/services/password.service.ts)):
+  - bcrypt 기반 (saltRounds: 10)
+  - `IPasswordService` 인터페이스 + 싱글톤
+
+- **AuthRepository 구현** ([packages/database/src/repositories/auth.repository.ts](packages/database/src/repositories/auth.repository.ts)):
+  - 사용자 조회/생성, 이메일 인증, 비밀번호 재설정 토큰 관리
+
+- **AuthService 구현** ([packages/database/src/services/auth.service.ts](packages/database/src/services/auth.service.ts)):
+  - 회원가입, 로그인, 이메일 인증, 비밀번호 재설정 비즈니스 로직
+
+- **EmailAuthController & Router** ([apps/api/src/controllers/emailAuthController.ts](apps/api/src/controllers/emailAuthController.ts), [apps/api/src/routes/emailAuth.ts](apps/api/src/routes/emailAuth.ts)):
+  - `POST /api/auth/email/register` - 회원가입 ✅
+  - `POST /api/auth/email/login` - 로그인
+  - `GET /api/auth/email/verify?token=xxx` - 이메일 인증
+  - `POST /api/auth/email/resend-verification` - 인증 재발송
+  - `POST /api/auth/email/password-reset` - 비밀번호 재설정 요청
+  - `POST /api/auth/email/password-reset/confirm` - 비밀번호 재설정 확인
+
+- **Prisma 문제 해결**:
+  - Prisma Client import 경로 수정: `../node_modules/.prisma/client` → `@prisma/client`
+  - Monorepo 환경 Prisma Client 경로 이슈 해결
+  - DB 스키마 완전 동기화 (`npx prisma db push --force-reset`)
+
+- **API 테스트 성공**:
+  - ✅ 회원가입 API 정상 작동
+  - ✅ 중복 이메일 검증 작동 (409 Conflict)
+  - ✅ DB에 사용자 정상 생성 (`provider='email'`, `has_password=true`)
+
+**다음 단계**: Step 3 (프론트엔드 회원가입 페이지 구현)
 
 ### Phase 1.13 (보류): Docker 컨테이너화
 

@@ -12,7 +12,7 @@ export * from "./password.service";
 export * from "./auth.service";
 
 // 데이터베이스 서비스 팩토리
-import { PrismaClient } from "../../node_modules/.prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { RepositoryFactory } from "../repositories";
 import { RedisCacheService, ICacheService } from "./cache.service";
 import { SearchService, ISearchService } from "./search.service";

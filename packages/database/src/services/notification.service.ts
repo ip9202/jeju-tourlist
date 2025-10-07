@@ -11,7 +11,7 @@
  * @version 1.0.0
  */
 
-import { PrismaClient, NotificationType, User, Notification } from '../../node_modules/.prisma/client';
+import { PrismaClient, NotificationType, Notification } from '@prisma/client';
 import { BaseService } from './base.service';
 import { CreateNotificationData, NotificationStats } from '../types/notification';
 

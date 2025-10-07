@@ -11,7 +11,7 @@
  * @version 1.0.0
  */
 
-import { PrismaClient, PointTransactionType, User } from '../../node_modules/.prisma/client';
+import { PrismaClient, PointTransactionType } from '@prisma/client';
 import { BaseService } from './base.service';
 
 /**

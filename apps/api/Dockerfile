@@ -34,6 +34,11 @@ COPY apps/api ./apps/api
 COPY packages ./packages
 COPY turbo.json package.json ./
 
+# Prisma Client 생성 (Builder 단계에서 수행)
+WORKDIR /app/packages/database
+RUN npx prisma generate || npx prisma generate || npx prisma generate
+WORKDIR /app
+
 # ============================================
 # Stage 3: Runner
 # ============================================
@@ -57,10 +62,6 @@ COPY --from=builder /app/apps/api ./apps/api
 
 # tsx 전역 설치
 RUN npm install -g tsx
-
-# Prisma 클라이언트 생성 (빌드 타임에 실행)
-WORKDIR /app/packages/database
-RUN npx prisma generate
 
 # 권한 설정
 WORKDIR /app

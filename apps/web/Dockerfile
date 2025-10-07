@@ -35,10 +35,10 @@ COPY apps/web ./apps/web
 COPY packages ./packages
 COPY turbo.json package.json ./
 
-# Prisma 생성
+# Prisma 생성 (재시도 로직 추가)
 WORKDIR /app/packages/database
 COPY packages/database/prisma ./prisma
-RUN npx prisma generate
+RUN npx prisma generate || npx prisma generate || npx prisma generate
 
 # 환경 변수 설정
 ENV NEXT_TELEMETRY_DISABLED 1
@@ -65,6 +65,7 @@ RUN adduser --system --uid 1001 nextjs
 COPY --from=builder /app/apps/web/public ./public
 COPY --from=builder /app/apps/web/.next/standalone ./
 COPY --from=builder /app/apps/web/.next/static ./.next/static
+COPY --from=builder /app/node_modules ./node_modules
 
 USER nextjs
 

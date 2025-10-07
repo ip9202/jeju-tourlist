@@ -17,49 +17,49 @@ datasource db {
 // ===========================================
 
 model User {
-  id        String   @id @default(cuid())
-  email     String?  @unique // 이메일 로그인용 (nullable, OAuth 사용자는 null 가능)
-  name      String
-  nickname  String   @unique
-  avatar    String?
-  password  String?  // 이메일 로그인용 해시된 비밀번호
-  provider  String?  // 'kakao', 'naver', 'google', 'email' (nullable)
+  id         String  @id @default(cuid())
+  email      String? @unique // 이메일 로그인용 (nullable, OAuth 사용자는 null 가능)
+  name       String
+  nickname   String  @unique
+  avatar     String?
+  password   String? // 이메일 로그인용 해시된 비밀번호
+  provider   String? // 'kakao', 'naver', 'google', 'email' (nullable)
   providerId String? // OAuth provider의 사용자 ID (nullable)
 
   // 프로필 정보
-  bio       String?
-  location  String?
-  website   String?
+  bio      String?
+  location String?
+  website  String?
 
   // 상태 관리
-  isActive  Boolean  @default(true)
-  isVerified Boolean @default(false) // 이메일 인증 여부
+  isActive      Boolean   @default(true)
+  isVerified    Boolean   @default(false) // 이메일 인증 여부
   emailVerified DateTime? // 이메일 인증 완료 시각
-  lastLoginAt DateTime?
+  lastLoginAt   DateTime?
 
   // 통계 정보
-  points    Int      @default(0)
-  level     Int      @default(1)
+  points Int @default(0)
+  level  Int @default(1)
 
   // 타임스탬프
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
+
   // 관계
-  questions     Question[]
-  answers       Answer[]
-  answerComments AnswerComment[]
-  questionLikes QuestionLike[]
-  answerLikes   AnswerLike[]
-  answerCommentLikes AnswerCommentLike[]
-  bookmarks     Bookmark[]
-  reports       Report[]
-  notifications Notification[]
-  userBadges    UserBadge[]
-  userProfile   UserProfile?
-  pointTransactions PointTransaction[]
+  questions               Question[]
+  answers                 Answer[]
+  answerComments          AnswerComment[]
+  questionLikes           QuestionLike[]
+  answerLikes             AnswerLike[]
+  answerCommentLikes      AnswerCommentLike[]
+  bookmarks               Bookmark[]
+  reports                 Report[]
+  notifications           Notification[]
+  userBadges              UserBadge[]
+  userProfile             UserProfile?
+  pointTransactions       PointTransaction[]
   emailVerificationTokens EmailVerificationToken[]
-  passwordResetTokens PasswordResetToken[]
+  passwordResetTokens     PasswordResetToken[]
 
   // 인덱스
   @@index([email])
@@ -70,20 +70,20 @@ model User {
 }
 
 model UserProfile {
-  id          String   @id @default(cuid())
-  userId      String   @unique
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   // 상세 프로필 정보
-  displayName String?  // 표시 이름 (nickname과 별도)
-  bio         String?  // 자기소개
+  displayName String? // 표시 이름 (nickname과 별도)
+  bio         String? // 자기소개
   birthDate   DateTime?
-  gender      String?  // 'male', 'female', 'other', 'prefer_not_to_say'
+  gender      String? // 'male', 'female', 'other', 'prefer_not_to_say'
   phone       String?
 
   // 제주 관련 정보
-  isJejuResident Boolean @default(false)
-  isLocalExpert  Boolean @default(false) // 현지인 전문가 여부
+  isJejuResident Boolean  @default(false)
+  isLocalExpert  Boolean  @default(false) // 현지인 전문가 여부
   jejuDistrict   String? // 제주시, 서귀포시, 제주도 등
   interests      String[] // 관심사 배열
 
@@ -104,46 +104,46 @@ model UserProfile {
 // ===========================================
 
 model Question {
-  id          String   @id @default(cuid())
-  title       String
-  content     String
-  authorId    String
-  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  
+  id       String @id @default(cuid())
+  title    String
+  content  String
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
   // 카테고리 및 태그
-  categoryId  String?
-  category    Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
-  tags        String[]  // 해시태그 배열
-  
+  categoryId String?
+  category   Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  tags       String[] // 해시태그 배열
+
   // 위치 정보
-  location    String?   // 제주도 내 위치
-  latitude    Float?
-  longitude   Float?
+  location  String? // 제주도 내 위치
+  latitude  Float?
+  longitude Float?
 
   // 첨부 파일
-  attachments String[]  // 파일 URL 배열
+  attachments String[] // 파일 URL 배열
 
   // 상태 관리
-  status      QuestionStatus @default(ACTIVE)
-  isResolved  Boolean        @default(false)
-  isPinned    Boolean        @default(false)
-  
+  status     QuestionStatus @default(ACTIVE)
+  isResolved Boolean        @default(false)
+  isPinned   Boolean        @default(false)
+
   // 통계
-  viewCount   Int      @default(0)
-  likeCount   Int      @default(0)
-  answerCount Int      @default(0)
-  
+  viewCount   Int @default(0)
+  likeCount   Int @default(0)
+  answerCount Int @default(0)
+
   // 타임스탬프
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  resolvedAt  DateTime?
-  
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  resolvedAt DateTime?
+
   // 관계
-  answers     Answer[]
-  likes       QuestionLike[]
-  bookmarks   Bookmark[]
-  reports     Report[] @relation("ReportQuestion")
-  
+  answers   Answer[]
+  likes     QuestionLike[]
+  bookmarks Bookmark[]
+  reports   Report[]       @relation("ReportQuestion")
+
   // 인덱스
   @@index([authorId])
   @@index([categoryId])
@@ -157,21 +157,21 @@ model Question {
 }
 
 model Category {
-  id          String   @id @default(cuid())
-  name        String   @unique
+  id          String  @id @default(cuid())
+  name        String  @unique
   description String?
-  color       String?  // 카테고리 색상
-  icon        String?  // 아이콘 이름
-  order       Int      @default(0)
-  isActive    Boolean  @default(true)
-  
+  color       String? // 카테고리 색상
+  icon        String? // 아이콘 이름
+  order       Int     @default(0)
+  isActive    Boolean @default(true)
+
   // 타임스탬프
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   // 관계
-  questions   Question[]
-  
+  questions Question[]
+
   @@index([isActive])
   @@index([order])
   @@map("categories")
@@ -182,32 +182,32 @@ model Category {
 // ===========================================
 
 model Answer {
-  id          String   @id @default(cuid())
-  content     String
-  authorId    String
-  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  questionId  String
-  question    Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  
+  id         String   @id @default(cuid())
+  content    String
+  authorId   String
+  author     User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
   // 상태 관리
-  status      AnswerStatus @default(ACTIVE)
-  isAccepted  Boolean      @default(false) // 질문자가 채택한 답변
-  
+  status     AnswerStatus @default(ACTIVE)
+  isAccepted Boolean      @default(false) // 질문자가 채택한 답변
+
   // 통계
-  likeCount   Int      @default(0)
-  dislikeCount Int     @default(0)
-  commentCount Int     @default(0) // 댓글 수
-  
+  likeCount    Int @default(0)
+  dislikeCount Int @default(0)
+  commentCount Int @default(0) // 댓글 수
+
   // 타임스탬프
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  acceptedAt  DateTime?
-  
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  acceptedAt DateTime?
+
   // 관계
-  likes       AnswerLike[]
-  comments    AnswerComment[]
-  reports     Report[] @relation("ReportAnswer")
-  
+  likes    AnswerLike[]
+  comments AnswerComment[]
+  reports  Report[]        @relation("ReportAnswer")
+
   // 인덱스
   @@index([authorId])
   @@index([questionId])
@@ -219,32 +219,32 @@ model Answer {
 }
 
 model AnswerComment {
-  id        String   @id @default(cuid())
-  content   String
-  authorId  String
-  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  answerId  String
-  answer    Answer   @relation(fields: [answerId], references: [id], onDelete: Cascade)
+  id       String @id @default(cuid())
+  content  String
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  answerId String
+  answer   Answer @relation(fields: [answerId], references: [id], onDelete: Cascade)
 
   // 계층구조 (답글 시스템)
-  parentId  String?  // 부모 댓글 ID (null: 최상위 댓글)
-  parent    AnswerComment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
-  replies   AnswerComment[] @relation("CommentReplies")
-  depth     Int      @default(0) // 계층 깊이 (0: 최상위, 1: 답글, 2: 답글의 답글)
+  parentId String? // 부모 댓글 ID (null: 최상위 댓글)
+  parent   AnswerComment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies  AnswerComment[] @relation("CommentReplies")
+  depth    Int             @default(0) // 계층 깊이 (0: 최상위, 1: 답글, 2: 답글의 답글)
 
   // 상태 관리
-  status    AnswerCommentStatus @default(ACTIVE)
+  status AnswerCommentStatus @default(ACTIVE)
 
   // 통계
-  likeCount Int      @default(0)
+  likeCount Int @default(0)
 
   // 타임스탬프
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   // 관계
-  likes     AnswerCommentLike[]
-  reports   Report[] @relation("ReportAnswerComment")
+  likes   AnswerCommentLike[]
+  reports Report[]            @relation("ReportAnswerComment")
 
   // 인덱스
   @@index([authorId])
@@ -265,42 +265,42 @@ model QuestionLike {
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   questionId String
   question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  
+
   // 타임스탬프
-  createdAt  DateTime @default(now())
-  
+  createdAt DateTime @default(now())
+
   // 유니크 제약
   @@unique([userId, questionId])
   @@map("question_likes")
 }
 
 model AnswerLike {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  answerId  String
-  answer    Answer   @relation(fields: [answerId], references: [id], onDelete: Cascade)
-  isLike    Boolean  // true: 좋아요, false: 싫어요
-  
+  id       String  @id @default(cuid())
+  userId   String
+  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  answerId String
+  answer   Answer  @relation(fields: [answerId], references: [id], onDelete: Cascade)
+  isLike   Boolean // true: 좋아요, false: 싫어요
+
   // 타임스탬프
   createdAt DateTime @default(now())
-  
+
   // 유니크 제약
   @@unique([userId, answerId])
   @@map("answer_likes")
 }
 
 model AnswerCommentLike {
-  id        String   @id @default(cuid())
+  id        String        @id @default(cuid())
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   commentId String
   comment   AnswerComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
-  isLike    Boolean  // true: 좋아요, false: 싫어요
-  
+  isLike    Boolean // true: 좋아요, false: 싫어요
+
   // 타임스탬프
   createdAt DateTime @default(now())
-  
+
   // 유니크 제약
   @@unique([userId, commentId])
   @@map("answer_comment_likes")
@@ -312,10 +312,10 @@ model Bookmark {
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   questionId String
   question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  
+
   // 타임스탬프
-  createdAt  DateTime @default(now())
-  
+  createdAt DateTime @default(now())
+
   // 유니크 제약
   @@unique([userId, questionId])
   @@map("bookmarks")
@@ -326,33 +326,33 @@ model Bookmark {
 // ===========================================
 
 model Report {
-  id         String   @id @default(cuid())
+  id         String @id @default(cuid())
   reporterId String
-  reporter   User     @relation(fields: [reporterId], references: [id], onDelete: Cascade)
-  
+  reporter   User   @relation(fields: [reporterId], references: [id], onDelete: Cascade)
+
   // 신고 대상
   targetType ReportTargetType
   targetId   String
-  
+
   // 신고 내용
-  reason     String
+  reason      String
   description String?
-  
+
   // 처리 상태
-  status     ReportStatus @default(PENDING)
-  adminId    String?
-  adminNote  String?
-  
+  status    ReportStatus @default(PENDING)
+  adminId   String?
+  adminNote String?
+
   // 타임스탬프
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
   resolvedAt DateTime?
-  
+
   // 관계 (polymorphic)
-  question   Question? @relation("ReportQuestion", fields: [targetId], references: [id], onDelete: Cascade, map: "reports_question_fkey")
-  answer     Answer?   @relation("ReportAnswer", fields: [targetId], references: [id], onDelete: Cascade, map: "reports_answer_fkey")
+  question      Question?      @relation("ReportQuestion", fields: [targetId], references: [id], onDelete: Cascade, map: "reports_question_fkey")
+  answer        Answer?        @relation("ReportAnswer", fields: [targetId], references: [id], onDelete: Cascade, map: "reports_answer_fkey")
   answerComment AnswerComment? @relation("ReportAnswerComment", fields: [targetId], references: [id], onDelete: Cascade, map: "reports_answer_comment_fkey")
-  
+
   // 인덱스
   @@index([targetType, targetId])
   @@index([status])
@@ -365,23 +365,23 @@ model Report {
 // ===========================================
 
 model Notification {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   // 알림 내용
-  type      NotificationType
-  title     String
-  message   String
-  data      Json?    // 추가 데이터
-  
+  type    NotificationType
+  title   String
+  message String
+  data    Json? // 추가 데이터
+
   // 상태
-  isRead    Boolean  @default(false)
-  
+  isRead Boolean @default(false)
+
   // 타임스탬프
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
   readAt    DateTime?
-  
+
   // 인덱스
   @@index([userId])
   @@index([isRead])
@@ -394,40 +394,40 @@ model Notification {
 // ===========================================
 
 model Badge {
-  id          String   @id @default(cuid())
-  name        String   @unique
+  id          String @id @default(cuid())
+  name        String @unique
   description String
-  icon        String   // 아이콘 이름
-  color       String   // 배지 색상
-  category    String   // 배지 카테고리
-  points      Int      @default(0) // 획득 시 포인트
-  
+  icon        String // 아이콘 이름
+  color       String // 배지 색상
+  category    String // 배지 카테고리
+  points      Int    @default(0) // 획득 시 포인트
+
   // 획득 조건
-  condition   Json     // 획득 조건 (JSON)
-  isActive    Boolean  @default(true)
-  
+  condition Json // 획득 조건 (JSON)
+  isActive  Boolean @default(true)
+
   // 타임스탬프
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   // 관계
-  userBadges  UserBadge[]
-  
+  userBadges UserBadge[]
+
   @@index([category])
   @@index([isActive])
   @@map("badges")
 }
 
 model UserBadge {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  badgeId   String
-  badge     Badge    @relation(fields: [badgeId], references: [id], onDelete: Cascade)
-  
+  id      String @id @default(cuid())
+  userId  String
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badgeId String
+  badge   Badge  @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+
   // 타임스탬프
   createdAt DateTime @default(now())
-  
+
   // 유니크 제약
   @@unique([userId, badgeId])
   @@map("user_badges")
@@ -438,26 +438,26 @@ model UserBadge {
 // ===========================================
 
 model PointTransaction {
-  id          String   @id @default(cuid())
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   // 포인트 정보
-  amount      Int      // 양수: 적립, 음수: 차감
-  balance     Int      // 거래 후 잔액
-  type        PointTransactionType
-  
+  amount  Int // 양수: 적립, 음수: 차감
+  balance Int // 거래 후 잔액
+  type    PointTransactionType
+
   // 관련 엔티티 (선택적)
-  relatedType String?  // 'question', 'answer', 'badge', 'system'
-  relatedId   String?  // 관련 엔티티 ID
-  
+  relatedType String? // 'question', 'answer', 'badge', 'system'
+  relatedId   String? // 관련 엔티티 ID
+
   // 설명
   description String
-  metadata    Json?    // 추가 메타데이터
-  
+  metadata    Json? // 추가 메타데이터
+
   // 타임스탬프
-  createdAt   DateTime @default(now())
-  
+  createdAt DateTime @default(now())
+
   // 인덱스
   @@index([userId])
   @@index([type])
@@ -530,17 +530,17 @@ enum PointTransactionType {
 // ===========================================
 
 model EmailVerificationToken {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  token     String   @unique // 이메일 인증 토큰
-  email     String   // 인증할 이메일 주소
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token  String @unique // 이메일 인증 토큰
+  email  String // 인증할 이메일 주소
 
   // 상태
-  isUsed    Boolean  @default(false)
+  isUsed Boolean @default(false)
 
   // 타임스탬프
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
   expiresAt DateTime // 토큰 만료 시간 (24시간)
   usedAt    DateTime?
 
@@ -553,17 +553,17 @@ model EmailVerificationToken {
 }
 
 model PasswordResetToken {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  token     String   @unique // 비밀번호 재설정 토큰
-  email     String   // 비밀번호를 재설정할 이메일 주소
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token  String @unique // 비밀번호 재설정 토큰
+  email  String // 비밀번호를 재설정할 이메일 주소
 
   // 상태
-  isUsed    Boolean  @default(false)
+  isUsed Boolean @default(false)
 
   // 타임스탬프
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
   expiresAt DateTime // 토큰 만료 시간 (1시간)
   usedAt    DateTime?
 

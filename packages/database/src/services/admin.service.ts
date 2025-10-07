@@ -12,7 +12,7 @@
  * @version 1.0.0
  */
 
-import { PrismaClient, User, Question, Answer, Report } from '../../node_modules/.prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { BaseService } from './base.service';
 
 /**
@@ -67,7 +67,7 @@ export interface UserManagementData {
     id: string;
     name: string;
     nickname: string;
-    email: string;
+    email: string | null;
     avatar?: string;
     isActive: boolean;
     points: number;

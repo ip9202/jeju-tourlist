@@ -11,7 +11,7 @@
  * @version 1.0.0
  */
 
-import { PrismaClient, Badge, UserBadge, User } from '../../node_modules/.prisma/client';
+import { PrismaClient, Badge } from '@prisma/client';
 import { BaseService } from './base.service';
 import { CreateBadgeData } from '../types/badge';
 

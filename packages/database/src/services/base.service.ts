@@ -3,7 +3,7 @@
  * 모든 서비스 클래스의 공통 기능을 제공
  */
 
-import { PrismaClient } from '../../node_modules/.prisma/client';
+import { PrismaClient } from '@prisma/client';
 
 export abstract class BaseService {
   protected prisma: PrismaClient;

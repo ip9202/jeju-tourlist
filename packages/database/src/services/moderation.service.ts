@@ -12,7 +12,7 @@
  * @version 1.0.0
  */
 
-import { PrismaClient, ReportStatus, ReportTargetType, User } from '../../node_modules/.prisma/client';
+import { PrismaClient, ReportStatus, ReportTargetType } from '@prisma/client';
 import { BaseService } from './base.service';
 import { CreateReportData } from '../types/moderation';
 

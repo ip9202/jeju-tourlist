@@ -1,4 +1,4 @@
-import { PrismaClient } from "../../node_modules/.prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { ICacheService, CacheKeyBuilder, CACHE_TTL } from "./cache.service";
 import {
   IUserRepository,
@@ -6,7 +6,7 @@ import {
   IAnswerRepository,
   ICategoryRepository,
 } from "../repositories";
-import { User, Question, Answer, Category } from "../../node_modules/.prisma/client";
+import { User, Question, Answer, Category } from "@prisma/client";
 import { CreateUserData, UpdateUserData } from "../types/user";
 import {
   CreateQuestionData,
