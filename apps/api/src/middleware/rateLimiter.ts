@@ -142,3 +142,49 @@ export const adminLimiter = rateLimit({
     });
   },
 });
+
+/**
+ * 이메일 회원가입 제한 (1시간에 3회)
+ */
+export const emailRegisterLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1시간
+  max: 3, // 최대 3회 요청
+  message: {
+    success: false,
+    error: "회원가입 요청이 너무 많습니다. 1시간 후 다시 시도해주세요.",
+    timestamp: new Date().toISOString(),
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+  handler: (req: Request, res: Response) => {
+    res.status(429).json({
+      success: false,
+      error: "회원가입 요청이 너무 많습니다. 1시간 후 다시 시도해주세요.",
+      message: "Email registration rate limit exceeded. Please try again in 1 hour.",
+      timestamp: new Date().toISOString(),
+    });
+  },
+});
+
+/**
+ * 이메일 로그인 제한 (1분에 5회)
+ */
+export const emailLoginLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1분
+  max: 5, // 최대 5회 요청
+  message: {
+    success: false,
+    error: "로그인 시도가 너무 많습니다. 1분 후 다시 시도해주세요.",
+    timestamp: new Date().toISOString(),
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+  handler: (req: Request, res: Response) => {
+    res.status(429).json({
+      success: false,
+      error: "로그인 시도가 너무 많습니다. 1분 후 다시 시도해주세요.",
+      message: "Email login rate limit exceeded. Please try again in 1 minute.",
+      timestamp: new Date().toISOString(),
+    });
+  },
+});

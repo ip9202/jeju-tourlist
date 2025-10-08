@@ -12,6 +12,7 @@ import { AuthService } from "@jeju-tourlist/database/services/auth.service";
 import { AuthRepository } from "@jeju-tourlist/database/repositories/auth.repository";
 import { passwordService } from "@jeju-tourlist/database/services/password.service";
 import { prisma } from "@jeju-tourlist/database";
+import { emailRegisterLimiter, emailLoginLimiter } from "../middleware/rateLimiter";
 
 /**
  * 이메일 인증 라우터 생성
@@ -24,9 +25,9 @@ export function createEmailAuthRouter(): Router {
   const authService = new AuthService(authRepository, passwordService);
   const emailAuthController = new EmailAuthController(authService);
 
-  // 공개 라우트 (인증 불필요)
-  router.post("/register", emailAuthController.register);
-  router.post("/login", emailAuthController.login);
+  // 공개 라우트 (인증 불필요) - Rate Limiter 적용
+  router.post("/register", emailRegisterLimiter, emailAuthController.register);
+  router.post("/login", emailLoginLimiter, emailAuthController.login);
   router.get("/verify", emailAuthController.verifyEmail);
   router.post("/resend-verification", emailAuthController.resendVerification);
   router.post("/password-reset", emailAuthController.requestPasswordReset);
