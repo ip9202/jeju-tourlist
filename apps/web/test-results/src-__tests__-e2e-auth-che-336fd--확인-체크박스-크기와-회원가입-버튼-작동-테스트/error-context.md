@@ -1,0 +1,56 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - link "홈으로 돌아가기" [ref=e5] [cursor=pointer]:
+      - /url: /
+      - img [ref=e6] [cursor=pointer]
+      - text: 홈으로 돌아가기
+    - generic [ref=e8]:
+      - generic [ref=e9]:
+        - heading "회원가입" [level=3] [ref=e10]
+        - paragraph [ref=e11]: 이메일로 회원가입하고 제주 여행의 모든 것을 경험하세요.
+      - generic [ref=e13]:
+        - generic [ref=e14]:
+          - generic [ref=e15]: 이메일
+          - textbox "이메일" [ref=e16]
+        - generic [ref=e17]:
+          - generic [ref=e18]: 비밀번호
+          - generic [ref=e19]:
+            - textbox "비밀번호" [ref=e20]
+            - button [ref=e21] [cursor=pointer]:
+              - img [ref=e23] [cursor=pointer]
+        - generic [ref=e26]:
+          - generic [ref=e27]: 비밀번호 확인
+          - generic [ref=e28]:
+            - textbox "비밀번호 확인" [ref=e29]
+            - button [ref=e30] [cursor=pointer]:
+              - img [ref=e32] [cursor=pointer]
+        - generic [ref=e35]:
+          - generic [ref=e36]: 이름
+          - textbox "이름" [ref=e37]
+        - generic [ref=e38]:
+          - generic [ref=e39]: 닉네임
+          - textbox "닉네임" [ref=e40]
+        - generic [ref=e41]:
+          - generic [ref=e42]:
+            - checkbox "이용약관에 동의합니다. *" [ref=e43] [cursor=pointer]
+            - checkbox
+            - generic [ref=e45] [cursor=pointer]:
+              - text: 이용약관에 동의합니다.
+              - generic [ref=e46] [cursor=pointer]: "*"
+          - generic [ref=e47]:
+            - checkbox "개인정보처리방침에 동의합니다. *" [ref=e48] [cursor=pointer]
+            - checkbox
+            - generic [ref=e50] [cursor=pointer]:
+              - text: 개인정보처리방침에 동의합니다.
+              - generic [ref=e51] [cursor=pointer]: "*"
+          - generic [ref=e52]:
+            - checkbox "마케팅 정보 수신에 동의합니다. (선택)" [ref=e53] [cursor=pointer]
+            - checkbox
+            - generic [ref=e55] [cursor=pointer]: 마케팅 정보 수신에 동의합니다. (선택)
+        - button "회원가입" [ref=e56] [cursor=pointer]:
+          - generic [ref=e57] [cursor=pointer]: 회원가입
+  - alert [ref=e58]
+```
