@@ -1,481 +1,203 @@
 # CLAUDE.md
 
-## 사용자 가이드
+## 🎯 프로젝트 개요
 
-- 모든 답변 및 주석은 한글로 한다.
+**"동네물어봐" (AskLocal)** - 제주도 여행자와 현지 주민을 연결하는 실시간 여행 Q&A 커뮤니티
+
+### 핵심 컨셉
+- **브랜드**: "동네물어봐" (AskLocal)
+- **핵심**: 제주 여행자 ↔ 현지 주민 실시간 Q&A
+- **비즈니스**: 커뮤니티 + 리워드 → 업체 제휴 → AI 추천
+- **플랫폼**: 웹 우선 → 모바일 앱 확장
+
+### 기술 스택
+- **프론트엔드**: Next.js 14 + TypeScript + Tailwind CSS + shadcn/ui
+- **백엔드**: Node.js + Express.js + PostgreSQL + Prisma ORM
+- **실시간**: Socket.io + NextAuth.js
+
+---
 
 ## 🐳 Docker 우선 실행 정책
 
 **⚠️ 중요: 모든 서비스는 Docker를 이용해서 실행합니다.**
 
-- 로컬 개발 환경보다 Docker 컨테이너 실행을 우선시
-- `docker-compose up -d` 명령어로 전체 스택 실행
-- API 서버, 웹 서버, 데이터베이스 모두 Docker 컨테이너에서 실행
-- 개발 및 테스트 시 Docker 환경에서 진행
+```bash
+# 전체 스택 실행
+docker-compose up -d
 
-Claude Code 작업 가이드 문서입니다.
+# 서비스 확인
+docker-compose ps
+```
 
-## 프로젝트 개요
+---
 
-"동네물어봐" (AskLocal)는 제주도 여행자와 현지 주민을 연결하는 실시간 여행 Q&A 커뮤니티 서비스입니다.
+## 📅 개발 진행 상황 (시간순)
 
-## 서비스 컨셉
+### Phase 1.1~1.7: 핵심 기능 완성 (2025-10-04 이전)
+✅ **완료된 기능들**:
+- 온보딩 플로우
+- 질문 작성 및 답변
+- 검색 및 필터링
+- 현지인 전문가 기능
+- 실시간 알림 시스템
+- 북마크 및 공유
+- 에러 처리 및 검증
 
-- **브랜드**: "동네물어봐" (AskLocal)
-- **핵심**: 제주 여행자 ↔ 현지 주민 실시간 Q&A
-- **비즈니스**: 커뮤니티 + 리워드 → 업체 제휴 → AI 추천
-- **플랫폼**: 웹 우선 → 모바일 앱 확장
-- **확장**: 제주 → 부산, 강릉 등
+### Phase 1.8: 답변 댓글 기능 (2025-10-04)
+✅ **완료**:
+- DB 스키마: `AnswerComment`, `AnswerCommentLike` 모델 추가
+- 백엔드: 댓글 CRUD API 완전 구현
+- 프론트엔드: 계층형 댓글 시스템 (무한 깊이)
+- UX: 댓글 수 배지, 기본 펼침 상태
 
-## 기술 스택
+### Phase 1.9: 검색 및 필터링 개선 (2025-10-04)
+✅ **완료**:
+- 검색 기능 수정 (이중 URL 인코딩 제거)
+- 카테고리 필터 동적 로드
+- Input 컴포넌트 Hydration 에러 해결
+- 실시간 검색 구현
 
-**프론트엔드**
+### Phase 1.10: 시스템 안정화 (2025-10-05)
+✅ **완료**:
+- Turbo 빌드 시스템 수정
+- 중복 프로세스 정리 (Next.js 서버 2개 → 1개)
+- 서비스 상태 검증 완료
 
-- Next.js 14 + TypeScript
-- Tailwind CSS v3 + shadcn/ui
-- Socket.io Client + NextAuth.js
+### Phase 1.11: 계층형 댓글 시스템 (2025-10-06)
+✅ **완료**:
+- DB 스키마: `parentId`, `depth` 필드 추가
+- API: 계층 데이터 저장 로직 구현
+- 프론트엔드: `buildCommentTree()` 함수로 트리 구조 변환
+- UX: 답글에 답글 달기 기능 완전 구현
 
-**백엔드**
+### Phase 1.12: 검색 통합 및 헤더 최적화 (2025-10-06)
+✅ **완료**:
+- `useQuestionSearch` 훅으로 검색 로직 통합
+- 헤더 3-column 레이아웃 적용
+- Playwright E2E 테스트 추가
+- 서브헤더/필터 간격 최적화
 
-- Node.js + Express.js + TypeScript
-- PostgreSQL + Prisma ORM
-- Socket.io + Elasticsearch
-
-## 핵심 설계 결정
-
-### UI/UX: 메시지 스타일 인터페이스
-
-- 카카오톡 스타일 자연스러운 소통
-- 자동 해시태그 파싱 시스템
-- 실시간 타이핑 표시
-
-### 10분 내 초즉시 응답 시스템
-
-- 4단계 알림: 3초/30초/2분/5분
-- 위치 기반 타겟팅: 2km → 5km → 제주 전체
-- 실시간 모니터링
-
-### 3단계 현지인 인증
-
-- ⭐ 1단계: GPS 패턴 분석 (임시 현지인)
-- 🏠 2단계: 지인 추천/SNS (검증된 현지인)
-- 👑 3단계: 서류 기반 (공식 제주도민)
-
-## 개발 우선순위
-
-1. **답변자 중심**: 현지 주민 참여 동기 부여
-2. **실���간**: 빠른 응답 시간 보장
-3. **신뢰성**: 사용자 검증 및 품질 관리
-4. **확장성**: 멀티리전 고려
-5. **데이터**: AI 서비스용 데이터 구조화
-
-## 현재 상태 (2025-10-07)
-
-### ✅ 완료된 작업
-
-#### Phase 1.x: 모든 핵심 기능 완성 (100%)
-
-1. **Phase 1.1**: 온보딩 플로우
-2. **Phase 1.2**: 질문 작성 및 답변
-3. **Phase 1.3**: 검색 및 필터링
-4. **Phase 1.4**: 현지인 전문가 기능
-5. **Phase 1.5**: 실시간 알림 시스템
-6. **Phase 1.6**: 북마크 및 공유
-7. **Phase 1.7**: 에러 처리 및 검증
-
-#### 시스템 안정화
-
-- shadcn/ui 디자인 시스템 통합
-- 모든 런타임/컴파일 에러 해결
-- Input ID Hydration 에러 해결
-- NextAuth API 라우팅 최적화
-- 서버 인프라 최적화 (중복 프로세스 제거)
-- 파일 업로드 시스템 완전 구현
-- 이미지 라이트박스 기능
-
-#### Phase 1.8: 답변 댓글 기능 (2025-10-04 완료)
-
-- **DB 스키마**: AnswerComment, AnswerCommentLike 모델 추가
-- **백엔드**: 댓글 CRUD API 완전 구현
-  - `POST /api/answer-comments` - 댓글 생성
-  - `GET /api/answer-comments/:id` - 댓글 상세 조회
-  - `GET /api/answers/:answerId/comments` - 답변별 댓글 목록
-  - `PUT /api/answer-comments/:id` - 댓글 수정
-  - `DELETE /api/answer-comments/:id` - 댓글 삭제
-  - `POST /api/answer-comments/:id/reaction` - 좋아요/싫어요
-  - `GET /api/answers/:answerId/comments/stats` - 댓글 통계
-- **Repository 패턴**: AnswerCommentRepository, AnswerCommentService
-- **타입 안전성**: Zod 스키마 검증, TypeScript 타입 정의
-- **패키지 구조**: database 패키지 exports 설정 최적화
-
-#### 버그 수정 및 개선 (2025-10-04)
-
-- **DB 마이그레이션**: Prisma schema 변경 후 `db push --force-reset` 실행
-- **답변 작성 오류 수정**:
-  - User 생성 시 `provider`, `providerId` 필수 필드 추가
-  - AnswerService, AnswerCommentService 임시 사용자 생성 로직 수정
-  - Zod 검증 에러 메시지 개선 (`error.issues` 사용)
-- **UI 개선**:
-  - 질문 작성 페이지 카테고리 선택 아이콘 이모지 적용
-  - 아이콘 매핑: map-pin→📍, utensils→🍴, bed→🛏️, car→🚗, shopping-bag→🛍️, help-circle→❓
-
-#### Phase 1.9: 질문 목록 검색 및 필터링 수정 (2025-10-04 완료)
-
-- **검색 기능 수정**:
-  - 이중 URL 인코딩 제거 (`encodeURIComponent` 삭제)
-  - `URLSearchParams.append()`의 자동 인코딩 활용
-  - 검색 트리거를 `useEffect` 의존성에 추가하여 실시간 검색 구현
-- **카테고리 필터 개선**:
-  - 하드코딩된 잘못된 카테고리 ID 제거
-  - API에서 실시간으로 카테고리 동적 로드
-  - 카테고리별 아이콘 자동 매핑 (관광지→🗺️, 맛집→🍽️, 숙박→🏨, 교통→🚗, 쇼핑→🛍️ 등)
-- **Input 컴포넌트 Hydration 수정**:
-  - `useId()` 훅 제거 (서버/클라이언트 ID 불일치 원인)
-  - ID를 props로 직접 전달하도록 변경
-  - 서버 사이드 렌더링과 클라이언트 하이드레이션 완전 일치
-- **시스템 최적화**:
-  - 중복 프로세스 정리 및 서버 안정화
-  - Next.js 빌드 캐시 최적화
-
-#### Phase 1.10: 시스템 안정화 및 검증 (2025-10-05 완료)
-
-- **Turbo 빌드 시스템 수정**:
-  - `turbo.json` 설정 오류 수정 (`tasks` → `pipeline`)
-  - Turbo v1 문법 호환성 확보
-  - 빌드 명령어 정상 작동 확인
-- **중복 프로세스 완전 정리**:
-  - Next.js 서버 중복 실행 문제 해결 (2개 → 1개)
-  - tsx watch 프로세스 정리
-  - 포트 3000, 4000 정상 할당 확인
-- **서비스 상태 검증**:
-  - 웹 서버 (localhost:3000): ✅ 정상 작동
-  - API 서버 (localhost:4000): ✅ Health Check 정상
-  - 프로세스 상태: 4개 프로세스 정상 실행
-  - 메모리 사용량: 50MB (API 서버, 정상 범위)
-
-#### Phase 1.11: 계층형 댓글 시스템 완성 (2025-10-06 완료)
-
-- **DB 스키마 확장**:
-  - `AnswerComment` 모델에 계층 구조 필드 추가
-  - `parentId` (부모 댓글 ID), `depth` (계층 깊이) 추가
-  - 자기 참조 관계 설정 (`parent`, `replies`)
-  - Prisma schema 업데이트 및 DB 마이그레이션
-- **API 계층 지원**:
-  - Zod 스키마에 `parentId`, `depth` 필드 추가
-  - AnswerCommentRepository 계층 데이터 저장 로직 구현
-  - 댓글 생성 시 부모 댓글 depth + 1 자동 계산
-- **프론트엔드 트리 구조**:
-  - `buildCommentTree()` 함수로 flat 데이터를 계층 구조로 변환
-  - 재귀 컴포넌트로 무한 깊이 댓글 렌더링
-  - 답글에 답글 달기 기능 완전 구현
-  - 중복 트리 빌드 로직 제거 (성능 최적화)
-- **UX 개선**:
-  - 댓글 기본 펼침 상태로 변경 (사용자 편의성)
-  - 디버그 console.log 전체 제거 (프로덕션 준비)
-  - 댓글 수 빨간 배지 알림 구현
-  - 배지 클리핑 이슈 해결 (`overflow-visible`, `z-index` 최적화)
-- **시스템 안정성**:
-  - 계층형 댓글 CRUD 완전 작동
-  - 실시간 UI 업데이트 정상 작동
-  - 0 런타임 에러
-
-#### Phase 1.12: 검색 기능 통합 및 헤더 최적화 (2025-10-06 진행 중)
-
-- **검색 기능 통합**:
-  - `useQuestionSearch` 훅 생성으로 검색 로직 통합
-  - `/search` 페이지와 `/questions` 페이지 검색 로직 일치
-  - API 서버 검색 기능 정상 작동 확인
-  - Prisma 검색 로직 검증 완료
-- **헤더 최적화**:
-  - 3-column 레이아웃 적용 (로고+네비게이션 | 검색 | 액션+모바일메뉴)
-  - "질문", "카테고리" 링크 수직 중앙 정렬 완료
-  - 검색창에 전용 검색 버튼 추가 (Enter 키 + 버튼 클릭 모두 지원)
-  - 모바일 반응형 메뉴 개선
-- **Playwright E2E 테스트**:
-  - `header.e2e.test.ts` 생성으로 헤더 기능 검증
-  - 레이아웃, 반응형, 검색 기능 테스트 완료
-  - strict mode violation 해결
-
-##### 2025-10-06 추가 업데이트 (질문 목록 서브헤더/필터 정렬 고도화)
-
-- **겹침 및 간격 이슈 해결**:
-  - `SubPageHeader`를 `sticky top-16 z-40`으로 고정하여 메인헤더(`h-16`, `z-50`) 바로 아래에 위치하도록 정합성 확보
-  - `apps/web/src/app/questions/page.tsx`에서 레이아웃을 명시적으로 구성하여 메인헤더 → 서브헤더 → 콘텐츠 순으로 렌더링
-  - 서브헤더와 필터 간 간격을 `mt-16` → `mt-2`로 축소해 컴팩트한 상단 UI 구현
-  - 사이드바 미사용 페이지에서 불필요한 여백이 생기지 않도록 레이아웃 경량화
-
-- **E2E 회귀 방지 테스트 추가**:
-  - `questions-header-overlap.e2e.test.ts`: 서브헤더가 필터를 덮지 않는지 좌표 기반 검증 (통과)
-  - `questions-header-spacing.e2e.test.ts`: 메인헤더↔서브헤더 간격=0px, 서브헤더↔필터 간격 최소화 검증 (통과)
-
-- **결과**:
-  - 메인헤더와 서브헤더 간 간격 0px 달성
-  - 서브헤더와 필터 간 간격 8px 수준으로 축소, 겹침 없음
-  - 질문 목록 상단 레이아웃 일관성 및 가독성 향상
-
-#### Phase 1.13: Docker 컨테이너화 작업 (2025-10-07 진행 중)
-
-**목표**: 전체 서비스를 Docker로 실행하여 배포 환경 표준화
-
-**완료된 작업**:
-
-- ✅ Docker 환경 분석 및 실행 가능성 확인
-- ✅ `.dockerignore` 파일 생성
-- ✅ `docker-compose.yml` 오케스트레이션 파일 작성
-  - PostgreSQL 15 (포트 5433, 로컬 5432 충돌 회피)
-  - Redis 7 (포트 6379)
-  - API Server (포트 4000)
-  - Web Server (포트 3000)
-- ✅ `.env.docker` 및 `.env.docker.example` 환경 변수 파일 생성
-- ✅ `DOCKER.md` 문서화 완료
-- ✅ Web Dockerfile 작성 및 빌드 성공
-- ✅ API Dockerfile 작성 (multi-stage build)
+### Phase 1.13: Docker 컨테이너화 (2025-10-07)
+⚠️ **진행 중**:
+- ✅ Docker 환경 구축 완료
 - ✅ PostgreSQL, Redis 컨테이너 정상 작동
+- ⚠️ API Server: Prisma 바이너리 문제 (네트워크 타임아웃)
+- ⏸️ Web Server: API 대기 중
 
-**현재 진행 중인 문제**:
+### Phase 1.14: 이메일 기반 로그인 시스템 (2025-10-07~08)
+🚀 **현재 진행 중**:
 
-1. **Prisma Binary Target 이슈**
-   - **문제**: Prisma Client가 플랫폼별 바이너리 엔진 필요
-   - **증상**:
-     ```
-     PrismaClientInitializationError: Prisma Client could not locate
-     the Query Engine for runtime "linux-musl-arm64-openssl-1.1.x"
-     ```
-   - **원인**:
-     - 로컬 Mac (darwin-arm64) vs Docker Linux (linux-musl-arm64)
-     - Alpine Linux는 OpenSSL 3.x 사용하나 Prisma가 1.1.x 감지
-   - **시도한 해결 방법**:
-     - ❌ schema.prisma에 `binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]` 추가
-     - ❌ 런타임 Prisma generate (start.sh 스크립트)
-     - ❌ 빌드 타임 Prisma generate (`RUN npx prisma generate`)
-     - ❌ 환경 변수로 엔진 경로 지정 (`PRISMA_QUERY_ENGINE_LIBRARY`)
-   - **차단 요인**:
-     - Docker 빌드 시 네트워크 타임아웃 반복 발생
-     - Prisma 바이너리 다운로드 중 ECONNRESET 에러
+#### Step 1: 데이터베이스 준비 ✅ (2025-10-07)
+- User 모델 확장 (`password`, `emailVerified` 필드 추가)
+- 인증 토큰 모델 추가 (`EmailVerificationToken`, `PasswordResetToken`)
 
-2. **빌드 성능 이슈**
-   - `npm install -g tsx` 단계에서 3-10분 소요
-   - `npx prisma generate` 바이너리 다운로드 타임아웃
-   - 네트워크 불안정으로 재현성 낮음
+#### Step 2: 백엔드 회원가입 API ✅ (2025-10-07)
+- Zod 스키마 정의 (`RegisterSchema`, `LoginSchema` 등)
+- PasswordService 구현 (bcrypt 기반)
+- AuthRepository, AuthService 구현
+- EmailAuthController & Router 구현
+- API 테스트 성공
 
-**현재 파일 상태**:
+#### Step 3: 백엔드 로그인 API ✅ (2025-10-07)
+- AuthService 로그인 메서드 구현
+- NextAuth CredentialsProvider 설정
+- OAuth + 이메일 로그인 통합 시스템
+- 통합 테스트 성공
 
-- `/apps/api/Dockerfile`: 최신 버전 (OpenSSL 3 설치, 빌드 타임 Prisma generate)
-- `/apps/web/Dockerfile`: 빌드 성공
-- `/docker-compose.yml`: Health check 90초 대기 시간 설정
-- `/packages/database/prisma/schema.prisma`: `binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]`
+#### Step 4: 프론트엔드 회원가입 페이지 ✅ (2025-10-08)
+- `useRegisterForm` 훅 (React Hook Form + Zod)
+- `PasswordStrengthIndicator` 컴포넌트
+- `RegisterForm` 컴포넌트 (3개 약관 동의)
+- `/auth/signup` 페이지 구현
+- Playwright E2E 테스트 100% 통과
 
-**다음 작업 계획**:
+#### Step 5: 프론트엔드 로그인 페이지 ⚠️ (2025-10-08)
+- `EmailLoginForm` 컴포넌트 구현
+- `signin/page.tsx` 레이아웃 개선
+- OAuth + 이메일 로그인 통합 UI
+- **문제**: Docker 환경 동기화 이슈로 파일 되돌림 발생
 
-- Option 1: 네트워크 안정 환경에서 재시도 (AWS/GCP)
-- Option 2: Pre-built Prisma binary를 이미지에 포함
-- Option 3: 로컬 개발 우선, Production 배포 시 재검토
+---
 
-### 🚨 기존 문제 (백로그)
+## 🚨 현재 문제점
 
-#### 검색 기능 무한 루프 문제 (보류)
+### 1. Docker 환경 동기화 문제
+- 로컬 파일 변경사항이 Docker 컨테이너에 반영되지 않음
+- `docker-compose build --no-cache` 필요
 
-- **문제**: `useEffect` 무한 루프로 인한 API 서버 과부하
-- **현재 상태**: Docker 작업 우선순위로 보류
+### 2. Prisma 바이너리 문제
+- Docker 빌드 시 네트워크 타임아웃
+- Prisma Client 바이너리 다운로드 실패
 
-#### Hydration 에러 (보류)
+### 3. 개발 환경 설정 이슈
+- Prettier 권한 문제 (Git 커밋 시)
+- TypeScript Zod 스키마 타입 에러
 
-- **문제**: 서버와 클라이언트 렌더링 불일치
-- **현재 상태**: 기능상 문제없어 보류
+---
 
-### 📊 시스템 상태
+## 📊 현재 시스템 상태
 
-**로컬 개발 환경** (정상 작동):
-
+### 로컬 개발 환경 ✅
 ```
-✅ Web Server (localhost:3000)
-   ├── Next.js 14.2.32 + TypeScript
-   ├── shadcn/ui + Tailwind CSS v3.4.18
-   ├── NextAuth 정상 작동
-   └── 기능 100% 작동
-
-✅ API Server (localhost:4000)
-   ├── Express.js + Socket.io
-   ├── Prisma ORM + PostgreSQL
-   ├── 파일 업로드 시스템
-   ├── 실시간 통계 브로드캐스트
-   └── Health Check 정상
-
-✅ Database
-   ├── PostgreSQL 15 (로컬)
-   └── Redis 7 (로컬)
+✅ Web Server (localhost:3000) - Next.js 14 + shadcn/ui
+✅ API Server (localhost:4000) - Express.js + Prisma
+✅ Database - PostgreSQL 15 + Redis 7
 ```
 
-**Docker 환경** (진행 중):
-
+### Docker 환경 ⚠️
 ```
-⚠️ Docker Compose Services
-   ✅ PostgreSQL 15 (포트 5433) - 정상
-   ✅ Redis 7 (포트 6379) - 정상
-   ⚠️ API Server (포트 4000) - Prisma 바이너리 문제
-   ⏸️ Web Server (포트 3000) - API 대기 중
+✅ PostgreSQL 15 (포트 5433) - 정상
+✅ Redis 7 (포트 6379) - 정상
+⚠️ API Server (포트 4000) - Prisma 바이너리 문제
+⚠️ Web Server (포트 3000) - API 대기 중
 ```
 
-### 🎯 품질 지표
+---
 
-- **로컬 개발**: 100% 작동
-- **Docker 완성도**: 70% (DB 정상, API 차단, Web 대기)
-- **E2E 테스트**: 100% 통과 (Phase 1.x)
-- **디자인 일관성**: shadcn/ui + 제주 브랜드 완벽 통합
-- **코드 품질**: TypeScript strict mode, Zod 검증
+## 🎯 다음 단계
 
-## 다음 단계
+### 즉시 해결 필요
+1. **Step 5 재구현**: 이메일 로그인 폼 복구
+2. **Docker 환경 안정화**: Prisma 바이너리 문제 해결
+3. **Step 6 진행**: 보안 강화 (Rate Limiter, CSRF)
 
-#### Phase 1.14: 이메일 기반 로그인 시스템 - Step 1~3 완료 (2025-10-07)
-
-**목표**: 기존 OAuth 시스템에 이메일 기반 인증 추가
-
-**Step 1: 데이터베이스 준비 완료** ✅
-
-- **User 모델 확장**:
-  - `email`: `String` → `String?` (nullable, 이메일 로그인용)
-  - `password`: `String?` 추가 (bcrypt 해시값 저장용)
-  - `provider`: `String` → `String?` (nullable, 'email' 추가)
-  - `providerId`: `String` → `String?` (nullable, OAuth용)
-  - `emailVerified`: `DateTime?` 추가 (이메일 인증 시각)
-
-- **UserProfile 모델 확장**:
-  - `displayName`: `String?` 추가 (표시 이름)
-  - `bio`: `String?` 추가 (자기소개)
-  - `isLocalExpert`: `Boolean` 추가 (현지인 전문가 여부)
-
-- **인증 토큰 모델 추가**:
-  - `EmailVerificationToken`: 이메일 인증용 (24시간 만료)
-  - `PasswordResetToken`: 비밀번호 재설정용 (1시간 만료)
-
-**Step 2: 백엔드 회원가입 API 완료** ✅
-
-- **Zod 스키마 정의** ([packages/database/src/types/auth.ts](packages/database/src/types/auth.ts)):
-  - `RegisterSchema`: 회원가입 검증
-  - `LoginSchema`, `PasswordResetRequestSchema`, `PasswordResetConfirmSchema`
-  - `EmailVerificationSchema`, `ResendVerificationSchema`
-
-- **PasswordService 구현** ([packages/database/src/services/password.service.ts](packages/database/src/services/password.service.ts)):
-  - bcrypt 기반 (saltRounds: 10)
-  - `IPasswordService` 인터페이스 + 싱글톤
-
-- **AuthRepository 구현** ([packages/database/src/repositories/auth.repository.ts](packages/database/src/repositories/auth.repository.ts)):
-  - 사용자 조회/생성, 이메일 인증, 비밀번호 재설정 토큰 관리
-
-- **AuthService 구현** ([packages/database/src/services/auth.service.ts](packages/database/src/services/auth.service.ts)):
-  - 회원가입, 로그인, 이메일 인증, 비밀번호 재설정 비즈니스 로직
-
-- **EmailAuthController & Router** ([apps/api/src/controllers/emailAuthController.ts](apps/api/src/controllers/emailAuthController.ts), [apps/api/src/routes/emailAuth.ts](apps/api/src/routes/emailAuth.ts)):
-  - `POST /api/auth/email/register` - 회원가입 ✅
-  - `POST /api/auth/email/login` - 로그인
-  - `GET /api/auth/email/verify?token=xxx` - 이메일 인증
-  - `POST /api/auth/email/resend-verification` - 인증 재발송
-  - `POST /api/auth/email/password-reset` - 비밀번호 재설정 요청
-  - `POST /api/auth/email/password-reset/confirm` - 비밀번호 재설정 확인
-
-- **Prisma 문제 해결**:
-  - Prisma Client import 경로 수정: `../node_modules/.prisma/client` → `@prisma/client`
-  - Monorepo 환경 Prisma Client 경로 이슈 해결
-  - DB 스키마 완전 동기화 (`npx prisma db push --force-reset`)
-
-- **API 테스트 성공**:
-  - ✅ 회원가입 API 정상 작동
-  - ✅ 중복 이메일 검증 작동 (409 Conflict)
-  - ✅ DB에 사용자 정상 생성 (`provider='email'`, `has_password=true`)
-
-**Step 3: 백엔드 로그인 API 완료** ✅
-
-- **AuthService 로그인 메서드 구현**:
-  - `login(input: LoginInput): Promise<User>` 메서드 추가
-  - 비밀번호 검증, 계정 활성화 상태 확인 로직
-  - `updateLastLoginAt` 메서드 추가 (마지막 로그인 시간 업데이트)
-
-- **NextAuth CredentialsProvider 설정** ([apps/web/src/lib/auth.ts](apps/web/src/lib/auth.ts)):
-  - `CredentialsProvider` 추가 (이메일/비밀번호 로그인)
-  - API 서버 `/api/auth/email/login` 호출하는 `authorize` 콜백
-  - OAuth와 통합된 인증 시스템 (OCP 원칙 준수)
-  - JWT 콜백에서 Credentials 로그인 처리
-
-- **통합 테스트 성공**:
-  - ✅ 이메일 로그인 API 정상 작동 (200 OK)
-  - ✅ 잘못된 비밀번호 에러 처리 (401 Unauthorized)
-  - ✅ Docker 환경에서 정상 작동
-  - ✅ NextAuth 세션 관리 정상 작동
-
-**다음 단계**: Step 4 (프론트엔드 회원가입 페이지 구현)
-
-### Phase 1.13 (보류): Docker 컨테이너화
-
-**우선순위**: Phase 1.14 (이메일 로그인) 우선 진행 후 재검토
-
-1. Prisma 바이너리 문제 해결
-   - 네트워크 안정 환경에서 재시도
-   - 또는 Pre-built binary 포함 방식 검토
-2. 전체 스택 Docker 실행 검증
-3. Docker 문서 업데이트
-
-### Phase 1.15: 기존 문제 해결 (백로그)
-
+### 백로그
 - 검색 기능 무한 루프 해결
 - Hydration 에러 해결
 - Rate Limiter 재활성화
 
-### Phase 2.0: 고급 기능
+---
 
-- 실시간 채팅 시스템
-- AI 기반 스마트 검색
-- 사용자 랭킹 시스템
-- 모바일 앱 개발
-
-### Phase 2.1: AI 기능
-
-- AI 답변 추천
-- 스마트 태그 생성
-- 개인화 추천 시스템
-
-## 개발 환경 운영
+## 🛠️ 개발 환경 운영
 
 ### 서버 실행
-
 ```bash
-# Web Server (포트 3000)
-cd apps/web && npm run dev
+# Docker 환경 (권장)
+docker-compose up -d
 
-# API Server (포트 4000)
-cd apps/api && npm run dev
-```
-
-### 환경 변수
-
-```bash
-# apps/web/.env.local
-NEXT_PUBLIC_SOCKET_URL=http://localhost:4000
-NEXT_PUBLIC_API_URL=http://localhost:4000/api
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=dev-secret-key-change-in-production
+# 로컬 환경
+cd apps/web && npm run dev    # 포트 3000
+cd apps/api && npm run dev    # 포트 4000
 ```
 
 ### Health Check
-
 ```bash
 curl http://localhost:3000/api/auth/session  # Web
 curl http://localhost:4000/health            # API
 ```
 
-## 문서 구조
+### Prisma Studio
+```bash
+# Docker 환경
+http://localhost:5555
 
-- **01-19**: 비즈니스 기획
-- **20-39**: 기술 명세서
-- **40-59**: 운영 가이드라인
-- **60-79**: 마케팅 자료
-- **80-99**: 회의록 및 기타
-
-상세 문서는 `docs/` 디렉토리 참조.
+# 로컬 환경
+cd packages/database && npx prisma studio
+```
 
 ---
 
-**마지막 업데이트**: 2025-10-07
-**현재 작업**: 이메일 기반 로그인 시스템 (Phase 1.14) 🚀
-**완료 사항**: Step 1 - 데이터베이스 준비 완료 ✅
-**다음 단계**: Step 2 - 백엔드 회원가입 API 구현
-**로컬 개발**: 100% 정상 작동 ✅
+**마지막 업데이트**: 2025-10-08  
+**현재 작업**: Phase 1.14 Step 5 복구 및 Step 6 진행  
+**완료 사항**: Step 1-4 완료 ✅  
+**다음 단계**: Step 5 재구현 → Step 6 보안 강화
