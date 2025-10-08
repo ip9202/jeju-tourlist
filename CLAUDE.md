@@ -36,8 +36,8 @@ docker-compose ps
 **빠른 개발을 위한 최적화된 환경**
 
 ```bash
-# 1. 데이터베이스만 Docker로 실행
-docker-compose up -d postgres redis
+# 1. 데이터베이스 및 Prisma Studio만 Docker로 실행
+docker-compose up -d postgres redis prisma-studio
 
 # 2. API 서버 로컬 실행 (핫리로드)
 cd apps/api && npm run dev
@@ -54,12 +54,13 @@ cd apps/web && npm run dev
 - ✅ **디버깅 용이**: 로컬 개발 도구 활용 가능
 
 **📊 서비스별 실행 방식:**
-| 서비스 | 개발용 | 배포용 | 포트 |
-|--------|--------|--------|------|
-| PostgreSQL | 🐳 Docker | 🐳 Docker | 5433 |
-| Redis | 🐳 Docker | 🐳 Docker | 6379 |
-| API Server | ⚡ 로컬 | 🐳 Docker | 4000 |
-| Web Server | ⚡ 로컬 | 🐳 Docker | 3000 |
+| 서비스 | 개발용 | 배포용 | 포트 | 컨테이너명 |
+|--------|--------|--------|------|-----------|
+| PostgreSQL | 🐳 Docker | 🐳 Docker | 5433 | jeju-postgres |
+| Redis | 🐳 Docker | 🐳 Docker | 6379 | jeju-redis |
+| Prisma Studio | 🐳 Docker | 🐳 Docker | 5555 | jeju-prisma-studio |
+| API Server | ⚡ 로컬 | 🐳 Docker | 4000 | jeju-api |
+| Web Server | ⚡ 로컬 | 🐳 Docker | 3000 | jeju-web |
 
 ---
 
@@ -210,22 +211,31 @@ cd apps/web && npm run dev
 
 ### ⚡ **하이브리드 개발 환경 (현재 실행 중)**
 
+**Docker 컨테이너에서 실행:**
+
 ```
-✅ PostgreSQL 15 (포트 5433) - Docker 컨테이너
-✅ Redis 7 (포트 6379) - Docker 컨테이너
-✅ API Server (포트 4000) - 로컬 실행 (핫리로드)
-✅ Web Server (포트 3000) - 로컬 실행 (핫리로드)
-✅ Prisma Studio (포트 5555) - Docker 컨테이너
+✅ PostgreSQL 15 (jeju-postgres) - 포트 5433
+✅ Redis 7 (jeju-redis) - 포트 6379
+✅ Prisma Studio (jeju-prisma-studio) - 포트 5555
+```
+
+**로컬에서 실행 (핫리로드):**
+
+```
+⚡ API Server - 포트 4000 (npm run dev)
+⚡ Web Server - 포트 3000 (npm run dev)
 ```
 
 ### 🐳 **Docker 전체 스택 환경 (배포용)**
 
+**모든 서비스가 Docker 컨테이너에서 실행:**
+
 ```
-✅ Web Server (localhost:3000) - Next.js 14 + shadcn/ui
-✅ API Server (localhost:4000) - Express.js + Prisma
-✅ PostgreSQL 15 (포트 5433) - 정상
-✅ Redis 7 (포트 6379) - 정상
-✅ Prisma Studio (포트 5555) - 정상
+🐳 PostgreSQL 15 (jeju-postgres) - 포트 5433
+🐳 Redis 7 (jeju-redis) - 포트 6379
+🐳 API Server (jeju-api) - 포트 4000
+🐳 Web Server (jeju-web) - 포트 3000
+🐳 Prisma Studio (jeju-prisma-studio) - 포트 5555
 ```
 
 ### 🎯 **개발 환경 선택 가이드**
@@ -295,11 +305,13 @@ curl http://localhost:4000/health            # API
 ### Prisma Studio
 
 ```bash
-# Docker 환경
-http://localhost:5555
+# Docker 환경 (권장 - 현재 실행 중)
+docker-compose up -d prisma-studio
+# 접속: http://localhost:5555
 
-# 로컬 환경
-cd packages/database && npx prisma studio
+# 로컬 환경 (대안)
+cd packages/database && DATABASE_URL="postgresql://test:test@localhost:5433/asklocal_dev?schema=public" npx prisma studio --port 5555
+# 접속: http://localhost:5555
 ```
 
 ### 🔄 **환경 전환 방법**
