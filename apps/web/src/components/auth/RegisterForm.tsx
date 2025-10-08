@@ -12,11 +12,14 @@ import { PasswordStrengthIndicator } from './PasswordStrengthIndicator';
 
 export function RegisterForm() {
   const { form, onSubmit, isSubmitting, submitError } = useRegisterForm();
-  const { register, formState: { errors }, watch } = form;
+  const { register, formState: { errors }, watch, setValue } = form;
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
 
   const password = watch('password');
+  const agreeToTerms = watch('agreeToTerms');
+  const agreeToPrivacy = watch('agreeToPrivacy');
+  const agreeToMarketing = watch('agreeToMarketing');
 
   return (
     <form onSubmit={onSubmit} className="space-y-6">
@@ -146,7 +149,8 @@ export function RegisterForm() {
         <div className="flex items-start space-x-2">
           <Checkbox
             id="register-terms"
-            {...register('agreeToTerms')}
+            checked={agreeToTerms}
+            onCheckedChange={(checked) => setValue('agreeToTerms', checked as boolean)}
             disabled={isSubmitting}
             aria-invalid={!!errors.agreeToTerms}
           />
@@ -166,7 +170,8 @@ export function RegisterForm() {
         <div className="flex items-start space-x-2">
           <Checkbox
             id="register-privacy"
-            {...register('agreeToPrivacy')}
+            checked={agreeToPrivacy}
+            onCheckedChange={(checked) => setValue('agreeToPrivacy', checked as boolean)}
             disabled={isSubmitting}
             aria-invalid={!!errors.agreeToPrivacy}
           />
@@ -186,7 +191,8 @@ export function RegisterForm() {
         <div className="flex items-start space-x-2">
           <Checkbox
             id="register-marketing"
-            {...register('agreeToMarketing')}
+            checked={agreeToMarketing}
+            onCheckedChange={(checked) => setValue('agreeToMarketing', checked as boolean)}
             disabled={isSubmitting}
           />
           <div className="space-y-1">
