@@ -72,7 +72,7 @@ export function useRegisterForm() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/email/register`,
+        `http://localhost:4000/auth/email/register`,
         {
           method: 'POST',
           headers: {
