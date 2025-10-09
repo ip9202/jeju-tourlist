@@ -255,6 +255,79 @@ cd apps/web && npm run dev
   - ✅ 헤더에 "로그아웃" 버튼 정상 표시
   - ✅ JWT 콜백 → 세션 콜백 데이터 흐름 정상 동작
 
+### Phase 1.17: 로그인 세션 안정화 (2025-10-09)
+
+✅ **완료**:
+
+#### JWEDecryptionFailed 오류 해결 ✅ (2025-10-09)
+
+- **문제**: JWEDecryptionFailed 오류로 인한 세션 유지 실패
+- **원인**: 캐시된 불일치 토큰들이 새 시크릿과 호환되지 않음
+- **해결**:
+  - **서버 완전 종료**: 모든 개발 서버 프로세스 종료
+  - **Next.js 캐시 정리**: `.next/cache/`, `.next/static/`, `.next/server/` 삭제
+  - **서버 재시작**: 깨끗한 상태로 API 서버 및 웹 서버 재시작
+- **결과**:
+  - ✅ JWEDecryptionFailed 오류 완전 해결
+  - ✅ 로그인 세션 정상 유지 확인
+  - ✅ 테스트 계정으로 정상 로그인 (`test1@jeju.com`)
+
+### Phase 1.18: 프로젝트 정리 및 코드 품질 개선 (2025-10-09)
+
+✅ **완료**:
+
+#### 사용하지 않는 파일 및 디렉토리 제거 ✅ (2025-10-09)
+
+- **백업 파일**: `user.repository.ts.backup` 삭제
+- **빈 디렉토리**: `apps/web/apps/web/` (중복 구조) 삭제
+- **빌드 캐시**: `.turbo/`, `dist/`, `tsconfig.tsbuildinfo` 정리
+- **테스트 결과**: `test-results/`, `playwright-report/` 정리
+
+#### Import 경로 최적화 ✅ (2025-10-09)
+
+- **상대 경로 → 절대 경로**: `../../../` → `@/` 변경
+- **영향받은 파일**: 3개 파일 최적화
+  - `apps/web/src/app/auth/error/page.tsx`
+  - `apps/web/src/app/profile/page.tsx`
+  - `apps/web/src/app/admin/page.tsx`
+
+#### ESLint 오류 수정 ✅ (2025-10-09)
+
+- **사용하지 않는 import**: `Calendar` 제거
+- **코드 품질**: 모든 ESLint 오류 해결
+
+### Phase 1.19: 메인 페이지 인기질문 개선 (2025-10-09)
+
+✅ **완료**:
+
+#### 2컬럼 레이아웃 변경 ✅ (2025-10-09)
+
+- **이전**: `grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4` (4컬럼)
+- **현재**: `grid-cols-1 md:grid-cols-2` (2컬럼)
+- **효과**: 더 깔끔하고 집중된 레이아웃
+
+#### 실제 데이터베이스 데이터 연동 ✅ (2025-10-09)
+
+- **API 엔드포인트**: `/api/questions/popular` 연동
+- **데이터 소스**: 목업 데이터 → 실제 데이터베이스 데이터
+- **정렬 기능**: 실제 API와 연동
+  - **인기순**: `/api/questions/popular` (조회수 기준)
+  - **최신순**: `/api/questions?sortBy=createdAt&sortOrder=desc`
+  - **답변완료**: `/api/questions?isResolved=true`
+
+#### 견고한 에러 처리 및 폴백 메커니즘 ✅ (2025-10-09)
+
+- **HTTP 상태 코드 검증**: `response.ok` 체크
+- **API 응답 검증**: `data.success` 체크
+- **폴백 데이터**: 에러 발생 시 목업 데이터 사용
+- **에러 상태 UI**: 사용자 친화적 에러 메시지 표시
+
+#### 데이터 매핑 및 타입 안전성 ✅ (2025-10-09)
+
+- **타입 정의**: `ApiQuestionData` 인터페이스 추가
+- **데이터 변환**: API 응답을 `PopularQuestion` 타입으로 매핑
+- **타입 안전성**: `any` 타입 제거, 명시적 타입 사용
+
 ---
 
 ## 🚨 현재 문제점
@@ -265,6 +338,9 @@ cd apps/web && npm run dev
 - ✅ Prisma 바이너리 문제 해결
 - ✅ Prettier 권한 문제 해결
 - ✅ NextAuth 세션 유지 문제 해결 (Phase 1.16)
+- ✅ JWEDecryptionFailed 오류 해결 (Phase 1.17)
+- ✅ 프로젝트 정리 및 코드 품질 개선 (Phase 1.18)
+- ✅ 메인 페이지 인기질문 개선 (Phase 1.19)
 
 ### 2. 남은 이슈
 
@@ -398,7 +474,7 @@ cd apps/web && npm run dev
 ---
 
 **마지막 업데이트**: 2025-10-09
-**현재 작업**: Phase 1.16 완료 ✅
-**완료 사항**: NextAuth 세션 콜백 수정 + 로그인 세션 유지 문제 해결 ✅
-**시스템 상태**: 모든 핵심 기능 정상 작동 (인증, Q&A, 댓글, 검색) ✅
+**현재 작업**: Phase 1.19 완료 ✅
+**완료 사항**: 메인 페이지 인기질문 2컬럼 레이아웃 + 실제 데이터 연동 ✅
+**시스템 상태**: 모든 핵심 기능 정상 작동 (인증, Q&A, 댓글, 검색, 메인페이지) ✅
 **다음 단계**: Phase 2 디자인 시스템 개선
