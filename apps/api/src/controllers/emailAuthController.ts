@@ -79,6 +79,69 @@ export class EmailAuthController {
   };
 
   /**
+   * 이메일 중복체크
+   * POST /api/auth/email/check
+   */
+  checkEmail = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { email } = req.body;
+
+      if (!email) {
+        res.status(400).json({
+          success: false,
+          error: {
+            code: "MISSING_EMAIL",
+            message: "이메일 주소가 필요합니다",
+          },
+          timestamp: new Date().toISOString(),
+        });
+        return;
+      }
+
+      // 이메일 형식 검증
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        res.status(400).json({
+          success: false,
+          error: {
+            code: "INVALID_EMAIL",
+            message: "올바른 이메일 형식이 아닙니다",
+          },
+          timestamp: new Date().toISOString(),
+        });
+        return;
+      }
+
+      // 이메일 중복체크
+      const isAvailable = await this.authService.checkEmailAvailability(email);
+
+      // 성공 응답
+      res.status(200).json({
+        success: true,
+        data: {
+          email,
+          available: isAvailable,
+          message: isAvailable 
+            ? "사용 가능한 이메일입니다" 
+            : "이미 사용 중인 이메일입니다",
+        },
+        timestamp: new Date().toISOString(),
+      });
+    } catch (error: any) {
+      console.error("Check email error:", error);
+
+      res.status(500).json({
+        success: false,
+        error: {
+          code: "CHECK_FAILED",
+          message: "이메일 중복체크에 실패했습니다",
+        },
+        timestamp: new Date().toISOString(),
+      });
+    }
+  };
+
+  /**
    * 이메일 로그인
    * POST /api/auth/email/login
    */

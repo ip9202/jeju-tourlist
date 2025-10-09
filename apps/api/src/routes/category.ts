@@ -57,6 +57,80 @@ export function createCategoryRouter(prisma: PrismaClient): Router {
   });
 
   /**
+   * 카테고리 생성
+   * POST /api/categories
+   */
+  router.post("/", async (req, res) => {
+    try {
+      const { name, description, color, icon, order } = req.body;
+
+      if (!name) {
+        const response: ApiResponse = {
+          success: false,
+          error: "카테고리 이름은 필수입니다.",
+          timestamp: new Date().toISOString(),
+        };
+        return res.status(400).json(response);
+      }
+
+      // 기존 카테고리와 이름 중복 확인
+      const existingCategory = await prisma.category.findFirst({
+        where: { name },
+      });
+
+      if (existingCategory) {
+        const response: ApiResponse = {
+          success: false,
+          error: "이미 존재하는 카테고리 이름입니다.",
+          timestamp: new Date().toISOString(),
+        };
+        return res.status(409).json(response);
+      }
+
+      // 카테고리 생성
+      const category = await prisma.category.create({
+        data: {
+          name,
+          description: description || "",
+          color: color || "#3B82F6",
+          icon: icon || "📁",
+          order: order || 0,
+          isActive: true,
+        },
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          color: true,
+          icon: true,
+          order: true,
+          isActive: true,
+        },
+      });
+
+      const response: ApiResponse = {
+        success: true,
+        data: category,
+        message: "카테고리가 성공적으로 생성되었습니다.",
+        timestamp: new Date().toISOString(),
+      };
+
+      res.status(201).json(response);
+    } catch (error) {
+      const response: ApiResponse = {
+        success: false,
+        error:
+          error instanceof Error
+            ? error.message
+            : "카테고리 생성 중 오류가 발생했습니다.",
+        timestamp: new Date().toISOString(),
+      };
+
+      res.status(500).json(response);
+    }
+  });
+
+  /**
    * 카테고리 상세 조회
    * GET /api/categories/:id
    */

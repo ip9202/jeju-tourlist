@@ -408,14 +408,40 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
                 size="sm"
                 disabled={currentPage === 1}
                 onClick={() => setCurrentPage(prev => prev - 1)}
+                className="hover:bg-gray-50 border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 이전
               </Button>
+              
+              {/* 페이지 번호 표시 */}
+              <div className="flex items-center space-x-1">
+                {Array.from({ length: Math.min(5, Math.ceil(totalCount / 10)) }, (_, i) => {
+                  const page = i + 1;
+                  const isCurrentPage = page === currentPage;
+                  return (
+                    <Button
+                      key={page}
+                      variant={isCurrentPage ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setCurrentPage(page)}
+                      className={`min-w-[32px] ${
+                        isCurrentPage 
+                          ? "bg-blue-600 text-white border-blue-600 hover:bg-blue-700 font-semibold shadow-md" 
+                          : "hover:bg-gray-50 border-gray-300"
+                      }`}
+                    >
+                      {page}
+                    </Button>
+                  );
+                })}
+              </div>
+              
               <Button
                 variant="outline"
                 size="sm"
                 disabled={currentPage >= Math.ceil(totalCount / 10)}
                 onClick={() => setCurrentPage(prev => prev + 1)}
+                className="hover:bg-gray-50 border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 다음
               </Button>

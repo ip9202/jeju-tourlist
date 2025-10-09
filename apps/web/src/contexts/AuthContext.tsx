@@ -37,24 +37,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // NextAuth 세션을 User 타입으로 변환
   useEffect(() => {
-    // 🔧 개발 환경: 항상 테스트 사용자로 로그인 (임시)
-    if (process.env.NODE_ENV === "development") {
-      const testUser: User = {
-        id: "test-user-id",
-        email: "test@example.com",
-        name: "테스트사용자",
-        profileImage: undefined,
-        provider: AuthProviderEnum.LOCAL,
-        providerId: "test-user-id",
-        role: UserRole.USER,
-        isActive: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      };
-      setUser(testUser);
-      setIsLoading(false);
-      return;
-    }
+    // 🔧 개발 환경: 테스트 사용자 로그인 제거 (실제 인증 사용)
+    // if (process.env.NODE_ENV === "development") {
+    //   const testUser: User = {
+    //     id: "test-user-id",
+    //     email: "test@example.com",
+    //     name: "테스트사용자",
+    //     profileImage: undefined,
+    //     provider: AuthProviderEnum.LOCAL,
+    //     providerId: "test-user-id",
+    //     role: UserRole.USER,
+    //     isActive: true,
+    //     createdAt: new Date(),
+    //     updatedAt: new Date(),
+    //   };
+    //   setUser(testUser);
+    //   setIsLoading(false);
+    //   return;
+    // }
 
     // 테스트 환경에서 인증 상태 강제 설정
     if (typeof window !== "undefined" && window.__AUTH_STATE__) {
@@ -115,11 +115,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
-  const logout = () => {
-    // NextAuth의 signOut 함수 사용
-    import("next-auth/react").then(({ signOut }) => {
-      signOut();
-    });
+  const logout = async () => {
+    try {
+      // NextAuth의 signOut 함수 사용
+      const { signOut } = await import("next-auth/react");
+      await signOut({ 
+        redirect: false, // 리다이렉트 비활성화하여 수동으로 처리
+        callbackUrl: "/" 
+      });
+      
+      // 로컬 상태 즉시 초기화
+      setUser(null);
+      setIsLoading(false);
+      
+      // 페이지 새로고침하여 완전한 로그아웃 상태로 전환
+      window.location.href = "/";
+    } catch (error) {
+      console.error("Logout error:", error);
+      // 에러가 발생해도 로컬 상태는 초기화
+      setUser(null);
+      setIsLoading(false);
+    }
   };
 
   const refreshUser = async () => {

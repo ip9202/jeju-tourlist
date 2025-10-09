@@ -178,8 +178,8 @@
     @apply min-h-[44px] min-w-[44px];
   }
   
-  /* 모든 인터랙티브 요소에 터치 타겟 적용 */
-  button, [role="button"], a[href], input, select, textarea {
+  /* 모든 인터랙티브 요소에 터치 타겟 적용 (체크박스 제외) */
+  button:not([role="checkbox"]), [role="button"]:not([role="checkbox"]), a[href], input:not([type="checkbox"]), select, textarea {
     @apply min-h-[44px] min-w-[44px];
   }
   

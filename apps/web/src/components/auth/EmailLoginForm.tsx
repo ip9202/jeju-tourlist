@@ -25,7 +25,11 @@ const emailLoginSchema = z.object({
 
 type EmailLoginFormData = z.infer<typeof emailLoginSchema>;
 
-export function EmailLoginForm() {
+interface EmailLoginFormProps {
+  callbackUrl?: string;
+}
+
+export function EmailLoginForm({ callbackUrl = '/' }: EmailLoginFormProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -58,8 +62,8 @@ export function EmailLoginForm() {
           setSubmitError('로그인 중 오류가 발생했습니다. 다시 시도해주세요.');
         }
       } else if (result?.ok) {
-        // 로그인 성공 시 홈페이지로 리다이렉트
-        router.push('/');
+        // 로그인 성공 시 callbackUrl로 리다이렉트
+        router.push(callbackUrl);
         router.refresh();
       }
     } catch (error) {

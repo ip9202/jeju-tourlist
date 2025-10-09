@@ -2,13 +2,14 @@
 
 import React from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@jeju-tourlist/ui";
 import { MapPin, Menu, Search } from "lucide-react";
 
 export const Header: React.FC = () => {
   const router = useRouter();
+  const pathname = usePathname();
   const { isAuthenticated, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState("");
@@ -33,13 +34,13 @@ export const Header: React.FC = () => {
         <nav className="mr-6 hidden md:flex items-center gap-6 text-sm">
           <Link
             href="/questions"
-            className="transition-colors hover:text-foreground/80 text-foreground/60"
+            className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center h-10"
           >
             질문
           </Link>
           <Link
             href="/categories"
-            className="transition-colors hover:text-foreground/80 text-foreground/60"
+            className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center h-10"
           >
             카테고리
           </Link>
@@ -59,18 +60,20 @@ export const Header: React.FC = () => {
             </div>
           </form>
 
+          {/* 질문하기 버튼 - 항상 질문하기 페이지로 리다이렉트 */}
+          <Link href={isAuthenticated ? "/questions/new" : `/auth/signin?callbackUrl=${encodeURIComponent('/questions/new')}`}>
+            <Button size="sm" className="hidden md:inline-flex">
+              질문하기
+            </Button>
+          </Link>
+
           <nav className="flex items-center gap-2">
             {isAuthenticated ? (
-              <>
-                <Link href="/questions/new">
-                  <Button size="sm">질문하기</Button>
-                </Link>
-                <Button variant="ghost" size="sm" onClick={logout}>
-                  로그아웃
-                </Button>
-              </>
+              <Button variant="ghost" size="sm" onClick={logout}>
+                로그아웃
+              </Button>
             ) : (
-              <Link href="/auth/signin">
+              <Link href={`/auth/signin?callbackUrl=${encodeURIComponent(pathname)}`}>
                 <Button variant="ghost" size="sm">
                   로그인
                 </Button>
@@ -105,6 +108,13 @@ export const Header: React.FC = () => {
               onClick={() => setIsMobileMenuOpen(false)}
             >
               카테고리
+            </Link>
+            <Link
+              href={isAuthenticated ? "/questions/new" : `/auth/signin?callbackUrl=${encodeURIComponent('/questions/new')}`}
+              className="text-foreground/60 transition-colors hover:text-foreground"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              질문하기
             </Link>
           </nav>
         </div>

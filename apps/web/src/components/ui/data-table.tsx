@@ -197,20 +197,46 @@ export function DataTable<TData, TValue>({
             {table.getFilteredSelectedRowModel().rows.length}개 중{" "}
             {table.getFilteredRowModel().rows.length}개 행이 선택됨
           </div>
-          <div className="space-x-2">
+          <div className="flex items-center space-x-2">
             <Button
               variant="outline"
               size="sm"
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
+              className="hover:bg-gray-50 border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               이전
             </Button>
+            
+            {/* 페이지 번호 표시 */}
+            <div className="flex items-center space-x-1">
+              {Array.from({ length: table.getPageCount() }, (_, i) => {
+                const page = i + 1;
+                const isCurrentPage = page === table.getState().pagination.pageIndex + 1;
+                return (
+                  <Button
+                    key={page}
+                    variant={isCurrentPage ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => table.setPageIndex(i)}
+                    className={`min-w-[32px] ${
+                      isCurrentPage 
+                        ? "bg-blue-600 text-white border-blue-600 hover:bg-blue-700 font-semibold shadow-md" 
+                        : "hover:bg-gray-50 border-gray-300"
+                    }`}
+                  >
+                    {page}
+                  </Button>
+                );
+              })}
+            </div>
+            
             <Button
               variant="outline"
               size="sm"
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
+              className="hover:bg-gray-50 border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               다음
             </Button>

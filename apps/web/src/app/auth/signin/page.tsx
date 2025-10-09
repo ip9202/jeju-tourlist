@@ -2,10 +2,14 @@
 
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { EmailLoginForm } from '@/components/auth/EmailLoginForm';
 
 export default function SignInPage() {
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get('callbackUrl') || '/';
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
@@ -26,7 +30,7 @@ export default function SignInPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <EmailLoginForm />
+            <EmailLoginForm callbackUrl={callbackUrl} />
             
             {/* 회원가입 링크 */}
             <div className="mt-6 text-center">

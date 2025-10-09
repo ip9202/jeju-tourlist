@@ -8,18 +8,34 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { useRegisterForm } from '@/hooks/useRegisterForm';
+import { useEmailCheck } from '@/hooks/useEmailCheck';
 import { PasswordStrengthIndicator } from './PasswordStrengthIndicator';
 
-export function RegisterForm() {
-  const { form, onSubmit, isSubmitting, submitError } = useRegisterForm();
+interface RegisterFormProps {
+  callbackUrl?: string;
+}
+
+export function RegisterForm({ callbackUrl = '/' }: RegisterFormProps) {
+  const { form, onSubmit, isSubmitting, submitError } = useRegisterForm(callbackUrl);
   const { register, formState: { errors }, watch, setValue } = form;
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
+  
+  // 이메일 중복체크 훅
+  const emailCheck = useEmailCheck();
 
   const password = watch('password');
+  const email = watch('email');
   const agreeToTerms = watch('agreeToTerms');
   const agreeToPrivacy = watch('agreeToPrivacy');
   const agreeToMarketing = watch('agreeToMarketing');
+
+  // 이메일 변경 시 중복체크
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setValue('email', value);
+    emailCheck.checkEmail(value);
+  };
 
   return (
     <form onSubmit={onSubmit} className="space-y-6">
@@ -34,14 +50,65 @@ export function RegisterForm() {
       {/* 이메일 */}
       <div className="space-y-2">
         <Label htmlFor="register-email">이메일</Label>
-        <Input
-          id="register-email"
-          type="email"
-          placeholder="example@email.com"
-          {...register('email')}
-          disabled={isSubmitting}
-          aria-invalid={!!errors.email}
-        />
+        <div className="space-y-1">
+          <Input
+            id="register-email"
+            type="email"
+            placeholder="example@email.com"
+            {...register('email')}
+            onChange={handleEmailChange}
+            disabled={isSubmitting}
+            aria-invalid={!!errors.email}
+          />
+          {/* 이메일 중복체크 상태 표시 */}
+          {email && emailCheck.state !== 'idle' && (
+            <div className="flex items-center space-x-2">
+              {emailCheck.checking && (
+                <div className="flex items-center space-x-1 text-sm text-muted-foreground">
+                  <Loader2 className="h-3 w-3 animate-spin" />
+                  <span>이메일 확인 중...</span>
+                </div>
+              )}
+              {emailCheck.available && (
+                <div className="flex items-center space-x-1 text-sm text-green-600">
+                  <span>✓ 사용 가능한 이메일입니다</span>
+                </div>
+              )}
+              {emailCheck.unavailable && (
+                <div className="flex items-center space-x-1 text-sm text-destructive">
+                  <AlertCircle className="h-3 w-3" />
+                  <span>이미 사용 중인 이메일입니다</span>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => emailCheck.checkEmail(email)}
+                    disabled={emailCheck.isLoading}
+                    className="h-6 px-2 text-xs"
+                  >
+                    다시 확인
+                  </Button>
+                </div>
+              )}
+              {emailCheck.error && (
+                <div className="flex items-center space-x-1 text-sm text-destructive">
+                  <AlertCircle className="h-3 w-3" />
+                  <span>이메일 확인 중 오류가 발생했습니다</span>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => emailCheck.checkEmail(email)}
+                    disabled={emailCheck.isLoading}
+                    className="h-6 px-2 text-xs"
+                  >
+                    다시 시도
+                  </Button>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
         {errors.email && (
           <p className="text-sm text-destructive">{errors.email.message}</p>
         )}
@@ -146,7 +213,7 @@ export function RegisterForm() {
 
       {/* 이용약관 동의 */}
       <div className="space-y-3">
-        <div className="flex items-start space-x-2">
+        <div className="flex items-center space-x-2">
           <Checkbox
             id="register-terms"
             checked={agreeToTerms}
@@ -167,7 +234,7 @@ export function RegisterForm() {
           </div>
         </div>
 
-        <div className="flex items-start space-x-2">
+        <div className="flex items-center space-x-2">
           <Checkbox
             id="register-privacy"
             checked={agreeToPrivacy}
@@ -188,7 +255,7 @@ export function RegisterForm() {
           </div>
         </div>
 
-        <div className="flex items-start space-x-2">
+        <div className="flex items-center space-x-2">
           <Checkbox
             id="register-marketing"
             checked={agreeToMarketing}
@@ -210,13 +277,15 @@ export function RegisterForm() {
       <Button
         type="submit"
         className="w-full"
-        disabled={isSubmitting}
+        disabled={isSubmitting || (email && !emailCheck.available) || emailCheck.isLoading}
       >
         {isSubmitting ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             회원가입 중...
           </>
+        ) : email && !emailCheck.available ? (
+          '이메일을 확인해주세요'
         ) : (
           '회원가입'
         )}

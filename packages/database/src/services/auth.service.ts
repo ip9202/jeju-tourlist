@@ -43,6 +43,13 @@ export interface IAuthService {
   login(input: LoginInput): Promise<User>;
 
   /**
+   * 이메일 중복체크
+   * @param email 이메일 주소
+   * @returns Promise<boolean> 사용 가능하면 true, 중복이면 false
+   */
+  checkEmailAvailability(email: string): Promise<boolean>;
+
+  /**
    * 이메일 인증
    * @param token 이메일 인증 토큰
    * @returns Promise<User>
@@ -176,6 +183,15 @@ export class AuthService implements IAuthService {
     await this.authRepository.updateLastLoginAt(user.id);
 
     return user;
+  }
+
+  // ============================================
+  // 이메일 중복체크
+  // ============================================
+
+  async checkEmailAvailability(email: string): Promise<boolean> {
+    const existingUser = await this.authRepository.findUserByEmail(email);
+    return !existingUser; // 사용자가 없으면 사용 가능 (true), 있으면 중복 (false)
   }
 
   // ============================================

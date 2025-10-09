@@ -98,6 +98,25 @@ services:
       timeout: 10s
       retries: 3
 
+  # Prisma Studio (Optional - can be run locally for better performance)
+  prisma-studio:
+    image: node:20-alpine
+    container_name: jeju-prisma-studio
+    restart: unless-stopped
+    ports:
+      - "5555:5555"
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-test}:${POSTGRES_PASSWORD:-test}@postgres:5432/${POSTGRES_DB:-asklocal_dev}?schema=public
+    volumes:
+      - ./packages/database:/app
+    working_dir: /app
+    networks:
+      - jeju-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: sh -c "npm install -g prisma && prisma studio --port 5555 --hostname 0.0.0.0"
+
 networks:
   jeju-network:
     driver: bridge

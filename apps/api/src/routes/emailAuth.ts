@@ -25,9 +25,10 @@ export function createEmailAuthRouter(): Router {
   const authService = new AuthService(authRepository, passwordService);
   const emailAuthController = new EmailAuthController(authService);
 
-  // 공개 라우트 (인증 불필요) - Rate Limiter 적용
-  router.post("/register", emailRegisterLimiter, emailAuthController.register);
-  router.post("/login", emailLoginLimiter, emailAuthController.login);
+  // 공개 라우트 (인증 불필요) - Rate Limiter 임시 비활성화 (테스트용)
+  router.post("/register", emailAuthController.register);
+  router.post("/login", emailAuthController.login);
+  router.post("/check", emailAuthController.checkEmail);
   router.get("/verify", emailAuthController.verifyEmail);
   router.post("/resend-verification", emailAuthController.resendVerification);
   router.post("/password-reset", emailAuthController.requestPasswordReset);

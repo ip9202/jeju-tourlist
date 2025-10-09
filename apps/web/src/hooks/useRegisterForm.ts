@@ -46,7 +46,7 @@ export const registerFormSchema = z.object({
 
 export type RegisterFormData = z.infer<typeof registerFormSchema>;
 
-export function useRegisterForm() {
+export function useRegisterForm(callbackUrl: string = '/') {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const router = useRouter();
@@ -72,7 +72,7 @@ export function useRegisterForm() {
 
     try {
       const response = await fetch(
-        `http://localhost:4000/auth/email/register`,
+        `http://localhost:4000/api/auth/email/register`,
         {
           method: 'POST',
           headers: {
@@ -96,8 +96,9 @@ export function useRegisterForm() {
         throw new Error(errorData.message || '회원가입에 실패했습니다.');
       }
 
-      // 성공 시 로그인 페이지로 리다이렉트
-      router.push('/auth/signin?message=회원가입이 완료되었습니다. 로그인해주세요.');
+      // 성공 시 로그인 페이지로 리다이렉트 (callbackUrl 포함)
+      const loginUrl = `/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}&message=회원가입이 완료되었습니다. 로그인해주세요.`;
+      router.push(loginUrl);
     } catch (error) {
       console.error('회원가입 에러:', error);
       setSubmitError(
