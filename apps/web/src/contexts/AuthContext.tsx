@@ -37,24 +37,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // NextAuth 세션을 User 타입으로 변환
   useEffect(() => {
-    // 🔧 개발 환경: 테스트 사용자 로그인 제거 (실제 인증 사용)
-    // if (process.env.NODE_ENV === "development") {
-    //   const testUser: User = {
-    //     id: "test-user-id",
-    //     email: "test@example.com",
-    //     name: "테스트사용자",
-    //     profileImage: undefined,
-    //     provider: AuthProviderEnum.LOCAL,
-    //     providerId: "test-user-id",
-    //     role: UserRole.USER,
-    //     isActive: true,
-    //     createdAt: new Date(),
-    //     updatedAt: new Date(),
-    //   };
-    //   setUser(testUser);
-    //   setIsLoading(false);
-    //   return;
-    // }
+    console.log("🔄 AuthContext 세션 업데이트:", {
+      status,
+      hasSession: !!session,
+      sessionUser: session?.user,
+    });
 
     // 테스트 환경에서 인증 상태 강제 설정
     if (typeof window !== "undefined" && window.__AUTH_STATE__) {
@@ -72,6 +59,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           createdAt: new Date(),
           updatedAt: new Date(),
         };
+        console.log("🧪 테스트 사용자 설정:", userData);
         setUser(userData);
         setIsLoading(false);
         return;
@@ -79,11 +67,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
 
     if (status === "loading") {
+      console.log("⏳ 세션 로딩 중...");
       setIsLoading(true);
       return;
     }
 
     if (status === "unauthenticated") {
+      console.log("❌ 인증되지 않음 - 사용자 null 설정");
       setUser(null);
       setIsLoading(false);
       return;
@@ -97,11 +87,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         profileImage: session.user.image || undefined,
         provider: (session.user as any).provider || "local",
         providerId: (session.user as any).providerId || "",
-        role: "user" as UserRole, // 기본값, 실제로는 API에서 가져와야 함
+        role: "user" as UserRole,
         isActive: true,
         createdAt: new Date(),
         updatedAt: new Date(),
       };
+      console.log("✅ 사용자 데이터 설정:", {
+        id: userData.id,
+        email: userData.email,
+        name: userData.name,
+      });
       setUser(userData);
     }
 
@@ -119,15 +114,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       // NextAuth의 signOut 함수 사용
       const { signOut } = await import("next-auth/react");
-      await signOut({ 
+      await signOut({
         redirect: false, // 리다이렉트 비활성화하여 수동으로 처리
-        callbackUrl: "/" 
+        callbackUrl: "/",
       });
-      
+
       // 로컬 상태 즉시 초기화
       setUser(null);
       setIsLoading(false);
-      
+
       // 페이지 새로고침하여 완전한 로그아웃 상태로 전환
       window.location.href = "/";
     } catch (error) {

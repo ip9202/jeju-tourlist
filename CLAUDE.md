@@ -63,6 +63,7 @@ cd apps/web && npm run dev
 | Web Server | ⚡ 로컬 | 🐳 Docker | 3000 | jeju-web |
 
 **📈 현재 데이터 현황 (2025-10-09):**
+
 - **카테고리**: 9개 (맛집, 관광지, 숙박, 교통, 액티비티, 쇼핑, 일반, 문화, 자연)
 - **사용자**: 10명 (테스트 사용자)
 - **질문**: 100개 (카테고리별 분포 정상화 완료)
@@ -203,7 +204,7 @@ cd apps/web && npm run dev
 
 - **문제**: 테스트 데이터 생성 시 카테고리 정보가 질문에 연결되지 않음
 - **원인**: `createQuestions` 함수에서 `categories` 매개변수 누락
-- **해결**: 
+- **해결**:
   - `createQuestions(users, categories)` 함수 시그니처 수정
   - `main()` 함수에서 카테고리 배열 전달
   - 기존 카테고리 없는 질문들 삭제 후 재생성
@@ -221,6 +222,39 @@ cd apps/web && npm run dev
   - `apps/web/src/components/search/SearchResults.tsx` - 검색 결과
   - `apps/web/src/components/ui/data-table.tsx` - 데이터 테이블
 
+### Phase 1.16: NextAuth 세션 콜백 수정 (2025-10-09)
+
+✅ **완료**:
+
+#### 로그인 세션 유지 문제 해결 ✅ (2025-10-09)
+
+- **문제**: 로그인 성공 후 세션이 유지되지 않고 즉시 로그아웃되는 현상
+- **원인**: NextAuth JWT/세션 콜백에서 사용자 데이터가 토큰과 세션으로 제대로 전달되지 않음
+- **해결**:
+  - **JWT 콜백 수정** (`apps/web/src/lib/auth.ts:L67-95`):
+    - `user` 객체 존재 시 사용자 정보를 토큰에 저장하도록 수정
+    - Credentials/OAuth 로그인 구분 로직 추가
+    - 디버깅을 위한 상세한 로그 추가
+  - **세션 콜백 수정** (`apps/web/src/lib/auth.ts:L97-120`):
+    - 토큰의 사용자 정보를 세션 객체로 복사
+    - `token.id` 또는 `token.sub`를 `session.user.id`로 설정
+    - 세션 생성 과정 로깅 추가
+  - **SessionProvider 개선** (`apps/web/src/components/providers/SessionProvider.tsx:L14-18`):
+    - 자동 갱신 간격 설정 (`refetchInterval: 5분`)
+    - 창 포커스 시 세션 갱신 (`refetchOnWindowFocus: true`)
+  - **AuthContext 디버깅 강화** (`apps/web/src/contexts/AuthContext.tsx`):
+    - 세션 업데이트 추적 로그 추가
+    - 사용자 데이터 설정 로그 추가
+- **핵심 개념**:
+  - NextAuth에서 `user` 객체는 최초 로그인 시에만 JWT 콜백에 전달됨
+  - 모든 사용자 정보는 첫 로그인 시 JWT 토큰에 저장해야 함
+  - 이후 요청에서는 토큰의 정보를 세션으로 전달하는 구조
+- **테스트 결과**:
+  - ✅ 이메일 로그인 성공 (`ip9202@gmail.com`)
+  - ✅ 세션 정상 유지 확인
+  - ✅ 헤더에 "로그아웃" 버튼 정상 표시
+  - ✅ JWT 콜백 → 세션 콜백 데이터 흐름 정상 동작
+
 ---
 
 ## 🚨 현재 문제점
@@ -230,6 +264,7 @@ cd apps/web && npm run dev
 - ✅ Docker 환경 동기화 문제 해결
 - ✅ Prisma 바이너리 문제 해결
 - ✅ Prettier 권한 문제 해결
+- ✅ NextAuth 세션 유지 문제 해결 (Phase 1.16)
 
 ### 2. 남은 이슈
 
@@ -362,7 +397,8 @@ cd apps/web && npm run dev
 
 ---
 
-**마지막 업데이트**: 2025-10-09  
-**현재 작업**: Phase 1.15 완료 ✅  
-**완료 사항**: 카테고리 데이터 연결 + 페이징 UI 개선 ✅  
+**마지막 업데이트**: 2025-10-09
+**현재 작업**: Phase 1.16 완료 ✅
+**완료 사항**: NextAuth 세션 콜백 수정 + 로그인 세션 유지 문제 해결 ✅
+**시스템 상태**: 모든 핵심 기능 정상 작동 (인증, Q&A, 댓글, 검색) ✅
 **다음 단계**: Phase 2 디자인 시스템 개선
