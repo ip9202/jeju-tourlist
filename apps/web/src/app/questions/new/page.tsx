@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { Button, Input, Textarea, Text } from "@jeju-tourlist/ui";
 import { AlertCircle, CheckCircle } from "lucide-react";
 import { SubPageHeader } from "@/components/layout/SubPageHeader";
@@ -36,6 +37,7 @@ interface Category {
 
 export default function NewQuestionPage() {
   const router = useRouter();
+  const { data: session, status } = useSession();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
   const [validation, setValidation] = useState<{
@@ -51,6 +53,14 @@ export default function NewQuestionPage() {
     hashtags: "",
     file: null as File | null,
   });
+
+  // 로그인 체크
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      alert("로그인이 필요합니다.");
+      router.push("/auth/signin");
+    }
+  }, [status, router]);
 
   // 카테고리 목록 로드
   useEffect(() => {
@@ -186,6 +196,11 @@ export default function NewQuestionPage() {
         }
       }
 
+      // 로그인 체크
+      if (!session?.user?.id) {
+        throw new Error("로그인이 필요합니다.");
+      }
+
       // API 호출을 위한 데이터 준비
       const requestData = {
         title: formData.title.trim(),
@@ -198,7 +213,7 @@ export default function NewQuestionPage() {
               .filter(tag => tag)
           : [],
         attachments,
-        authorId: "temp-user-id", // 임시 사용자 ID (인증 구현 전)
+        authorId: session.user.id,
       };
 
       console.log("[DEBUG] 요청 데이터:", requestData);

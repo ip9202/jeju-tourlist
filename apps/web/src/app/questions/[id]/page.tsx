@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { Button, Heading, Text, ImageLightbox } from "@jeju-tourlist/ui";
 import {
   ArrowLeft,
@@ -61,6 +62,8 @@ interface Answer {
 
 export default function QuestionDetailPage() {
   const params = useParams();
+  const router = useRouter();
+  const { data: session } = useSession();
   const [question, setQuestion] = useState<Question | null>(null);
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [loading, setLoading] = useState(true);
@@ -113,6 +116,15 @@ export default function QuestionDetailPage() {
   const handleAnswerSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // 로그인 체크
+    if (!session?.user?.id) {
+      setAnswerError("로그인이 필요합니다.");
+      setTimeout(() => {
+        router.push("/auth/signin");
+      }, 1500);
+      return;
+    }
+
     // 답변 검증
     if (!newAnswer.trim()) {
       setAnswerError("답변을 입력해주세요");
@@ -139,7 +151,7 @@ export default function QuestionDetailPage() {
         body: JSON.stringify({
           content: newAnswer.trim(),
           questionId: params.id,
-          authorId: "temp-user-id", // 임시 사용자 ID
+          authorId: session.user.id,
         }),
       });
 
@@ -637,36 +649,47 @@ export default function QuestionDetailPage() {
           <Heading level={3} className="text-lg font-bold text-gray-900 mb-4">
             답변 작성
           </Heading>
-          <form onSubmit={handleAnswerSubmit} className="space-y-4">
-            <div>
-              <textarea
-                value={newAnswer}
-                onChange={e => setNewAnswer(e.target.value)}
-                placeholder="답변을 작성해주세요..."
-                rows={6}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                data-testid="answer-content"
-                disabled={isSubmitting}
-              />
-            </div>
-            {answerError && (
-              <div
-                className="text-red-600 text-sm mt-2"
-                data-testid="answer-error"
-              >
-                {answerError}
-              </div>
-            )}
-            <div className="flex justify-end">
-              <Button
-                type="submit"
-                data-testid="submit-answer"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? "작성 중..." : "답변 작성"}
+          {!session ? (
+            <div className="text-center py-8">
+              <Text className="text-gray-600 mb-4">
+                답변을 작성하려면 로그인이 필요합니다.
+              </Text>
+              <Button onClick={() => router.push("/auth/signin")}>
+                로그인하기
               </Button>
             </div>
-          </form>
+          ) : (
+            <form onSubmit={handleAnswerSubmit} className="space-y-4">
+              <div>
+                <textarea
+                  value={newAnswer}
+                  onChange={e => setNewAnswer(e.target.value)}
+                  placeholder="답변을 작성해주세요..."
+                  rows={6}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  data-testid="answer-content"
+                  disabled={isSubmitting}
+                />
+              </div>
+              {answerError && (
+                <div
+                  className="text-red-600 text-sm mt-2"
+                  data-testid="answer-error"
+                >
+                  {answerError}
+                </div>
+              )}
+              <div className="flex justify-end">
+                <Button
+                  type="submit"
+                  data-testid="submit-answer"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "작성 중..." : "답변 작성"}
+                </Button>
+              </div>
+            </form>
+          )}
         </div>
       </div>
 
