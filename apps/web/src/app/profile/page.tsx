@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useAuth } from "../../contexts/AuthContext";
-import { ProtectedRoute } from "../../components/auth/ProtectedRoute";
-import { Button } from "../../components/ui/button";
-import { SubPageHeader } from "../../components/layout/SubPageHeader";
+import { useAuth } from "@/contexts/AuthContext";
+import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { Button } from "@/components/ui/button";
+import { SubPageHeader } from "@/components/layout/SubPageHeader";
 import { Header } from "@/components/layout/Header";
 import { User, Settings, Edit3, Save, X } from "lucide-react";
 

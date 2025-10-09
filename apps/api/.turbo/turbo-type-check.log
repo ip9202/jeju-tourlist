@@ -1,6 +1,0 @@
-
-> @jeju-tourlist/api@1.0.0 type-check /Users/ip9202/develop/vibe/jeju-tourlist/apps/api
-> tsc --noEmit
-
- ELIFECYCLE  Command failed.
- WARN   Local package.json exists, but node_modules missing, did you mean to install?

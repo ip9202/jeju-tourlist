@@ -1,26 +1,37 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../components/ui/card"
-import { Badge } from "../../components/ui/badge"
-import { Button } from "../../components/ui/button"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs"
-import { UserRankingTable, UserRanking } from "../../components/admin/UserRankingTable"
-import { QuestionStatsTable, QuestionStats } from "../../components/admin/QuestionStatsTable"
-import { 
-  Users, 
-  MessageSquare, 
-  TrendingUp, 
+import * as React from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  UserRankingTable,
+  UserRanking,
+} from "@/components/admin/UserRankingTable";
+import {
+  QuestionStatsTable,
+  QuestionStats,
+} from "@/components/admin/QuestionStatsTable";
+import {
+  Users,
+  MessageSquare,
+  TrendingUp,
   Activity,
-  Calendar,
   BarChart3,
-  Settings
-} from "lucide-react"
+  Settings,
+} from "lucide-react";
 
 /**
  * 관리자 대시보드 페이지
  * 사용자 랭킹, 질문 통계, 시스템 현황을 종합적으로 표시
- * 
+ *
  * SOLID 원칙 적용:
  * - Single Responsibility: 관리자 대시보드 표시만 담당
  * - Open/Closed: 새로운 통계 섹션 추가 가능
@@ -43,7 +54,7 @@ export default function AdminDashboard() {
       likesReceived: 892,
       joinDate: "2024-01-15",
       lastActive: "2024-01-23",
-      status: "active"
+      status: "active",
     },
     {
       id: "2",
@@ -57,7 +68,7 @@ export default function AdminDashboard() {
       likesReceived: 756,
       joinDate: "2024-01-20",
       lastActive: "2024-01-23",
-      status: "active"
+      status: "active",
     },
     {
       id: "3",
@@ -71,7 +82,7 @@ export default function AdminDashboard() {
       likesReceived: 623,
       joinDate: "2024-01-10",
       lastActive: "2024-01-22",
-      status: "active"
+      status: "active",
     },
     {
       id: "4",
@@ -85,7 +96,7 @@ export default function AdminDashboard() {
       likesReceived: 445,
       joinDate: "2024-01-25",
       lastActive: "2024-01-23",
-      status: "active"
+      status: "active",
     },
     {
       id: "5",
@@ -99,9 +110,9 @@ export default function AdminDashboard() {
       likesReceived: 398,
       joinDate: "2024-01-18",
       lastActive: "2024-01-21",
-      status: "inactive"
-    }
-  ]
+      status: "inactive",
+    },
+  ];
 
   const questionStatsData: QuestionStats[] = [
     {
@@ -110,7 +121,7 @@ export default function AdminDashboard() {
       author: {
         id: "1",
         name: "김제주",
-        avatar: "/avatars/kim-jeju.jpg"
+        avatar: "/avatars/kim-jeju.jpg",
       },
       category: "여행코스",
       tags: ["제주도", "3박4일", "여행코스", "추천"],
@@ -120,7 +131,7 @@ export default function AdminDashboard() {
       createdAt: "2024-01-20",
       updatedAt: "2024-01-23",
       status: "open",
-      priority: "high"
+      priority: "high",
     },
     {
       id: "q2",
@@ -128,7 +139,7 @@ export default function AdminDashboard() {
       author: {
         id: "2",
         name: "이여행",
-        avatar: "/avatars/lee-travel.jpg"
+        avatar: "/avatars/lee-travel.jpg",
       },
       category: "교통",
       tags: ["렌터카", "교통", "추천"],
@@ -138,7 +149,7 @@ export default function AdminDashboard() {
       createdAt: "2024-01-19",
       updatedAt: "2024-01-22",
       status: "resolved",
-      priority: "medium"
+      priority: "medium",
     },
     {
       id: "q3",
@@ -146,7 +157,7 @@ export default function AdminDashboard() {
       author: {
         id: "3",
         name: "박관광",
-        avatar: "/avatars/park-tour.jpg"
+        avatar: "/avatars/park-tour.jpg",
       },
       category: "날씨",
       tags: ["날씨", "기후", "제주도"],
@@ -156,7 +167,7 @@ export default function AdminDashboard() {
       createdAt: "2024-01-18",
       updatedAt: "2024-01-23",
       status: "open",
-      priority: "high"
+      priority: "high",
     },
     {
       id: "q4",
@@ -164,7 +175,7 @@ export default function AdminDashboard() {
       author: {
         id: "4",
         name: "최제주도",
-        avatar: "/avatars/choi-jeju.jpg"
+        avatar: "/avatars/choi-jeju.jpg",
       },
       category: "맛집",
       tags: ["맛집", "음식", "추천", "제주도"],
@@ -174,7 +185,7 @@ export default function AdminDashboard() {
       createdAt: "2024-01-17",
       updatedAt: "2024-01-23",
       status: "resolved",
-      priority: "medium"
+      priority: "medium",
     },
     {
       id: "q5",
@@ -182,7 +193,7 @@ export default function AdminDashboard() {
       author: {
         id: "5",
         name: "정여행자",
-        avatar: "/avatars/jung-traveler.jpg"
+        avatar: "/avatars/jung-traveler.jpg",
       },
       category: "숙소",
       tags: ["숙소", "예약", "제주도"],
@@ -192,9 +203,9 @@ export default function AdminDashboard() {
       createdAt: "2024-01-16",
       updatedAt: "2024-01-20",
       status: "closed",
-      priority: "low"
-    }
-  ]
+      priority: "low",
+    },
+  ];
 
   const stats = {
     totalUsers: 1234,
@@ -203,8 +214,8 @@ export default function AdminDashboard() {
     totalAnswers: 2341,
     totalViews: 45678,
     todayQuestions: 12,
-    todayAnswers: 45
-  }
+    todayAnswers: 45,
+  };
 
   return (
     <div className="container mx-auto py-6 space-y-6">
@@ -236,7 +247,9 @@ export default function AdminDashboard() {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.totalUsers.toLocaleString()}</div>
+            <div className="text-2xl font-bold">
+              {stats.totalUsers.toLocaleString()}
+            </div>
             <p className="text-xs text-muted-foreground">
               활성 사용자 {stats.activeUsers.toLocaleString()}명
             </p>
@@ -249,7 +262,9 @@ export default function AdminDashboard() {
             <MessageSquare className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.totalQuestions.toLocaleString()}</div>
+            <div className="text-2xl font-bold">
+              {stats.totalQuestions.toLocaleString()}
+            </div>
             <p className="text-xs text-muted-foreground">
               오늘 {stats.todayQuestions}개 질문
             </p>
@@ -262,7 +277,9 @@ export default function AdminDashboard() {
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.totalAnswers.toLocaleString()}</div>
+            <div className="text-2xl font-bold">
+              {stats.totalAnswers.toLocaleString()}
+            </div>
             <p className="text-xs text-muted-foreground">
               오늘 {stats.todayAnswers}개 답변
             </p>
@@ -275,10 +292,10 @@ export default function AdminDashboard() {
             <Activity className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.totalViews.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">
-              평균 조회수 증가 중
-            </p>
+            <div className="text-2xl font-bold">
+              {stats.totalViews.toLocaleString()}
+            </div>
+            <p className="text-xs text-muted-foreground">평균 조회수 증가 중</p>
           </CardContent>
         </Card>
       </div>
@@ -367,5 +384,5 @@ export default function AdminDashboard() {
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }
