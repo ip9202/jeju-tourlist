@@ -4,12 +4,35 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { QuestionCard, QuestionData } from "@/components/feed";
-import { TrendingUp, Clock, MessageCircle, Eye } from "lucide-react";
+import { TrendingUp } from "lucide-react";
+
+/**
+ * API 응답 데이터 타입
+ */
+interface ApiQuestionData {
+  id: string;
+  title: string;
+  content: string;
+  author: {
+    id: string;
+    name: string;
+    avatar: string | null;
+  };
+  category?: {
+    name: string;
+  };
+  tags: string[];
+  createdAt: string;
+  answerCount: number;
+  viewCount: number;
+  likeCount: number;
+  isResolved: boolean;
+}
 
 /**
  * 인기 질문 데이터 타입 (QuestionData와 호환)
  */
-interface PopularQuestion extends Omit<QuestionData, 'isAuthor' | 'updatedAt'> {
+interface PopularQuestion extends Omit<QuestionData, "isAuthor" | "updatedAt"> {
   // QuestionData와 동일한 구조를 유지하되 일부 필드는 선택적으로
 }
 
@@ -43,6 +66,7 @@ export const PopularQuestions: React.FC<PopularQuestionsProps> = ({
 }) => {
   const [questions, setQuestions] = useState<PopularQuestion[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<"popular" | "recent" | "answered">(
     "popular"
   );
@@ -164,10 +188,60 @@ export const PopularQuestions: React.FC<PopularQuestionsProps> = ({
   useEffect(() => {
     const loadQuestions = async () => {
       setLoading(true);
-      // 실제로는 API 호출
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setQuestions(mockQuestions.slice(0, limit));
-      setLoading(false);
+      setError(null);
+      try {
+        // 실제 API 호출
+        const response = await fetch(
+          `http://localhost:4000/api/questions/popular?limit=${limit}`
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (data.success && data.data) {
+          // API 응답 데이터를 PopularQuestion 타입으로 변환
+          const mappedQuestions: PopularQuestion[] = data.data.map(
+            (question: ApiQuestionData) => ({
+              id: question.id,
+              title: question.title,
+              content: question.content,
+              author: {
+                id: question.author.id,
+                name: question.author.name,
+                profileImage: question.author.avatar,
+                isVerified: false, // 현재 데이터에 없음
+              },
+              category: question.category?.name || "일반",
+              tags: question.tags || [],
+              createdAt: question.createdAt,
+              answerCount: question.answerCount,
+              viewCount: question.viewCount,
+              likeCount: question.likeCount,
+              isAnswered: question.isResolved,
+              isBookmarked: false,
+              isLiked: false,
+            })
+          );
+
+          setQuestions(mappedQuestions);
+        } else {
+          throw new Error(data.error || "API 응답 오류");
+        }
+      } catch (error) {
+        console.error("인기 질문 조회 실패:", error);
+        setError(
+          error instanceof Error
+            ? error.message
+            : "질문을 불러오는데 실패했습니다."
+        );
+        // 에러 발생 시 목업 데이터 사용
+        setQuestions(mockQuestions.slice(0, limit));
+      } finally {
+        setLoading(false);
+      }
     };
 
     loadQuestions();
@@ -176,8 +250,72 @@ export const PopularQuestions: React.FC<PopularQuestionsProps> = ({
   /**
    * 정렬 옵션 변경 핸들러
    */
-  const handleSortChange = (newSortBy: "popular" | "recent" | "answered") => {
+  const handleSortChange = async (
+    newSortBy: "popular" | "recent" | "answered"
+  ) => {
     setSortBy(newSortBy);
+
+    // 정렬 변경 시 새로운 데이터 로드
+    setLoading(true);
+    setError(null);
+    try {
+      let apiUrl = `http://localhost:4000/api/questions/popular?limit=${limit}`;
+
+      // 정렬 옵션에 따라 다른 API 엔드포인트 사용
+      if (newSortBy === "recent") {
+        apiUrl = `http://localhost:4000/api/questions?limit=${limit}&sortBy=createdAt&sortOrder=desc`;
+      } else if (newSortBy === "answered") {
+        apiUrl = `http://localhost:4000/api/questions?limit=${limit}&isResolved=true&sortBy=createdAt&sortOrder=desc`;
+      }
+
+      const response = await fetch(apiUrl);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.success && data.data) {
+        const mappedQuestions: PopularQuestion[] = data.data.map(
+          (question: ApiQuestionData) => ({
+            id: question.id,
+            title: question.title,
+            content: question.content,
+            author: {
+              id: question.author.id,
+              name: question.author.name,
+              profileImage: question.author.avatar,
+              isVerified: false,
+            },
+            category: question.category?.name || "일반",
+            tags: question.tags || [],
+            createdAt: question.createdAt,
+            answerCount: question.answerCount,
+            viewCount: question.viewCount,
+            likeCount: question.likeCount,
+            isAnswered: question.isResolved,
+            isBookmarked: false,
+            isLiked: false,
+          })
+        );
+
+        setQuestions(mappedQuestions);
+      } else {
+        throw new Error(data.error || "API 응답 오류");
+      }
+    } catch (error) {
+      console.error("정렬된 질문 조회 실패:", error);
+      setError(
+        error instanceof Error
+          ? error.message
+          : "질문을 불러오는데 실패했습니다."
+      );
+      // 에러 발생 시 목업 데이터 사용
+      setQuestions(mockQuestions.slice(0, limit));
+    } finally {
+      setLoading(false);
+    }
   };
 
   /**
@@ -203,9 +341,7 @@ export const PopularQuestions: React.FC<PopularQuestionsProps> = ({
   const handleBookmark = (questionId: string) => {
     setQuestions(prev =>
       prev.map(q =>
-        q.id === questionId
-          ? { ...q, isBookmarked: !q.isBookmarked }
-          : q
+        q.id === questionId ? { ...q, isBookmarked: !q.isBookmarked } : q
       )
     );
   };
@@ -254,6 +390,15 @@ export const PopularQuestions: React.FC<PopularQuestionsProps> = ({
           )}
         </div>
 
+        {/* 에러 메시지 */}
+        {error && (
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
+            <p className="text-sm text-red-600">
+              ⚠️ {error} (목업 데이터를 표시합니다)
+            </p>
+          </div>
+        )}
+
         {/* 정렬 옵션 - 모바일에서는 스크롤 가능 */}
         <div className="flex space-x-2 overflow-x-auto scrollbar-thin pb-2">
           <button
@@ -291,7 +436,7 @@ export const PopularQuestions: React.FC<PopularQuestionsProps> = ({
 
       {/* 질문 목록 - 새로운 Card 기반 */}
       <div className="p-mobile">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
           {questions.map(question => (
             <QuestionCard
               key={question.id}
