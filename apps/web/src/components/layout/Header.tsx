@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { useAuth } from "@/contexts/AuthContext";
+import { useSession, signOut } from "next-auth/react";
 import { Button } from "@jeju-tourlist/ui";
 import {
   MapPin,
@@ -19,9 +19,30 @@ import { cn } from "@/lib/utils";
 export const Header: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const { isAuthenticated, logout } = useAuth();
+  const { data: session, status } = useSession();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState("");
+
+  const isAuthenticated = status === "authenticated";
+
+  // 디버깅
+  React.useEffect(() => {
+    console.log("🎯 Header 세션 상태:", {
+      status,
+      isAuthenticated,
+      hasSession: !!session,
+      sessionUser: session?.user,
+    });
+  }, [status, session, isAuthenticated]);
+
+  // 로그아웃 핸들러
+  const handleLogout = async () => {
+    console.log("🔴 로그아웃 시작");
+    await signOut({
+      callbackUrl: "/",
+      redirect: true,
+    });
+  };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -99,7 +120,8 @@ export const Header: React.FC = () => {
           <nav className="flex items-center gap-2">
             {isAuthenticated ? (
               <button
-                onClick={logout}
+                type="button"
+                onClick={handleLogout}
                 className={cn(
                   "inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors",
                   "hover:bg-accent hover:text-accent-foreground text-muted-foreground"

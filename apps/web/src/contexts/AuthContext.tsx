@@ -41,6 +41,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       status,
       hasSession: !!session,
       sessionUser: session?.user,
+      timestamp: new Date().toISOString(),
     });
 
     // 테스트 환경에서 인증 상태 강제 설정
@@ -79,6 +80,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return;
     }
 
+    // 세션은 있지만 사용자 정보가 없는 경우 (비정상 상태)
+    if (session && !session.user) {
+      console.log("⚠️ 세션은 있지만 사용자 정보 없음 - 로그아웃 처리");
+      setUser(null);
+      setIsLoading(false);
+      return;
+    }
+
     if (session?.user) {
       const userData: User = {
         id: (session.user as any).id || "",
@@ -98,6 +107,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         name: userData.name,
       });
       setUser(userData);
+    } else {
+      // session이 null이면 로그아웃 상태
+      console.log("ℹ️ 세션 없음 - 로그아웃 상태");
+      setUser(null);
     }
 
     setIsLoading(false);
@@ -111,25 +124,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const logout = async () => {
+    console.log("🚪 로그아웃 함수 호출됨");
     try {
-      // NextAuth의 signOut 함수 사용
-      const { signOut } = await import("next-auth/react");
-      await signOut({
-        redirect: false, // 리다이렉트 비활성화하여 수동으로 처리
-        callbackUrl: "/",
-      });
-
       // 로컬 상태 즉시 초기화
       setUser(null);
       setIsLoading(false);
 
-      // 페이지 새로고침하여 완전한 로그아웃 상태로 전환
+      // NextAuth의 signOut 함수 사용
+      const { signOut } = await import("next-auth/react");
+      console.log("🔓 signOut 함수 호출 시작");
+
+      // signOut 호출 - redirect 없이 세션만 삭제
+      await signOut({
+        redirect: false,
+      });
+
+      console.log("✅ signOut 완료 - 페이지 리로드");
+
+      // 강제 페이지 리로드로 완전한 로그아웃
       window.location.href = "/";
     } catch (error) {
-      console.error("Logout error:", error);
-      // 에러가 발생해도 로컬 상태는 초기화
-      setUser(null);
-      setIsLoading(false);
+      console.error("❌ Logout error:", error);
+      // 에러 발생 시에도 강제 리다이렉트
+      window.location.href = "/";
     }
   };
 

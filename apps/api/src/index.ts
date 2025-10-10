@@ -55,6 +55,7 @@ import { createAnswerRouter } from "./routes/answer";
 import { createAnswerCommentRouter } from "./routes/answerComment";
 import { createCategoryRouter } from "./routes/category";
 import { createEmailAuthRouter } from "./routes/emailAuth";
+import { createStatsRouter } from "./routes/stats";
 import uploadRoutes from "./routes/upload";
 import {
   SocketConfig,
@@ -141,6 +142,9 @@ app.use("/api/categories", createCategoryRouter(prisma));
 
 // 이메일 기반 인증 라우트
 app.use("/api/auth/email", createEmailAuthRouter());
+
+// 통계 라우트
+app.use("/api/stats", createStatsRouter(prisma));
 
 // 파일 업로드 라우트
 app.use("/api/upload", uploadRoutes);

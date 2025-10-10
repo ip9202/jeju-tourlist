@@ -45,61 +45,83 @@ export const RealtimeBanner: React.FC<RealtimeBannerProps> = ({
   const [currentIndex, setCurrentIndex] = useState(0);
 
   /**
-   * 목업 데이터 (실제로는 API에서 최신순으로 가져올 데이터)
-   */
-  const mockQuestions: RealtimeQuestion[] = [
-    {
-      id: "1",
-      title: "제주도 3박 4일 여행 코스 추천해주세요",
-      author: "김제주",
-      authorAvatar: "/avatars/kim-jeju.jpg",
-      createdAt: "2분 전",
-      category: "여행",
-      answerCount: 2,
-    },
-    {
-      id: "2",
-      title: "제주도 렌터카 vs 대중교통 어떤 게 좋을까요?",
-      author: "박여행",
-      authorAvatar: "/avatars/park-travel.jpg",
-      createdAt: "5분 전",
-      category: "교통",
-      answerCount: 5,
-    },
-    {
-      id: "3",
-      title: "제주도 날씨 12월에 어떤가요?",
-      author: "이현지",
-      authorAvatar: "/avatars/lee-local.jpg",
-      createdAt: "8분 전",
-      category: "일반",
-      answerCount: 8,
-    },
-    {
-      id: "4",
-      title: "제주도 맛집 추천해주세요!",
-      author: "최맛집",
-      authorAvatar: "/avatars/choi-food.jpg",
-      createdAt: "12분 전",
-      category: "맛집",
-      answerCount: 12,
-    },
-    {
-      id: "5",
-      title: "제주도 포토스팟 어디가 좋을까요?",
-      author: "정포토",
-      authorAvatar: "/avatars/jung-photo.jpg",
-      createdAt: "15분 전",
-      category: "포토스팟",
-      answerCount: 15,
-    },
-  ];
-
-  /**
-   * 컴포넌트 마운트 시 목업 데이터 설정
+   * 실시간 질문 데이터 로드
    */
   useEffect(() => {
-    setQuestions(mockQuestions);
+    const loadRealtimeQuestions = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:4000/api/stats/realtime-questions?limit=5"
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (data.success && data.data) {
+          setQuestions(data.data);
+        } else {
+          throw new Error(data.error || "실시간 질문을 불러올 수 없습니다.");
+        }
+      } catch (error) {
+        console.error("실시간 질문 로드 실패:", error);
+
+        // 에러 발생 시 기본 목업 데이터 사용
+        const mockQuestions: RealtimeQuestion[] = [
+          {
+            id: "1",
+            title: "제주도 3박 4일 여행 코스 추천해주세요",
+            author: "김제주",
+            authorAvatar: "/avatars/kim-jeju.jpg",
+            createdAt: "2분 전",
+            category: "여행",
+            answerCount: 2,
+          },
+          {
+            id: "2",
+            title: "제주도 렌터카 vs 대중교통 어떤 게 좋을까요?",
+            author: "박여행",
+            authorAvatar: "/avatars/park-travel.jpg",
+            createdAt: "5분 전",
+            category: "교통",
+            answerCount: 5,
+          },
+          {
+            id: "3",
+            title: "제주도 날씨 12월에 어떤가요?",
+            author: "이현지",
+            authorAvatar: "/avatars/lee-local.jpg",
+            createdAt: "8분 전",
+            category: "일반",
+            answerCount: 8,
+          },
+          {
+            id: "4",
+            title: "제주도 맛집 추천해주세요!",
+            author: "최맛집",
+            authorAvatar: "/avatars/choi-food.jpg",
+            createdAt: "12분 전",
+            category: "맛집",
+            answerCount: 12,
+          },
+          {
+            id: "5",
+            title: "제주도 포토스팟 어디가 좋을까요?",
+            author: "정포토",
+            authorAvatar: "/avatars/jung-photo.jpg",
+            createdAt: "15분 전",
+            category: "포토스팟",
+            answerCount: 15,
+          },
+        ];
+
+        setQuestions(mockQuestions);
+      }
+    };
+
+    loadRealtimeQuestions();
   }, []);
 
   /**
