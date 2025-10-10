@@ -5,7 +5,16 @@ import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@jeju-tourlist/ui";
-import { MapPin, Menu, Search } from "lucide-react";
+import {
+  MapPin,
+  Menu,
+  Search,
+  MessageSquare,
+  Grid3x3,
+  LogIn,
+  LogOut,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export const Header: React.FC = () => {
   const router = useRouter();
@@ -25,23 +34,37 @@ export const Header: React.FC = () => {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 max-w-screen-2xl items-center">
-        <Link href="/" className="mr-6 flex items-center space-x-2">
+      <div className="container flex h-16 max-w-screen-2xl items-center px-6 md:px-8">
+        <Link href="/" className="mr-8 flex items-center space-x-2">
           <MapPin className="h-6 w-6" />
           <span className="hidden font-bold sm:inline-block">동네물어봐</span>
         </Link>
 
-        <nav className="mr-6 hidden md:flex items-center gap-6 text-sm">
+        <nav className="mr-8 hidden md:flex items-center gap-2 text-sm">
           <Link
             href="/questions"
-            className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center h-10"
+            className={cn(
+              "inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+              "hover:bg-accent hover:text-accent-foreground",
+              pathname === "/questions"
+                ? "bg-accent text-accent-foreground"
+                : "text-muted-foreground"
+            )}
           >
+            <MessageSquare className="h-4 w-4" />
             질문
           </Link>
           <Link
             href="/categories"
-            className="transition-colors hover:text-foreground/80 text-foreground/60 flex items-center h-10"
+            className={cn(
+              "inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+              "hover:bg-accent hover:text-accent-foreground",
+              pathname === "/categories"
+                ? "bg-accent text-accent-foreground"
+                : "text-muted-foreground"
+            )}
           >
+            <Grid3x3 className="h-4 w-4" />
             카테고리
           </Link>
         </nav>
@@ -61,7 +84,13 @@ export const Header: React.FC = () => {
           </form>
 
           {/* 질문하기 버튼 - 항상 질문하기 페이지로 리다이렉트 */}
-          <Link href={isAuthenticated ? "/questions/new" : `/auth/signin?callbackUrl=${encodeURIComponent('/questions/new')}`}>
+          <Link
+            href={
+              isAuthenticated
+                ? "/questions/new"
+                : `/auth/signin?callbackUrl=${encodeURIComponent("/questions/new")}`
+            }
+          >
             <Button size="sm" className="hidden md:inline-flex">
               질문하기
             </Button>
@@ -69,14 +98,26 @@ export const Header: React.FC = () => {
 
           <nav className="flex items-center gap-2">
             {isAuthenticated ? (
-              <Button variant="ghost" size="sm" onClick={logout}>
+              <button
+                onClick={logout}
+                className={cn(
+                  "inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                  "hover:bg-accent hover:text-accent-foreground text-muted-foreground"
+                )}
+              >
+                <LogOut className="h-4 w-4" />
                 로그아웃
-              </Button>
+              </button>
             ) : (
-              <Link href={`/auth/signin?callbackUrl=${encodeURIComponent(pathname)}`}>
-                <Button variant="ghost" size="sm">
-                  로그인
-                </Button>
+              <Link
+                href={`/auth/signin?callbackUrl=${encodeURIComponent(pathname)}`}
+                className={cn(
+                  "inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                  "hover:bg-accent hover:text-accent-foreground text-muted-foreground"
+                )}
+              >
+                <LogIn className="h-4 w-4" />
+                로그인
               </Link>
             )}
           </nav>
@@ -93,25 +134,46 @@ export const Header: React.FC = () => {
       </div>
 
       {isMobileMenuOpen && (
-        <div className="container border-t py-4 md:hidden">
-          <nav className="flex flex-col space-y-3">
+        <div className="container border-t py-4 md:hidden px-6">
+          <nav className="flex flex-col space-y-2">
             <Link
               href="/questions"
-              className="text-foreground/60 transition-colors hover:text-foreground"
+              className={cn(
+                "inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                "hover:bg-accent hover:text-accent-foreground",
+                pathname === "/questions"
+                  ? "bg-accent text-accent-foreground"
+                  : "text-muted-foreground"
+              )}
               onClick={() => setIsMobileMenuOpen(false)}
             >
+              <MessageSquare className="h-4 w-4" />
               질문
             </Link>
             <Link
               href="/categories"
-              className="text-foreground/60 transition-colors hover:text-foreground"
+              className={cn(
+                "inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                "hover:bg-accent hover:text-accent-foreground",
+                pathname === "/categories"
+                  ? "bg-accent text-accent-foreground"
+                  : "text-muted-foreground"
+              )}
               onClick={() => setIsMobileMenuOpen(false)}
             >
+              <Grid3x3 className="h-4 w-4" />
               카테고리
             </Link>
             <Link
-              href={isAuthenticated ? "/questions/new" : `/auth/signin?callbackUrl=${encodeURIComponent('/questions/new')}`}
-              className="text-foreground/60 transition-colors hover:text-foreground"
+              href={
+                isAuthenticated
+                  ? "/questions/new"
+                  : `/auth/signin?callbackUrl=${encodeURIComponent("/questions/new")}`
+              }
+              className={cn(
+                "inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                "hover:bg-accent hover:text-accent-foreground text-muted-foreground"
+              )}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               질문하기
