@@ -11,13 +11,6 @@ import CredentialsProvider from "next-auth/providers/credentials";
  */
 export const authOptions: NextAuthOptions = {
   debug: true, // 디버그 모드 활성화
-  session: {
-    strategy: "jwt", // JWT 전략으로 다시 변경
-    maxAge: 7 * 24 * 60 * 60, // 7일
-  },
-  jwt: {
-    maxAge: 7 * 24 * 60 * 60, // 7일
-  },
   useSecureCookies: false, // 개발 환경이므로 false
   cookies: {
     sessionToken: {
@@ -26,7 +19,8 @@ export const authOptions: NextAuthOptions = {
         httpOnly: true,
         sameSite: "lax",
         path: "/",
-        secure: false, // 개발 환경이므로 false
+        secure: false,
+        maxAge: 30 * 24 * 60 * 60, // 30일
       },
     },
   },
@@ -256,6 +250,9 @@ export const authOptions: NextAuthOptions = {
         return token;
       }
 
+      // 토큰에 타임스탬프 추가 (캐시 무효화용)
+      token.iat = Math.floor(Date.now() / 1000);
+
       console.log("🔑 최종 토큰:", {
         sub: token.sub,
         id: token.id,
@@ -264,6 +261,7 @@ export const authOptions: NextAuthOptions = {
         provider: token.provider,
         providerId: token.providerId,
         hasValidId: !!(token.id || token.sub),
+        iat: token.iat,
       });
 
       return token;
@@ -278,6 +276,8 @@ export const authOptions: NextAuthOptions = {
         tokenName: token?.name,
         tokenProvider: token?.provider,
         sessionUser: session?.user,
+        fullToken: token,
+        fullSession: session,
       });
 
       // 토큰 유효성 검증
@@ -324,6 +324,14 @@ export const authOptions: NextAuthOptions = {
     error: "/auth/error",
   },
   secret: process.env.NEXTAUTH_SECRET,
+  session: {
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30일
+    updateAge: 24 * 60 * 60, // 24시간마다 갱신
+  },
+  jwt: {
+    maxAge: 30 * 24 * 60 * 60, // 30일
+  },
 };
 
 export default NextAuth(authOptions);

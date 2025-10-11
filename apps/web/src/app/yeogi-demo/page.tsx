@@ -1,13 +1,56 @@
+"use client";
+
 import React from "react";
 import { Search, Star, Clock, Users, Heart, ChevronRight } from "lucide-react";
-import Link from "next/link";
-import { Header } from "@/components/layout/Header";
 
-export default function Home() {
+// 여기요 스타일의 메인 페이지 컴포넌트
+export default function YeogiDemoPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* 헤더 */}
-      <Header />
+      <header className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center">
+              <h1 className="text-2xl font-bold text-blue-600">동네물어봐</h1>
+              <span className="ml-2 text-sm text-gray-500">
+                제주도 여행 Q&A
+              </span>
+            </div>
+            <nav className="hidden md:flex space-x-8">
+              <a
+                href="#"
+                className="text-gray-700 hover:text-blue-600 font-medium"
+              >
+                홈
+              </a>
+              <a
+                href="#"
+                className="text-gray-700 hover:text-blue-600 font-medium"
+              >
+                인기질문
+              </a>
+              <a
+                href="#"
+                className="text-gray-700 hover:text-blue-600 font-medium"
+              >
+                카테고리
+              </a>
+              <a
+                href="#"
+                className="text-gray-700 hover:text-blue-600 font-medium"
+              >
+                전문가
+              </a>
+            </nav>
+            <div className="flex items-center space-x-4">
+              <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                로그인
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
 
       {/* 메인 컨텐츠 */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -28,7 +71,7 @@ export default function Home() {
                 placeholder="궁금한 제주 여행 정보를 검색해보세요"
                 className="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-xl text-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
-              <button className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-700 text-white px-6 py-2 rounded-lg hover:bg-gray-800">
+              <button className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
                 검색
               </button>
             </div>
@@ -65,7 +108,7 @@ export default function Home() {
         <div className="mb-8">
           <div className="flex justify-between items-center mb-6">
             <h3 className="text-2xl font-bold text-gray-900">인기 질문</h3>
-            <button className="text-gray-700 hover:text-gray-900 font-medium flex items-center">
+            <button className="text-blue-600 hover:text-blue-700 font-medium flex items-center">
               더보기 <ChevronRight className="w-4 h-4 ml-1" />
             </button>
           </div>
@@ -128,7 +171,7 @@ export default function Home() {
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
-                    <div className="w-8 h-8 bg-gradient-to-r from-gray-600 to-gray-800 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">
+                    <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">
                       {question.expert.charAt(0)}
                     </div>
                     <div>
@@ -141,7 +184,7 @@ export default function Home() {
                       </div>
                     </div>
                   </div>
-                  <button className="text-gray-700 hover:text-gray-900 text-sm font-medium">
+                  <button className="text-blue-600 hover:text-blue-700 text-sm font-medium">
                     답변보기
                   </button>
                 </div>
@@ -154,7 +197,7 @@ export default function Home() {
         <div className="mb-8">
           <div className="flex justify-between items-center mb-6">
             <h3 className="text-2xl font-bold text-gray-900">인기 전문가</h3>
-            <button className="text-gray-700 hover:text-gray-900 font-medium flex items-center">
+            <button className="text-blue-600 hover:text-blue-700 font-medium flex items-center">
               전문가 더보기 <ChevronRight className="w-4 h-4 ml-1" />
             </button>
           </div>
@@ -194,7 +237,7 @@ export default function Home() {
                 key={index}
                 className="bg-white rounded-xl p-6 text-center shadow-sm hover:shadow-lg transition-shadow border border-gray-100"
               >
-                <div className="w-16 h-16 bg-gradient-to-r from-gray-600 to-gray-800 rounded-full flex items-center justify-center text-white text-2xl mx-auto mb-4">
+                <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-2xl mx-auto mb-4">
                   {expert.avatar}
                 </div>
                 <h4 className="font-semibold text-gray-900 mb-1">
@@ -210,38 +253,29 @@ export default function Home() {
                     ({expert.answers}개 답변)
                   </span>
                 </div>
-                <Link
-                  href="/auth/signin?callbackUrl=/questions/new"
-                  className="w-full bg-gray-700 text-white py-2 rounded-lg hover:bg-gray-800 transition-colors block text-center"
-                >
+                <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors">
                   질문하기
-                </Link>
+                </button>
               </div>
             ))}
           </div>
         </div>
 
         {/* CTA 섹션 */}
-        <div className="bg-gradient-to-r from-gray-700 to-gray-900 rounded-2xl p-8 text-center text-white">
+        <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-center text-white">
           <h3 className="text-2xl font-bold mb-4">
             제주 여행의 모든 것을 한 번에!
           </h3>
-          <p className="text-gray-300 mb-6">
+          <p className="text-blue-100 mb-6">
             현지 전문가들과 함께하는 스마트한 제주 여행 계획
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/questions"
-              className="bg-white text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-center"
-            >
+            <button className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
               지금 시작하기
-            </Link>
-            <Link
-              href="/experts"
-              className="border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-gray-800 transition-colors text-center"
-            >
+            </button>
+            <button className="border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors">
               전문가 되기
-            </Link>
+            </button>
           </div>
         </div>
       </main>

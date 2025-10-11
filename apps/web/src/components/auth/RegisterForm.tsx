@@ -1,48 +1,60 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, AlertCircle, Eye, EyeOff } from 'lucide-react';
-import { useRegisterForm } from '@/hooks/useRegisterForm';
-import { useEmailCheck } from '@/hooks/useEmailCheck';
-import { PasswordStrengthIndicator } from './PasswordStrengthIndicator';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Loader2, AlertCircle, Eye, EyeOff, CheckCircle } from "lucide-react";
+import { useRegisterForm } from "@/hooks/useRegisterForm";
+import { useEmailCheck } from "@/hooks/useEmailCheck";
+import { PasswordStrengthIndicator } from "./PasswordStrengthIndicator";
 
 interface RegisterFormProps {
   callbackUrl?: string;
 }
 
-export function RegisterForm({ callbackUrl = '/' }: RegisterFormProps) {
-  const { form, onSubmit, isSubmitting, submitError } = useRegisterForm(callbackUrl);
-  const { register, formState: { errors }, watch, setValue } = form;
+export function RegisterForm({ callbackUrl = "/" }: RegisterFormProps) {
+  const { form, onSubmit, isSubmitting, submitError } =
+    useRegisterForm(callbackUrl);
+  const {
+    register,
+    formState: { errors },
+    watch,
+    setValue,
+  } = form;
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
-  
+
   // 이메일 중복체크 훅
   const emailCheck = useEmailCheck();
 
-  const password = watch('password');
-  const email = watch('email');
-  const agreeToTerms = watch('agreeToTerms');
-  const agreeToPrivacy = watch('agreeToPrivacy');
-  const agreeToMarketing = watch('agreeToMarketing');
+  const password = watch("password");
+  const email = watch("email");
+  const agreeToTerms = watch("agreeToTerms");
+  const agreeToPrivacy = watch("agreeToPrivacy");
+  const agreeToMarketing = watch("agreeToMarketing");
 
   // 이메일 변경 시 중복체크
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setValue('email', value);
+    setValue("email", value);
     emailCheck.checkEmail(value);
   };
 
   return (
     <form onSubmit={onSubmit} className="space-y-6">
-      {/* 에러 메시지 */}
+      {/* 에러/성공 메시지 */}
       {submitError && (
-        <Alert variant="destructive">
-          <AlertCircle className="h-4 w-4" />
+        <Alert
+          variant={submitError.includes("완료") ? "default" : "destructive"}
+        >
+          {submitError.includes("완료") ? (
+            <CheckCircle className="h-4 w-4 text-green-600" />
+          ) : (
+            <AlertCircle className="h-4 w-4" />
+          )}
           <AlertDescription>{submitError}</AlertDescription>
         </Alert>
       )}
@@ -55,13 +67,13 @@ export function RegisterForm({ callbackUrl = '/' }: RegisterFormProps) {
             id="register-email"
             type="email"
             placeholder="example@email.com"
-            {...register('email')}
+            {...register("email")}
             onChange={handleEmailChange}
             disabled={isSubmitting}
             aria-invalid={!!errors.email}
           />
           {/* 이메일 중복체크 상태 표시 */}
-          {email && emailCheck.state !== 'idle' && (
+          {email && emailCheck.state !== "idle" && (
             <div className="flex items-center space-x-2">
               {emailCheck.checking && (
                 <div className="flex items-center space-x-1 text-sm text-muted-foreground">
@@ -120,9 +132,9 @@ export function RegisterForm({ callbackUrl = '/' }: RegisterFormProps) {
         <div className="relative">
           <Input
             id="register-password"
-            type={showPassword ? 'text' : 'password'}
+            type={showPassword ? "text" : "password"}
             placeholder="영문, 숫자, 특수문자 조합 8자 이상"
-            {...register('password')}
+            {...register("password")}
             disabled={isSubmitting}
             aria-invalid={!!errors.password}
           />
@@ -153,9 +165,9 @@ export function RegisterForm({ callbackUrl = '/' }: RegisterFormProps) {
         <div className="relative">
           <Input
             id="register-password-confirm"
-            type={showPasswordConfirm ? 'text' : 'password'}
+            type={showPasswordConfirm ? "text" : "password"}
             placeholder="비밀번호를 다시 입력해주세요"
-            {...register('passwordConfirm')}
+            {...register("passwordConfirm")}
             disabled={isSubmitting}
             aria-invalid={!!errors.passwordConfirm}
           />
@@ -175,7 +187,9 @@ export function RegisterForm({ callbackUrl = '/' }: RegisterFormProps) {
           </Button>
         </div>
         {errors.passwordConfirm && (
-          <p className="text-sm text-destructive">{errors.passwordConfirm.message}</p>
+          <p className="text-sm text-destructive">
+            {errors.passwordConfirm.message}
+          </p>
         )}
       </div>
 
@@ -186,7 +200,7 @@ export function RegisterForm({ callbackUrl = '/' }: RegisterFormProps) {
           id="register-name"
           type="text"
           placeholder="홍길동"
-          {...register('name')}
+          {...register("name")}
           disabled={isSubmitting}
           aria-invalid={!!errors.name}
         />
@@ -202,7 +216,7 @@ export function RegisterForm({ callbackUrl = '/' }: RegisterFormProps) {
           id="register-nickname"
           type="text"
           placeholder="제주여행러"
-          {...register('nickname')}
+          {...register("nickname")}
           disabled={isSubmitting}
           aria-invalid={!!errors.nickname}
         />
@@ -217,7 +231,9 @@ export function RegisterForm({ callbackUrl = '/' }: RegisterFormProps) {
           <Checkbox
             id="register-terms"
             checked={agreeToTerms}
-            onCheckedChange={(checked) => setValue('agreeToTerms', checked as boolean)}
+            onCheckedChange={checked =>
+              setValue("agreeToTerms", checked as boolean)
+            }
             disabled={isSubmitting}
             aria-invalid={!!errors.agreeToTerms}
           />
@@ -229,7 +245,9 @@ export function RegisterForm({ callbackUrl = '/' }: RegisterFormProps) {
               이용약관에 동의합니다. <span className="text-destructive">*</span>
             </Label>
             {errors.agreeToTerms && (
-              <p className="text-sm text-destructive">{errors.agreeToTerms.message}</p>
+              <p className="text-sm text-destructive">
+                {errors.agreeToTerms.message}
+              </p>
             )}
           </div>
         </div>
@@ -238,7 +256,9 @@ export function RegisterForm({ callbackUrl = '/' }: RegisterFormProps) {
           <Checkbox
             id="register-privacy"
             checked={agreeToPrivacy}
-            onCheckedChange={(checked) => setValue('agreeToPrivacy', checked as boolean)}
+            onCheckedChange={checked =>
+              setValue("agreeToPrivacy", checked as boolean)
+            }
             disabled={isSubmitting}
             aria-invalid={!!errors.agreeToPrivacy}
           />
@@ -247,10 +267,13 @@ export function RegisterForm({ callbackUrl = '/' }: RegisterFormProps) {
               htmlFor="register-privacy"
               className="text-sm font-normal cursor-pointer"
             >
-              개인정보처리방침에 동의합니다. <span className="text-destructive">*</span>
+              개인정보처리방침에 동의합니다.{" "}
+              <span className="text-destructive">*</span>
             </Label>
             {errors.agreeToPrivacy && (
-              <p className="text-sm text-destructive">{errors.agreeToPrivacy.message}</p>
+              <p className="text-sm text-destructive">
+                {errors.agreeToPrivacy.message}
+              </p>
             )}
           </div>
         </div>
@@ -259,7 +282,9 @@ export function RegisterForm({ callbackUrl = '/' }: RegisterFormProps) {
           <Checkbox
             id="register-marketing"
             checked={agreeToMarketing}
-            onCheckedChange={(checked) => setValue('agreeToMarketing', checked as boolean)}
+            onCheckedChange={checked =>
+              setValue("agreeToMarketing", checked as boolean)
+            }
             disabled={isSubmitting}
           />
           <div className="space-y-1">
@@ -277,7 +302,11 @@ export function RegisterForm({ callbackUrl = '/' }: RegisterFormProps) {
       <Button
         type="submit"
         className="w-full"
-        disabled={isSubmitting || (email && !emailCheck.available) || emailCheck.isLoading}
+        disabled={
+          isSubmitting ||
+          (email && !emailCheck.available) ||
+          emailCheck.isLoading
+        }
       >
         {isSubmitting ? (
           <>
@@ -285,9 +314,9 @@ export function RegisterForm({ callbackUrl = '/' }: RegisterFormProps) {
             회원가입 중...
           </>
         ) : email && !emailCheck.available ? (
-          '이메일을 확인해주세요'
+          "이메일을 확인해주세요"
         ) : (
-          '회원가입'
+          "회원가입"
         )}
       </Button>
     </form>

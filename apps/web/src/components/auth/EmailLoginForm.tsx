@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2, AlertCircle, Eye, EyeOff } from "lucide-react";
+import { Loader2, AlertCircle, Eye, EyeOff, CheckCircle } from "lucide-react";
 
 // Zod 스키마 정의
 const emailLoginSchema = z.object({
@@ -60,11 +60,13 @@ export function EmailLoginForm({ callbackUrl = "/" }: EmailLoginFormProps) {
           setSubmitError("로그인 중 오류가 발생했습니다. 다시 시도해주세요.");
         }
       } else if (result?.ok) {
-        console.log("✅ 로그인 성공 - 페이지 리다이렉트");
+        console.log("✅ 로그인 성공 - 3초 후 페이지 리다이렉트");
+        setSubmitError("로그인 성공! 3초 후 메인 페이지로 이동합니다...");
 
-        // 세션 갱신 대기
-        await new Promise(resolve => setTimeout(resolve, 500));
+        // 3초 대기 후 리다이렉트
+        await new Promise(resolve => setTimeout(resolve, 3000));
 
+        console.log("🔄 리다이렉트 시작");
         // 로그인 성공 시 전체 페이지 리다이렉트 (쿠키 적용 보장)
         window.location.href = callbackUrl;
       }
@@ -78,10 +80,16 @@ export function EmailLoginForm({ callbackUrl = "/" }: EmailLoginFormProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      {/* 에러 메시지 */}
+      {/* 에러/성공 메시지 */}
       {submitError && (
-        <Alert variant="destructive">
-          <AlertCircle className="h-4 w-4" />
+        <Alert
+          variant={submitError.includes("성공") ? "default" : "destructive"}
+        >
+          {submitError.includes("성공") ? (
+            <CheckCircle className="h-4 w-4 text-green-600" />
+          ) : (
+            <AlertCircle className="h-4 w-4" />
+          )}
           <AlertDescription>{submitError}</AlertDescription>
         </Alert>
       )}

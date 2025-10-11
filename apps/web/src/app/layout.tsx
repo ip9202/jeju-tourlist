@@ -28,11 +28,14 @@ export default function RootLayout({
     <html lang="ko">
       <body
         className={`${jetBrainsMono.variable} antialiased`}
-        style={{ fontFamily: 'Pretendard Variable, Pretendard, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans KR, Helvetica Neue, Arial, sans-serif' }}
+        style={{
+          fontFamily:
+            "Pretendard Variable, Pretendard, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans KR, Helvetica Neue, Arial, sans-serif",
+        }}
       >
         <SessionProvider>
           <AuthProvider>
-            {children}
+            <DynamicSocketProvider>{children}</DynamicSocketProvider>
           </AuthProvider>
         </SessionProvider>
       </body>

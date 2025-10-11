@@ -99,7 +99,7 @@ app.use(
 
 app.use(
   cors({
-    origin: env.NEXTAUTH_URL,
+    origin: ["http://localhost:3000", "http://localhost:3001"],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],

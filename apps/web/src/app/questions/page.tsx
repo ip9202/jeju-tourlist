@@ -2,12 +2,11 @@
 
 import React, { useState, useEffect, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { Button, Heading, Text } from "@jeju-tourlist/ui";
-import { Filter } from "lucide-react";
+// import { Button, Heading, Text } from "@jeju-tourlist/ui";
+import { Filter, Search, Clock, Users, Eye, Heart } from "lucide-react";
 import { type Question, type SearchFilters } from "@/hooks/useQuestionSearch";
-import { SubPageHeader } from "@/components/layout/SubPageHeader";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
+// import { Header } from "@/components/layout/Header";
+// import { Footer } from "@/components/layout/Footer";
 import Link from "next/link";
 
 interface Category {
@@ -48,155 +47,97 @@ function QuestionsPageContent() {
     const searchParam = searchParams.get("search");
     if (searchParam) {
       setSearchTerm(searchParam);
-    } else {
-      setSearchTerm(""); // URL에 검색 파라미터가 없으면 검색어 초기화
     }
-    setIsInitialized(true);
   }, [searchParams]);
 
-  // 질문 로드 (검색어, 필터, 페이지 변경 시)
+  // 검색어가 변경될 때마다 검색 실행
   useEffect(() => {
-    // 초기화가 완료된 후에만 실행
     if (isInitialized) {
-      loadQuestions();
+      const timeoutId = setTimeout(() => {
+        searchQuestions();
+      }, 500); // 500ms 디바운스
+
+      return () => clearTimeout(timeoutId);
     }
-  }, [searchTerm, filters, pagination.page, isInitialized]);
+  }, [searchTerm, filters, pagination.page]);
+
+  // 초기 로드
+  useEffect(() => {
+    if (!isLoadingRef.current) {
+      searchQuestions();
+      setIsInitialized(true);
+    }
+  }, []);
 
   const loadCategories = async () => {
     try {
-      const API_URL =
-        process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
-      const response = await fetch(`${API_URL}/categories`);
-
-      if (!response.ok) {
-        throw new Error("카테고리 목록을 불러오는데 실패했습니다.");
+      const response = await fetch("/api/categories");
+      if (response.ok) {
+        const data = await response.json();
+        setCategories(data.categories || []);
       }
-
-      const data = await response.json();
-
-      // 카테고리에 아이콘 매핑
-      const iconMap: Record<string, string> = {
-        관광지: "🗺️",
-        맛집: "🍽️",
-        숙박: "🏨",
-        교통: "🚗",
-        쇼핑: "🛍️",
-        기타: "💬",
-        액티비티: "🏄",
-        날씨: "🌤️",
-      };
-
-      const categoriesWithIcons = data.data.map((cat: Category) => ({
-        ...cat,
-        icon: iconMap[cat.name] || "💬",
-      }));
-
-      setCategories(categoriesWithIcons);
     } catch (error) {
       console.error("카테고리 로드 실패:", error);
     }
   };
 
-  const loadQuestions = async () => {
-    // 이미 로딩 중이면 중복 호출 방지
-    if (isLoadingRef.current) {
-      return;
-    }
+  const searchQuestions = async () => {
+    if (isLoadingRef.current) return;
 
     isLoadingRef.current = true;
     setLoading(true);
     setError(null);
 
     try {
-      const API_URL =
-        process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
+      const params = new URLSearchParams({
+        page: pagination.page.toString(),
+        limit: pagination.limit.toString(),
+        sortBy: filters.sortBy,
+        sortOrder: filters.sortOrder,
+      });
 
-      // 쿼리 파라미터 구성
-      const params = new URLSearchParams();
-
-      if (searchTerm) {
-        params.append("query", searchTerm);
+      if (searchTerm.trim()) {
+        params.append("search", searchTerm.trim());
       }
-
       if (filters.categoryId) {
         params.append("categoryId", filters.categoryId);
       }
-
-      if (filters.status === "answered") {
-        params.append("isResolved", "true");
-      } else if (filters.status === "unanswered") {
-        params.append("isResolved", "false");
+      if (filters.status !== "all") {
+        params.append("status", filters.status);
       }
 
-      if (filters.sortBy) {
-        params.append("sortBy", filters.sortBy);
-      }
-
-      if (filters.sortOrder) {
-        params.append("sortOrder", filters.sortOrder);
-      }
-
-      params.append("page", pagination.page.toString());
-      params.append("limit", pagination.limit.toString());
-
-      const url = `${API_URL}/questions?${params.toString()}`;
-      const response = await fetch(url);
-
+      const response = await fetch(`/api/questions?${params}`);
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error("질문을 불러오는데 실패했습니다.");
       }
 
       const data = await response.json();
-
-      // API 응답 데이터를 Question 인터페이스에 맞게 변환
-      const transformedQuestions: Question[] = data.data.map((q: any) => ({
-        id: q.id,
-        title: q.title,
-        content: q.content,
-        author: {
-          id: q.author.id,
-          name: q.author.name,
-          nickname: q.author.nickname,
-          avatar: q.author.avatar,
-        },
-        category: q.category
-          ? {
-              id: q.category.id,
-              name: q.category.name,
-              color: q.category.color,
-            }
-          : null,
-        tags: q.tags || [],
-        location: q.location,
-        status: q.status,
-        isResolved: q.isResolved,
-        isPinned: q.isPinned,
-        viewCount: q.viewCount,
-        likeCount: q.likeCount,
-        answerCount: q.answerCount,
-        createdAt: q.createdAt,
-        updatedAt: q.updatedAt,
-        resolvedAt: q.resolvedAt,
-      }));
-
-      setQuestions(transformedQuestions);
-      setPagination(prev => ({
-        ...prev,
-        total: data.pagination?.total || transformedQuestions.length,
-        totalPages: data.pagination?.totalPages || 1,
-      }));
+      if (data.success) {
+        setQuestions(data.questions || []);
+        setPagination(prev => ({
+          ...prev,
+          total: data.total || 0,
+          totalPages: data.totalPages || 0,
+        }));
+      } else {
+        throw new Error(data.message || "질문을 불러오는데 실패했습니다.");
+      }
     } catch (error) {
-      console.error("질문 목록 로드 실패:", error);
-      setError("질문 목록을 불러오는데 실패했습니다.");
+      console.error("검색 실패:", error);
+      setError(
+        error instanceof Error
+          ? error.message
+          : "알 수 없는 오류가 발생했습니다."
+      );
     } finally {
       setLoading(false);
       isLoadingRef.current = false;
     }
   };
 
-  const handleFilterChange = (key: string, value: string) => {
+  const handleFilterChange = (key: keyof SearchFilters, value: string) => {
     setFilters(prev => ({ ...prev, [key]: value }));
-    setPagination(prev => ({ ...prev, page: 1 }));
+    setPagination(prev => ({ ...prev, page: 1 })); // 필터 변경 시 첫 페이지로
   };
 
   const handlePageChange = (newPage: number) => {
@@ -209,199 +150,393 @@ function QuestionsPageContent() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* 메인 헤더 */}
-      <div className="sticky top-0 z-50">
-        <Header />
-      </div>
+      {/* 헤더 */}
+      <header className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center">
+              <h1 className="text-2xl font-bold text-blue-600">동네물어봐</h1>
+              <span className="ml-2 text-sm text-gray-500">
+                제주도 여행 Q&A
+              </span>
+            </div>
+            <nav className="hidden md:flex space-x-8">
+              <Link
+                href="/"
+                className="text-gray-700 hover:text-gray-900 font-medium"
+              >
+                홈
+              </Link>
+              <Link
+                href="/questions"
+                className="text-gray-700 hover:text-gray-900 font-medium"
+              >
+                인기질문
+              </Link>
+              <Link
+                href="/categories"
+                className="text-gray-700 hover:text-gray-900 font-medium"
+              >
+                카테고리
+              </Link>
+              <Link
+                href="/experts"
+                className="text-gray-700 hover:text-gray-900 font-medium"
+              >
+                전문가
+              </Link>
+            </nav>
+            <div className="flex items-center space-x-4">
+              <Link
+                href="/auth/signin"
+                className="bg-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-800"
+              >
+                로그인
+              </Link>
+            </div>
+          </div>
+        </div>
+      </header>
 
-      {/* SubPageHeader */}
-      <SubPageHeader
-        title="질문 목록"
-        showBackButton={true}
-        showHomeButton={true}
-      />
+      {/* 메인 컨텐츠 */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* 검색 섹션 */}
+        <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
+          <div className="text-center mb-6">
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">
+              제주 여행 질문 모음
+            </h2>
+            <p className="text-gray-600">
+              제주 여행에 대한 모든 궁금증을 해결해보세요
+            </p>
+          </div>
 
-      <div className="max-w-6xl mx-auto px-4 py-4">
-        {/* 필터만 표시 */}
-        <div className="mb-6 mt-2" data-testid="filters-block">
-          <div className="flex items-center space-x-3 text-xs">
-            <div className="flex items-center space-x-1">
-              <Filter className="w-3 h-3 text-gray-500" />
+          <div className="max-w-2xl mx-auto">
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                type="text"
+                placeholder="궁금한 제주 여행 정보를 검색해보세요"
+                value={searchTerm}
+                onChange={e => setSearchTerm(e.target.value)}
+                className="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-xl text-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+              <button className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-700 text-white px-6 py-2 rounded-lg hover:bg-gray-800">
+                검색
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* 필터 섹션 */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-8">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <Filter className="w-5 h-5 text-gray-500" />
+                <span className="text-sm font-medium text-gray-700">필터</span>
+              </div>
+
               <select
                 value={filters.categoryId}
                 onChange={e => handleFilterChange("categoryId", e.target.value)}
-                className="px-2 py-1 border border-gray-300 rounded text-xs"
+                className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
-                <option value="">전체</option>
+                <option value="">전체 카테고리</option>
                 {categories.map(category => (
                   <option key={category.id} value={category.id}>
                     {category.icon} {category.name}
                   </option>
                 ))}
               </select>
+
+              <select
+                value={filters.status}
+                onChange={e => handleFilterChange("status", e.target.value)}
+                className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="all">전체 상태</option>
+                <option value="unresolved">미해결</option>
+                <option value="resolved">해결됨</option>
+              </select>
             </div>
-            <select
-              value={filters.status}
-              onChange={e => handleFilterChange("status", e.target.value)}
-              className="px-2 py-1 border border-gray-300 rounded text-xs"
-            >
-              <option value="all">전체</option>
-              <option value="answered">답변완료</option>
-              <option value="unanswered">답변대기</option>
-            </select>
+
+            <div className="flex items-center space-x-4">
+              <select
+                value={`${filters.sortBy}-${filters.sortOrder}`}
+                onChange={e => {
+                  const [sortBy, sortOrder] = e.target.value.split("-");
+                  setFilters(prev => ({
+                    ...prev,
+                    sortBy: sortBy as any,
+                    sortOrder: sortOrder as any,
+                  }));
+                }}
+                className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="createdAt-desc">최신순</option>
+                <option value="createdAt-asc">오래된순</option>
+                <option value="views-desc">조회수 높은순</option>
+                <option value="views-asc">조회수 낮은순</option>
+                <option value="answers-desc">답변 많은순</option>
+                <option value="answers-asc">답변 적은순</option>
+              </select>
+            </div>
           </div>
         </div>
 
         {/* 질문 목록 */}
-        <div className="space-y-4">
-          {loading && (
-            <div className="text-center py-8">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mx-auto"></div>
-              <Text className="text-gray-600 mt-2">질문을 불러오는 중...</Text>
+        <div className="space-y-6">
+          {loading ? (
+            <div className="text-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+              <p className="mt-4 text-gray-600">질문을 불러오는 중...</p>
             </div>
-          )}
-
-          {error && (
-            <div className="text-center py-8">
-              <Text className="text-red-600">{error}</Text>
+          ) : error ? (
+            <div className="text-center py-12">
+              <div className="text-red-500 text-lg font-medium mb-2">
+                오류가 발생했습니다
+              </div>
+              <p className="text-gray-600">{error}</p>
+              <button
+                onClick={searchQuestions}
+                className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+              >
+                다시 시도
+              </button>
             </div>
-          )}
-
-          {!loading && !error && filteredQuestions.length === 0 && (
-            <div className="text-center py-8">
-              <Text className="text-gray-600">질문이 없습니다.</Text>
+          ) : filteredQuestions.length === 0 ? (
+            <div className="text-center py-12">
+              <div className="text-gray-500 text-lg font-medium mb-2">
+                질문이 없습니다
+              </div>
+              <p className="text-gray-400">다른 검색어나 필터를 시도해보세요</p>
             </div>
-          )}
-
-          {!loading &&
-            !error &&
+          ) : (
             filteredQuestions.map(question => (
               <div
                 key={question.id}
-                className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
+                className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-shadow border border-gray-100 p-6"
               >
-                <div className="flex justify-between items-start mb-3">
-                  <Link href={`/questions/${question.id}`} className="flex-1">
-                    <Heading
-                      level={3}
-                      className="text-lg font-semibold text-gray-900 hover:text-indigo-600 transition-colors"
-                    >
-                      {question.title}
-                    </Heading>
-                  </Link>
-                  <div className="flex items-center space-x-2 ml-4">
-                    {question.category && (
-                      <span className="px-2 py-1 text-xs font-medium rounded-full bg-indigo-100 text-indigo-800">
-                        {question.category.name}
-                      </span>
-                    )}
-                    {question.isResolved ? (
-                      <span className="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center space-x-3">
+                    <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded-full">
+                      {question.category?.name || "일반"}
+                    </span>
+                    {question.isResolved && (
+                      <span className="bg-green-100 text-green-800 text-xs font-medium px-2 py-1 rounded-full">
                         해결됨
                       </span>
-                    ) : (
-                      <span className="px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">
-                        답변대기
-                      </span>
                     )}
                   </div>
+                  <Heart className="w-5 h-5 text-gray-400 hover:text-red-500 cursor-pointer" />
                 </div>
 
-                <Text className="text-gray-600 mb-4 line-clamp-2">
-                  {question.content}
-                </Text>
+                <h3 className="text-lg font-semibold text-gray-900 mb-3 line-clamp-2">
+                  <Link
+                    href={`/questions/${question.id}`}
+                    className="hover:text-blue-600"
+                  >
+                    {question.title}
+                  </Link>
+                </h3>
 
-                <div className="flex items-center justify-between text-sm text-gray-500">
+                <p className="text-gray-600 mb-4 line-clamp-2">
+                  {question.content}
+                </p>
+
+                <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
                   <div className="flex items-center space-x-4">
-                    <span>작성자: {question.author.name}</span>
-                    <span>답변 {question.answerCount}개</span>
-                    <span>조회 {question.viewCount}</span>
-                    <span>좋아요 {question.likeCount}</span>
+                    <span className="flex items-center">
+                      <Users className="w-4 h-4 mr-1" />
+                      {question.answerCount || 0}개 답변
+                    </span>
+                    <span className="flex items-center">
+                      <Eye className="w-4 h-4 mr-1" />
+                      {question.viewCount || 0} 조회
+                    </span>
+                    <span className="flex items-center">
+                      <Clock className="w-4 h-4 mr-1" />
+                      {new Date(question.createdAt).toLocaleDateString()}
+                    </span>
                   </div>
-                  <span>
-                    {new Date(question.createdAt).toLocaleDateString("ko-KR")}
-                  </span>
+                  <div className="flex items-center space-x-2">
+                    <div className="w-6 h-6 bg-gradient-to-r from-gray-600 to-gray-800 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                      {question.author?.name?.charAt(0) || "U"}
+                    </div>
+                    <span className="text-sm text-gray-600">
+                      {question.author?.name || "익명"}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    {question.tags?.slice(0, 3).map((tag, index) => (
+                      <span
+                        key={index}
+                        className="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded"
+                      >
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                  <Link
+                    href={`/questions/${question.id}`}
+                    className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                  >
+                    답변보기 →
+                  </Link>
                 </div>
               </div>
-            ))}
+            ))
+          )}
         </div>
 
         {/* 페이지네이션 */}
-        {!loading && pagination.totalPages > 1 && (
-          <div className="mt-8 flex justify-center items-center space-x-2">
-            <Button
-              variant="outline"
-              onClick={() => handlePageChange(pagination.page - 1)}
-              disabled={pagination.page === 1}
-              className="px-4 py-2 hover:bg-gray-50 border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              이전
-            </Button>
-
-            <div className="flex space-x-1">
-              {Array.from(
-                { length: pagination.totalPages },
-                (_, i) => i + 1
-              ).map(page => {
-                // 현재 페이지 주변 5개 페이지만 표시
-                if (
-                  page === 1 ||
-                  page === pagination.totalPages ||
-                  (page >= pagination.page - 2 && page <= pagination.page + 2)
-                ) {
-                  const isCurrentPage = page === pagination.page;
-                  return (
-                    <Button
-                      key={page}
-                      variant={isCurrentPage ? "default" : "outline"}
-                      onClick={() => handlePageChange(page)}
-                      className={`px-4 py-2 min-w-[40px] ${
-                        isCurrentPage 
-                          ? "bg-blue-600 text-white border-blue-600 hover:bg-blue-700 font-semibold shadow-md" 
-                          : "hover:bg-gray-50 border-gray-300"
-                      }`}
-                    >
-                      {page}
-                    </Button>
-                  );
-                } else if (
-                  page === pagination.page - 3 ||
-                  page === pagination.page + 3
-                ) {
-                  return (
-                    <span key={page} className="px-2 py-2 text-gray-500 font-medium">
-                      ...
-                    </span>
-                  );
-                }
-                return null;
-              })}
+        {pagination.totalPages > 1 && (
+          <div className="flex items-center justify-between mt-8">
+            <div className="text-sm text-gray-700">
+              총 {pagination.total}개 중{" "}
+              {(pagination.page - 1) * pagination.limit + 1}-
+              {Math.min(pagination.page * pagination.limit, pagination.total)}개
+              표시
             </div>
 
-            <Button
-              variant="outline"
-              onClick={() => handlePageChange(pagination.page + 1)}
-              disabled={pagination.page === pagination.totalPages}
-              className="px-4 py-2 hover:bg-gray-50 border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              다음
-            </Button>
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={() => handlePageChange(pagination.page - 1)}
+                disabled={pagination.page === 1}
+                className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                이전
+              </button>
+
+              {Array.from(
+                { length: Math.min(5, pagination.totalPages) },
+                (_, i) => {
+                  const pageNum = i + 1;
+                  const isCurrentPage = pageNum === pagination.page;
+
+                  return (
+                    <button
+                      key={pageNum}
+                      onClick={() => handlePageChange(pageNum)}
+                      className={`px-3 py-2 text-sm font-medium rounded-lg ${
+                        isCurrentPage
+                          ? "bg-gray-700 text-white shadow-md"
+                          : "text-gray-700 bg-white border border-gray-300 hover:bg-gray-50"
+                      }`}
+                    >
+                      {pageNum}
+                    </button>
+                  );
+                }
+              )}
+
+              <button
+                onClick={() => handlePageChange(pagination.page + 1)}
+                disabled={pagination.page === pagination.totalPages}
+                className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                다음
+              </button>
+            </div>
           </div>
         )}
+      </main>
 
-        {/* 결과 정보 */}
-        {!loading && questions.length > 0 && (
-          <div className="mt-4 text-center text-sm text-gray-600">
-            전체 {pagination.total}개 중{" "}
-            {(pagination.page - 1) * pagination.limit + 1}-
-            {Math.min(pagination.page * pagination.limit, pagination.total)}개
-            표시
+      {/* 푸터 */}
+      <footer className="bg-gray-900 text-white py-12 mt-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+              <h4 className="text-lg font-semibold mb-4">동네물어봐</h4>
+              <p className="text-gray-400 text-sm">
+                제주도 여행자와 현지 주민을 연결하는 실시간 Q&A 커뮤니티
+              </p>
+            </div>
+            <div>
+              <h5 className="font-semibold mb-4">서비스</h5>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li>
+                  <a href="#" className="hover:text-white">
+                    질문하기
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white">
+                    답변하기
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white">
+                    전문가
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white">
+                    커뮤니티
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h5 className="font-semibold mb-4">지원</h5>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li>
+                  <a href="#" className="hover:text-white">
+                    고객센터
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white">
+                    이용가이드
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white">
+                    자주묻는질문
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white">
+                    문의하기
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h5 className="font-semibold mb-4">회사</h5>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li>
+                  <a href="#" className="hover:text-white">
+                    회사소개
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white">
+                    채용정보
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white">
+                    이용약관
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white">
+                    개인정보처리방침
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
-        )}
-      </div>
-
-      {/* Footer */}
-      <Footer />
+          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
+            <p>&copy; 2024 동네물어봐. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
@@ -411,7 +546,7 @@ export default function QuestionsPage() {
     <Suspense
       fallback={
         <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
         </div>
       }
     >
