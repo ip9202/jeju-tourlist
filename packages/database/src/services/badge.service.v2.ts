@@ -11,16 +11,42 @@
  * @version 2.0.0
  */
 
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, BadgeType } from "@prisma/client";
 import { IBadgeRepository } from "../repositories/badge.repository";
 import { BadgeRepository } from "../repositories/badge.repository.impl";
-import {
-  BadgeCalculationResult,
-  UserBadgeProgress,
-  BadgeStats,
-  BatchProcessResult,
-  ExpertPointsResult,
-} from "../types/badge";
+
+/**
+ * 배지 계산 결과
+ */
+export interface BadgeCalculationResult {
+  badgeId: string;
+  badgeCode: string;
+  badgeName: string;
+  isEarned: boolean;
+  progress: number;
+  maxProgress: number;
+  message: string;
+  points: number;
+}
+
+/**
+ * 사용자 배지 진행률 정보
+ */
+export interface UserBadgeProgress {
+  badgeId: string;
+  badgeCode: string;
+  badgeName: string;
+  emoji: string;
+  description: string;
+  type: BadgeType;
+  category?: string;
+  progress: number;
+  maxProgress: number;
+  percentage: number;
+  isEarned: boolean;
+  earnedAt?: Date;
+  message: string;
+}
 
 /**
  * 배지 시스템 서비스
@@ -49,7 +75,7 @@ export class BadgeService {
       try {
         // 이미 획득한 배지인지 확인
         const existingUserBadge = await this.badgeRepository.getUserBadgeById(userId, badge.id);
-        if (existingUserBadge?.earnedAt) {
+        if (existingUserBadge?.isEarned) {
           continue;
         }
 
@@ -107,7 +133,7 @@ export class BadgeService {
         progress: eligibility.progress,
         maxProgress: eligibility.maxProgress,
         percentage: Math.min((eligibility.progress / eligibility.maxProgress) * 100, 100),
-        isEarned: !!userBadge?.earnedAt,
+        isEarned: userBadge?.isEarned || false,
         earnedAt: userBadge?.earnedAt || undefined,
         message: eligibility.message,
       });
@@ -131,12 +157,8 @@ export class BadgeService {
    * @param userId - 사용자 ID
    * @returns 배지 통계 정보
    */
-  async getUserBadgeStats(userId: string): Promise<BadgeStats> {
-    const stats = await this.badgeRepository.getBadgeStats(userId);
-    return {
-      ...stats,
-      completionRate: stats.totalBadges > 0 ? (stats.earnedBadges / stats.totalBadges) * 100 : 0,
-    };
+  async getUserBadgeStats(userId: string) {
+    return await this.badgeRepository.getBadgeStats(userId);
   }
 
   /**
@@ -154,11 +176,14 @@ export class BadgeService {
    *
    * @returns 처리 결과 통계
    */
-  async batchProcessAllUsers(): Promise<BatchProcessResult> {
+  async batchProcessAllUsers(): Promise<{
+    processedUsers: number;
+    totalBadgesAwarded: number;
+    errors: string[];
+  }> {
     console.log("🔄 배지 배치 처리 시작...");
-    const startTime = Date.now();
 
-    const activeUsers = await (this.badgeRepository as any).prisma.user.findMany({
+    const activeUsers = await this.badgeRepository["prisma"].user.findMany({
       where: { isActive: true },
       select: { id: true, name: true },
     });
@@ -183,14 +208,12 @@ export class BadgeService {
       }
     }
 
-    const processingTime = Date.now() - startTime;
-    console.log(`✅ 배치 처리 완료: ${processedUsers}명 처리, ${totalBadgesAwarded}개 배지 부여 (${processingTime}ms)`);
+    console.log(`✅ 배치 처리 완료: ${processedUsers}명 처리, ${totalBadgesAwarded}개 배지 부여`);
 
     return {
       processedUsers,
       totalBadgesAwarded,
       errors,
-      processingTime,
     };
   }
 
@@ -201,47 +224,30 @@ export class BadgeService {
    * @param badgeCode - 배지 코드
    * @returns 지급된 포인트
    */
-  async awardExpertPoints(userId: string, badgeCode: string): Promise<ExpertPointsResult> {
+  async awardExpertPoints(userId: string, badgeCode: string): Promise<number> {
     const badge = await this.badgeRepository.findByCode(badgeCode);
     if (!badge || !badge.adoptBonusPoints) {
-      return {
-        userId,
-        badgeCode,
-        pointsAwarded: 0,
-        totalPoints: 0,
-      };
+      return 0;
     }
 
     // 사용자가 해당 배지를 보유하고 있는지 확인
     const userBadge = await this.badgeRepository.getUserBadgeByCode(userId, badgeCode);
-    if (!userBadge?.earnedAt) {
-      return {
-        userId,
-        badgeCode,
-        pointsAwarded: 0,
-        totalPoints: 0,
-      };
+    if (!userBadge?.isEarned) {
+      return 0;
     }
 
     // 포인트 지급 (실제 구현에서는 PointService 사용)
-    const updatedUser = await (this.badgeRepository as any).prisma.user.update({
+    await this.badgeRepository["prisma"].user.update({
       where: { id: userId },
       data: {
-        points: {
+        totalPoints: {
           increment: badge.adoptBonusPoints,
         },
       },
-      select: { points: true },
     });
 
     console.log(`💰 전문가 포인트 지급: ${userId}에게 ${badge.adoptBonusPoints}포인트 (${badge.name})`);
-    
-    return {
-      userId,
-      badgeCode,
-      pointsAwarded: badge.adoptBonusPoints,
-      totalPoints: updatedUser.points,
-    };
+    return badge.adoptBonusPoints;
   }
 
   /**

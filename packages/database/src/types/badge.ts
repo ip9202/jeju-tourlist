@@ -1,114 +1,181 @@
-import { z } from "zod";
+/**
+ * 배지 시스템 타입 정의
+ *
+ * @description
+ * - 배지 관련 모든 타입 정의
+ * - TypeScript 타입 안전성 보장
+ * - API 인터페이스 및 DTO 정의
+ *
+ * @author 동네물어봐 개발팀
+ * @version 1.0.0
+ */
 
-// 배지 생성 스키마
-export const CreateBadgeSchema = z.object({
-  name: z.string().min(1).max(50),
-  description: z.string().min(1).max(200),
-  icon: z.string().min(1).max(50),
-  color: z.string().regex(/^#[0-9A-Fa-f]{6}$/),
-  category: z.string().min(1).max(30),
-  points: z.number().int().min(0).default(0),
-  condition: z.record(z.string(), z.any()),
-  isActive: z.boolean().default(true),
-});
+import { BadgeType } from "@prisma/client";
 
-export type CreateBadgeData = z.infer<typeof CreateBadgeSchema>;
-
-// 배지 업데이트 스키마
-export const UpdateBadgeSchema = CreateBadgeSchema.partial().omit({
-  name: true,
-});
-
-export type UpdateBadgeData = z.infer<typeof UpdateBadgeSchema>;
-
-// 사용자 배지 부여 스키마
-export const AwardBadgeSchema = z.object({
-  userId: z.string().cuid(),
-  badgeId: z.string().cuid(),
-});
-
-export type AwardBadgeData = z.infer<typeof AwardBadgeSchema>;
-
-// 배지 검색 옵션
-export interface BadgeSearchOptions {
-  query?: string;
+/**
+ * 배지 생성 데이터
+ */
+export interface CreateBadgeData {
+  code: string;
+  name: string;
+  emoji: string;
+  description: string;
+  type: BadgeType;
   category?: string;
+  requiredAnswers: number;
+  requiredAdoptRate?: number;
+  bonusPoints: number;
+  adoptBonusPoints?: number;
+  requiresGpsAuth?: boolean;
+  requiresSocialAuth?: boolean;
+  requiresDocAuth?: boolean;
   isActive?: boolean;
-  sortBy?: "name" | "points" | "createdAt";
-  sortOrder?: "asc" | "desc";
-  pagination?: {
-    page: number;
-    limit: number;
-  };
 }
 
-// 사용자 배지 검색 옵션
-export interface UserBadgeSearchOptions {
-  userId?: string;
-  badgeId?: string;
+/**
+ * 배지 수정 데이터
+ */
+export interface UpdateBadgeData {
+  name?: string;
+  description?: string;
+  requiredAnswers?: number;
+  requiredAdoptRate?: number;
+  bonusPoints?: number;
+  adoptBonusPoints?: number;
+  isActive?: boolean;
+}
+
+/**
+ * 배지 조회 옵션
+ */
+export interface BadgeQueryOptions {
   category?: string;
-  dateFrom?: Date;
-  dateTo?: Date;
-  sortBy?: "createdAt" | "points";
-  sortOrder?: "asc" | "desc";
-  pagination?: {
-    page: number;
-    limit: number;
-  };
+  type?: BadgeType;
+  isActive?: boolean;
+  page?: number;
+  limit?: number;
 }
 
-// 배지 통계
+/**
+ * 사용자 배지 조회 옵션
+ */
+export interface UserBadgeQueryOptions {
+  userId: string;
+  category?: string;
+  type?: BadgeType;
+  isEarned?: boolean;
+  page?: number;
+  limit?: number;
+}
+
+/**
+ * 배지 조건 검증 결과
+ */
+export interface BadgeConditionResult {
+  badgeId: string;
+  isEarned: boolean;
+  progress: number;
+  maxProgress: number;
+  message?: string;
+}
+
+/**
+ * 사용자 배지 정보
+ */
+export interface UserBadgeInfo {
+  badgeId: string;
+  badgeCode: string;
+  badgeName: string;
+  emoji: string;
+  description: string;
+  type: BadgeType;
+  category?: string;
+  earnedAt: Date;
+  progress?: number;
+  maxProgress?: number;
+  isEarned: boolean;
+}
+
+/**
+ * 배지 계산 결과
+ */
+export interface BadgeCalculationResult {
+  badgeId: string;
+  badgeCode: string;
+  badgeName: string;
+  isEarned: boolean;
+  progress: number;
+  maxProgress: number;
+  message: string;
+  points: number;
+}
+
+/**
+ * 사용자 배지 진행률 정보
+ */
+export interface UserBadgeProgress {
+  badgeId: string;
+  badgeCode: string;
+  badgeName: string;
+  emoji: string;
+  description: string;
+  type: BadgeType;
+  category?: string;
+  progress: number;
+  maxProgress: number;
+  percentage: number;
+  isEarned: boolean;
+  earnedAt?: Date;
+  message: string;
+}
+
+/**
+ * 배지 통계 정보
+ */
 export interface BadgeStats {
   totalBadges: number;
-  activeBadges: number;
-  totalAwards: number;
-  badgesByCategory: Record<string, number>;
-  mostPopularBadges: Array<{
-    badgeId: string;
-    badgeName: string;
-    awardCount: number;
-  }>;
-}
-
-// 사용자 배지 통계
-export interface UserBadgeStats {
-  totalBadges: number;
+  earnedBadges: number;
   totalPoints: number;
-  badgesByCategory: Record<string, number>;
-  recentBadges: Array<{
-    badgeId: string;
-    badgeName: string;
-    earnedAt: Date;
-  }>;
+  categoryStats: Record<string, { count: number; points: number }>;
+  completionRate: number;
 }
 
-// 배지 목록 아이템
-export interface BadgeListItem {
-  id: string;
-  name: string;
-  description: string;
-  icon: string;
-  color: string;
-  category: string;
-  points: number;
-  isActive: boolean;
-  awardCount: number;
-  createdAt: Date;
-  updatedAt: Date;
+/**
+ * 배치 처리 결과
+ */
+export interface BatchProcessResult {
+  processedUsers: number;
+  totalBadgesAwarded: number;
+  errors: string[];
+  processingTime: number;
 }
 
-// 사용자 배지 목록 아이템
-export interface UserBadgeListItem {
-  id: string;
-  badge: {
-    id: string;
-    name: string;
-    description: string;
-    icon: string;
-    color: string;
-    category: string;
-    points: number;
-  };
+/**
+ * 배지 자격 검증 결과
+ */
+export interface BadgeEligibilityResult {
+  isEligible: boolean;
+  progress: number;
+  maxProgress: number;
+  message: string;
+}
+
+/**
+ * 답변 채택 데이터
+ */
+export interface AnswerAdoptionData {
+  questionId: string;
+  answerId: string;
+  adopterId: string; // 질문 작성자 ID
+  answererId: string; // 답변 작성자 ID
+}
+
+/**
+ * 전문가 포인트 지급 결과
+ */
+export interface ExpertPointsResult {
   userId: string;
-  createdAt: Date;
+  badgeCode: string;
+  pointsAwarded: number;
+  totalPoints: number;
 }

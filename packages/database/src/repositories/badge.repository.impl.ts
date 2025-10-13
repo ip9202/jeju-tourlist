@@ -1,0 +1,489 @@
+/**
+ * 배지 리포지토리 구현체
+ *
+ * @description
+ * - Prisma 기반 배지 데이터 접근 계층
+ * - SOLID 원칙 중 SRP(단일 책임 원칙) 준수
+ * - 데이터베이스 쿼리 최적화 및 트랜잭션 관리
+ *
+ * @author 동네물어봐 개발팀
+ * @version 1.0.0
+ */
+
+import { PrismaClient, Badge, UserBadge } from "@prisma/client";
+import {
+  IBadgeRepository,
+  CreateBadgeData,
+  UpdateBadgeData,
+  BadgeQueryOptions,
+  UserBadgeQueryOptions,
+} from "./badge.repository";
+
+/**
+ * 배지 리포지토리 구현체
+ */
+export class BadgeRepository implements IBadgeRepository {
+  constructor(private prisma: PrismaClient) {}
+
+  /**
+   * 배지 생성
+   */
+  async create(data: CreateBadgeData): Promise<Badge> {
+    return await this.prisma.badge.create({
+      data: {
+        ...data,
+        isActive: data.isActive ?? true,
+        requiresGpsAuth: data.requiresGpsAuth ?? false,
+        requiresSocialAuth: data.requiresSocialAuth ?? false,
+        requiresDocAuth: data.requiresDocAuth ?? false,
+      },
+    });
+  }
+
+  /**
+   * ID로 배지 조회
+   */
+  async findById(id: string): Promise<Badge | null> {
+    return await this.prisma.badge.findUnique({
+      where: { id },
+    });
+  }
+
+  /**
+   * 코드로 배지 조회
+   */
+  async findByCode(code: string): Promise<Badge | null> {
+    return await this.prisma.badge.findUnique({
+      where: { code },
+    });
+  }
+
+  /**
+   * 배지 목록 조회
+   */
+  async findMany(options: BadgeQueryOptions = {}): Promise<Badge[]> {
+    const {
+      category,
+      type,
+      isActive = true,
+      page = 1,
+      limit = 20,
+    } = options;
+
+    const where: any = {};
+
+    if (category) {
+      where.category = category;
+    }
+
+    if (type) {
+      where.type = type;
+    }
+
+    if (isActive !== undefined) {
+      where.isActive = isActive;
+    }
+
+    return await this.prisma.badge.findMany({
+      where,
+      orderBy: [
+        { type: "asc" },
+        { requiredAnswers: "asc" },
+        { createdAt: "desc" },
+      ],
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+  }
+
+  /**
+   * 배지 수정
+   */
+  async update(id: string, data: UpdateBadgeData): Promise<Badge> {
+    return await this.prisma.badge.update({
+      where: { id },
+      data: {
+        ...data,
+        updatedAt: new Date(),
+      },
+    });
+  }
+
+  /**
+   * 배지 삭제 (비활성화)
+   */
+  async delete(id: string): Promise<void> {
+    await this.prisma.badge.update({
+      where: { id },
+      data: { isActive: false },
+    });
+  }
+
+  /**
+   * 사용자에게 배지 부여
+   */
+  async awardBadge(userId: string, badgeId: string): Promise<UserBadge> {
+    return await this.prisma.$transaction(async (tx) => {
+      // 배지 정보 조회
+      const badge = await tx.badge.findUnique({
+        where: { id: badgeId },
+      });
+
+      if (!badge) {
+        throw new Error("배지를 찾을 수 없습니다.");
+      }
+
+      if (!badge.isActive) {
+        throw new Error("비활성화된 배지입니다.");
+      }
+
+      // 중복 부여 방지
+      const existingUserBadge = await tx.userBadge.findUnique({
+        where: {
+          userId_badgeId: {
+            userId,
+            badgeId,
+          },
+        },
+      });
+
+      if (existingUserBadge) {
+        throw new Error("이미 획득한 배지입니다.");
+      }
+
+      // 사용자 배지 생성
+      const userBadge = await tx.userBadge.create({
+        data: {
+          userId,
+          badgeId,
+          earnedAt: new Date(),
+          notified: false,
+        },
+        include: {
+          badge: true,
+        },
+      });
+
+      // 사용자 포인트 업데이트
+      await tx.user.update({
+        where: { id: userId },
+        data: {
+          points: {
+            increment: badge.bonusPoints,
+          },
+        },
+      });
+
+      return userBadge;
+    });
+  }
+
+  /**
+   * 사용자 배지 목록 조회
+   */
+  async getUserBadges(options: UserBadgeQueryOptions): Promise<UserBadge[]> {
+    const {
+      userId,
+      category,
+      type,
+      isEarned,
+      page = 1,
+      limit = 20,
+    } = options;
+
+    const where: any = { userId };
+
+    if (category) {
+      where.badge = { category };
+    }
+
+    if (type) {
+      where.badge = { ...where.badge, type };
+    }
+
+    // isEarned 필드가 없으므로 earnedAt으로 판단
+    if (isEarned !== undefined) {
+      if (isEarned) {
+        where.earnedAt = { not: null };
+      } else {
+        where.earnedAt = null;
+      }
+    }
+
+    return await this.prisma.userBadge.findMany({
+      where,
+      include: {
+        badge: true,
+      },
+      orderBy: { earnedAt: "desc" },
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+  }
+
+  /**
+   * 사용자 특정 배지 조회 (ID)
+   */
+  async getUserBadgeById(userId: string, badgeId: string): Promise<UserBadge | null> {
+    return await this.prisma.userBadge.findUnique({
+      where: {
+        userId_badgeId: {
+          userId,
+          badgeId,
+        },
+      },
+      include: {
+        badge: true,
+      },
+    });
+  }
+
+  /**
+   * 사용자 특정 배지 조회 (코드)
+   */
+  async getUserBadgeByCode(userId: string, badgeCode: string): Promise<UserBadge | null> {
+    return await this.prisma.userBadge.findFirst({
+      where: {
+        userId,
+        badge: {
+          code: badgeCode,
+        },
+      },
+      include: {
+        badge: true,
+      },
+    });
+  }
+
+  /**
+   * 사용자 배지 진행률 업데이트
+   */
+  async updateUserBadgeProgress(userId: string, badgeId: string, _progress: any): Promise<UserBadge> {
+    return await this.prisma.userBadge.update({
+      where: {
+        userId_badgeId: {
+          userId,
+          badgeId,
+        },
+      },
+      data: {
+        // progress 필드가 없으므로 메타데이터로 저장
+        // 실제 구현에서는 별도 테이블이나 JSON 필드 사용
+      },
+      include: {
+        badge: true,
+      },
+    });
+  }
+
+  /**
+   * 사용자 배지 획득 완료 표시
+   */
+  async markBadgeAsEarned(userId: string, badgeId: string): Promise<UserBadge> {
+    return await this.prisma.userBadge.update({
+      where: {
+        userId_badgeId: {
+          userId,
+          badgeId,
+        },
+      },
+      data: {
+        earnedAt: new Date(),
+      },
+      include: {
+        badge: true,
+      },
+    });
+  }
+
+  /**
+   * 사용자 배지 통계 조회
+   */
+  async getBadgeStats(userId: string): Promise<{
+    totalBadges: number;
+    earnedBadges: number;
+    totalPoints: number;
+    categoryStats: Record<string, { count: number; points: number }>;
+  }> {
+    const [userBadges, totalBadges] = await Promise.all([
+      this.prisma.userBadge.findMany({
+        where: { userId, earnedAt: { not: null } },
+        include: { badge: true },
+      }),
+      this.prisma.badge.count({
+        where: { isActive: true },
+      }),
+    ]);
+
+    // 카테고리별 통계
+    const categoryStats = userBadges.reduce(
+      (acc, ub) => {
+        const category = ub.badge.category || "기타";
+        if (!acc[category]) {
+          acc[category] = { count: 0, points: 0 };
+        }
+        acc[category].count++;
+        acc[category].points += ub.badge.bonusPoints;
+        return acc;
+      },
+      {} as Record<string, { count: number; points: number }>
+    );
+
+    const totalPoints = userBadges.reduce((sum, ub) => sum + ub.badge.bonusPoints, 0);
+
+    return {
+      totalBadges,
+      earnedBadges: userBadges.length,
+      totalPoints,
+      categoryStats,
+    };
+  }
+
+  /**
+   * 배지 획득 자격 검증
+   */
+  async checkBadgeEligibility(userId: string, badgeId: string): Promise<{
+    isEligible: boolean;
+    progress: number;
+    maxProgress: number;
+    message: string;
+  }> {
+    const [badge, user] = await Promise.all([
+      this.prisma.badge.findUnique({
+        where: { id: badgeId },
+      }),
+      this.prisma.user.findUnique({
+        where: { id: userId },
+        include: {
+          answers: {
+            include: {
+              question: {
+                include: {
+                  category: true,
+                },
+              },
+            },
+          },
+        },
+      }),
+    ]);
+
+    if (!badge || !user) {
+      return {
+        isEligible: false,
+        progress: 0,
+        maxProgress: 1,
+        message: "배지 또는 사용자를 찾을 수 없습니다.",
+      };
+    }
+
+    let progress = 0;
+    let maxProgress = 1;
+    let isEligible = false;
+    let message = "";
+
+    switch (badge.type) {
+      case "CATEGORY_EXPERT": {
+        // 카테고리별 답변 수 및 채택률 계산
+        const categoryAnswers = user.answers.filter(
+          (answer) => answer.question.category?.name === badge.category
+        );
+
+        const adoptedAnswers = categoryAnswers.filter((answer) => answer.adoptedAt !== null);
+        const adoptRate = categoryAnswers.length > 0 ? adoptedAnswers.length / categoryAnswers.length : 0;
+
+        progress = categoryAnswers.length;
+        maxProgress = badge.requiredAnswers;
+        isEligible =
+          categoryAnswers.length >= badge.requiredAnswers &&
+          (!badge.requiredAdoptRate || adoptRate >= badge.requiredAdoptRate / 100);
+
+        message = isEligible
+          ? `${badge.category} 카테고리에서 ${badge.requiredAnswers}개 답변을 작성하고 채택률 ${badge.requiredAdoptRate || 0}%를 달성했습니다!`
+          : `${badge.category} 카테고리에서 ${badge.requiredAnswers - categoryAnswers.length}개 더 답변을 작성하세요.`;
+
+        break;
+      }
+
+      case "ACTIVITY_LEVEL": {
+        // 전체 답변 수 계산
+        progress = user.totalAnswers || 0;
+        maxProgress = badge.requiredAnswers;
+        isEligible = progress >= badge.requiredAnswers;
+
+        message = isEligible
+          ? `총 ${badge.requiredAnswers}개의 답변을 작성했습니다!`
+          : `${badge.requiredAnswers - progress}개 더 답변을 작성하세요.`;
+
+        break;
+      }
+
+      default:
+        message = "지원하지 않는 배지 타입입니다.";
+    }
+
+    return {
+      isEligible,
+      progress,
+      maxProgress,
+      message,
+    };
+  }
+
+  /**
+   * 배지 획득 가능한 사용자 목록 조회
+   */
+  async findEligibleUsersForBadge(badgeId: string): Promise<string[]> {
+    const badge = await this.prisma.badge.findUnique({
+      where: { id: badgeId },
+    });
+
+    if (!badge) {
+      return [];
+    }
+
+    const eligibleUsers = await this.prisma.user.findMany({
+      where: {
+        isActive: true,
+        userBadges: {
+          none: {
+            badgeId,
+          },
+        },
+      },
+      select: { id: true },
+    });
+
+    // 각 사용자에 대해 자격 검증
+    const verifiedUsers: string[] = [];
+    for (const user of eligibleUsers) {
+      const eligibility = await this.checkBadgeEligibility(user.id, badgeId);
+      if (eligibility.isEligible) {
+        verifiedUsers.push(user.id);
+      }
+    }
+
+    return verifiedUsers;
+  }
+
+  /**
+   * 사용자에게 여러 배지 일괄 부여
+   */
+  async bulkAwardBadges(userId: string, badgeIds: string[]): Promise<UserBadge[]> {
+    return await this.prisma.$transaction(async (_tx) => {
+      const userBadges: UserBadge[] = [];
+
+      for (const badgeId of badgeIds) {
+        try {
+          const userBadge = await this.awardBadge(userId, badgeId);
+          userBadges.push(userBadge);
+        } catch (error) {
+          // 이미 획득한 배지는 무시
+          console.warn(`배지 ${badgeId} 부여 실패:`, error);
+        }
+      }
+
+      return userBadges;
+    });
+  }
+}

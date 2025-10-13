@@ -41,7 +41,9 @@
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
     "db:seed": "tsx src/seed.ts",
-    "db:seed:categories": "tsx prisma/seed-categories.ts"
+    "db:seed:categories": "tsx prisma/seed-categories.ts",
+    "batch:run": "tsx src/scripts/batch-scheduler.ts",
+    "batch:test": "NODE_ENV=test tsx src/scripts/batch-scheduler.ts"
   },
   "devDependencies": {
     "@jest/globals": "^30.1.2",

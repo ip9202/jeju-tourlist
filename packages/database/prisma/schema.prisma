@@ -68,30 +68,32 @@ model UserProfile {
 }
 
 model Question {
-  id          String         @id @default(cuid())
-  title       String
-  content     String
-  authorId    String
-  categoryId  String?
-  tags        String[]
-  location    String?
-  latitude    Float?
-  longitude   Float?
-  status      QuestionStatus @default(ACTIVE)
-  isResolved  Boolean        @default(false)
-  isPinned    Boolean        @default(false)
-  viewCount   Int            @default(0)
-  likeCount   Int            @default(0)
-  answerCount Int            @default(0)
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
-  resolvedAt  DateTime?
-  answers     Answer[]
-  bookmarks   Bookmark[]
-  likes       QuestionLike[]
-  author      User           @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  category    Category?      @relation(fields: [categoryId], references: [id])
-  reports     Report[]       @relation("ReportQuestion")
+  id               String         @id @default(cuid())
+  title            String
+  content          String
+  authorId         String
+  categoryId       String?
+  tags             String[]
+  location         String?
+  latitude         Float?
+  longitude        Float?
+  status           QuestionStatus @default(ACTIVE)
+  isResolved       Boolean        @default(false)
+  isPinned         Boolean        @default(false)
+  viewCount        Int            @default(0)
+  likeCount        Int            @default(0)
+  answerCount      Int            @default(0)
+  acceptedAnswerId String?        @unique
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  resolvedAt       DateTime?
+  answers          Answer[]
+  acceptedAnswer   Answer?        @relation("AcceptedAnswer", fields: [acceptedAnswerId], references: [id])
+  bookmarks        Bookmark[]
+  likes            QuestionLike[]
+  author           User           @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  category         Category?      @relation(fields: [categoryId], references: [id])
+  reports          Report[]       @relation("ReportQuestion")
 
   @@index([authorId])
   @@index([categoryId])
@@ -138,6 +140,7 @@ model Answer {
   likes        AnswerLike[]
   author       User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
   question     Question     @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  acceptedBy   Question?    @relation("AcceptedAnswer")
   reports      Report[]     @relation("ReportAnswer")
 
   @@index([authorId])
@@ -336,6 +339,7 @@ enum PointTransactionType {
   SYSTEM_REWARD
   SYSTEM_PENALTY
   ADMIN_ADJUSTMENT
+  POINT_SPENT
 }
 
 enum BadgeType {
