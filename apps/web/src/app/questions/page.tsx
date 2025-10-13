@@ -5,8 +5,9 @@ import { useSearchParams } from "next/navigation";
 // import { Button, Heading, Text } from "@jeju-tourlist/ui";
 import { Filter, Search, Clock, Users, Eye, Heart } from "lucide-react";
 import { type Question, type SearchFilters } from "@/hooks/useQuestionSearch";
-// import { Header } from "@/components/layout/Header";
+import { Header } from "@/components/layout/Header";
 // import { Footer } from "@/components/layout/Footer";
+import { safeFormatSimpleDate } from "@/lib/dateUtils";
 import Link from "next/link";
 
 interface Category {
@@ -42,24 +43,23 @@ function QuestionsPageContent() {
     loadCategories();
   }, []);
 
-  // URL 파라미터에서 검색어 읽어오기
+  // URL 파라미터에서 검색어 읽어오기 (query 또는 search 파라미터 지원)
   useEffect(() => {
+    const queryParam = searchParams.get("query");
     const searchParam = searchParams.get("search");
-    if (searchParam) {
-      setSearchTerm(searchParam);
+    const searchTerm = queryParam || searchParam;
+
+    if (searchTerm) {
+      setSearchTerm(searchTerm);
     }
   }, [searchParams]);
 
-  // 검색어가 변경될 때마다 검색 실행
+  // 필터나 페이지가 변경될 때만 자동 검색
   useEffect(() => {
     if (isInitialized) {
-      const timeoutId = setTimeout(() => {
-        searchQuestions();
-      }, 500); // 500ms 디바운스
-
-      return () => clearTimeout(timeoutId);
+      searchQuestions();
     }
-  }, [searchTerm, filters, pagination.page]);
+  }, [filters, pagination.page]);
 
   // 초기 로드
   useEffect(() => {
@@ -74,14 +74,15 @@ function QuestionsPageContent() {
       const response = await fetch("/api/categories");
       if (response.ok) {
         const data = await response.json();
-        setCategories(data.categories || []);
+        console.log("📦 카테고리 데이터:", data);
+        setCategories(data.data || []);
       }
     } catch (error) {
       console.error("카테고리 로드 실패:", error);
     }
   };
 
-  const searchQuestions = async () => {
+  const searchQuestions = async (searchTerm?: string) => {
     if (isLoadingRef.current) return;
 
     isLoadingRef.current = true;
@@ -89,41 +90,47 @@ function QuestionsPageContent() {
     setError(null);
 
     try {
-      const params = new URLSearchParams({
-        page: pagination.page.toString(),
-        limit: pagination.limit.toString(),
-        sortBy: filters.sortBy,
-        sortOrder: filters.sortOrder,
-      });
+      const params = new URLSearchParams();
+      params.append("page", pagination.page.toString());
+      params.append("limit", pagination.limit.toString());
+      if (filters.sortBy) params.append("sortBy", filters.sortBy);
+      if (filters.sortOrder) params.append("sortOrder", filters.sortOrder);
 
-      if (searchTerm.trim()) {
-        params.append("search", searchTerm.trim());
+      // searchTerm 파라미터가 전달된 경우에만 검색어 추가
+      if (searchTerm && searchTerm.trim()) {
+        params.append("query", searchTerm.trim());
       }
       if (filters.categoryId) {
         params.append("categoryId", filters.categoryId);
       }
-      if (filters.status !== "all") {
+      if (filters.status && filters.status !== "all") {
         params.append("status", filters.status);
       }
 
-      const response = await fetch(`/api/questions?${params}`);
+      const url = `/api/questions?${params}`;
+      console.log("🔍 검색 요청:", url);
+
+      const response = await fetch(url);
       if (!response.ok) {
         throw new Error("질문을 불러오는데 실패했습니다.");
       }
 
       const data = await response.json();
+      console.log("📥 검색 응답:", data);
+
       if (data.success) {
-        setQuestions(data.questions || []);
+        setQuestions(data.data || []);
+        console.log("✅ 질문 개수:", data.data?.length || 0);
         setPagination(prev => ({
           ...prev,
-          total: data.total || 0,
-          totalPages: data.totalPages || 0,
+          total: data.pagination?.totalPages * data.pagination?.limit || 0,
+          totalPages: data.pagination?.totalPages || 0,
         }));
       } else {
         throw new Error(data.message || "질문을 불러오는데 실패했습니다.");
       }
     } catch (error) {
-      console.error("검색 실패:", error);
+      console.error("❌ 검색 실패:", error);
       setError(
         error instanceof Error
           ? error.message
@@ -145,58 +152,26 @@ function QuestionsPageContent() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const handleSearch = () => {
+    console.log("🔍 검색 버튼 클릭 - 검색어:", searchTerm);
+    setPagination(prev => ({ ...prev, page: 1 })); // 검색 시 첫 페이지로
+    searchQuestions(searchTerm); // 검색어 전달
+  };
+
+  const handleSearchKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      console.log("⌨️ Enter 키 입력 - 검색어:", searchTerm);
+      handleSearch();
+    }
+  };
+
   // API에서 이미 필터링된 데이터를 받으므로 추가 필터링 불필요
   const filteredQuestions = questions;
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* 헤더 */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-blue-600">동네물어봐</h1>
-              <span className="ml-2 text-sm text-gray-500">
-                제주도 여행 Q&A
-              </span>
-            </div>
-            <nav className="hidden md:flex space-x-8">
-              <Link
-                href="/"
-                className="text-gray-700 hover:text-gray-900 font-medium"
-              >
-                홈
-              </Link>
-              <Link
-                href="/questions"
-                className="text-gray-700 hover:text-gray-900 font-medium"
-              >
-                인기질문
-              </Link>
-              <Link
-                href="/categories"
-                className="text-gray-700 hover:text-gray-900 font-medium"
-              >
-                카테고리
-              </Link>
-              <Link
-                href="/experts"
-                className="text-gray-700 hover:text-gray-900 font-medium"
-              >
-                전문가
-              </Link>
-            </nav>
-            <div className="flex items-center space-x-4">
-              <Link
-                href="/auth/signin"
-                className="bg-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-800"
-              >
-                로그인
-              </Link>
-            </div>
-          </div>
-        </div>
-      </header>
+      {/* 공통 헤더 */}
+      <Header />
 
       {/* 메인 컨텐츠 */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -219,9 +194,13 @@ function QuestionsPageContent() {
                 placeholder="궁금한 제주 여행 정보를 검색해보세요"
                 value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
+                onKeyPress={handleSearchKeyPress}
                 className="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-xl text-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
-              <button className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-700 text-white px-6 py-2 rounded-lg hover:bg-gray-800">
+              <button
+                onClick={handleSearch}
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-700 text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition-colors"
+              >
                 검색
               </button>
             </div>
@@ -357,7 +336,7 @@ function QuestionsPageContent() {
                     </span>
                     <span className="flex items-center">
                       <Clock className="w-4 h-4 mr-1" />
-                      {new Date(question.createdAt).toLocaleDateString()}
+                      {safeFormatSimpleDate(question.createdAt)}
                     </span>
                   </div>
                   <div className="flex items-center space-x-2">
@@ -372,14 +351,7 @@ function QuestionsPageContent() {
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    {question.tags?.slice(0, 3).map((tag, index) => (
-                      <span
-                        key={index}
-                        className="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded"
-                      >
-                        #{tag}
-                      </span>
-                    ))}
+                    {/* Tags removed as not in Question type */}
                   </div>
                   <Link
                     href={`/questions/${question.id}`}

@@ -1,19 +1,19 @@
 /**
  * 배지 시스템 서비스
- * 
+ *
  * @description
  * - 배지 생성, 조회, 관리 로직
  * - 자동 배지 부여 시스템
  * - 배지 조건 검증 및 처리
  * - SOLID 원칙 중 SRP(단일 책임 원칙) 준수
- * 
+ *
  * @author 동네물어봐 개발팀
  * @version 1.0.0
  */
 
-import { PrismaClient, Badge } from '@prisma/client';
-import { BaseService } from './base.service';
-import { CreateBadgeData } from '../types/badge';
+import { PrismaClient, Badge } from "@prisma/client";
+import { BaseService } from "./base.service";
+import { CreateBadgeData } from "../types/badge";
 
 /**
  * 배지 조건 검증 결과
@@ -38,7 +38,7 @@ export interface UserBadgeInfo {
 
 /**
  * 배지 시스템 서비스
- * 
+ *
  * @description
  * - 배지 관련 모든 비즈니스 로직 처리
  * - 자동 배지 부여 및 조건 검증
@@ -51,12 +51,12 @@ export class BadgeService extends BaseService {
 
   /**
    * 배지 생성
-   * 
+   *
    * @description
    * - 새로운 배지 생성
    * - 배지 조건 검증
    * - 중복 배지명 방지
-   * 
+   *
    * @param data - 배지 생성 데이터
    * @returns 생성된 배지
    */
@@ -67,7 +67,7 @@ export class BadgeService extends BaseService {
     });
 
     if (existingBadge) {
-      throw new Error('이미 존재하는 배지명입니다.');
+      throw new Error("이미 존재하는 배지명입니다.");
     }
 
     return await this.prisma.badge.create({
@@ -85,29 +85,29 @@ export class BadgeService extends BaseService {
 
   /**
    * 사용자 배지 부여
-   * 
+   *
    * @description
    * - 사용자에게 배지 부여
    * - 중복 부여 방지
    * - 포인트 적립 처리
-   * 
+   *
    * @param userId - 사용자 ID
    * @param badgeId - 배지 ID
    * @returns 부여된 사용자 배지
    */
   async awardBadge(userId: string, badgeId: string) {
-    return await this.prisma.$transaction(async (tx) => {
+    return await this.prisma.$transaction(async tx => {
       // 배지 정보 조회
       const badge = await tx.badge.findUnique({
         where: { id: badgeId },
       });
 
       if (!badge) {
-        throw new Error('배지를 찾을 수 없습니다.');
+        throw new Error("배지를 찾을 수 없습니다.");
       }
 
       if (!badge.isActive) {
-        throw new Error('비활성화된 배지입니다.');
+        throw new Error("비활성화된 배지입니다.");
       }
 
       // 중복 부여 검증
@@ -121,7 +121,7 @@ export class BadgeService extends BaseService {
       });
 
       if (existingUserBadge) {
-        throw new Error('이미 획득한 배지입니다.');
+        throw new Error("이미 획득한 배지입니다.");
       }
 
       // 사용자 배지 부여
@@ -139,9 +139,9 @@ export class BadgeService extends BaseService {
             userId,
             amount: badge.points,
             balance: 0, // 실제 잔액은 PointService에서 계산
-            type: 'BADGE_EARNED',
+            type: "BADGE_EARNED",
             description: `배지 획득: ${badge.name}`,
-            relatedType: 'badge',
+            relatedType: "badge",
             relatedId: badgeId,
             metadata: {
               badgeName: badge.name,
@@ -165,19 +165,19 @@ export class BadgeService extends BaseService {
 
   /**
    * 사용자 배지 목록 조회
-   * 
+   *
    * @description
    * - 사용자가 획득한 배지 목록
    * - 배지 상세 정보 포함
    * - 카테고리별 필터링 지원
-   * 
+   *
    * @param userId - 사용자 ID
    * @param category - 배지 카테고리 (선택적)
    * @returns 사용자 배지 목록
    */
   async getUserBadges(userId: string, category?: string) {
     const where: any = { userId };
-    
+
     if (category) {
       where.badge = { category };
     }
@@ -187,7 +187,7 @@ export class BadgeService extends BaseService {
       include: {
         badge: true,
       },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: "desc" },
     });
 
     return userBadges.map(ub => ({
@@ -198,12 +198,12 @@ export class BadgeService extends BaseService {
 
   /**
    * 사용자 배지 통계 조회
-   * 
+   *
    * @description
    * - 사용자별 배지 획득 통계
    * - 카테고리별 배지 분포
    * - 배지 포인트 합계
-   * 
+   *
    * @param userId - 사용자 ID
    * @returns 배지 통계 정보
    */
@@ -215,19 +215,25 @@ export class BadgeService extends BaseService {
     });
 
     // 카테고리별 통계
-    const categoryStats = userBadges.reduce((acc, ub) => {
-      const category = ub.badge.category;
-      if (!acc[category]) {
-        acc[category] = { count: 0, points: 0 };
-      }
-      acc[category].count++;
-      acc[category].points += ub.badge.points;
-      return acc;
-    }, {} as Record<string, { count: number; points: number }>);
+    const categoryStats = userBadges.reduce(
+      (acc, ub) => {
+        const category = ub.badge.category;
+        if (!acc[category]) {
+          acc[category] = { count: 0, points: 0 };
+        }
+        acc[category].count++;
+        acc[category].points += ub.badge.points;
+        return acc;
+      },
+      {} as Record<string, { count: number; points: number }>
+    );
 
     // 전체 통계
     const totalBadges = userBadges.length;
-    const totalPoints = userBadges.reduce((sum, ub) => sum + ub.badge.points, 0);
+    const totalPoints = userBadges.reduce(
+      (sum, ub) => sum + ub.badge.points,
+      0
+    );
 
     // 전체 배지 수 (획득 가능한 배지)
     const totalAvailableBadges = await this.prisma.badge.count({
@@ -237,7 +243,10 @@ export class BadgeService extends BaseService {
     return {
       totalBadges,
       totalAvailableBadges,
-      completionRate: totalAvailableBadges > 0 ? (totalBadges / totalAvailableBadges) * 100 : 0,
+      completionRate:
+        totalAvailableBadges > 0
+          ? (totalBadges / totalAvailableBadges) * 100
+          : 0,
       totalPoints,
       categoryStats,
     };
@@ -245,12 +254,12 @@ export class BadgeService extends BaseService {
 
   /**
    * 자동 배지 부여 검사
-   * 
+   *
    * @description
    * - 사용자 활동 기반 자동 배지 부여
    * - 배지 조건 검증 및 자동 부여
    * - 배치 처리 지원
-   * 
+   *
    * @param userId - 사용자 ID
    * @returns 부여된 배지 목록
    */
@@ -270,7 +279,7 @@ export class BadgeService extends BaseService {
     });
 
     if (!user) {
-      throw new Error('사용자를 찾을 수 없습니다.');
+      throw new Error("사용자를 찾을 수 없습니다.");
     }
 
     // 활성화된 배지 목록 조회
@@ -288,7 +297,7 @@ export class BadgeService extends BaseService {
 
       // 배지 조건 검증
       const conditionResult = await this.checkBadgeCondition(user, badge);
-      
+
       if (conditionResult.isEarned) {
         try {
           await this.awardBadge(userId, badge.id);
@@ -307,84 +316,93 @@ export class BadgeService extends BaseService {
 
   /**
    * 배지 조건 검증
-   * 
+   *
    * @description
    * - 특정 배지의 획득 조건 검증
    * - 진행률 계산
    * - 조건별 세부 검증 로직
-   * 
+   *
    * @param user - 사용자 정보
    * @param badge - 배지 정보
    * @returns 조건 검증 결과
    */
-  private async checkBadgeCondition(user: any, badge: Badge): Promise<BadgeConditionResult> {
+  private async checkBadgeCondition(
+    user: any,
+    badge: Badge
+  ): Promise<BadgeConditionResult> {
     const condition = badge.condition as any;
     let isEarned = false;
     let progress = 0;
     let maxProgress = 1;
-    let message = '';
+    let message = "";
 
     try {
       switch (condition.type) {
-        case 'question_count':
+        case "question_count":
           progress = user.questions.length;
           maxProgress = condition.required;
           isEarned = progress >= condition.required;
-          message = isEarned 
+          message = isEarned
             ? `${condition.required}개의 질문을 작성했습니다!`
             : `${condition.required - progress}개 더 질문을 작성하세요.`;
           break;
 
-        case 'answer_count':
+        case "answer_count":
           progress = user.answers.length;
           maxProgress = condition.required;
           isEarned = progress >= condition.required;
-          message = isEarned 
+          message = isEarned
             ? `${condition.required}개의 답변을 작성했습니다!`
             : `${condition.required - progress}개 더 답변을 작성하세요.`;
           break;
 
-        case 'like_received':
-          const totalLikes = user.questionLikes.length + user.answerLikes.length;
+        case "like_received": {
+          const totalLikes =
+            user.questionLikes.length + user.answerLikes.length;
           progress = totalLikes;
           maxProgress = condition.required;
           isEarned = progress >= condition.required;
-          message = isEarned 
+          message = isEarned
             ? `${condition.required}개의 좋아요를 받았습니다!`
             : `${condition.required - progress}개 더 좋아요를 받으세요.`;
           break;
+        }
 
-        case 'points_earned':
+        case "points_earned":
           progress = user.points;
           maxProgress = condition.required;
           isEarned = progress >= condition.required;
-          message = isEarned 
+          message = isEarned
             ? `${condition.required}포인트를 획득했습니다!`
             : `${condition.required - progress}포인트 더 획득하세요.`;
           break;
 
-        case 'consecutive_days':
+        case "consecutive_days":
           // 연속 로그인 일수 계산 (구현 필요)
           progress = 0; // TODO: 연속 로그인 일수 계산 로직
           maxProgress = condition.required;
           isEarned = progress >= condition.required;
-          message = isEarned 
+          message = isEarned
             ? `${condition.required}일 연속 로그인했습니다!`
             : `${condition.required - progress}일 더 연속 로그인하세요.`;
           break;
 
-        case 'first_question':
+        case "first_question":
           progress = user.questions.length > 0 ? 1 : 0;
           maxProgress = 1;
           isEarned = progress >= 1;
-          message = isEarned ? '첫 번째 질문을 작성했습니다!' : '첫 번째 질문을 작성하세요.';
+          message = isEarned
+            ? "첫 번째 질문을 작성했습니다!"
+            : "첫 번째 질문을 작성하세요.";
           break;
 
-        case 'first_answer':
+        case "first_answer":
           progress = user.answers.length > 0 ? 1 : 0;
           maxProgress = 1;
           isEarned = progress >= 1;
-          message = isEarned ? '첫 번째 답변을 작성했습니다!' : '첫 번째 답변을 작성하세요.';
+          message = isEarned
+            ? "첫 번째 답변을 작성했습니다!"
+            : "첫 번째 답변을 작성하세요.";
           break;
 
         default:
@@ -406,34 +424,31 @@ export class BadgeService extends BaseService {
 
   /**
    * 배지 목록 조회
-   * 
+   *
    * @description
    * - 전체 배지 목록 조회
    * - 카테고리별 필터링 지원
    * - 페이지네이션 지원
-   * 
+   *
    * @param options - 조회 옵션
    * @returns 배지 목록
    */
-  async getBadges(options: {
-    category?: string;
-    isActive?: boolean;
-    page?: number;
-    limit?: number;
-  } = {}) {
-    const {
-      category,
-      isActive = true,
-      page = 1,
-      limit = 20,
-    } = options;
+  async getBadges(
+    options: {
+      category?: string;
+      isActive?: boolean;
+      page?: number;
+      limit?: number;
+    } = {}
+  ) {
+    const { category, isActive = true, page = 1, limit = 20 } = options;
 
     const where: any = {};
-    
+
     if (category) {
       where.category = category;
     }
-    
+
     if (isActive !== undefined) {
       where.isActive = isActive;
     }
@@ -441,7 +456,7 @@ export class BadgeService extends BaseService {
     const [badges, total] = await Promise.all([
       this.prisma.badge.findMany({
         where,
-        orderBy: { createdAt: 'desc' },
+        orderBy: { createdAt: "desc" },
         skip: (page - 1) * limit,
         take: limit,
       }),
@@ -461,12 +476,12 @@ export class BadgeService extends BaseService {
 
   /**
    * 배지 수정
-   * 
+   *
    * @description
    * - 기존 배지 정보 수정
    * - 배지명 중복 검증
    * - 활성화 상태 관리
-   * 
+   *
    * @param badgeId - 배지 ID
    * @param data - 수정할 데이터
    * @returns 수정된 배지
@@ -482,7 +497,7 @@ export class BadgeService extends BaseService {
       });
 
       if (existingBadge) {
-        throw new Error('이미 존재하는 배지명입니다.');
+        throw new Error("이미 존재하는 배지명입니다.");
       }
     }
 
@@ -497,12 +512,12 @@ export class BadgeService extends BaseService {
 
   /**
    * 배지 삭제 (비활성화)
-   * 
+   *
    * @description
    * - 배지 비활성화 처리
    * - 기존 사용자 배지는 유지
    * - 소프트 삭제 방식
-   * 
+   *
    * @param badgeId - 배지 ID
    * @returns 비활성화된 배지
    */

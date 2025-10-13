@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Avatar, Button } from "@jeju-tourlist/ui";
-import { Calendar, MapPin, Edit, Settings, CheckCircle } from "lucide-react";
+import { safeFormatDate } from "@/lib/dateUtils";
 
 /**
  * 사용자 프로필 데이터 타입
@@ -142,8 +142,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
    * 날짜 포맷팅 함수
    */
   const formatJoinDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("ko-KR", {
+    return safeFormatDate(dateString, {
       year: "numeric",
       month: "long",
       day: "numeric",

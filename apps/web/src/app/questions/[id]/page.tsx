@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button, Heading, Text, ImageLightbox } from "@jeju-tourlist/ui";
 import {
   ArrowLeft,
@@ -63,7 +63,7 @@ interface Answer {
 export default function QuestionDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const { data: session } = useSession();
+  const { user } = useAuth();
   const [question, setQuestion] = useState<Question | null>(null);
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [loading, setLoading] = useState(true);
@@ -117,7 +117,7 @@ export default function QuestionDetailPage() {
     e.preventDefault();
 
     // 로그인 체크
-    if (!session?.user?.id) {
+    if (!user?.id) {
       setAnswerError("로그인이 필요합니다.");
       setTimeout(() => {
         router.push("/auth/signin");
@@ -151,7 +151,7 @@ export default function QuestionDetailPage() {
         body: JSON.stringify({
           content: newAnswer.trim(),
           questionId: params.id,
-          authorId: session.user.id,
+          authorId: user.id,
         }),
       });
 
@@ -649,7 +649,7 @@ export default function QuestionDetailPage() {
           <Heading level={3} className="text-lg font-bold text-gray-900 mb-4">
             답변 작성
           </Heading>
-          {!session ? (
+          {!user ? (
             <div className="text-center py-8">
               <Text className="text-gray-600 mb-4">
                 답변을 작성하려면 로그인이 필요합니다.

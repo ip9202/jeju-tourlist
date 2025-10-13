@@ -141,7 +141,7 @@ app.use("/api/answer-comments", createAnswerCommentRouter(prisma));
 app.use("/api/categories", createCategoryRouter(prisma));
 
 // 이메일 기반 인증 라우트
-app.use("/api/auth/email", createEmailAuthRouter());
+app.use("/api/auth", createEmailAuthRouter());
 
 // 통계 라우트
 app.use("/api/stats", createStatsRouter(prisma));

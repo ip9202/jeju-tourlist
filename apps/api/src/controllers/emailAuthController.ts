@@ -8,7 +8,10 @@
 
 import { Request, Response } from "express";
 import { IAuthService } from "@jeju-tourlist/database/services/auth.service";
-import { RegisterSchema, LoginSchema } from "@jeju-tourlist/database/types/auth";
+import {
+  RegisterSchema,
+  LoginSchema,
+} from "@jeju-tourlist/database/types/auth";
 import { z } from "zod";
 
 /**
@@ -55,7 +58,7 @@ export class EmailAuthController {
           error: {
             code: "VALIDATION_ERROR",
             message: "입력 데이터가 유효하지 않습니다",
-            details: error.issues.map((issue) => ({
+            details: error.issues.map(issue => ({
               field: issue.path.join("."),
               message: issue.message,
             })),
@@ -121,8 +124,8 @@ export class EmailAuthController {
         data: {
           email,
           available: isAvailable,
-          message: isAvailable 
-            ? "사용 가능한 이메일입니다" 
+          message: isAvailable
+            ? "사용 가능한 이메일입니다"
             : "이미 사용 중인 이메일입니다",
         },
         timestamp: new Date().toISOString(),
@@ -178,7 +181,7 @@ export class EmailAuthController {
           error: {
             code: "VALIDATION_ERROR",
             message: "입력 데이터가 유효하지 않습니다",
-            details: error.issues.map((issue) => ({
+            details: error.issues.map(issue => ({
               field: issue.path.join("."),
               message: issue.message,
             })),
@@ -275,9 +278,8 @@ export class EmailAuthController {
       }
 
       // 이메일 인증 재발송 처리
-      const verificationToken = await this.authService.resendVerificationEmail(
-        email
-      );
+      const verificationToken =
+        await this.authService.resendVerificationEmail(email);
 
       // 성공 응답
       res.status(200).json({
@@ -395,6 +397,64 @@ export class EmailAuthController {
         error: {
           code: error.code || "RESET_FAILED",
           message: error.message || "비밀번호 재설정에 실패했습니다",
+        },
+        timestamp: new Date().toISOString(),
+      });
+    }
+  };
+
+  /**
+   * 로그아웃
+   * POST /api/auth/logout
+   */
+  logout = async (req: Request, res: Response): Promise<void> => {
+    try {
+      // 클라이언트에서 localStorage 삭제하도록 성공 응답만 반환
+      res.status(200).json({
+        success: true,
+        data: {
+          message: "로그아웃이 완료되었습니다",
+        },
+        timestamp: new Date().toISOString(),
+      });
+    } catch (error: any) {
+      console.error("Logout error:", error);
+
+      res.status(500).json({
+        success: false,
+        error: {
+          code: "LOGOUT_FAILED",
+          message: "로그아웃에 실패했습니다",
+        },
+        timestamp: new Date().toISOString(),
+      });
+    }
+  };
+
+  /**
+   * 현재 사용자 정보 조회
+   * GET /api/auth/me
+   */
+  me = async (req: Request, res: Response): Promise<void> => {
+    try {
+      // 토큰은 클라이언트에서 관리하므로, 여기서는 간단한 응답만 반환
+      // TODO: JWT 토큰 구현 시 토큰 검증 추가 필요
+      res.status(200).json({
+        success: true,
+        data: {
+          user: null,
+          message: "JWT 토큰 인증이 아직 구현되지 않았습니다",
+        },
+        timestamp: new Date().toISOString(),
+      });
+    } catch (error: any) {
+      console.error("Get user info error:", error);
+
+      res.status(500).json({
+        success: false,
+        error: {
+          code: "GET_USER_FAILED",
+          message: "사용자 정보 조회에 실패했습니다",
         },
         timestamp: new Date().toISOString(),
       });

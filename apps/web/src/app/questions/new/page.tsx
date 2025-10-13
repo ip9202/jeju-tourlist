@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button, Input, Textarea, Text } from "@jeju-tourlist/ui";
 import { AlertCircle, CheckCircle } from "lucide-react";
 import { SubPageHeader } from "@/components/layout/SubPageHeader";
@@ -37,7 +37,7 @@ interface Category {
 
 export default function NewQuestionPage() {
   const router = useRouter();
-  const { data: session, status } = useSession();
+  const { user, isLoading } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
   const [validation, setValidation] = useState<{
@@ -56,11 +56,11 @@ export default function NewQuestionPage() {
 
   // 로그인 체크
   useEffect(() => {
-    if (status === "unauthenticated") {
+    if (!isLoading && !user) {
       alert("로그인이 필요합니다.");
       router.push("/auth/signin");
     }
-  }, [status, router]);
+  }, [isLoading, user, router]);
 
   // 카테고리 목록 로드
   useEffect(() => {
@@ -197,7 +197,7 @@ export default function NewQuestionPage() {
       }
 
       // 로그인 체크
-      if (!session?.user?.id) {
+      if (!user?.id) {
         throw new Error("로그인이 필요합니다.");
       }
 
@@ -213,7 +213,7 @@ export default function NewQuestionPage() {
               .filter(tag => tag)
           : [],
         attachments,
-        authorId: session.user.id,
+        authorId: user?.id || "",
       };
 
       console.log("[DEBUG] 요청 데이터:", requestData);

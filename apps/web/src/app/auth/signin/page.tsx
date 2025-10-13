@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-// import { ArrowLeft, MapPin, Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { MapPin, Mail, Lock } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-// import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { EmailLoginForm } from "@/components/auth/EmailLoginForm";
+import { Header } from "@/components/layout/Header";
 
 export default function SignInPage() {
   const searchParams = useSearchParams();
@@ -12,53 +12,8 @@ export default function SignInPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* 헤더 */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-blue-600">동네물어봐</h1>
-              <span className="ml-2 text-sm text-gray-500">
-                제주도 여행 Q&A
-              </span>
-            </div>
-            <nav className="hidden md:flex space-x-8">
-              <Link
-                href="/"
-                className="text-gray-700 hover:text-gray-900 font-medium"
-              >
-                홈
-              </Link>
-              <Link
-                href="/questions"
-                className="text-gray-700 hover:text-gray-900 font-medium"
-              >
-                인기질문
-              </Link>
-              <Link
-                href="/categories"
-                className="text-gray-700 hover:text-gray-900 font-medium"
-              >
-                카테고리
-              </Link>
-              <Link
-                href="/experts"
-                className="text-gray-700 hover:text-gray-900 font-medium"
-              >
-                전문가
-              </Link>
-            </nav>
-            <div className="flex items-center space-x-4">
-              <Link
-                href="/auth/signin"
-                className="bg-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-800"
-              >
-                로그인
-              </Link>
-            </div>
-          </div>
-        </div>
-      </header>
+      {/* 공통 헤더 */}
+      <Header />
 
       {/* 메인 컨텐츠 */}
       <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">

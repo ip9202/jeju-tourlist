@@ -32,7 +32,7 @@
     "dev": "tsc --watch",
     "clean": "rm -rf dist",
     "type-check": "tsc --noEmit",
-    "lint": "eslint src --ext .ts",
+    "lint": "eslint src",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
@@ -59,5 +59,8 @@
     "dotenv-flow": "^4.0.0",
     "prisma": "^5.22.0",
     "zod": "^4.1.9"
+  },
+  "prisma": {
+    "seed": "tsx src/seed-badges.ts"
   }
 }

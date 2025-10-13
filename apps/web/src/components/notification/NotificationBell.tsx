@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Bell, X } from "lucide-react";
+import { safeFormatRelativeTime } from "@/lib/dateUtils";
 
 interface Notification {
   id: string;
@@ -27,7 +28,7 @@ export const NotificationBell: React.FC = () => {
   const [notifications, setNotifications] = useState<Notification[]>(
     INITIAL_NOTIFICATIONS
   );
-  const [isMounted, setIsMounted] = useState(false);
+  const [, setIsMounted] = useState(false);
 
   const unreadCount = notifications.filter(n => !n.read).length;
 
@@ -81,22 +82,7 @@ export const NotificationBell: React.FC = () => {
   };
 
   const formatTime = (timestamp: string) => {
-    // 클라이언트에서만 시간 계산 (Hydration 에러 방지)
-    if (!isMounted) {
-      return "방금 전"; // 서버 렌더링 시 고정된 값
-    }
-
-    const date = new Date(timestamp);
-    const now = new Date();
-    const diffInMinutes = Math.floor(
-      (now.getTime() - date.getTime()) / (1000 * 60)
-    );
-
-    if (diffInMinutes < 1) return "방금 전";
-    if (diffInMinutes < 60) return `${diffInMinutes}분 전`;
-    if (diffInMinutes < 24 * 60)
-      return `${Math.floor(diffInMinutes / 60)}시간 전`;
-    return date.toLocaleDateString("ko-KR");
+    return safeFormatRelativeTime(timestamp);
   };
 
   return (

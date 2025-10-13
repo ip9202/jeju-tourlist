@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@jeju-tourlist/ui";
 import {
   Heart,
@@ -99,7 +99,7 @@ export const EnhancedAnswerCard: React.FC<EnhancedAnswerCardProps> = ({
   showComments = true,
   maxComments = 5,
 }) => {
-  const { data: session } = useSession();
+  const { user } = useAuth();
   const [comments, setComments] = useState<HierarchicalComment[]>([]);
   const [showCommentForm, setShowCommentForm] = useState(false);
   // const [isLoadingComments, setIsLoadingComments] = useState(false);
@@ -220,7 +220,7 @@ export const EnhancedAnswerCard: React.FC<EnhancedAnswerCardProps> = ({
    */
   const handleCommentSubmit = async (content: string) => {
     // 로그인 체크
-    if (!session?.user?.id) {
+    if (!user?.id) {
       throw new Error("로그인이 필요합니다.");
     }
 
@@ -233,7 +233,7 @@ export const EnhancedAnswerCard: React.FC<EnhancedAnswerCardProps> = ({
         body: JSON.stringify({
           content,
           answerId: answer.id,
-          authorId: session.user.id,
+          authorId: user?.id || "",
           parentId: null, // 최상위 댓글
           depth: 0,
         }),
@@ -311,7 +311,7 @@ export const EnhancedAnswerCard: React.FC<EnhancedAnswerCardProps> = ({
    */
   const handleReplySubmit = async (parentId: string, content: string) => {
     // 로그인 체크
-    if (!session?.user?.id) {
+    if (!user?.id) {
       throw new Error("로그인이 필요합니다.");
     }
 
@@ -328,7 +328,7 @@ export const EnhancedAnswerCard: React.FC<EnhancedAnswerCardProps> = ({
         body: JSON.stringify({
           content,
           answerId: answer.id,
-          authorId: session.user.id,
+          authorId: user?.id || "",
           parentId: parentId,
           depth: parentDepth + 1, // 부모 depth + 1
         }),

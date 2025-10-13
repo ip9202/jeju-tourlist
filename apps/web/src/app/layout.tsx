@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
-import { SessionProvider } from "@/components/providers/SessionProvider";
 import { DynamicSocketProvider } from "@/components/providers/DynamicSocketProvider";
 import "@fontsource/pretendard/400.css";
 import "@fontsource/pretendard/500.css";
@@ -33,11 +32,9 @@ export default function RootLayout({
             "Pretendard Variable, Pretendard, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans KR, Helvetica Neue, Arial, sans-serif",
         }}
       >
-        <SessionProvider>
-          <AuthProvider>
-            <DynamicSocketProvider>{children}</DynamicSocketProvider>
-          </AuthProvider>
-        </SessionProvider>
+        <AuthProvider>
+          <DynamicSocketProvider>{children}</DynamicSocketProvider>
+        </AuthProvider>
       </body>
     </html>
   );

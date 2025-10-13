@@ -1,0 +1,127 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+    - alert [ref=e2]
+    - generic [ref=e3]:
+        - banner [ref=e4]:
+            - generic [ref=e6]:
+                - link "동네물어봐 제주 여행 Q&A" [ref=e7] [cursor=pointer]:
+                    - /url: /
+                    - img [ref=e9]
+                    - generic [ref=e12]: 동네물어봐
+                    - generic [ref=e13]: 제주 여행 Q&A
+                - navigation [ref=e14]:
+                    - link "질문 목록" [ref=e15] [cursor=pointer]:
+                        - /url: /questions
+                    - link "카테고리" [ref=e16] [cursor=pointer]:
+                        - /url: /categories
+                    - link "전문가" [ref=e17] [cursor=pointer]:
+                        - /url: /experts
+                - generic [ref=e18]:
+                    - generic [ref=e20]:
+                        - img [ref=e21]
+                        - searchbox "제주 여행 정보 검색..." [ref=e24]
+                    - link "질문하기" [ref=e25] [cursor=pointer]:
+                        - /url: /auth/signin?callbackUrl=%2Fquestions%2Fnew
+                        - button "질문하기" [ref=e26]:
+                            - generic [ref=e27]: 질문하기
+                    - link "로그인" [ref=e28] [cursor=pointer]:
+                        - /url: /auth/signin?callbackUrl=%2Fauth%2Fsignin
+                        - generic [ref=e29]: 로그인
+        - generic [ref=e31]:
+            - generic [ref=e32]:
+                - generic [ref=e33]:
+                    - img [ref=e35]
+                    - heading "로그인" [level=1] [ref=e38]
+                    - paragraph [ref=e39]: 제주 여행의 모든 것을 경험하세요
+                - generic [ref=e40]:
+                    - generic [ref=e41]:
+                        - generic [ref=e42]:
+                            - text: 이메일
+                            - textbox "이메일" [active] [ref=e43]:
+                                - /placeholder: example@email.com
+                                - text: invalid-email
+                            - paragraph [ref=e44]: 올바른 이메일 형식이 아닙니다.
+                        - generic [ref=e45]:
+                            - text: 비밀번호
+                            - generic [ref=e46]:
+                                - textbox "비밀번호" [ref=e47]:
+                                    - /placeholder: 비밀번호를 입력하세요
+                                    - text: password123
+                                - button "비밀번호 보기" [ref=e48] [cursor=pointer]:
+                                    - img [ref=e50]
+                        - button "로그인" [ref=e53] [cursor=pointer]:
+                            - generic [ref=e54]: 로그인
+                    - generic [ref=e55]:
+                        - generic [ref=e60]: 또는
+                        - generic [ref=e61]:
+                            - paragraph [ref=e62]: 아직 계정이 없으신가요?
+                            - link "회원가입하기" [ref=e63] [cursor=pointer]:
+                                - /url: /auth/signup
+            - generic [ref=e65]:
+                - generic [ref=e66]:
+                    - img [ref=e68]
+                    - heading "빠른 로그인" [level=3] [ref=e71]
+                    - paragraph [ref=e72]: 이메일로 간편하게
+                - generic [ref=e73]:
+                    - img [ref=e75]
+                    - heading "안전한 보안" [level=3] [ref=e78]
+                    - paragraph [ref=e79]: 개인정보 보호
+                - generic [ref=e80]:
+                    - img [ref=e82]
+                    - heading "제주 전문" [level=3] [ref=e85]
+                    - paragraph [ref=e86]: 현지 정보 제공
+        - contentinfo [ref=e87]:
+            - generic [ref=e88]:
+                - generic [ref=e89]:
+                    - generic [ref=e90]:
+                        - heading "동네물어봐" [level=4] [ref=e91]
+                        - paragraph [ref=e92]: 제주도 여행자와 현지 주민을 연결하는 실시간 Q&A 커뮤니티
+                    - generic [ref=e93]:
+                        - heading "서비스" [level=5] [ref=e94]
+                        - list [ref=e95]:
+                            - listitem [ref=e96]:
+                                - link "질문하기" [ref=e97] [cursor=pointer]:
+                                    - /url: "#"
+                            - listitem [ref=e98]:
+                                - link "답변하기" [ref=e99] [cursor=pointer]:
+                                    - /url: "#"
+                            - listitem [ref=e100]:
+                                - link "전문가" [ref=e101] [cursor=pointer]:
+                                    - /url: "#"
+                            - listitem [ref=e102]:
+                                - link "커뮤니티" [ref=e103] [cursor=pointer]:
+                                    - /url: "#"
+                    - generic [ref=e104]:
+                        - heading "지원" [level=5] [ref=e105]
+                        - list [ref=e106]:
+                            - listitem [ref=e107]:
+                                - link "고객센터" [ref=e108] [cursor=pointer]:
+                                    - /url: "#"
+                            - listitem [ref=e109]:
+                                - link "이용가이드" [ref=e110] [cursor=pointer]:
+                                    - /url: "#"
+                            - listitem [ref=e111]:
+                                - link "자주묻는질문" [ref=e112] [cursor=pointer]:
+                                    - /url: "#"
+                            - listitem [ref=e113]:
+                                - link "문의하기" [ref=e114] [cursor=pointer]:
+                                    - /url: "#"
+                    - generic [ref=e115]:
+                        - heading "회사" [level=5] [ref=e116]
+                        - list [ref=e117]:
+                            - listitem [ref=e118]:
+                                - link "회사소개" [ref=e119] [cursor=pointer]:
+                                    - /url: "#"
+                            - listitem [ref=e120]:
+                                - link "채용정보" [ref=e121] [cursor=pointer]:
+                                    - /url: "#"
+                            - listitem [ref=e122]:
+                                - link "이용약관" [ref=e123] [cursor=pointer]:
+                                    - /url: "#"
+                            - listitem [ref=e124]:
+                                - link "개인정보처리방침" [ref=e125] [cursor=pointer]:
+                                    - /url: "#"
+                - paragraph [ref=e127]: © 2024 동네물어봐. All rights reserved.
+```

@@ -1,0 +1,43 @@
+
+> @jeju-tourlist/database@1.0.0 type-check /Users/ip9202/develop/vibe/jeju-tourlist/packages/database
+> tsc --noEmit
+
+src/__tests__/setup.ts(83,38): error TS18046: 'error' is of type 'unknown'.
+src/errors/error-handler.ts(35,12): error TS2511: Cannot create an instance of an abstract class.
+src/errors/error-handler.ts(62,10): error TS2511: Cannot create an instance of an abstract class.
+src/errors/error-handler.ts(80,9): error TS7053: Element implicitly has an 'any' type because expression of type '0' can't be used to index type '{}'.
+  Property '0' does not exist on type '{}'.
+src/errors/error-handler.ts(81,9): error TS7053: Element implicitly has an 'any' type because expression of type '0' can't be used to index type '{}'.
+  Property '0' does not exist on type '{}'.
+src/errors/error-handler.ts(82,9): error TS7053: Element implicitly has an 'any' type because expression of type '1' can't be used to index type '{}'.
+  Property '1' does not exist on type '{}'.
+src/errors/error-handler.ts(88,9): error TS2345: Argument of type '{}' is not assignable to parameter of type 'string'.
+src/errors/error-handler.ts(102,9): error TS2345: Argument of type '{}' is not assignable to parameter of type 'string'.
+src/errors/error-handler.ts(110,9): error TS2345: Argument of type '{}' is not assignable to parameter of type 'string'.
+src/errors/error-handler.ts(117,9): error TS2345: Argument of type '{}' is not assignable to parameter of type 'string'.
+src/errors/error-handler.ts(123,9): error TS2345: Argument of type '{}' is not assignable to parameter of type 'string'.
+src/errors/error-handler.ts(129,14): error TS2511: Cannot create an instance of an abstract class.
+src/errors/error-handler.ts(144,14): error TS2511: Cannot create an instance of an abstract class.
+src/errors/error-handler.ts(173,10): error TS2511: Cannot create an instance of an abstract class.
+src/errors/error-handler.ts(188,10): error TS2511: Cannot create an instance of an abstract class.
+src/repositories/enhanced-user.repository.ts(37,45): error TS2314: Generic type 'BaseRepository<T, CreateData, UpdateData, SearchOptions>' requires 4 type argument(s).
+src/repositories/enhanced-user.repository.ts(52,31): error TS2339: Property 'prisma' does not exist on type 'EnhancedUserRepository'.
+src/repositories/enhanced-user.repository.ts(99,31): error TS2339: Property 'prisma' does not exist on type 'EnhancedUserRepository'.
+src/repositories/enhanced-user.repository.ts(144,31): error TS2339: Property 'prisma' does not exist on type 'EnhancedUserRepository'.
+src/repositories/enhanced-user.repository.ts(195,31): error TS2339: Property 'prisma' does not exist on type 'EnhancedUserRepository'.
+src/repositories/enhanced-user.repository.ts(238,31): error TS2339: Property 'prisma' does not exist on type 'EnhancedUserRepository'.
+src/repositories/enhanced-user.repository.ts(281,32): error TS2339: Property 'buildWhereClause' does not exist on type 'EnhancedUserRepository'.
+src/repositories/enhanced-user.repository.ts(283,32): error TS2339: Property 'prisma' does not exist on type 'EnhancedUserRepository'.
+src/repositories/enhanced-user.repository.ts(286,23): error TS2339: Property 'buildOrderBy' does not exist on type 'EnhancedUserRepository'.
+src/repositories/enhanced-user.repository.ts(287,23): error TS2339: Property 'limit' does not exist on type 'UserSearchOptions'.
+src/repositories/enhanced-user.repository.ts(288,23): error TS2339: Property 'offset' does not exist on type 'UserSearchOptions'.
+src/repositories/enhanced-user.repository.ts(327,32): error TS2339: Property 'buildWhereClause' does not exist on type 'EnhancedUserRepository'.
+src/repositories/enhanced-user.repository.ts(329,32): error TS2339: Property 'prisma' does not exist on type 'EnhancedUserRepository'.
+src/repositories/enhanced-user.repository.ts(366,32): error TS2339: Property 'prisma' does not exist on type 'EnhancedUserRepository'.
+src/repositories/question.repository.ts(243,9): error TS2322: Type '{ createdAt: Date; updatedAt: Date; title: string; content: string; tags: string[]; attachments: string[]; authorId?: string | undefined; categoryId?: string | null | undefined; location?: string | undefined; latitude?: number | undefined; longitude?: number | undefined; }' is not assignable to type '(Without<QuestionCreateInput, QuestionUncheckedCreateInput> & QuestionUncheckedCreateInput) | (Without<...> & QuestionCreateInput)'.
+  Type '{ createdAt: Date; updatedAt: Date; title: string; content: string; tags: string[]; attachments: string[]; authorId?: string | undefined; categoryId?: string | null | undefined; location?: string | undefined; latitude?: number | undefined; longitude?: number | undefined; }' is not assignable to type 'Without<QuestionUncheckedCreateInput, QuestionCreateInput> & QuestionCreateInput'.
+    Type '{ createdAt: Date; updatedAt: Date; title: string; content: string; tags: string[]; attachments: string[]; authorId?: string | undefined; categoryId?: string | null | undefined; location?: string | undefined; latitude?: number | undefined; longitude?: number | undefined; }' is not assignable to type 'Without<QuestionUncheckedCreateInput, QuestionCreateInput>'.
+      Types of property 'authorId' are incompatible.
+        Type 'string | undefined' is not assignable to type 'undefined'.
+          Type 'string' is not assignable to type 'undefined'.
+ ELIFECYCLE  Command failed with exit code 1.

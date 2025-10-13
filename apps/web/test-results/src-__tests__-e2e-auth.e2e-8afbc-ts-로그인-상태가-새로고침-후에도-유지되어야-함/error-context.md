@@ -1,0 +1,252 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+    - alert [ref=e2]
+    - generic [ref=e3]:
+        - banner [ref=e4]:
+            - generic [ref=e6]:
+                - link "동네물어봐 제주 여행 Q&A" [ref=e7] [cursor=pointer]:
+                    - /url: /
+                    - img [ref=e9]
+                    - generic [ref=e12]: 동네물어봐
+                    - generic [ref=e13]: 제주 여행 Q&A
+                - navigation [ref=e14]:
+                    - link "질문 목록" [ref=e15] [cursor=pointer]:
+                        - /url: /questions
+                    - link "카테고리" [ref=e16] [cursor=pointer]:
+                        - /url: /categories
+                    - link "전문가" [ref=e17] [cursor=pointer]:
+                        - /url: /experts
+                - generic [ref=e18]:
+                    - generic [ref=e20]:
+                        - img [ref=e21]
+                        - searchbox "제주 여행 정보 검색..." [ref=e24]
+                    - link "질문하기" [ref=e25] [cursor=pointer]:
+                        - /url: /questions/new
+                        - button "질문하기" [ref=e26]:
+                            - generic [ref=e27]: 질문하기
+                    - button "T Test User" [ref=e28] [cursor=pointer]:
+                        - generic [ref=e29]: T
+                        - generic [ref=e30]: Test User
+                        - img [ref=e31]
+        - main [ref=e33]:
+            - generic [ref=e34]:
+                - generic [ref=e35]:
+                    - heading "제주도 여행, 무엇이든 물어보세요!" [level=2] [ref=e36]
+                    - paragraph [ref=e37]: 현지 전문가들이 직접 답변해드립니다
+                - generic [ref=e39]:
+                    - img [ref=e40]
+                    - textbox "궁금한 제주 여행 정보를 검색해보세요" [ref=e43]
+                    - button "검색" [ref=e44] [cursor=pointer]
+            - generic [ref=e45]:
+                - heading "인기 카테고리" [level=3] [ref=e46]
+                - generic [ref=e47]:
+                    - generic [ref=e48] [cursor=pointer]:
+                        - generic [ref=e49]: 🍽️
+                        - heading "맛집" [level=4] [ref=e50]
+                        - paragraph [ref=e51]: 45개 질문
+                    - generic [ref=e52] [cursor=pointer]:
+                        - generic [ref=e53]: 🏛️
+                        - heading "관광지" [level=4] [ref=e54]
+                        - paragraph [ref=e55]: 32개 질문
+                    - generic [ref=e56] [cursor=pointer]:
+                        - generic [ref=e57]: 🏨
+                        - heading "숙박" [level=4] [ref=e58]
+                        - paragraph [ref=e59]: 28개 질문
+                    - generic [ref=e60] [cursor=pointer]:
+                        - generic [ref=e61]: 🚗
+                        - heading "교통" [level=4] [ref=e62]
+                        - paragraph [ref=e63]: 21개 질문
+                    - generic [ref=e64] [cursor=pointer]:
+                        - generic [ref=e65]: 🏄
+                        - heading "액티비티" [level=4] [ref=e66]
+                        - paragraph [ref=e67]: 18개 질문
+                    - generic [ref=e68] [cursor=pointer]:
+                        - generic [ref=e69]: 🛍️
+                        - heading "쇼핑" [level=4] [ref=e70]
+                        - paragraph [ref=e71]: 15개 질문
+            - generic [ref=e72]:
+                - generic [ref=e73]:
+                    - heading "인기 질문" [level=3] [ref=e74]
+                    - button "더보기" [ref=e75] [cursor=pointer]:
+                        - text: 더보기
+                        - img [ref=e76]
+                - generic [ref=e78]:
+                    - generic [ref=e79]:
+                        - generic [ref=e80]:
+                            - generic [ref=e81]: 맛집
+                            - img [ref=e82] [cursor=pointer]
+                        - heading "제주도에서 꼭 가봐야 할 맛집 추천해주세요!" [level=4] [ref=e84]
+                        - generic [ref=e85]:
+                            - generic [ref=e86]:
+                                - generic [ref=e87]:
+                                    - img [ref=e88]
+                                    - text: 12개 답변
+                                - generic [ref=e93]:
+                                    - img [ref=e94]
+                                    - text: 2시간 전
+                            - generic [ref=e97]: 1250 조회
+                        - generic [ref=e98]:
+                            - generic [ref=e99]:
+                                - generic [ref=e100]: 제
+                                - generic [ref=e101]:
+                                    - paragraph [ref=e102]: 제주맛집마스터
+                                    - generic [ref=e103]:
+                                        - img [ref=e104]
+                                        - generic [ref=e106]: "4.9"
+                            - button "답변보기" [ref=e107] [cursor=pointer]
+                    - generic [ref=e108]:
+                        - generic [ref=e109]:
+                            - generic [ref=e110]: 교통
+                            - img [ref=e111] [cursor=pointer]
+                        - heading "제주도 렌터카 vs 대중교통, 어떤게 나을까요?" [level=4] [ref=e113]
+                        - generic [ref=e114]:
+                            - generic [ref=e115]:
+                                - generic [ref=e116]:
+                                    - img [ref=e117]
+                                    - text: 8개 답변
+                                - generic [ref=e122]:
+                                    - img [ref=e123]
+                                    - text: 4시간 전
+                            - generic [ref=e126]: 980 조회
+                        - generic [ref=e127]:
+                            - generic [ref=e128]:
+                                - generic [ref=e129]: 제
+                                - generic [ref=e130]:
+                                    - paragraph [ref=e131]: 제주교통전문가
+                                    - generic [ref=e132]:
+                                        - img [ref=e133]
+                                        - generic [ref=e135]: "4.9"
+                            - button "답변보기" [ref=e136] [cursor=pointer]
+                    - generic [ref=e137]:
+                        - generic [ref=e138]:
+                            - generic [ref=e139]: 관광지
+                            - img [ref=e140] [cursor=pointer]
+                        - heading "제주도 3박4일 일정 추천해주세요" [level=4] [ref=e142]
+                        - generic [ref=e143]:
+                            - generic [ref=e144]:
+                                - generic [ref=e145]:
+                                    - img [ref=e146]
+                                    - text: 15개 답변
+                                - generic [ref=e151]:
+                                    - img [ref=e152]
+                                    - text: 6시간 전
+                            - generic [ref=e155]: 2100 조회
+                        - generic [ref=e156]:
+                            - generic [ref=e157]:
+                                - generic [ref=e158]: 제
+                                - generic [ref=e159]:
+                                    - paragraph [ref=e160]: 제주여행플래너
+                                    - generic [ref=e161]:
+                                        - img [ref=e162]
+                                        - generic [ref=e164]: "4.9"
+                            - button "답변보기" [ref=e165] [cursor=pointer]
+            - generic [ref=e166]:
+                - generic [ref=e167]:
+                    - heading "인기 전문가" [level=3] [ref=e168]
+                    - button "전문가 더보기" [ref=e169] [cursor=pointer]:
+                        - text: 전문가 더보기
+                        - img [ref=e170]
+                - generic [ref=e172]:
+                    - generic [ref=e173]:
+                        - generic [ref=e174]: 🍽️
+                        - heading "제주맛집마스터" [level=4] [ref=e175]
+                        - paragraph [ref=e176]: 맛집 추천
+                        - generic [ref=e177]:
+                            - img [ref=e178]
+                            - generic [ref=e180]: "4.9"
+                            - generic [ref=e181]: (156개 답변)
+                        - link "질문하기" [ref=e182] [cursor=pointer]:
+                            - /url: /auth/signin?callbackUrl=/questions/new
+                    - generic [ref=e183]:
+                        - generic [ref=e184]: 🗺️
+                        - heading "제주여행플래너" [level=4] [ref=e185]
+                        - paragraph [ref=e186]: 일정 계획
+                        - generic [ref=e187]:
+                            - img [ref=e188]
+                            - generic [ref=e190]: "4.8"
+                            - generic [ref=e191]: (98개 답변)
+                        - link "질문하기" [ref=e192] [cursor=pointer]:
+                            - /url: /auth/signin?callbackUrl=/questions/new
+                    - generic [ref=e193]:
+                        - generic [ref=e194]: 🚗
+                        - heading "제주교통전문가" [level=4] [ref=e195]
+                        - paragraph [ref=e196]: 교통 정보
+                        - generic [ref=e197]:
+                            - img [ref=e198]
+                            - generic [ref=e200]: "4.7"
+                            - generic [ref=e201]: (87개 답변)
+                        - link "질문하기" [ref=e202] [cursor=pointer]:
+                            - /url: /auth/signin?callbackUrl=/questions/new
+                    - generic [ref=e203]:
+                        - generic [ref=e204]: 🏄
+                        - heading "제주액티비티가이드" [level=4] [ref=e205]
+                        - paragraph [ref=e206]: 액티비티
+                        - generic [ref=e207]:
+                            - img [ref=e208]
+                            - generic [ref=e210]: "4.9"
+                            - generic [ref=e211]: (72개 답변)
+                        - link "질문하기" [ref=e212] [cursor=pointer]:
+                            - /url: /auth/signin?callbackUrl=/questions/new
+            - generic [ref=e213]:
+                - heading "제주 여행의 모든 것을 한 번에!" [level=3] [ref=e214]
+                - paragraph [ref=e215]: 현지 전문가들과 함께하는 스마트한 제주 여행 계획
+                - generic [ref=e216]:
+                    - link "지금 시작하기" [ref=e217] [cursor=pointer]:
+                        - /url: /questions
+                    - link "전문가 되기" [ref=e218] [cursor=pointer]:
+                        - /url: /experts
+        - contentinfo [ref=e219]:
+            - generic [ref=e220]:
+                - generic [ref=e221]:
+                    - generic [ref=e222]:
+                        - heading "동네물어봐" [level=4] [ref=e223]
+                        - paragraph [ref=e224]: 제주도 여행자와 현지 주민을 연결하는 실시간 Q&A 커뮤니티
+                    - generic [ref=e225]:
+                        - heading "서비스" [level=5] [ref=e226]
+                        - list [ref=e227]:
+                            - listitem [ref=e228]:
+                                - link "질문하기" [ref=e229] [cursor=pointer]:
+                                    - /url: "#"
+                            - listitem [ref=e230]:
+                                - link "답변하기" [ref=e231] [cursor=pointer]:
+                                    - /url: "#"
+                            - listitem [ref=e232]:
+                                - link "전문가" [ref=e233] [cursor=pointer]:
+                                    - /url: "#"
+                            - listitem [ref=e234]:
+                                - link "커뮤니티" [ref=e235] [cursor=pointer]:
+                                    - /url: "#"
+                    - generic [ref=e236]:
+                        - heading "지원" [level=5] [ref=e237]
+                        - list [ref=e238]:
+                            - listitem [ref=e239]:
+                                - link "고객센터" [ref=e240] [cursor=pointer]:
+                                    - /url: "#"
+                            - listitem [ref=e241]:
+                                - link "이용가이드" [ref=e242] [cursor=pointer]:
+                                    - /url: "#"
+                            - listitem [ref=e243]:
+                                - link "자주묻는질문" [ref=e244] [cursor=pointer]:
+                                    - /url: "#"
+                            - listitem [ref=e245]:
+                                - link "문의하기" [ref=e246] [cursor=pointer]:
+                                    - /url: "#"
+                    - generic [ref=e247]:
+                        - heading "회사" [level=5] [ref=e248]
+                        - list [ref=e249]:
+                            - listitem [ref=e250]:
+                                - link "회사소개" [ref=e251] [cursor=pointer]:
+                                    - /url: "#"
+                            - listitem [ref=e252]:
+                                - link "채용정보" [ref=e253] [cursor=pointer]:
+                                    - /url: "#"
+                            - listitem [ref=e254]:
+                                - link "이용약관" [ref=e255] [cursor=pointer]:
+                                    - /url: "#"
+                            - listitem [ref=e256]:
+                                - link "개인정보처리방침" [ref=e257] [cursor=pointer]:
+                                    - /url: "#"
+                - paragraph [ref=e259]: © 2024 동네물어봐. All rights reserved.
+```

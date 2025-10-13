@@ -1,6 +1,12 @@
 "use client";
 
-import React, { useState, useEffect, Suspense } from "react";
+import React, {
+  useState,
+  useEffect,
+  Suspense,
+  useRef,
+  useCallback,
+} from "react";
 import { useSearchParams } from "next/navigation";
 import { Button, Input, Heading, Text } from "@jeju-tourlist/ui";
 import { Search, Filter } from "lucide-react";
@@ -12,7 +18,7 @@ import {
 } from "@/hooks/useQuestionSearch";
 import { SubPageHeader } from "@/components/layout/SubPageHeader";
 import { Header } from "@/components/layout/Header";
-import Link from "next/link";
+import { safeFormatSimpleDate } from "@/lib/dateUtils";
 
 function SearchPageContent() {
   const searchParams = useSearchParams();
@@ -25,32 +31,55 @@ function SearchPageContent() {
     sortBy: "createdAt",
     sortOrder: "desc",
   });
+  const lastQueryRef = useRef<string>("");
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    const query = searchParams.get("q");
-    if (query) {
-      setSearchTerm(query);
-      handleSearch(query);
-    }
+    const query = searchParams.get("q") || "";
+    if (!query) return;
+
+    // 동일 검색어 중복 요청 방지
+    if (lastQueryRef.current === query) return;
+
+    lastQueryRef.current = query;
+    setSearchTerm(query);
+    // 디바운스로 초기 진입 시 과도한 호출 방지
+    if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+    debounceTimerRef.current = setTimeout(() => {
+      void performSearch(query, filters);
+    }, 200);
   }, [searchParams]);
 
-  const handleSearch = async (term: string) => {
-    if (!term.trim()) {
-      return;
-    }
+  const performSearch = useCallback(
+    async (term: string, currentFilters: SearchFilters) => {
+      if (!term.trim()) return;
+      try {
+        const result = await searchQuestions({
+          query: term,
+          ...currentFilters,
+          page: 1,
+          limit: 20,
+        });
+        setQuestions(result.questions);
+      } catch {
+        // 에러 UI는 상위 상태로 처리됨
+      }
+    },
+    [searchQuestions]
+  );
 
-    try {
-      const result = await searchQuestions({
-        query: term,
-        ...filters,
-        page: 1,
-        limit: 20,
-      });
+  const handleSearch = (term: string) => {
+    const trimmed = term.trim();
+    if (!trimmed) return;
+    // 동일 검색어 반복 호출 방지
+    if (lastQueryRef.current === trimmed) return;
+    lastQueryRef.current = trimmed;
 
-      setQuestions(result.questions);
-    } catch (err) {
-      // 검색 실패 시 에러 상태로 처리
-    }
+    // 디바운스 적용
+    if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+    debounceTimerRef.current = setTimeout(() => {
+      void performSearch(trimmed, filters);
+    }, 250);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -62,11 +91,17 @@ function SearchPageContent() {
   };
 
   const handleFilterChange = (key: keyof SearchFilters, value: string) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
-    // 필터 변경 시 자동으로 검색 실행
-    if (searchTerm.trim()) {
-      handleSearch(searchTerm);
-    }
+    // 변경될 필터를 미리 계산하여 즉시 검색에 사용
+    const nextFilters = { ...filters, [key]: value } as SearchFilters;
+    setFilters(nextFilters);
+
+    if (!searchTerm.trim()) return;
+
+    // 디바운스로 연쇄 호출 최소화
+    if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+    debounceTimerRef.current = setTimeout(() => {
+      void performSearch(searchTerm.trim(), nextFilters);
+    }, 250);
   };
 
   return (
@@ -196,9 +231,7 @@ function SearchPageContent() {
                         </span>
                       )}
                     </div>
-                    <span>
-                      {new Date(question.createdAt).toLocaleDateString("ko-KR")}
-                    </span>
+                    <span>{safeFormatSimpleDate(question.createdAt)}</span>
                   </div>
                 </div>
               ))}

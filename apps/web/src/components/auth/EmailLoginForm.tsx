@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { signIn } from "next-auth/react";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -27,9 +28,12 @@ interface EmailLoginFormProps {
 }
 
 export function EmailLoginForm({ callbackUrl = "/" }: EmailLoginFormProps) {
+  const router = useRouter();
+  const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const {
     register,
@@ -43,32 +47,28 @@ export function EmailLoginForm({ callbackUrl = "/" }: EmailLoginFormProps) {
   const onSubmit = async (data: EmailLoginFormData) => {
     setIsSubmitting(true);
     setSubmitError(null);
+    setIsSuccess(false);
 
     try {
-      const result = await signIn("credentials", {
-        email: data.email,
-        password: data.password,
-        redirect: false,
-      });
+      const result = await login(data.email, data.password);
 
       console.log("로그인 결과:", result);
 
-      if (result?.error) {
-        if (result.error === "CredentialsSignin") {
-          setSubmitError("이메일 또는 비밀번호가 올바르지 않습니다.");
-        } else {
-          setSubmitError("로그인 중 오류가 발생했습니다. 다시 시도해주세요.");
-        }
-      } else if (result?.ok) {
-        console.log("✅ 로그인 성공 - 3초 후 페이지 리다이렉트");
-        setSubmitError("로그인 성공! 3초 후 메인 페이지로 이동합니다...");
+      if (!result.success) {
+        setSubmitError(
+          result.message || "이메일 또는 비밀번호가 올바르지 않습니다."
+        );
+      } else {
+        console.log("✅ 로그인 성공 - 페이지 리다이렉트");
+        setIsSuccess(true);
+        setSubmitError("로그인 성공! 페이지를 이동합니다...");
 
-        // 3초 대기 후 리다이렉트
-        await new Promise(resolve => setTimeout(resolve, 3000));
+        // 잠시 대기 후 리다이렉트
+        await new Promise(resolve => setTimeout(resolve, 1000));
 
-        console.log("🔄 리다이렉트 시작");
-        // 로그인 성공 시 전체 페이지 리다이렉트 (쿠키 적용 보장)
-        window.location.href = callbackUrl;
+        console.log("🔄 리다이렉트 시작:", callbackUrl);
+        router.push(callbackUrl);
+        router.refresh();
       }
     } catch (error) {
       console.error("Login error:", error);
@@ -82,10 +82,8 @@ export function EmailLoginForm({ callbackUrl = "/" }: EmailLoginFormProps) {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       {/* 에러/성공 메시지 */}
       {submitError && (
-        <Alert
-          variant={submitError.includes("성공") ? "default" : "destructive"}
-        >
-          {submitError.includes("성공") ? (
+        <Alert variant={isSuccess ? "default" : "destructive"}>
+          {isSuccess ? (
             <CheckCircle className="h-4 w-4 text-green-600" />
           ) : (
             <AlertCircle className="h-4 w-4" />
