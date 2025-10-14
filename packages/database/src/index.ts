@@ -14,6 +14,9 @@ export * from "./services";
 import { prisma } from "./client";
 import { DatabaseServiceFactory } from "./services";
 
+// Prisma 클라이언트 직접 export
+export { prisma };
+
 // 싱글톤 데이터베이스 서비스 인스턴스
 export const databaseService = DatabaseServiceFactory.getInstance(prisma);
 

@@ -12,11 +12,12 @@ datasource db {
 model User {
   id                String             @id @default(cuid())
   email             String             @unique
+  password          String?            // 이메일 로그인용 해시된 비밀번호
   name              String
   nickname          String             @unique
   avatar            String?
   provider          String
-  providerId        String
+  providerId        String?            // OAuth 제공자 ID (이메일 로그인 시 null 허용)
   bio               String?
   location          String?
   website           String?
@@ -74,6 +75,7 @@ model Question {
   authorId         String
   categoryId       String?
   tags             String[]
+  attachments      String[]      @default([])
   location         String?
   latitude         Float?
   longitude        Float?
@@ -348,4 +350,40 @@ enum BadgeType {
   LOCATION_BASED
   SOCIAL_VERIFIED
   OFFICIAL_VERIFIED
+}
+
+// 이메일 인증 토큰
+model EmailVerificationToken {
+  id        String   @id @default(cuid())
+  userId    String
+  email     String
+  token     String   @unique
+  expiresAt DateTime
+  isUsed    Boolean  @default(false)
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([email])
+  @@index([token])
+  @@map("email_verification_tokens")
+}
+
+// 비밀번호 재설정 토큰
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  userId    String
+  email     String
+  token     String   @unique
+  expiresAt DateTime
+  isUsed    Boolean  @default(false)
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([email])
+  @@index([token])
+  @@map("password_reset_tokens")
 }

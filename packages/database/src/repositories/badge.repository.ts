@@ -84,8 +84,15 @@ export interface IBadgeRepository {
   awardBadge(userId: string, badgeId: string): Promise<UserBadge>;
   getUserBadges(options: UserBadgeQueryOptions): Promise<UserBadge[]>;
   getUserBadgeById(userId: string, badgeId: string): Promise<UserBadge | null>;
-  getUserBadgeByCode(userId: string, badgeCode: string): Promise<UserBadge | null>;
-  updateUserBadgeProgress(userId: string, badgeId: string, progress: any): Promise<UserBadge>;
+  getUserBadgeByCode(
+    userId: string,
+    badgeCode: string
+  ): Promise<UserBadge | null>;
+  updateUserBadgeProgress(
+    userId: string,
+    badgeId: string,
+    progress: any
+  ): Promise<UserBadge>;
   markBadgeAsEarned(userId: string, badgeId: string): Promise<UserBadge>;
 
   // 배지 통계
@@ -97,7 +104,10 @@ export interface IBadgeRepository {
   }>;
 
   // 배지 조건 검증
-  checkBadgeEligibility(userId: string, badgeId: string): Promise<{
+  checkBadgeEligibility(
+    userId: string,
+    badgeId: string
+  ): Promise<{
     isEligible: boolean;
     progress: number;
     maxProgress: number;
@@ -107,4 +117,11 @@ export interface IBadgeRepository {
   // 배치 처리
   findEligibleUsersForBadge(badgeId: string): Promise<string[]>;
   bulkAwardBadges(userId: string, badgeIds: string[]): Promise<UserBadge[]>;
+
+  // 추가 메서드들
+  getUserBadgeProgress(userId: string): Promise<any[]>;
+  findActiveUsers(): Promise<
+    Array<{ id: string; name: string; email: string }>
+  >;
+  getBadgeSystemStats(days: number): Promise<any>;
 }

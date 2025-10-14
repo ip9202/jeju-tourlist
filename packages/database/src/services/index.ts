@@ -10,6 +10,8 @@ export * from "./admin.service";
 export * from "./moderation.service";
 export * from "./password.service";
 export * from "./auth.service";
+export * from "./answer-adoption.service";
+export * from "./batch-scheduler.service";
 
 // 데이터베이스 서비스 팩토리
 import { PrismaClient } from "@prisma/client";

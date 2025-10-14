@@ -146,7 +146,11 @@ export interface IAuthRepository {
  * AuthRepository 구현
  */
 export class AuthRepository implements IAuthRepository {
-  constructor(private readonly prisma: PrismaClient) {}
+  private readonly prisma: PrismaClient;
+
+  constructor(prisma: PrismaClient) {
+    this.prisma = prisma;
+  }
 
   // ============================================
   // User 관련 메서드 구현
@@ -177,7 +181,7 @@ export class AuthRepository implements IAuthRepository {
         name: data.name,
         nickname: data.nickname,
         provider: "email",
-        providerId: null, // 이메일 기반은 providerId가 null
+        providerId: null,
         isVerified: false,
         isActive: true,
       },

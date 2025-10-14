@@ -48,19 +48,13 @@ export class BadgeService {
     for (const badge of badges) {
       try {
         // 이미 획득한 배지인지 확인
-        const existingUserBadge = await this.badgeRepository.getUserBadgeById(
-          userId,
-          badge.id
-        );
+        const existingUserBadge = await this.badgeRepository.getUserBadgeById(userId, badge.id);
         if (existingUserBadge?.earnedAt) {
           continue;
         }
 
         // 배지 자격 검증
-        const eligibility = await this.badgeRepository.checkBadgeEligibility(
-          userId,
-          badge.id
-        );
+        const eligibility = await this.badgeRepository.checkBadgeEligibility(userId, badge.id);
 
         if (eligibility.isEligible) {
           // 배지 부여
@@ -77,9 +71,7 @@ export class BadgeService {
             points: badge.bonusPoints,
           });
 
-          console.log(
-            `✅ 배지 부여: ${badge.emoji} ${badge.name} (${badge.bonusPoints}포인트)`
-          );
+          console.log(`✅ 배지 부여: ${badge.emoji} ${badge.name} (${badge.bonusPoints}포인트)`);
         }
       } catch (error) {
         console.error(`❌ 배지 ${badge.name} 검사 중 오류:`, error);
@@ -100,10 +92,7 @@ export class BadgeService {
     const stats = await this.badgeRepository.getBadgeStats(userId);
     return {
       ...stats,
-      completionRate:
-        stats.totalBadges > 0
-          ? (stats.earnedBadges / stats.totalBadges) * 100
-          : 0,
+      completionRate: stats.totalBadges > 0 ? (stats.earnedBadges / stats.totalBadges) * 100 : 0,
     };
   }
 
@@ -126,9 +115,7 @@ export class BadgeService {
     console.log("🔄 배지 배치 처리 시작...");
     const startTime = Date.now();
 
-    const activeUsers = await (
-      this.badgeRepository as any
-    ).prisma.user.findMany({
+    const activeUsers = await (this.badgeRepository as any).prisma.user.findMany({
       where: { isActive: true },
       select: { id: true, name: true },
     });
@@ -154,9 +141,7 @@ export class BadgeService {
     }
 
     const processingTime = Date.now() - startTime;
-    console.log(
-      `✅ 배치 처리 완료: ${processedUsers}명 처리, ${totalBadgesAwarded}개 배지 부여 (${processingTime}ms)`
-    );
+    console.log(`✅ 배치 처리 완료: ${processedUsers}명 처리, ${totalBadgesAwarded}개 배지 부여 (${processingTime}ms)`);
 
     return {
       processedUsers,
@@ -173,10 +158,7 @@ export class BadgeService {
    * @param badgeCode - 배지 코드
    * @returns 지급된 포인트
    */
-  async awardExpertPoints(
-    userId: string,
-    badgeCode: string
-  ): Promise<ExpertPointsResult> {
+  async awardExpertPoints(userId: string, badgeCode: string): Promise<ExpertPointsResult> {
     const badge = await this.badgeRepository.findByCode(badgeCode);
     if (!badge || !badge.adoptBonusPoints) {
       return {
@@ -188,10 +170,7 @@ export class BadgeService {
     }
 
     // 사용자가 해당 배지를 보유하고 있는지 확인
-    const userBadge = await this.badgeRepository.getUserBadgeByCode(
-      userId,
-      badgeCode
-    );
+    const userBadge = await this.badgeRepository.getUserBadgeByCode(userId, badgeCode);
     if (!userBadge?.earnedAt) {
       return {
         userId,
@@ -212,10 +191,8 @@ export class BadgeService {
       select: { points: true },
     });
 
-    console.log(
-      `💰 전문가 포인트 지급: ${userId}에게 ${badge.adoptBonusPoints}포인트 (${badge.name})`
-    );
-
+    console.log(`💰 전문가 포인트 지급: ${userId}에게 ${badge.adoptBonusPoints}포인트 (${badge.name})`);
+    
     return {
       userId,
       badgeCode,
@@ -223,6 +200,28 @@ export class BadgeService {
       totalPoints: updatedUser.points,
     };
   }
+
+  /**
+   * 배지 생성 (관리자용)
+   *
+   * @param data - 배지 생성 데이터
+   * @returns 생성된 배지
+   */
+  async createBadge(data: any) {
+    return await this.badgeRepository.create(data);
+  }
+
+  /**
+   * 배지 수정 (관리자용)
+   *
+   * @param badgeId - 배지 ID
+   * @param data - 수정 데이터
+   * @returns 수정된 배지
+   */
+  async updateBadge(badgeId: string, data: any) {
+    return await this.badgeRepository.update(badgeId, data);
+  }
+
 
   /**
    * 사용자 배지 진행률 조회
@@ -253,7 +252,7 @@ export class BadgeService {
     try {
       // 모든 활성 사용자 조회
       const users = await this.badgeRepository.findActiveUsers();
-
+      
       for (const user of users) {
         try {
           const results = await this.checkAndAwardBadges(user.id);
@@ -322,47 +321,5 @@ export class BadgeService {
    */
   async awardBadge(userId: string, badgeId: string) {
     return await this.badgeRepository.awardBadge(userId, badgeId);
-  }
-
-  /**
-   * 배지 목록 조회
-   *
-   * @param options - 조회 옵션
-   * @returns 배지 목록
-   */
-  async getBadges(options: any = {}) {
-    return await this.badgeRepository.findMany(options);
-  }
-
-  /**
-   * 사용자 배지 목록 조회
-   *
-   * @param userId - 사용자 ID
-   * @param category - 카테고리 (선택)
-   * @returns 사용자 배지 목록
-   */
-  async getUserBadges(userId: string, category?: string) {
-    return await this.badgeRepository.getUserBadges({ userId, category });
-  }
-
-  /**
-   * 배지 생성 (관리자용)
-   *
-   * @param data - 배지 생성 데이터
-   * @returns 생성된 배지
-   */
-  async createBadge(data: any) {
-    return await this.badgeRepository.create(data);
-  }
-
-  /**
-   * 배지 수정 (관리자용)
-   *
-   * @param badgeId - 배지 ID
-   * @param data - 수정 데이터
-   * @returns 수정된 배지
-   */
-  async updateBadge(badgeId: string, data: any) {
-    return await this.badgeRepository.update(badgeId, data);
   }
 }

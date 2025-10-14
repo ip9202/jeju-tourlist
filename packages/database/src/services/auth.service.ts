@@ -90,7 +90,11 @@ export class AuthService implements IAuthService {
   constructor(
     private readonly authRepository: IAuthRepository,
     private readonly passwordService: IPasswordService
-  ) {}
+  ) {
+    console.log("🔍 [DEBUG] AuthService 생성자 호출됨");
+    console.log("🔍 [DEBUG] authRepository:", authRepository);
+    console.log("🔍 [DEBUG] passwordService:", passwordService);
+  }
 
   // ============================================
   // 회원가입
@@ -100,6 +104,8 @@ export class AuthService implements IAuthService {
     user: User;
     verificationToken: EmailVerificationToken;
   }> {
+    console.log("🔍 [DEBUG] AuthService.register 시작:", input.email);
+
     // 1. 이메일 중복 확인
     const existingUserByEmail = await this.authRepository.findUserByEmail(
       input.email
@@ -107,6 +113,7 @@ export class AuthService implements IAuthService {
     if (existingUserByEmail) {
       throw new Error("이미 사용 중인 이메일입니다");
     }
+    console.log("🔍 [DEBUG] 이메일 중복 확인 완료");
 
     // 2. 닉네임 중복 확인
     const existingUserByNickname = await this.authRepository.findUserByNickname(
@@ -115,17 +122,28 @@ export class AuthService implements IAuthService {
     if (existingUserByNickname) {
       throw new Error("이미 사용 중인 닉네임입니다");
     }
+    console.log("🔍 [DEBUG] 닉네임 중복 확인 완료");
 
     // 3. 비밀번호 해싱
     const hashedPassword = await this.passwordService.hash(input.password);
+    console.log("🔍 [DEBUG] 비밀번호 해싱 완료");
 
     // 4. 사용자 생성
+    console.log("🔍 [DEBUG] createEmailUser 호출 시작");
+    console.log("🔍 [DEBUG] this.authRepository:", this.authRepository);
+    console.log(
+      "🔍 [DEBUG] this.authRepository.createEmailUser:",
+      this.authRepository.createEmailUser
+    );
+
     const user = await this.authRepository.createEmailUser({
       email: input.email,
       password: hashedPassword,
       name: input.name,
       nickname: input.nickname,
     });
+
+    console.log("🔍 [DEBUG] createEmailUser 호출 완료:", user.id);
 
     // 5. 이메일 인증 토큰 생성
     const token = this.generateToken();

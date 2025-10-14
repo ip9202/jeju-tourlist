@@ -62,7 +62,13 @@ export class BadgeRepository implements IBadgeRepository {
    * 배지 목록 조회
    */
   async findMany(options: BadgeQueryOptions = {}): Promise<Badge[]> {
-    const { category, type, isActive = true, page = 1, limit = 20 } = options;
+    const {
+      category,
+      type,
+      isActive = true,
+      page = 1,
+      limit = 20,
+    } = options;
 
     const where: any = {};
 
@@ -117,7 +123,7 @@ export class BadgeRepository implements IBadgeRepository {
    * 사용자에게 배지 부여
    */
   async awardBadge(userId: string, badgeId: string): Promise<UserBadge> {
-    return await this.prisma.$transaction(async tx => {
+    return await this.prisma.$transaction(async (tx) => {
       // 배지 정보 조회
       const badge = await tx.badge.findUnique({
         where: { id: badgeId },
@@ -176,7 +182,14 @@ export class BadgeRepository implements IBadgeRepository {
    * 사용자 배지 목록 조회
    */
   async getUserBadges(options: UserBadgeQueryOptions): Promise<UserBadge[]> {
-    const { userId, category, type, isEarned, page = 1, limit = 20 } = options;
+    const {
+      userId,
+      category,
+      type,
+      isEarned,
+      page = 1,
+      limit = 20,
+    } = options;
 
     const where: any = { userId };
 
@@ -211,10 +224,7 @@ export class BadgeRepository implements IBadgeRepository {
   /**
    * 사용자 특정 배지 조회 (ID)
    */
-  async getUserBadgeById(
-    userId: string,
-    badgeId: string
-  ): Promise<UserBadge | null> {
+  async getUserBadgeById(userId: string, badgeId: string): Promise<UserBadge | null> {
     return await this.prisma.userBadge.findUnique({
       where: {
         userId_badgeId: {
@@ -231,10 +241,7 @@ export class BadgeRepository implements IBadgeRepository {
   /**
    * 사용자 특정 배지 조회 (코드)
    */
-  async getUserBadgeByCode(
-    userId: string,
-    badgeCode: string
-  ): Promise<UserBadge | null> {
+  async getUserBadgeByCode(userId: string, badgeCode: string): Promise<UserBadge | null> {
     return await this.prisma.userBadge.findFirst({
       where: {
         userId,
@@ -251,11 +258,7 @@ export class BadgeRepository implements IBadgeRepository {
   /**
    * 사용자 배지 진행률 업데이트
    */
-  async updateUserBadgeProgress(
-    userId: string,
-    badgeId: string,
-    _progress: any
-  ): Promise<UserBadge> {
+  async updateUserBadgeProgress(userId: string, badgeId: string, _progress: any): Promise<UserBadge> {
     return await this.prisma.userBadge.update({
       where: {
         userId_badgeId: {
@@ -304,7 +307,7 @@ export class BadgeRepository implements IBadgeRepository {
   }> {
     const [userBadges, totalBadges] = await Promise.all([
       this.prisma.userBadge.findMany({
-        where: { userId, earnedAt: { not: undefined } },
+        where: { userId, earnedAt: { not: null } },
         include: { badge: true },
       }),
       this.prisma.badge.count({
@@ -326,10 +329,7 @@ export class BadgeRepository implements IBadgeRepository {
       {} as Record<string, { count: number; points: number }>
     );
 
-    const totalPoints = userBadges.reduce(
-      (sum, ub) => sum + ub.badge.bonusPoints,
-      0
-    );
+    const totalPoints = userBadges.reduce((sum, ub) => sum + ub.badge.bonusPoints, 0);
 
     return {
       totalBadges,
@@ -342,10 +342,7 @@ export class BadgeRepository implements IBadgeRepository {
   /**
    * 배지 획득 자격 검증
    */
-  async checkBadgeEligibility(
-    userId: string,
-    badgeId: string
-  ): Promise<{
+  async checkBadgeEligibility(userId: string, badgeId: string): Promise<{
     isEligible: boolean;
     progress: number;
     maxProgress: number;
@@ -389,23 +386,17 @@ export class BadgeRepository implements IBadgeRepository {
       case "CATEGORY_EXPERT": {
         // 카테고리별 답변 수 및 채택률 계산
         const categoryAnswers = user.answers.filter(
-          answer => answer.question.category?.name === badge.category
+          (answer) => answer.question.category?.name === badge.category
         );
 
-        const adoptedAnswers = categoryAnswers.filter(
-          answer => answer.adoptedAt !== null
-        );
-        const adoptRate =
-          categoryAnswers.length > 0
-            ? adoptedAnswers.length / categoryAnswers.length
-            : 0;
+        const adoptedAnswers = categoryAnswers.filter((answer) => answer.adoptedAt !== null);
+        const adoptRate = categoryAnswers.length > 0 ? adoptedAnswers.length / categoryAnswers.length : 0;
 
         progress = categoryAnswers.length;
         maxProgress = badge.requiredAnswers;
         isEligible =
           categoryAnswers.length >= badge.requiredAnswers &&
-          (!badge.requiredAdoptRate ||
-            adoptRate >= badge.requiredAdoptRate / 100);
+          (!badge.requiredAdoptRate || adoptRate >= badge.requiredAdoptRate / 100);
 
         message = isEligible
           ? `${badge.category} 카테고리에서 ${badge.requiredAnswers}개 답변을 작성하고 채택률 ${badge.requiredAdoptRate || 0}%를 달성했습니다!`
@@ -478,11 +469,8 @@ export class BadgeRepository implements IBadgeRepository {
   /**
    * 사용자에게 여러 배지 일괄 부여
    */
-  async bulkAwardBadges(
-    userId: string,
-    badgeIds: string[]
-  ): Promise<UserBadge[]> {
-    return await this.prisma.$transaction(async _tx => {
+  async bulkAwardBadges(userId: string, badgeIds: string[]): Promise<UserBadge[]> {
+    return await this.prisma.$transaction(async (_tx) => {
       const userBadges: UserBadge[] = [];
 
       for (const badgeId of badgeIds) {
@@ -505,7 +493,7 @@ export class BadgeRepository implements IBadgeRepository {
   async getUserBadgeProgress(userId: string): Promise<any[]> {
     const badges = await this.prisma.badge.findMany({
       where: { isActive: true },
-      orderBy: { createdAt: "asc" },
+      orderBy: { createdAt: 'asc' },
     });
 
     const userBadges = await this.prisma.userBadge.findMany({
@@ -516,7 +504,7 @@ export class BadgeRepository implements IBadgeRepository {
     const earnedBadgeIds = new Set(userBadges.map(ub => ub.badgeId));
 
     const progress = await Promise.all(
-      badges.map(async badge => {
+      badges.map(async (badge) => {
         const isEarned = earnedBadgeIds.has(badge.id);
         const userBadge = userBadges.find(ub => ub.badgeId === badge.id);
 
@@ -556,9 +544,7 @@ export class BadgeRepository implements IBadgeRepository {
   /**
    * 활성 사용자 목록 조회
    */
-  async findActiveUsers(): Promise<
-    Array<{ id: string; name: string; email: string }>
-  > {
+  async findActiveUsers(): Promise<Array<{ id: string; name: string; email: string }>> {
     return await this.prisma.user.findMany({
       where: { isActive: true },
       select: {
@@ -590,12 +576,11 @@ export class BadgeRepository implements IBadgeRepository {
     const totalUserBadges = await this.prisma.userBadge.count();
 
     // 평균 배지 수
-    const averageBadgesPerUser =
-      totalUsers > 0 ? totalUserBadges / totalUsers : 0;
+    const averageBadgesPerUser = totalUsers > 0 ? totalUserBadges / totalUsers : 0;
 
     // 배지별 분포
     const badgeDistribution = await this.prisma.userBadge.groupBy({
-      by: ["badgeId"],
+      by: ['badgeId'],
       _count: {
         userId: true,
       },
@@ -618,17 +603,14 @@ export class BadgeRepository implements IBadgeRepository {
 
     const badgeDistributionWithPercentage = badgeDistribution.map(item => ({
       badgeId: item.badgeId,
-      badgeName: badgeNameMap.get(item.badgeId) || "Unknown",
+      badgeName: badgeNameMap.get(item.badgeId) || 'Unknown',
       userCount: item._count.userId,
-      percentage:
-        totalUsers > 0
-          ? Math.round((item._count.userId / totalUsers) * 100)
-          : 0,
+      percentage: totalUsers > 0 ? Math.round((item._count.userId / totalUsers) * 100) : 0,
     }));
 
     // 최근 활동 (일별)
     const recentActivity = await this.prisma.userBadge.groupBy({
-      by: ["earnedAt"],
+      by: ['earnedAt'],
       _count: {
         userId: true,
       },
@@ -638,12 +620,12 @@ export class BadgeRepository implements IBadgeRepository {
         },
       },
       orderBy: {
-        earnedAt: "desc",
+        earnedAt: 'desc',
       },
     });
 
     const recentActivityFormatted = recentActivity.map(item => ({
-      date: item.earnedAt.toISOString().split("T")[0],
+      date: item.earnedAt.toISOString().split('T')[0],
       badgesEarned: item._count.userId,
       newUsers: 0, // TODO: 실제 신규 사용자 수 계산
     }));
