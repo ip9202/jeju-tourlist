@@ -3,6 +3,8 @@
 import React from "react";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
+import { NotificationProvider } from "@/components/notification";
+import { useAuth } from "@/contexts/AuthContext";
 import { Sidebar } from "./Sidebar";
 
 /**
@@ -35,30 +37,34 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
   showSidebar = true,
   className = "",
 }) => {
+  const { user } = useAuth();
+
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* 헤더 */}
-      <Header />
+    <NotificationProvider userId={user?.id}>
+      <div className="min-h-screen bg-gray-50 flex flex-col">
+        {/* 헤더 */}
+        <Header />
 
-      {/* 메인 콘텐츠 영역 */}
-      {showSidebar ? (
-        <div className="flex-1 flex">
-          {/* 사이드바 (데스크톱에서만 표시) */}
-          <div className="hidden lg:block">
-            <Sidebar />
+        {/* 메인 콘텐츠 영역 */}
+        {showSidebar ? (
+          <div className="flex-1 flex">
+            {/* 사이드바 (데스크톱에서만 표시) */}
+            <div className="hidden lg:block">
+              <Sidebar />
+            </div>
+
+            {/* 메인 콘텐츠 */}
+            <main className={`flex-1 ${className}`}>{children}</main>
           </div>
-
-          {/* 메인 콘텐츠 */}
+        ) : (
+          /* 사이드바 없는 경우 - 서브헤더가 메인헤더 바로 아래에 오도록 */
           <main className={`flex-1 ${className}`}>{children}</main>
-        </div>
-      ) : (
-        /* 사이드바 없는 경우 - 서브헤더가 메인헤더 바로 아래에 오도록 */
-        <main className={`flex-1 ${className}`}>{children}</main>
-      )}
+        )}
 
-      {/* 푸터 */}
-      <Footer />
-    </div>
+        {/* 푸터 */}
+        <Footer />
+      </div>
+    </NotificationProvider>
   );
 };
 

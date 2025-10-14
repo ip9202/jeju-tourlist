@@ -72,3 +72,6 @@ export interface Answer extends BaseEntity {
   isAccepted: boolean;
   likeCount: number;
 }
+
+// 배지 관련 타입 export
+export * from './badge';

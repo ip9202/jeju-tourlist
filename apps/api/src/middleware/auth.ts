@@ -22,23 +22,7 @@ export const authMiddleware = async (
   try {
     const token = extractToken(req);
 
-    // 개발 환경에서는 토큰 없이도 동작 (임시 처리)
-    if (!token && process.env.NODE_ENV === "development") {
-      console.log("[Auth] 개발 환경 - 실제 사용자로 인증 우회");
-      req.user = {
-        id: "cmgivfdih000021pz0w3uxk36", // 실제 사용자 ID 사용
-        email: "test1@jeju.com",
-        name: "김제주",
-        avatar: undefined,
-        role: "user",
-        isActive: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      };
-      next();
-      return;
-    }
-
+    // 개발 환경에서도 인증 토큰 검증 (보안 강화)
     if (!token) {
       res.status(401).json({
         success: false,

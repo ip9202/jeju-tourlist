@@ -289,7 +289,7 @@ export class AnswerController {
         const response: ApiResponse = {
           success: false,
           error: "입력 데이터가 올바르지 않습니다.",
-          message: error.errors.map(e => e.message).join(", "),
+          message: error.issues.map(e => e.message).join(", "),
           timestamp: new Date().toISOString(),
         };
         return res.status(400).json(response);

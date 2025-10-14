@@ -46,4 +46,8 @@ router.post('/reports/:id/process', authenticate, adminController.processReport)
 router.get('/settings', authenticate, adminController.getSystemSettings);
 router.put('/settings', authenticate, adminController.updateSystemSettings);
 
+// 배지 관리
+router.post('/badges/calculate', authenticate, adminController.calculateBadges);
+router.get('/badges/stats', authenticate, adminController.getBadgeStats);
+
 export default router;

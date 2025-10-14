@@ -10,3 +10,5 @@
 export { QuestionDetail } from "./QuestionDetail";
 export { AnswerSection } from "./AnswerSection";
 export { QuestionPage } from "./QuestionPage";
+export { AnswerAuthorBadge, AnswerAuthorBadgeCompact } from "./AnswerAuthorBadge";
+export { AdoptAnswerButton, AdoptAnswerButtonCompact } from "./AdoptAnswerButton";

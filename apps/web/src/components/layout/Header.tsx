@@ -17,6 +17,7 @@ import {
   ChevronUp,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { HeaderUserBadge, HeaderBadgeNotification, HeaderBadgeStats } from "./HeaderUserBadge";
 
 export const Header: React.FC = () => {
   const router = useRouter();
@@ -221,13 +222,26 @@ export const Header: React.FC = () => {
                     }}
                   >
                     <div className="px-4 py-3 border-b border-gray-100 bg-blue-50">
-                      <p className="text-sm font-semibold text-gray-900">
-                        {user?.name}
-                      </p>
-                      <p className="text-xs text-gray-500 truncate">
-                        {user?.email}
-                      </p>
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm font-semibold text-gray-900">
+                            {user?.name}
+                          </p>
+                          <p className="text-xs text-gray-500 truncate">
+                            {user?.email}
+                          </p>
+                        </div>
+                        <HeaderBadgeNotification userId={user.id} />
+                      </div>
+                      <div className="mt-2">
+                        <HeaderBadgeStats userId={user.id} />
+                      </div>
                     </div>
+
+                    {/* 배지 섹션 */}
+                    <HeaderUserBadge userId={user.id} />
+
+                    <div className="border-t border-gray-100 my-1"></div>
 
                     <Link
                       href="/profile"

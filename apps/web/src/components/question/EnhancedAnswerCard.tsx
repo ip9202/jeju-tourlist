@@ -13,6 +13,8 @@ import {
   Check,
 } from "lucide-react";
 import { HierarchicalCommentList } from "./HierarchicalCommentList";
+import { AnswerAuthorBadge } from "./AnswerAuthorBadge";
+import { AdoptAnswerButton } from "./AdoptAnswerButton";
 
 /**
  * 답변 데이터 타입
@@ -503,14 +505,11 @@ export const EnhancedAnswerCard: React.FC<EnhancedAnswerCardProps> = ({
               {answer.author.name.charAt(0)}
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <span className="font-medium">{answer.author.name}</span>
-                {answer.isAccepted && (
-                  <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
-                    채택됨
-                  </span>
-                )}
-              </div>
+              <AnswerAuthorBadge
+                userId={answer.author.id}
+                userName={answer.author.name}
+                isAccepted={answer.isAccepted}
+              />
               <span className="text-sm text-gray-500">
                 {formatTimeAgo(answer.createdAt)}
               </span>

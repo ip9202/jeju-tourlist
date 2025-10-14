@@ -4,7 +4,7 @@ import {
   UpdateQuestionData,
   QuestionSearchOptions,
   QuestionListItem,
-} from "@jeju-tourlist/database/types/question";
+} from "@jeju-tourlist/database/src/types/question";
 import { PaginationParams } from "../../types";
 
 /**

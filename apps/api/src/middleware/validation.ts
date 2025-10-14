@@ -36,7 +36,7 @@ export function validateRequest(
         const response: ApiResponse = {
           success: false,
           error: "입력 데이터가 올바르지 않습니다.",
-          message: error.errors
+          message: error.issues
             .map(e => `${e.path.join(".")}: ${e.message}`)
             .join(", "),
           timestamp: new Date().toISOString(),

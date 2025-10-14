@@ -74,7 +74,7 @@ export function useRegisterForm(callbackUrl: string = "/") {
 
     try {
       const response = await fetch(
-        `http://localhost:4000/api/auth/email/register`,
+        `http://localhost:4000/api/auth/register`,
         {
           method: "POST",
           headers: {

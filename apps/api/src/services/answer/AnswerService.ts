@@ -3,7 +3,7 @@ import {
   CreateAnswerData,
   UpdateAnswerData,
   AnswerSearchOptions,
-} from "@jeju-tourlist/database/types/answer";
+} from "@jeju-tourlist/database/src/types/answer";
 import { PaginationParams } from "../../types";
 import { PrismaClient } from "@prisma/client";
 

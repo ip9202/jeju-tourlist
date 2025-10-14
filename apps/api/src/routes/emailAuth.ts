@@ -8,9 +8,9 @@
 
 import { Router } from "express";
 import { EmailAuthController } from "../controllers/emailAuthController";
-import { AuthService } from "@jeju-tourlist/database/services/auth.service";
-import { AuthRepository } from "@jeju-tourlist/database/repositories/auth.repository";
-import { passwordService } from "@jeju-tourlist/database/services/password.service";
+import { AuthService } from "@jeju-tourlist/database";
+import { AuthRepository } from "@jeju-tourlist/database";
+import { passwordService } from "@jeju-tourlist/database";
 import { prisma } from "@jeju-tourlist/database";
 // Rate limiter는 현재 비활성화 상태 (개발 환경)
 // import { emailRegisterLimiter, emailLoginLimiter } from "../middleware/rateLimiter";

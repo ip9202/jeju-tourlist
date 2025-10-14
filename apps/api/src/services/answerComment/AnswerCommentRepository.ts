@@ -5,7 +5,7 @@ import {
   AnswerCommentSearchOptions,
   AnswerCommentListItem,
   AnswerCommentReactionData,
-} from "@jeju-tourlist/database/types/answerComment";
+} from "@jeju-tourlist/database/src/types/answerComment";
 
 /**
  * 답변 댓글 Repository 클래스

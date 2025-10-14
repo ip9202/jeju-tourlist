@@ -3,7 +3,7 @@ import {
   CreateQuestionData,
   UpdateQuestionData,
   QuestionSearchOptions,
-} from "@jeju-tourlist/database/types/question";
+} from "@jeju-tourlist/database/src/types/question";
 import { PaginationParams } from "../../types";
 import { PrismaClient } from "@prisma/client";
 

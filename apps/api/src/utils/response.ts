@@ -67,3 +67,27 @@ export class ResponseHelper {
     this.error(res, "Internal Server Error", message, 500);
   }
 }
+
+// 간단한 응답 생성 함수 (기존 코드 호환성을 위해)
+export function createResponse<T>(
+  success: boolean,
+  message: string,
+  data?: T,
+  error?: string
+): ApiResponse<T> | ApiError {
+  if (success) {
+    return {
+      success: true,
+      data,
+      message,
+      timestamp: new Date().toISOString(),
+    };
+  } else {
+    return {
+      success: false,
+      error: error || 'Unknown Error',
+      message,
+      timestamp: new Date().toISOString(),
+    };
+  }
+}

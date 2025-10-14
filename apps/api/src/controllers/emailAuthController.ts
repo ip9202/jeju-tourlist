@@ -7,11 +7,11 @@
  */
 
 import { Request, Response } from "express";
-import { IAuthService } from "@jeju-tourlist/database/services/auth.service";
+import { IAuthService } from "@jeju-tourlist/database";
 import {
   RegisterSchema,
   LoginSchema,
-} from "@jeju-tourlist/database/types/auth";
+} from "@jeju-tourlist/database";
 import { z } from "zod";
 
 /**
@@ -26,11 +26,18 @@ export class EmailAuthController {
    */
   register = async (req: Request, res: Response): Promise<void> => {
     try {
+      console.log('🔍 [DEBUG] EmailAuthController.register 호출됨');
+      console.log('🔍 [DEBUG] req.body:', req.body);
+      console.log('🔍 [DEBUG] this.authService:', this.authService);
+      
       // Zod 검증
       const validatedData = RegisterSchema.parse(req.body);
+      console.log('🔍 [DEBUG] Zod 검증 완료:', validatedData);
 
       // 회원가입 처리
+      console.log('🔍 [DEBUG] AuthService.register 호출 시작');
       const result = await this.authService.register(validatedData);
+      console.log('🔍 [DEBUG] AuthService.register 호출 완료:', result);
 
       // 성공 응답
       res.status(201).json({

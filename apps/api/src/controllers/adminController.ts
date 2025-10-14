@@ -14,6 +14,7 @@
 import { Request, Response } from 'express';
 import { AdminService } from '@jeju-tourlist/database';
 import { ModerationService } from '@jeju-tourlist/database';
+import { BadgeService } from '@jeju-tourlist/database';
 import { prisma } from '@jeju-tourlist/database';
 import { createResponse } from '../utils/response';
 
@@ -28,10 +29,12 @@ import { createResponse } from '../utils/response';
 export class AdminController {
   private adminService: AdminService;
   private moderationService: ModerationService;
+  private badgeService: BadgeService;
 
   constructor() {
     this.adminService = new AdminService(prisma);
     this.moderationService = new ModerationService(prisma);
+    this.badgeService = new BadgeService(prisma);
   }
 
   /**
@@ -45,7 +48,7 @@ export class AdminController {
    * @param res - Express 응답 객체
    * @param next - 다음 미들웨어 함수
    */
-  private checkAdminAuth = (req: Request, res: Response, next: Function) => {
+  private checkAdminAuth = (req: Request, res: Response, next: () => void) => {
     // TODO: 실제 관리자 권한 검증 로직 구현
     // if (!req.user?.isAdmin) {
     //   return res.status(403).json(
@@ -412,6 +415,68 @@ export class AdminController {
       console.error('시스템 설정 업데이트 오류:', error);
       res.status(500).json(
         createResponse(false, '시스템 설정 업데이트 중 오류가 발생했습니다.', null)
+      );
+    }
+  };
+
+  /**
+   * 배지 계산 수동 실행
+   * 
+   * @description
+   * - 관리자가 수동으로 배지 계산 실행
+   * - 모든 사용자에 대해 배지 조건 검사
+   * 
+   * @route POST /api/admin/badges/calculate
+   * @access Private (Admin only)
+   */
+  calculateBadges = async (req: Request, res: Response) => {
+    try {
+      this.checkAdminAuth(req, res, async () => {
+        const { userId } = req.body;
+
+        let result;
+        if (userId) {
+          // 특정 사용자만 계산
+          result = await this.badgeService.checkAndAwardBadges(userId);
+        } else {
+          // 모든 사용자 계산
+          result = await this.badgeService.calculateAllUserBadges();
+        }
+
+        res.json(createResponse(true, '배지 계산을 완료했습니다.', result));
+      });
+    } catch (error) {
+      console.error('배지 계산 오류:', error);
+      res.status(500).json(
+        createResponse(false, '배지 계산 중 오류가 발생했습니다.', null)
+      );
+    }
+  };
+
+  /**
+   * 배지 통계 조회
+   * 
+   * @description
+   * - 배지 시스템 전체 통계
+   * - 배지별 획득 현황, 사용자별 배지 분포
+   * 
+   * @route GET /api/admin/badges/stats
+   * @access Private (Admin only)
+   */
+  getBadgeStats = async (req: Request, res: Response) => {
+    try {
+      this.checkAdminAuth(req, res, async () => {
+        const { period = 30 } = req.query;
+        const days = parseInt(period as string) || 30;
+
+        const stats = await this.badgeService.getBadgeSystemStats(days);
+
+        res.json(createResponse(true, '배지 통계를 조회했습니다.', stats));
+      });
+    } catch (error) {
+      console.error('배지 통계 조회 오류:', error);
+      res.status(500).json(
+        createResponse(false, '배지 통계 조회 중 오류가 발생했습니다.', null)
       );
     }
   };

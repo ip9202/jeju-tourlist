@@ -111,14 +111,14 @@ export class BadgeController {
     try {
       const {
         category,
-        isActive = true,
+        isActive: _isActive = true,
         page = 1,
         limit = 20,
       } = req.query;
 
       const options = {
         category: category as string,
-        isActive: isActive === 'true',
+        isActive: true, // 기본값을 true로 고정
         page: parseInt(page as string) || 1,
         limit: parseInt(limit as string) || 20,
       };
@@ -130,6 +130,72 @@ export class BadgeController {
       console.error('배지 목록 조회 오류:', error);
       res.status(500).json(
         createResponse(false, '배지 목록 조회 중 오류가 발생했습니다.', null)
+      );
+    }
+  };
+
+  /**
+   * 특정 사용자 배지 조회
+   * 
+   * @description
+   * - 특정 사용자가 획득한 배지 목록 조회
+   * - 카테고리별 필터링 지원
+   * 
+   * @route GET /api/badges/users/:userId
+   * @access Public
+   */
+  getUserBadges = async (req: Request, res: Response) => {
+    try {
+      const { userId } = req.params;
+      const { category } = req.query;
+
+      if (!userId) {
+        return res.status(400).json(
+          createResponse(false, '사용자 ID가 필요합니다.', null)
+        );
+      }
+
+      const badges = await this.badgeService.getUserBadges(
+        userId, 
+        category as string
+      );
+
+      res.json(createResponse(true, '사용자 배지 목록을 조회했습니다.', { badges }));
+    } catch (error) {
+      console.error('사용자 배지 조회 오류:', error);
+      res.status(500).json(
+        createResponse(false, '사용자 배지 조회 중 오류가 발생했습니다.', null)
+      );
+    }
+  };
+
+  /**
+   * 특정 사용자 배지 진행률 조회
+   * 
+   * @description
+   * - 사용자별 배지 진행률 조회
+   * - 획득하지 않은 배지의 진행률 표시
+   * 
+   * @route GET /api/badges/users/:userId/progress
+   * @access Public
+   */
+  getUserBadgeProgress = async (req: Request, res: Response) => {
+    try {
+      const { userId } = req.params;
+
+      if (!userId) {
+        return res.status(400).json(
+          createResponse(false, '사용자 ID가 필요합니다.', null)
+        );
+      }
+
+      const progress = await this.badgeService.getUserBadgeProgress(userId);
+
+      res.json(createResponse(true, '사용자 배지 진행률을 조회했습니다.', progress));
+    } catch (error) {
+      console.error('사용자 배지 진행률 조회 오류:', error);
+      res.status(500).json(
+        createResponse(false, '사용자 배지 진행률 조회 중 오류가 발생했습니다.', null)
       );
     }
   };

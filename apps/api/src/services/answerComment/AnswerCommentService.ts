@@ -3,8 +3,8 @@ import {
   CreateAnswerCommentData,
   UpdateAnswerCommentData,
   AnswerCommentSearchOptions,
-} from "@jeju-tourlist/database/types/answerComment";
-import { PaginationParams } from "../../types";
+} from "@jeju-tourlist/database/src/types/answerComment";
+// import { PaginationParams } from "../../types";
 import { PrismaClient } from "@prisma/client";
 
 /**

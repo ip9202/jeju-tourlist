@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { UserStats } from "@jeju-tourlist/database/types/user";
+import { UserStats } from "@jeju-tourlist/database/src/types/user";
 import { PaginationParams } from "../../types";
 
 /**

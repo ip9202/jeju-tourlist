@@ -38,6 +38,12 @@ router.post('/check', authenticate, badgeController.checkAndAwardBadges);
 // 전체 배지 목록 조회 (공개)
 router.get('/', badgeController.getBadges);
 
+// 특정 사용자 배지 조회 (공개)
+router.get('/users/:userId', badgeController.getUserBadges);
+
+// 특정 사용자 배지 진행률 조회 (공개)
+router.get('/users/:userId/progress', badgeController.getUserBadgeProgress);
+
 // 배지 생성 (관리자 전용)
 router.post('/', authenticate, badgeController.createBadge);
 

@@ -10,3 +10,4 @@
 export { UserProfile } from "./UserProfile";
 export { ActivityHistory } from "./ActivityHistory";
 export { ProfilePage } from "./ProfilePage";
+export { UserBadgeSection } from "./UserBadgeSection";

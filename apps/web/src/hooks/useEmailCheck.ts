@@ -19,7 +19,7 @@ export function useEmailCheck() {
     setState('checking');
 
     try {
-      const response = await fetch(`http://localhost:4000/api/auth/email/check`, {
+      const response = await fetch(`http://localhost:4000/api/auth/check`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

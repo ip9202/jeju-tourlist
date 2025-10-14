@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { MainLayout } from "@/components/layout";
 import { UserProfile } from "./UserProfile";
 import { ActivityHistory } from "./ActivityHistory";
+import { UserBadgeSection } from "./UserBadgeSection";
 import { Breadcrumb, Button } from "@jeju-tourlist/ui";
 import { ArrowLeft, Share2 } from "lucide-react";
 
@@ -146,6 +147,11 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ userId }) => {
         {/* 활동 이력 */}
         <div className="mb-8">
           <ActivityHistory userId={actualUserId} />
+        </div>
+
+        {/* 배지 섹션 */}
+        <div className="mb-8">
+          <UserBadgeSection userId={actualUserId} />
         </div>
 
         {/* 하단 액션 버튼 */}

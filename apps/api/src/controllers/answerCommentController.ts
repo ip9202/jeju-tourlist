@@ -4,7 +4,7 @@ import { PrismaClient } from "@prisma/client";
 import {
   CreateAnswerCommentSchema,
   UpdateAnswerCommentSchema,
-} from "@jeju-tourlist/database/types/answerComment";
+} from "@jeju-tourlist/database/src/types/answerComment";
 import { ApiResponse, PaginatedResponse } from "../types";
 import { z } from "zod";
 
@@ -54,7 +54,7 @@ export class AnswerCommentController {
           success: false,
           error: "입력 데이터가 올바르지 않습니다.",
           message:
-            error.errors?.map(e => e.message).join(", ") ||
+            error.issues?.map(e => e.message).join(", ") ||
             "검증 오류가 발생했습니다.",
           timestamp: new Date().toISOString(),
         };
@@ -286,7 +286,7 @@ export class AnswerCommentController {
           success: false,
           error: "입력 데이터가 올바르지 않습니다.",
           message:
-            error.errors?.map(e => e.message).join(", ") ||
+            error.issues?.map(e => e.message).join(", ") ||
             "검증 오류가 발생했습니다.",
           timestamp: new Date().toISOString(),
         };

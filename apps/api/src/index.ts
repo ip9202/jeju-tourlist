@@ -6,6 +6,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import swaggerUi from "swagger-ui-express";
 import path from "path";
+import rateLimit from "express-rate-limit";
 // 환경변수 설정
 const env = {
   NODE_ENV: process.env.NODE_ENV || "development",
@@ -46,27 +47,27 @@ import { ErrorHandler } from "./middleware/errorHandler";
 import { swaggerSpec, swaggerUiOptions } from "./config/swagger";
 import healthRoutes from "./routes/health";
 import pointRoutes from "./routes/point";
-// import badgeRoutes from "./routes/badge";
-// import adminRoutes from "./routes/admin";
+import badgeRoutes from "./routes/badge";
+import adminRoutes from "./routes/admin";
 // import notificationRoutes from "./routes/notification";
 import { PrismaClient } from "@prisma/client";
 import { createQuestionRouter } from "./routes/question";
 import { createAnswerRouter } from "./routes/answer";
-import { createAnswerCommentRouter } from "./routes/answerComment";
-import { createCategoryRouter } from "./routes/category";
 import { createEmailAuthRouter } from "./routes/emailAuth";
+import { createAnswerAdoptionRouter } from "./routes/answer-adoption";
+import { createBatchSchedulerRouter } from "./routes/batch-scheduler";
 import { createStatsRouter } from "./routes/stats";
-import uploadRoutes from "./routes/upload";
 import {
   SocketConfig,
   createAuthMiddleware,
   createLoggingMiddleware,
   createRateLimitMiddleware,
 } from "./config/socket";
-import { RoomManager } from "./services/socket/roomManager";
+import uploadRoutes from "./routes/upload";
 import { ConnectionManager } from "./services/socket/connectionManager";
-import { NotificationManager } from "./services/socket/notificationManager";
 import { StatsManager } from "./services/socket/statsManager";
+import { RoomManager } from "./services/socket/roomManager";
+import { NotificationManager } from "./services/socket/notificationManager";
 import { SocketEventHandler } from "./services/socket/eventHandler";
 
 // 환경변수 검증
@@ -110,8 +111,24 @@ app.use(morgan("combined"));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
-// Rate Limiting 적용 (개발 환경에서 비활성화)
-// app.use(generalLimiter);
+// Rate Limiting 적용 (보안 강화)
+const generalLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 1분
+  max: 10, // 최대 10 요청 (테스트용으로 낮게 설정)
+  message: {
+    success: false,
+    error: "너무 많은 요청입니다. 잠시 후 다시 시도해주세요.",
+    timestamp: new Date().toISOString(),
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: (req) => {
+    // 헬스체크는 제외
+    return req.path === '/health';
+  }
+});
+
+app.use(generalLimiter);
 
 // 입력값 정제 (XSS 방지) - 임시 비활성화
 // app.use(
@@ -130,15 +147,15 @@ app.use("/health", healthRoutes);
 
 // API 라우트
 app.use("/api/points", pointRoutes);
-// app.use("/api/badges", badgeRoutes);
-// app.use("/api/admin", adminRoutes);
+app.use("/api/badges", badgeRoutes);
+app.use("/api/admin", adminRoutes);
 // app.use("/api/notifications", notificationRoutes);
 
 // 질문/답변/카테고리 라우트 활성화
 app.use("/api/questions", createQuestionRouter(prisma));
 app.use("/api/answers", createAnswerRouter(prisma));
-app.use("/api/answer-comments", createAnswerCommentRouter(prisma));
-app.use("/api/categories", createCategoryRouter(prisma));
+app.use("/api/answers", createAnswerAdoptionRouter(prisma));
+app.use("/api/batch", createBatchSchedulerRouter(prisma));
 
 // 이메일 기반 인증 라우트
 app.use("/api/auth", createEmailAuthRouter());
