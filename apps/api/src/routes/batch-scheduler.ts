@@ -76,8 +76,11 @@ export function createBatchSchedulerRouter(prisma: PrismaClient): Router {
     } catch (error) {
       console.error("❌ 배치 작업 상태 조회 실패:", error);
 
-      const errorMessage = error instanceof Error ? error.message : "알 수 없는 오류가 발생했습니다.";
-      
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "알 수 없는 오류가 발생했습니다.";
+
       res.status(500).json({
         success: false,
         message: errorMessage,
@@ -102,11 +105,22 @@ export function createBatchSchedulerRouter(prisma: PrismaClient): Router {
         totalRuns: logs.length,
         successfulRuns: logs.filter(log => log.success).length,
         failedRuns: logs.filter(log => !log.success).length,
-        totalProcessedUsers: logs.reduce((sum, log) => sum + log.processedUsers, 0),
-        totalNewBadges: logs.reduce((sum, log) => sum + log.newBadgesAwarded, 0),
-        averageProcessingTime: logs.length > 0 
-          ? logs.reduce((sum, log) => sum + (log.endTime.getTime() - log.startTime.getTime()), 0) / logs.length
-          : 0,
+        totalProcessedUsers: logs.reduce(
+          (sum, log) => sum + log.processedUsers,
+          0
+        ),
+        totalNewBadges: logs.reduce(
+          (sum, log) => sum + log.newBadgesAwarded,
+          0
+        ),
+        averageProcessingTime:
+          logs.length > 0
+            ? logs.reduce(
+                (sum, log) =>
+                  sum + (log.endTime.getTime() - log.startTime.getTime()),
+                0
+              ) / logs.length
+            : 0,
         lastRun: logs.length > 0 ? logs[0].startTime : null,
       };
 
@@ -117,8 +131,11 @@ export function createBatchSchedulerRouter(prisma: PrismaClient): Router {
     } catch (error) {
       console.error("❌ 배치 작업 통계 조회 실패:", error);
 
-      const errorMessage = error instanceof Error ? error.message : "알 수 없는 오류가 발생했습니다.";
-      
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "알 수 없는 오류가 발생했습니다.";
+
       res.status(500).json({
         success: false,
         message: errorMessage,
@@ -131,138 +148,170 @@ export function createBatchSchedulerRouter(prisma: PrismaClient): Router {
    * @desc 배치 작업 설정 업데이트
    * @access Private (관리자만)
    */
-  router.put("/config", authenticateUser, requireAdmin, async (req: any, res: any) => {
-    try {
-      // 입력 데이터 검증
-      const validatedData = BatchConfigSchema.parse(req.body);
+  router.put(
+    "/config",
+    authenticateUser,
+    requireAdmin,
+    async (req: any, res: any) => {
+      try {
+        // 입력 데이터 검증
+        const validatedData = BatchConfigSchema.parse(req.body);
 
-      // 설정 업데이트
-      batchService.updateConfig(validatedData);
+        // 설정 업데이트
+        batchService.updateConfig(validatedData);
 
-      res.status(200).json({
-        success: true,
-        message: "배치 작업 설정이 업데이트되었습니다.",
-        data: validatedData,
-      });
-
-      console.log("✅ 배치 작업 설정 업데이트:", validatedData);
-    } catch (error) {
-      console.error("❌ 배치 작업 설정 업데이트 실패:", error);
-
-      if (error instanceof z.ZodError) {
-        res.status(400).json({
-          success: false,
-          message: "입력 데이터가 올바르지 않습니다.",
-          errors: error.issues,
+        res.status(200).json({
+          success: true,
+          message: "배치 작업 설정이 업데이트되었습니다.",
+          data: validatedData,
         });
-        return;
-      }
 
-      const errorMessage = error instanceof Error ? error.message : "알 수 없는 오류가 발생했습니다.";
-      
-      res.status(500).json({
-        success: false,
-        message: errorMessage,
-      });
+        console.log("✅ 배치 작업 설정 업데이트:", validatedData);
+      } catch (error) {
+        console.error("❌ 배치 작업 설정 업데이트 실패:", error);
+
+        if (error instanceof z.ZodError) {
+          res.status(400).json({
+            success: false,
+            message: "입력 데이터가 올바르지 않습니다.",
+            errors: error.issues,
+          });
+          return;
+        }
+
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : "알 수 없는 오류가 발생했습니다.";
+
+        res.status(500).json({
+          success: false,
+          message: errorMessage,
+        });
+      }
     }
-  });
+  );
 
   /**
    * @route POST /api/batch/run
    * @desc 배치 작업 수동 실행
    * @access Private (관리자만)
    */
-  router.post("/run", authenticateUser, requireAdmin, async (req: any, res: any) => {
-    try {
-      // 배치 작업 실행
-      const result = await batchService.runManualBatch();
+  router.post(
+    "/run",
+    authenticateUser,
+    requireAdmin,
+    async (req: any, res: any) => {
+      try {
+        // 배치 작업 실행
+        const result = await batchService.runManualBatch();
 
-      res.status(200).json({
-        success: true,
-        message: "배치 작업이 완료되었습니다.",
-        data: {
-          startTime: result.startTime,
-          endTime: result.endTime,
-          duration: result.duration,
-          processedUsers: result.processedUsers,
-          newBadgesAwarded: result.newBadgesAwarded,
-          notificationsSent: result.notificationsSent,
-          errors: result.errors.length,
-          summary: result.summary,
-        },
-      });
+        res.status(200).json({
+          success: true,
+          message: "배치 작업이 완료되었습니다.",
+          data: {
+            startTime: result.startTime,
+            endTime: result.endTime,
+            duration: result.duration,
+            processedUsers: result.processedUsers,
+            newBadgesAwarded: result.newBadgesAwarded,
+            notificationsSent: result.notificationsSent,
+            errors: result.errors.length,
+            summary: result.summary,
+          },
+        });
 
-      console.log("✅ 수동 배치 작업 완료:", result.summary);
-    } catch (error) {
-      console.error("❌ 수동 배치 작업 실패:", error);
+        console.log("✅ 수동 배치 작업 완료:", result.summary);
+      } catch (error) {
+        console.error("❌ 수동 배치 작업 실패:", error);
 
-      const errorMessage = error instanceof Error ? error.message : "알 수 없는 오류가 발생했습니다.";
-      
-      res.status(500).json({
-        success: false,
-        message: errorMessage,
-      });
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : "알 수 없는 오류가 발생했습니다.";
+
+        res.status(500).json({
+          success: false,
+          message: errorMessage,
+        });
+      }
     }
-  });
+  );
 
   /**
    * @route POST /api/batch/stop
    * @desc 배치 작업 중단
    * @access Private (관리자만)
    */
-  router.post("/stop", authenticateUser, requireAdmin, async (req: any, res: any) => {
-    try {
-      // 배치 작업 중단
-      await batchService.stopBatchJob();
+  router.post(
+    "/stop",
+    authenticateUser,
+    requireAdmin,
+    async (req: any, res: any) => {
+      try {
+        // 배치 작업 중단
+        await batchService.stopBatchJob();
 
-      res.status(200).json({
-        success: true,
-        message: "배치 작업이 중단되었습니다.",
-      });
+        res.status(200).json({
+          success: true,
+          message: "배치 작업이 중단되었습니다.",
+        });
 
-      console.log("⏹️ 배치 작업 중단 완료");
-    } catch (error) {
-      console.error("❌ 배치 작업 중단 실패:", error);
+        console.log("⏹️ 배치 작업 중단 완료");
+      } catch (error) {
+        console.error("❌ 배치 작업 중단 실패:", error);
 
-      const errorMessage = error instanceof Error ? error.message : "알 수 없는 오류가 발생했습니다.";
-      
-      res.status(500).json({
-        success: false,
-        message: errorMessage,
-      });
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : "알 수 없는 오류가 발생했습니다.";
+
+        res.status(500).json({
+          success: false,
+          message: errorMessage,
+        });
+      }
     }
-  });
+  );
 
   /**
    * @route GET /api/batch/logs
    * @desc 배치 작업 로그 조회
    * @access Private (관리자만)
    */
-  router.get("/logs", authenticateUser, requireAdmin, async (req: any, res: any) => {
-    try {
-      const { startDate, endDate, limit = 50 } = req.query;
+  router.get(
+    "/logs",
+    authenticateUser,
+    requireAdmin,
+    async (req: any, res: any) => {
+      try {
+        const { startDate, endDate, limit = 50 } = req.query;
 
-      const logs = await batchService.getBatchLogs({
-        startDate: startDate ? new Date(startDate as string) : undefined,
-        endDate: endDate ? new Date(endDate as string) : undefined,
-        limit: parseInt(limit as string),
-      });
+        const logs = await batchService.getBatchLogs({
+          startDate: startDate ? new Date(startDate as string) : undefined,
+          endDate: endDate ? new Date(endDate as string) : undefined,
+          limit: parseInt(limit as string),
+        });
 
-      res.status(200).json({
-        success: true,
-        data: logs,
-      });
-    } catch (error) {
-      console.error("❌ 배치 작업 로그 조회 실패:", error);
+        res.status(200).json({
+          success: true,
+          data: logs,
+        });
+      } catch (error) {
+        console.error("❌ 배치 작업 로그 조회 실패:", error);
 
-      const errorMessage = error instanceof Error ? error.message : "알 수 없는 오류가 발생했습니다.";
-      
-      res.status(500).json({
-        success: false,
-        message: errorMessage,
-      });
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : "알 수 없는 오류가 발생했습니다.";
+
+        res.status(500).json({
+          success: false,
+          message: errorMessage,
+        });
+      }
     }
-  });
+  );
 
   return router;
 }

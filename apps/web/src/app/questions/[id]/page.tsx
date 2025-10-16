@@ -15,6 +15,7 @@ import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { EnhancedAnswerCard } from "@/components/question/EnhancedAnswerCard";
 import { SubPageHeader } from "@/components/layout/SubPageHeader";
 import { Header } from "@/components/layout/Header";
+import { api } from "@/lib/apiClient";
 
 interface Question {
   id: string;
@@ -142,30 +143,20 @@ export default function QuestionDetailPage() {
     setAnswerError("");
 
     try {
-      // API 호출 (Next.js rewrites를 통해 프록시됨)
-      const response = await fetch(`/api/answers`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          content: newAnswer.trim(),
-          questionId: params.id,
-          authorId: user.id,
-        }),
+      // API 호출 (api 클라이언트 사용 - 자동으로 Authorization 헤더 포함)
+      const response = await api.post("/api/answers", {
+        content: newAnswer.trim(),
+        questionId: params.id,
+        authorId: user.id,
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "답변 작성에 실패했습니다.");
+      if (!response.success) {
+        throw new Error(response.error || "답변 작성에 실패했습니다.");
       }
 
-      const result = await response.json();
-      console.log("답변 작성 성공:", result);
-
       // 새 답변을 목록에 추가 (API 응답에 author 정보가 포함됨)
-      if (result.data.author) {
-        setAnswers(prev => [result.data, ...prev]);
+      if (response.data.author) {
+        setAnswers(prev => [response.data, ...prev]);
       }
       setNewAnswer("");
 

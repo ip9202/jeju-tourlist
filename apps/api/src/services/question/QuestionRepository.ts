@@ -33,7 +33,7 @@ export class QuestionRepository {
    */
   async create(data: CreateQuestionData): Promise<Question> {
     try {
-      return await this.prisma.question.create({
+      const result = await this.prisma.question.create({
         data: {
           title: data.title,
           content: data.content,
@@ -66,6 +66,8 @@ export class QuestionRepository {
           },
         },
       });
+
+      return result;
     } catch (error) {
       throw new Error(
         `질문 생성 실패: ${error instanceof Error ? error.message : "알 수 없는 오류"}`

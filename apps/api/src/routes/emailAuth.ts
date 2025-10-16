@@ -8,7 +8,7 @@
 
 import { Router } from "express";
 import { EmailAuthController } from "../controllers/emailAuthController";
-import { AuthService } from "@jeju-tourlist/database";
+import { AuthService, UserRepository } from "@jeju-tourlist/database";
 import { AuthRepository } from "@jeju-tourlist/database";
 import { passwordService } from "@jeju-tourlist/database";
 import { prisma } from "@jeju-tourlist/database";
@@ -23,10 +23,14 @@ export function createEmailAuthRouter(): Router {
 
   // 의존성 주입 (Dependency Inversion Principle)
   const authRepository = new AuthRepository(prisma);
+  const userRepository = new UserRepository(prisma);
   const authService = new AuthService(authRepository, passwordService);
-  const emailAuthController = new EmailAuthController(authService);
+  const emailAuthController = new EmailAuthController(
+    authService,
+    userRepository
+  );
 
-  // 공개 라우트 (인증 불필요) - Rate Limiter 임시 비활성화 (테스트용)
+  // 공개 라우트 (인증 불필요)
   router.post("/register", emailAuthController.register);
   router.post("/login", emailAuthController.login);
   router.post("/logout", emailAuthController.logout);

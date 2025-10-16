@@ -127,9 +127,9 @@ const nextConfig = {
         },
       ],
       afterFiles: [
-        // NextAuth를 제외한 모든 API 요청을 백엔드로
+        // 모든 API 요청을 백엔드로 (NextAuth 삭제됨)
         {
-          source: '/api/:path((?!auth).*)*',
+          source: '/api/:path*',
           destination: `${process.env.API_BASE_URL || 'http://localhost:4000'}/api/:path*`,
         },
       ],

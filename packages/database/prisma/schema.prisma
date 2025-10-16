@@ -31,16 +31,18 @@ model User {
   adoptedAnswers    Int                @default(0)
   adoptRate         Float              @default(0)
   totalAnswers      Int                @default(0)
-  answerLikes       AnswerLike[]
-  answers           Answer[]
-  bookmarks         Bookmark[]
-  notifications     Notification[]
-  pointTransactions PointTransaction[]
-  questionLikes     QuestionLike[]
-  questions         Question[]
-  reports           Report[]
-  userBadges        UserBadge[]
-  userProfile       UserProfile?
+  answerCommentLikes AnswerCommentLike[]
+  answerComments     AnswerComment[]
+  answerLikes        AnswerLike[]
+  answers            Answer[]
+  bookmarks          Bookmark[]
+  notifications      Notification[]
+  pointTransactions  PointTransaction[]
+  questionLikes      QuestionLike[]
+  questions          Question[]
+  reports            Report[]
+  userBadges         UserBadge[]
+  userProfile        UserProfile?
 
   @@index([email])
   @@index([provider, providerId])
@@ -140,6 +142,7 @@ model Answer {
   adoptedAt    DateTime?
   expertPoints Int          @default(0)
   likes        AnswerLike[]
+  comments     AnswerComment[]
   author       User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
   question     Question     @relation(fields: [questionId], references: [id], onDelete: Cascade)
   acceptedBy   Question?    @relation("AcceptedAnswer")
@@ -152,6 +155,46 @@ model Answer {
   @@index([createdAt])
   @@index([likeCount])
   @@map("answers")
+}
+
+model AnswerComment {
+  id        String            @id @default(cuid())
+  content   String
+  authorId  String
+  answerId  String
+  parentId  String?           // 계층형 댓글을 위한 부모 댓글 ID
+  depth     Int               @default(0) // 댓글 깊이
+  status    AnswerCommentStatus @default(ACTIVE)
+  likeCount Int               @default(0)
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+  
+  // 관계
+  author    User              @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  answer    Answer            @relation(fields: [answerId], references: [id], onDelete: Cascade)
+  parent    AnswerComment?    @relation("CommentHierarchy", fields: [parentId], references: [id], onDelete: Cascade)
+  children  AnswerComment[]   @relation("CommentHierarchy")
+  likes     AnswerCommentLike[]
+  
+  @@index([authorId])
+  @@index([answerId])
+  @@index([parentId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("answer_comments")
+}
+
+model AnswerCommentLike {
+  id        String        @id @default(cuid())
+  userId    String
+  commentId String
+  isLike    Boolean
+  createdAt DateTime      @default(now())
+  comment   AnswerComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, commentId])
+  @@map("answer_comment_likes")
 }
 
 model QuestionLike {
@@ -302,6 +345,12 @@ enum QuestionStatus {
 }
 
 enum AnswerStatus {
+  ACTIVE
+  DELETED
+  HIDDEN
+}
+
+enum AnswerCommentStatus {
   ACTIVE
   DELETED
   HIDDEN

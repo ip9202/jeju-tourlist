@@ -11,7 +11,8 @@ import rateLimit from "express-rate-limit";
 const env = {
   NODE_ENV: process.env.NODE_ENV || "development",
   DATABASE_URL:
-    process.env.DATABASE_URL || "postgresql://localhost:5432/jeju_tourlist",
+    process.env.DATABASE_URL ||
+    "postgresql://test:test@localhost:5433/asklocal_dev",
   NEXTAUTH_SECRET:
     process.env.NEXTAUTH_SECRET ||
     "your-super-secret-key-here-must-be-at-least-32-characters-long",
@@ -53,8 +54,10 @@ import adminRoutes from "./routes/admin";
 import { PrismaClient } from "@prisma/client";
 import { createQuestionRouter } from "./routes/question";
 import { createAnswerRouter } from "./routes/answer";
+import { createCategoryRouter } from "./routes/category";
 import { createEmailAuthRouter } from "./routes/emailAuth";
 import { createAnswerAdoptionRouter } from "./routes/answer-adoption";
+import { createAnswerCommentRouter } from "./routes/answerComment";
 import { createBatchSchedulerRouter } from "./routes/batch-scheduler";
 import { createStatsRouter } from "./routes/stats";
 import {
@@ -111,10 +114,10 @@ app.use(morgan("combined"));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
-// Rate Limiting 적용 (보안 강화)
+// Rate Limiting 적용 (개발 환경용 완화된 설정)
 const generalLimiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1분
-  max: 10, // 최대 10 요청 (테스트용으로 낮게 설정)
+  max: 100, // 최대 100 요청 (개발 환경용으로 완화)
   message: {
     success: false,
     error: "너무 많은 요청입니다. 잠시 후 다시 시도해주세요.",
@@ -122,10 +125,10 @@ const generalLimiter = rateLimit({
   },
   standardHeaders: true,
   legacyHeaders: false,
-  skip: (req) => {
-    // 헬스체크는 제외
-    return req.path === '/health';
-  }
+  skip: req => {
+    // 헬스체크와 인증 관련 요청은 제외
+    return req.path === "/health" || req.path.startsWith("/api/auth");
+  },
 });
 
 app.use(generalLimiter);
@@ -155,6 +158,8 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/questions", createQuestionRouter(prisma));
 app.use("/api/answers", createAnswerRouter(prisma));
 app.use("/api/answers", createAnswerAdoptionRouter(prisma));
+app.use("/api/answer-comments", createAnswerCommentRouter(prisma));
+app.use("/api/categories", createCategoryRouter(prisma));
 app.use("/api/batch", createBatchSchedulerRouter(prisma));
 
 // 이메일 기반 인증 라우트

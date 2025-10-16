@@ -7,6 +7,21 @@ import {
   AnswerCommentReactionData,
 } from "@jeju-tourlist/database/src/types/answerComment";
 
+// 직접 PrismaClient 생성
+const prisma = new PrismaClient({
+  log:
+    process.env.NODE_ENV === "development"
+      ? ["query", "error", "warn"]
+      : ["error"],
+  datasources: {
+    db: {
+      url:
+        process.env.DATABASE_URL ||
+        "postgresql://test:test@localhost:5433/asklocal_dev",
+    },
+  },
+});
+
 /**
  * 답변 댓글 Repository 클래스
  *
@@ -22,7 +37,11 @@ import {
  * ```
  */
 export class AnswerCommentRepository {
-  constructor(private readonly prisma: PrismaClient) {}
+  constructor(private readonly _prisma?: PrismaClient) {}
+
+  private get prisma(): PrismaClient {
+    return this._prisma || prisma;
+  }
 
   /**
    * 답변 댓글 생성
@@ -157,7 +176,7 @@ export class AnswerCommentRepository {
         orderBy.createdAt = options.sortOrder || "asc";
       }
 
-      return await this.prisma.answerComment.findMany({
+      return await prisma.answerComment.findMany({
         where,
         orderBy,
         include: {
@@ -315,7 +334,7 @@ export class AnswerCommentRepository {
         where.authorId = options.authorId;
       }
 
-      return await this.prisma.answerComment.count({ where });
+      return await prisma.answerComment.count({ where });
     } catch (error) {
       throw new Error(
         `답변 댓글 개수 조회 실패: ${error instanceof Error ? error.message : "알 수 없는 오류"}`

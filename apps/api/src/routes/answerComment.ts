@@ -27,6 +27,19 @@ export function createAnswerCommentRouter(prisma: PrismaClient): Router {
   router.post("/", authMiddleware, answerCommentController.createComment);
 
   /**
+   * @route GET /api/answer-comments/answer/:answerId
+   * @desc 답변별 댓글 목록 조회
+   * @access Public
+   * @param { string } answerId - 답변 ID
+   * @query { number } page - 페이지 번호 (기본값: 1)
+   * @query { number } limit - 페이지당 항목 수 (기본값: 50)
+   */
+  router.get(
+    "/answer/:answerId",
+    answerCommentController.getCommentsByAnswerId
+  );
+
+  /**
    * @route GET /api/answer-comments/:id
    * @desc 답변 댓글 상세 조회
    * @access Public

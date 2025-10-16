@@ -7,6 +7,7 @@ import { Button, Input, Textarea, Text } from "@jeju-tourlist/ui";
 import { AlertCircle, CheckCircle } from "lucide-react";
 import { SubPageHeader } from "@/components/layout/SubPageHeader";
 import { Header } from "@/components/layout/Header";
+import { api } from "@/lib/apiClient";
 
 // 아이콘 이름을 이모지로 매핑
 const getIconEmoji = (iconName: string | null): string => {
@@ -72,7 +73,7 @@ export default function NewQuestionPage() {
           setCategories(data.data || []);
         }
       } catch (error) {
-        console.error("[DEBUG] 카테고리 로드 실패:", error);
+        console.error("카테고리 로드 실패:", error);
       } finally {
         setIsLoadingCategories(false);
       }
@@ -156,28 +157,21 @@ export default function NewQuestionPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    console.log("[DEBUG] handleSubmit 시작");
-    console.log("[DEBUG] isSubmitting:", isSubmitting);
-
     if (isSubmitting) {
-      console.log("[DEBUG] 이미 제출 중 - 무시");
       e.preventDefault();
       return; // 이미 제출 중이면 무시
     }
 
     if (!validateForm()) {
-      console.log("[DEBUG] 유효성 검사 실패");
       return;
     }
 
     setIsSubmitting(true);
-    console.log("[DEBUG] 제출 시작");
 
     try {
       // 파일 업로드 처리
       let attachments: string[] = [];
       if (formData.file) {
-        console.log("[DEBUG] 파일 업로드 시작:", formData.file.name);
         const fileFormData = new FormData();
         fileFormData.append("file", formData.file);
 
@@ -189,9 +183,7 @@ export default function NewQuestionPage() {
         if (uploadResponse.ok) {
           const uploadResult = await uploadResponse.json();
           attachments = [uploadResult.data.url];
-          console.log("[DEBUG] 파일 업로드 성공:", uploadResult.data.url);
         } else {
-          console.error("[DEBUG] 파일 업로드 실패");
           throw new Error("파일 업로드에 실패했습니다.");
         }
       }
@@ -216,34 +208,17 @@ export default function NewQuestionPage() {
         authorId: user?.id || "",
       };
 
-      console.log("[DEBUG] 요청 데이터:", requestData);
-      console.log("[DEBUG] API URL: /api/questions");
+      // API 호출 (api 클라이언트 사용 - 자동으로 Authorization 헤더 포함)
+      const response = await api.post("/api/questions", requestData);
 
-      // API 호출 (Next.js rewrites를 통해 프록시됨)
-      const response = await fetch("/api/questions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestData),
-      });
-
-      console.log("[DEBUG] 응답 상태:", response.status, response.statusText);
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("[DEBUG] 에러 응답:", errorData);
-        throw new Error(errorData.message || "질문 작성에 실패했습니다.");
+      if (!response.success) {
+        throw new Error(response.error || "질문 작성에 실패했습니다.");
       }
-
-      const result = await response.json();
-      console.log("[DEBUG] 질문 작성 성공:", result);
 
       // 성공 시 질문 상세 페이지로 이동
       alert("질문이 저장되었습니다!");
-      router.push(`/questions/${result.data.id}`);
+      router.push(`/questions/${response.data.id}`);
     } catch (error) {
-      console.error("[DEBUG] 질문 작성 실패:", error);
       setErrors(prev => ({
         ...prev,
         content:
@@ -256,7 +231,6 @@ export default function NewQuestionPage() {
       );
     } finally {
       setIsSubmitting(false);
-      console.log("[DEBUG] handleSubmit 종료");
     }
   };
 

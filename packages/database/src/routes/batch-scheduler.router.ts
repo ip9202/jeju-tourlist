@@ -66,14 +66,24 @@ export function createBatchSchedulerRouter(prisma: PrismaClient): Router {
    * @access Private (관리자만)
    * @body { enabled, schedule, maxConcurrentUsers, retryAttempts, retryDelay, notificationEnabled, logLevel }
    */
-  router.put("/config", authenticateUser, requireAdmin, controller.updateConfig);
+  router.put(
+    "/config",
+    authenticateUser,
+    requireAdmin,
+    controller.updateConfig
+  );
 
   /**
    * @route POST /api/batch/run
    * @desc 배치 작업 수동 실행
    * @access Private (관리자만)
    */
-  router.post("/run", authenticateUser, requireAdmin, controller.runManualBatch);
+  router.post(
+    "/run",
+    authenticateUser,
+    requireAdmin,
+    controller.runManualBatch
+  );
 
   /**
    * @route POST /api/batch/stop
@@ -96,4 +106,6 @@ export function createBatchSchedulerRouter(prisma: PrismaClient): Router {
 /**
  * 기본 배치 스케줄러 라우터 (Prisma 클라이언트 자동 주입)
  */
-export const batchSchedulerRouter = createBatchSchedulerRouter(new PrismaClient());
+export const batchSchedulerRouter = createBatchSchedulerRouter(
+  new PrismaClient()
+);

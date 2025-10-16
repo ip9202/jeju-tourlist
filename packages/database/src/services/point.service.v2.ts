@@ -60,12 +60,18 @@ export class PointService {
    * @param data - 포인트 트랜잭션 데이터
    * @returns 포인트 지급/차감 결과
    */
-  async addPoints(data: CreatePointTransactionData): Promise<PointAwardResult | PointDeductResult> {
-    console.log(`💰 포인트 트랜잭션 시작: ${data.userId}, ${data.amount}포인트`);
+  async addPoints(
+    data: CreatePointTransactionData
+  ): Promise<PointAwardResult | PointDeductResult> {
+    console.log(
+      `💰 포인트 트랜잭션 시작: ${data.userId}, ${data.amount}포인트`
+    );
 
     try {
       // 현재 잔액 조회
-      const currentBalance = await this.pointRepository.getUserBalance(data.userId);
+      const currentBalance = await this.pointRepository.getUserBalance(
+        data.userId
+      );
 
       // 잔액 검증 (차감 시)
       if (data.amount < 0 && currentBalance + data.amount < 0) {
@@ -84,7 +90,9 @@ export class PointService {
       const newBalance = currentBalance + data.amount;
       await this.pointRepository.updateUserBalance(data.userId, newBalance);
 
-      console.log(`✅ 포인트 트랜잭션 완료: ${data.userId}, 잔액 ${newBalance}`);
+      console.log(
+        `✅ 포인트 트랜잭션 완료: ${data.userId}, 잔액 ${newBalance}`
+      );
 
       if (data.amount > 0) {
         return {
@@ -116,7 +124,10 @@ export class PointService {
    * @param options - 조회 옵션
    * @returns 포인트 트랜잭션 목록
    */
-  async getPointHistory(userId: string, options: Omit<PointTransactionQueryOptions, 'userId'> = {}) {
+  async getPointHistory(
+    userId: string,
+    options: Omit<PointTransactionQueryOptions, "userId"> = {}
+  ) {
     return await this.pointRepository.getTransactions({ userId, ...options });
   }
 
@@ -137,7 +148,10 @@ export class PointService {
    * @param period - 조회 기간 (일)
    * @returns 포인트 통계 정보
    */
-  async getUserPointStats(userId: string, period: number = 30): Promise<PointStats> {
+  async getUserPointStats(
+    userId: string,
+    period: number = 30
+  ): Promise<PointStats> {
     return await this.pointRepository.getUserPointStats(userId, period);
   }
 
@@ -179,7 +193,11 @@ export class PointService {
    * @param points - 지급할 포인트
    * @returns 포인트 지급 결과
    */
-  async awardBadgePoints(userId: string, badgeName: string, points: number): Promise<PointAwardResult> {
+  async awardBadgePoints(
+    userId: string,
+    badgeName: string,
+    points: number
+  ): Promise<PointAwardResult> {
     const result = await this.addPoints({
       userId,
       amount: points,
@@ -200,7 +218,11 @@ export class PointService {
    * @param points - 지급할 포인트
    * @returns 포인트 지급 결과
    */
-  async awardAnswerAdoptionPoints(userId: string, questionTitle: string, points: number): Promise<PointAwardResult> {
+  async awardAnswerAdoptionPoints(
+    userId: string,
+    questionTitle: string,
+    points: number
+  ): Promise<PointAwardResult> {
     const result = await this.addPoints({
       userId,
       amount: points,
@@ -221,7 +243,11 @@ export class PointService {
    * @param points - 지급할 포인트
    * @returns 포인트 지급 결과
    */
-  async awardQuestionPoints(userId: string, questionTitle: string, points: number): Promise<PointAwardResult> {
+  async awardQuestionPoints(
+    userId: string,
+    questionTitle: string,
+    points: number
+  ): Promise<PointAwardResult> {
     const result = await this.addPoints({
       userId,
       amount: points,
@@ -242,7 +268,11 @@ export class PointService {
    * @param points - 지급할 포인트
    * @returns 포인트 지급 결과
    */
-  async awardAnswerPoints(userId: string, questionTitle: string, points: number): Promise<PointAwardResult> {
+  async awardAnswerPoints(
+    userId: string,
+    questionTitle: string,
+    points: number
+  ): Promise<PointAwardResult> {
     const result = await this.addPoints({
       userId,
       amount: points,
@@ -291,14 +321,16 @@ export class PointService {
    * @param awards - 포인트 지급 목록
    * @returns 처리 결과
    */
-  async bulkAwardPoints(awards: Array<{
-    userId: string;
-    amount: number;
-    type: PointTransactionType;
-    description: string;
-    relatedType?: string;
-    relatedId?: string;
-  }>): Promise<{
+  async bulkAwardPoints(
+    awards: Array<{
+      userId: string;
+      amount: number;
+      type: PointTransactionType;
+      description: string;
+      relatedType?: string;
+      relatedId?: string;
+    }>
+  ): Promise<{
     success: boolean;
     processed: number;
     failed: number;
@@ -322,7 +354,9 @@ export class PointService {
       }
     }
 
-    console.log(`✅ 일괄 포인트 지급 완료: 성공 ${processed}건, 실패 ${failed}건`);
+    console.log(
+      `✅ 일괄 포인트 지급 완료: 성공 ${processed}건, 실패 ${failed}건`
+    );
 
     return {
       success: failed === 0,
@@ -341,7 +375,8 @@ export class PointService {
   async cleanupOldTransactions(daysToKeep: number = 365): Promise<number> {
     console.log(`🧹 오래된 포인트 트랜잭션 정리 시작: ${daysToKeep}일 이전`);
 
-    const deletedCount = await this.pointRepository.cleanupOldTransactions(daysToKeep);
+    const deletedCount =
+      await this.pointRepository.cleanupOldTransactions(daysToKeep);
 
     console.log(`✅ 포인트 트랜잭션 정리 완료: ${deletedCount}건 삭제`);
 

@@ -7,18 +7,18 @@
  */
 
 import { Request, Response } from "express";
-import { IAuthService } from "@jeju-tourlist/database";
-import {
-  RegisterSchema,
-  LoginSchema,
-} from "@jeju-tourlist/database";
+import { IAuthService, UserRepository } from "@jeju-tourlist/database";
+import { RegisterSchema, LoginSchema } from "@jeju-tourlist/database";
 import { z } from "zod";
 
 /**
  * 이메일 인증 컨트롤러
  */
 export class EmailAuthController {
-  constructor(private readonly authService: IAuthService) {}
+  constructor(
+    private readonly authService: IAuthService,
+    private readonly userRepository: UserRepository
+  ) {}
 
   /**
    * 이메일 회원가입
@@ -26,18 +26,11 @@ export class EmailAuthController {
    */
   register = async (req: Request, res: Response): Promise<void> => {
     try {
-      console.log('🔍 [DEBUG] EmailAuthController.register 호출됨');
-      console.log('🔍 [DEBUG] req.body:', req.body);
-      console.log('🔍 [DEBUG] this.authService:', this.authService);
-      
       // Zod 검증
       const validatedData = RegisterSchema.parse(req.body);
-      console.log('🔍 [DEBUG] Zod 검증 완료:', validatedData);
 
       // 회원가입 처리
-      console.log('🔍 [DEBUG] AuthService.register 호출 시작');
       const result = await this.authService.register(validatedData);
-      console.log('🔍 [DEBUG] AuthService.register 호출 완료:', result);
 
       // 성공 응답
       res.status(201).json({
@@ -444,13 +437,83 @@ export class EmailAuthController {
    */
   me = async (req: Request, res: Response): Promise<void> => {
     try {
-      // 토큰은 클라이언트에서 관리하므로, 여기서는 간단한 응답만 반환
-      // TODO: JWT 토큰 구현 시 토큰 검증 추가 필요
+      // Authorization 헤더에서 토큰 추출
+      const authHeader = req.headers.authorization;
+      if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        res.status(401).json({
+          success: false,
+          error: {
+            code: "MISSING_TOKEN",
+            message: "인증 토큰이 필요합니다",
+          },
+          timestamp: new Date().toISOString(),
+        });
+        return;
+      }
+
+      const token = authHeader.substring(7); // "Bearer " 제거
+
+      // 임시 토큰에서 사용자 ID 추출 (temp_userId_timestamp 형식)
+      if (!token.startsWith("temp_")) {
+        res.status(401).json({
+          success: false,
+          error: {
+            code: "INVALID_TOKEN",
+            message: "유효하지 않은 토큰 형식입니다",
+          },
+          timestamp: new Date().toISOString(),
+        });
+        return;
+      }
+
+      // 토큰에서 사용자 ID 추출
+      const tokenParts = token.split("_");
+      if (tokenParts.length < 3) {
+        res.status(401).json({
+          success: false,
+          error: {
+            code: "INVALID_TOKEN",
+            message: "토큰 형식이 올바르지 않습니다",
+          },
+          timestamp: new Date().toISOString(),
+        });
+        return;
+      }
+
+      const userId = tokenParts[1];
+
+      // 사용자 정보 조회 (UserRepository를 통해 ID로 조회)
+      const user = await this.userRepository.findById(userId);
+
+      if (!user) {
+        res.status(401).json({
+          success: false,
+          error: {
+            code: "USER_NOT_FOUND",
+            message: "사용자를 찾을 수 없습니다",
+          },
+          timestamp: new Date().toISOString(),
+        });
+        return;
+      }
+
       res.status(200).json({
         success: true,
         data: {
-          user: null,
-          message: "JWT 토큰 인증이 아직 구현되지 않았습니다",
+          user: {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            nickname: user.nickname,
+            avatar: user.avatar,
+            provider: user.provider,
+            isVerified: user.isVerified,
+            isActive: user.isActive,
+            points: user.points,
+            level: user.level,
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt,
+          },
         },
         timestamp: new Date().toISOString(),
       });

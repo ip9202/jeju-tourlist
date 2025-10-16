@@ -124,6 +124,8 @@ export interface IPointRepository {
   }>;
 
   // 배치 처리
-  bulkUpdateUserBalances(updates: Array<{ userId: string; amount: number }>): Promise<void>;
+  bulkUpdateUserBalances(
+    updates: Array<{ userId: string; amount: number }>
+  ): Promise<void>;
   cleanupOldTransactions(daysToKeep: number): Promise<number>;
 }

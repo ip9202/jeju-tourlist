@@ -17,12 +17,16 @@ import {
   ChevronUp,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { HeaderUserBadge, HeaderBadgeNotification, HeaderBadgeStats } from "./HeaderUserBadge";
+import {
+  HeaderUserBadge,
+  HeaderBadgeNotification,
+  HeaderBadgeStats,
+} from "./HeaderUserBadge";
 
 export const Header: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const { user, isAuthenticated, isLoading, logout } = useAuth();
+  const { user, isAuthenticated, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState("");
   const [isUserMenuOpen, setIsUserMenuOpen] = React.useState(false);
@@ -33,36 +37,11 @@ export const Header: React.FC = () => {
     right: 0,
   });
 
-  // 디버깅
-  React.useEffect(() => {
-    console.log("🎯 Header AuthContext 상태:", {
-      isAuthenticated,
-      isLoading,
-      hasUser: !!user,
-      user: user
-        ? {
-            id: user.id,
-            email: user.email,
-            name: user.name,
-          }
-        : null,
-    });
-  }, [isAuthenticated, isLoading, user]);
-
-  // 드롭다운 상태 디버깅
-  React.useEffect(() => {
-    console.log("🟢 드롭다운 상태 변경:", isUserMenuOpen);
-  }, [isUserMenuOpen]);
-
   // 드롭다운 위치 계산
   React.useEffect(() => {
     if (isUserMenuOpen && buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect();
       setDropdownPosition({
-        top: rect.bottom + 8,
-        right: window.innerWidth - rect.right,
-      });
-      console.log("📍 드롭다운 위치:", {
         top: rect.bottom + 8,
         right: window.innerWidth - rect.right,
       });
@@ -93,7 +72,6 @@ export const Header: React.FC = () => {
 
   // 로그아웃 핸들러
   const handleLogout = async () => {
-    console.log("🔴 Header에서 로그아웃 시작");
     await logout();
     setIsUserMenuOpen(false);
     router.push("/");

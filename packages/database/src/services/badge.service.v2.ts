@@ -74,13 +74,19 @@ export class BadgeService {
     for (const badge of badges) {
       try {
         // 이미 획득한 배지인지 확인
-        const existingUserBadge = await this.badgeRepository.getUserBadgeById(userId, badge.id);
+        const existingUserBadge = await this.badgeRepository.getUserBadgeById(
+          userId,
+          badge.id
+        );
         if (existingUserBadge?.isEarned) {
           continue;
         }
 
         // 배지 자격 검증
-        const eligibility = await this.badgeRepository.checkBadgeEligibility(userId, badge.id);
+        const eligibility = await this.badgeRepository.checkBadgeEligibility(
+          userId,
+          badge.id
+        );
 
         if (eligibility.isEligible) {
           // 배지 부여
@@ -97,7 +103,9 @@ export class BadgeService {
             points: badge.bonusPoints,
           });
 
-          console.log(`✅ 배지 부여: ${badge.emoji} ${badge.name} (${badge.bonusPoints}포인트)`);
+          console.log(
+            `✅ 배지 부여: ${badge.emoji} ${badge.name} (${badge.bonusPoints}포인트)`
+          );
         }
       } catch (error) {
         console.error(`❌ 배지 ${badge.name} 검사 중 오류:`, error);
@@ -119,8 +127,14 @@ export class BadgeService {
     const progressList: UserBadgeProgress[] = [];
 
     for (const badge of badges) {
-      const eligibility = await this.badgeRepository.checkBadgeEligibility(userId, badge.id);
-      const userBadge = await this.badgeRepository.getUserBadgeById(userId, badge.id);
+      const eligibility = await this.badgeRepository.checkBadgeEligibility(
+        userId,
+        badge.id
+      );
+      const userBadge = await this.badgeRepository.getUserBadgeById(
+        userId,
+        badge.id
+      );
 
       progressList.push({
         badgeId: badge.id,
@@ -132,7 +146,10 @@ export class BadgeService {
         category: badge.category || undefined,
         progress: eligibility.progress,
         maxProgress: eligibility.maxProgress,
-        percentage: Math.min((eligibility.progress / eligibility.maxProgress) * 100, 100),
+        percentage: Math.min(
+          (eligibility.progress / eligibility.maxProgress) * 100,
+          100
+        ),
         isEarned: userBadge?.isEarned || false,
         earnedAt: userBadge?.earnedAt || undefined,
         message: eligibility.message,
@@ -208,7 +225,9 @@ export class BadgeService {
       }
     }
 
-    console.log(`✅ 배치 처리 완료: ${processedUsers}명 처리, ${totalBadgesAwarded}개 배지 부여`);
+    console.log(
+      `✅ 배치 처리 완료: ${processedUsers}명 처리, ${totalBadgesAwarded}개 배지 부여`
+    );
 
     return {
       processedUsers,
@@ -231,7 +250,10 @@ export class BadgeService {
     }
 
     // 사용자가 해당 배지를 보유하고 있는지 확인
-    const userBadge = await this.badgeRepository.getUserBadgeByCode(userId, badgeCode);
+    const userBadge = await this.badgeRepository.getUserBadgeByCode(
+      userId,
+      badgeCode
+    );
     if (!userBadge?.isEarned) {
       return 0;
     }
@@ -246,7 +268,9 @@ export class BadgeService {
       },
     });
 
-    console.log(`💰 전문가 포인트 지급: ${userId}에게 ${badge.adoptBonusPoints}포인트 (${badge.name})`);
+    console.log(
+      `💰 전문가 포인트 지급: ${userId}에게 ${badge.adoptBonusPoints}포인트 (${badge.name})`
+    );
     return badge.adoptBonusPoints;
   }
 

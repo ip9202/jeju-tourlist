@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { HierarchicalCommentList } from "./HierarchicalCommentList";
 import { AnswerAuthorBadge } from "./AnswerAuthorBadge";
-import { AdoptAnswerButton } from "./AdoptAnswerButton";
+import { api } from "@/lib/apiClient";
 
 /**
  * 답변 데이터 타입
@@ -162,7 +162,7 @@ export const EnhancedAnswerCard: React.FC<EnhancedAnswerCardProps> = ({
       // setIsLoadingComments(true);
       try {
         const response = await fetch(
-          `/api/answers/${answer.id}/comments?limit=50`
+          `/api/answer-comments/answer/${answer.id}?limit=50`
         );
         if (!response.ok) {
           throw new Error("댓글 로드 실패");
@@ -227,25 +227,18 @@ export const EnhancedAnswerCard: React.FC<EnhancedAnswerCardProps> = ({
     }
 
     try {
-      const response = await fetch("/api/answer-comments", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          content,
-          answerId: answer.id,
-          authorId: user?.id || "",
-          parentId: null, // 최상위 댓글
-          depth: 0,
-        }),
+      // API 호출 (api 클라이언트 사용 - 자동으로 Authorization 헤더 포함)
+      const result = await api.post("/api/answer-comments", {
+        content,
+        answerId: answer.id,
+        authorId: user?.id || "",
+        parentId: null, // 최상위 댓글
+        depth: 0,
       });
 
-      if (!response.ok) {
-        throw new Error("댓글 작성에 실패했습니다");
+      if (!result.success) {
+        throw new Error(result.error || "댓글 작성에 실패했습니다");
       }
-
-      const result = await response.json();
 
       // 새 댓글을 목록에 추가
       if (result.data) {
@@ -322,25 +315,18 @@ export const EnhancedAnswerCard: React.FC<EnhancedAnswerCardProps> = ({
       const parentComment = findCommentById(comments, parentId);
       const parentDepth = parentComment?.depth ?? 0;
 
-      const response = await fetch("/api/answer-comments", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          content,
-          answerId: answer.id,
-          authorId: user?.id || "",
-          parentId: parentId,
-          depth: parentDepth + 1, // 부모 depth + 1
-        }),
+      // API 호출 (api 클라이언트 사용 - 자동으로 Authorization 헤더 포함)
+      const result = await api.post("/api/answer-comments", {
+        content,
+        answerId: answer.id,
+        authorId: user?.id || "",
+        parentId: parentId,
+        depth: parentDepth + 1, // 부모 depth + 1
       });
 
-      if (!response.ok) {
-        throw new Error("답글 작성에 실패했습니다");
+      if (!result.success) {
+        throw new Error(result.error || "답글 작성에 실패했습니다");
       }
-
-      const result = await response.json();
 
       // 답글을 부모 댓글에 추가
       if (result.data) {
@@ -364,21 +350,16 @@ export const EnhancedAnswerCard: React.FC<EnhancedAnswerCardProps> = ({
    */
   const handleCommentLike = async (commentId: string) => {
     try {
-      const response = await fetch(
+      // API 호출 (api 클라이언트 사용 - 자동으로 Authorization 헤더 포함)
+      const result = await api.post(
         `/api/answer-comments/${commentId}/reaction`,
         {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            isLike: true,
-          }),
+          isLike: true,
         }
       );
 
-      if (!response.ok) {
-        throw new Error("댓글 좋아요에 실패했습니다");
+      if (!result.success) {
+        throw new Error(result.error || "댓글 좋아요에 실패했습니다");
       }
 
       // 로컬 상태 업데이트

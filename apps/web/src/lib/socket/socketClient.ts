@@ -50,7 +50,6 @@ export class SocketClient implements ISocketClient {
       const { io } = await import("socket.io-client");
 
       if (this.socket?.connected) {
-        console.log("🔌 이미 연결되어 있습니다.");
         return;
       }
 
@@ -67,8 +66,6 @@ export class SocketClient implements ISocketClient {
 
       this.setupEventListeners();
       this.socket.connect();
-
-      console.log(`🔌 Socket.io 서버에 연결 시도 중: ${this.options.url}`);
     } catch (error) {
       console.error("❌ Socket.io 연결 실패:", error);
       this.status = "error";
@@ -87,7 +84,6 @@ export class SocketClient implements ISocketClient {
     this.status = "disconnected";
     this.reconnectAttempts = 0;
     this.emitStatusChange();
-    console.log("🔌 Socket.io 연결이 해제되었습니다.");
   }
 
   /**
@@ -170,7 +166,6 @@ export class SocketClient implements ISocketClient {
     }
 
     this.socket.emit(event, data);
-    console.log(`📡 이벤트 전송: ${event as string}`, data);
   }
 
   /**
@@ -198,17 +193,15 @@ export class SocketClient implements ISocketClient {
       this.status = "connected";
       this.reconnectAttempts = 0;
       this.emitStatusChange();
-      console.log(`✅ Socket.io 연결 성공: ${this.socket.id}`);
 
       // 기존 등록된 이벤트 리스너들을 다시 등록
       this.registerEventListeners();
     });
 
     // 연결 해제
-    this.socket.on("disconnect", (reason: string) => {
+    this.socket.on("disconnect", (_reason: string) => {
       this.status = "disconnected";
       this.emitStatusChange();
-      console.log(`🔌 Socket.io 연결 해제: ${reason}`);
     });
 
     // 연결 에러
@@ -223,17 +216,13 @@ export class SocketClient implements ISocketClient {
       this.status = "reconnecting";
       this.reconnectAttempts = attempt;
       this.emitStatusChange();
-      console.log(
-        `🔄 재연결 시도 중... (${attempt}/${this.options.reconnectionAttempts})`
-      );
     });
 
     // 재연결 성공
-    this.socket.on("reconnect", (attempt: number) => {
+    this.socket.on("reconnect", (_attempt: number) => {
       this.status = "connected";
       this.reconnectAttempts = 0;
       this.emitStatusChange();
-      console.log(`✅ 재연결 성공 (${attempt}번 시도 후)`);
     });
 
     // 재연결 실패

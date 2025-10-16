@@ -32,10 +32,32 @@ export const authMiddleware = async (
       return;
     }
 
-    // TODO: 실제 JWT 검증 로직 구현
-    // 임시로 더미 사용자 설정
+    // 임시 토큰에서 사용자 ID 추출 (temp_userId_timestamp 형식)
+    if (!token.startsWith("temp_")) {
+      res.status(401).json({
+        success: false,
+        error: "유효하지 않은 토큰 형식입니다.",
+        timestamp: new Date().toISOString(),
+      });
+      return;
+    }
+
+    // 토큰에서 사용자 ID 추출
+    const tokenParts = token.split("_");
+    if (tokenParts.length < 3) {
+      res.status(401).json({
+        success: false,
+        error: "토큰 형식이 올바르지 않습니다.",
+        timestamp: new Date().toISOString(),
+      });
+      return;
+    }
+
+    const userId = tokenParts[1];
+
+    // 임시 사용자 설정 (실제 사용자 ID 사용)
     req.user = {
-      id: "temp-user-id",
+      id: userId, // 실제 사용자 ID 사용
       email: "temp@example.com",
       name: "임시 사용자",
       avatar: undefined,
