@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>전문가 배지 시스템 - 동네물어봐</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Pretendard', system-ui, -apple-system, sans-serif;
+        }
+        .badge-glow {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+        }
+        .badge-animation {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .progress-bar {
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- 헤더 -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <h1 class="text-xl font-bold text-gray-900">동네물어봐</h1>
+                </div>
+                <nav class="flex space-x-8">
+                    <a href="#" class="text-gray-600 hover:text-gray-900">홈</a>
+                    <a href="#" class="text-gray-600 hover:text-gray-900">질문</a>
+                    <a href="#" class="text-blue-600 font-semibold">전문가</a>
+                    <a href="#" class="text-gray-600 hover:text-gray-900">프로필</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- 페이지 헤더 -->
+        <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
+            <div class="text-center">
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">
+                    🏆 전문가 배지 시스템
+                </h1>
+                <p class="text-gray-600 text-lg">
+                    제주 여행 전문가가 되어 배지를 획득하고 포인트를 모아보세요!
+                </p>
+            </div>
+        </div>
+
+        <!-- 배지 시스템 소개 -->
+        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">💡 배지 시스템이란?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="text-center">
+                    <div class="text-4xl mb-2">🎯</div>
+                    <h3 class="font-semibold text-gray-800 mb-2">전문성 인증</h3>
+                    <p class="text-gray-600 text-sm">카테고리별 답변 활동으로 전문가 배지 획득</p>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl mb-2">⭐</div>
+                    <h3 class="font-semibold text-gray-800 mb-2">신뢰도 향상</h3>
+                    <p class="text-gray-600 text-sm">배지로 답변자의 전문성을 시각적으로 표현</p>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl mb-2">🎁</div>
+                    <h3 class="font-semibold text-gray-800 mb-2">포인트 보상</h3>
+                    <p class="text-gray-600 text-sm">배지 획득과 답변 채택 시 포인트 지급</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 전문 분야 배지 -->
+        <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">🍽️ 전문 분야 배지</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- 맛집 탐정 -->
+                <div class="border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow">
+                    <div class="text-center">
+                        <div class="text-5xl mb-4 badge-animation">🍜</div>
+                        <h3 class="font-bold text-gray-900 mb-2">맛집 탐정</h3>
+                        <p class="text-sm text-gray-600 mb-4">맛집 카테고리 전문가</p>
+                        
+                        <div class="space-y-2 mb-4">
+                            <div class="flex justify-between text-sm">
+                                <span>답변 수</span>
+                                <span class="font-semibold">50개</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span>채택률</span>
+                                <span class="font-semibold">30% 이상</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span>포인트</span>
+                                <span class="font-semibold text-blue-600">+5</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-200 rounded-full h-2 mb-2">
+                            <div class="bg-blue-500 h-2 rounded-full" style="width: 60%"></div>
+                        </div>
+                        <p class="text-xs text-gray-500">30/50 답변 완료</p>
+                    </div>
+                </div>
+
+                <!-- 카페 큐레이터 -->
+                <div class="border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow">
+                    <div class="text-center">
+                        <div class="text-5xl mb-4">☕</div>
+                        <h3 class="font-bold text-gray-900 mb-2">카페 큐레이터</h3>
+                        <p class="text-sm text-gray-600 mb-4">카페 관련 전문가</p>
+                        
+                        <div class="space-y-2 mb-4">
+                            <div class="flex justify-between text-sm">
+                                <span>답변 수</span>
+                                <span class="font-semibold">30개</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span>채택률</span>
+                                <span class="font-semibold">25% 이상</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span>포인트</span>
+                                <span class="font-semibold text-blue-600">+3</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-200 rounded-full h-2 mb-2">
+                            <div class="bg-green-500 h-2 rounded-full" style="width: 80%"></div>
+                        </div>
+                        <p class="text-xs text-gray-500">24/30 답변 완료</p>
+                    </div>
+                </div>
+
+                <!-- 드라이브 마스터 -->
+                <div class="border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow">
+                    <div class="text-center">
+                        <div class="text-5xl mb-4">🚗</div>
+                        <h3 class="font-bold text-gray-900 mb-2">드라이브 마스터</h3>
+                        <p class="text-sm text-gray-600 mb-4">교통/드라이브 전문가</p>
+                        
+                        <div class="space-y-2 mb-4">
+                            <div class="flex justify-between text-sm">
+                                <span>답변 수</span>
+                                <span class="font-semibold">30개</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span>채택률</span>
+                                <span class="font-semibold">25% 이상</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span>포인트</span>
+                                <span class="font-semibold text-blue-600">+3</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-200 rounded-full h-2 mb-2">
+                            <div class="bg-yellow-500 h-2 rounded-full" style="width: 40%"></div>
+                        </div>
+                        <p class="text-xs text-gray-500">12/30 답변 완료</p>
+                    </div>
+                </div>
+
+                <!-- 해변 전문가 -->
+                <div class="border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow">
+                    <div class="text-center">
+                        <div class="text-5xl mb-4">🏖️</div>
+                        <h3 class="font-bold text-gray-900 mb-2">해변 전문가</h3>
+                        <p class="text-sm text-gray-600 mb-4">해변/액티비티 전문가</p>
+                        
+                        <div class="space-y-2 mb-4">
+                            <div class="flex justify-between text-sm">
+                                <span>답변 수</span>
+                                <span class="font-semibold">20개</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span>채택률</span>
+                                <span class="font-semibold">20% 이상</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span>포인트</span>
+                                <span class="font-semibold text-blue-600">+3</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-200 rounded-full h-2 mb-2">
+                            <div class="bg-purple-500 h-2 rounded-full" style="width: 15%"></div>
+                        </div>
+                        <p class="text-xs text-gray-500">3/20 답변 완료</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 활동 수준 배지 -->
+        <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">🏅 활동 수준 배지</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- 새내기 도우미 -->
+                <div class="border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow">
+                    <div class="text-center">
+                        <div class="text-5xl mb-4">🥉</div>
+                        <h3 class="font-bold text-gray-900 mb-2">새내기 도우미</h3>
+                        <p class="text-sm text-gray-600 mb-4">총 답변 10개</p>
+                        
+                        <div class="space-y-2 mb-4">
+                            <div class="flex justify-between text-sm">
+                                <span>포인트</span>
+                                <span class="font-semibold text-blue-600">+10</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-200 rounded-full h-2 mb-2">
+                            <div class="bg-yellow-600 h-2 rounded-full" style="width: 100%"></div>
+                        </div>
+                        <p class="text-xs text-green-600 font-semibold">✅ 획득 완료</p>
+                    </div>
+                </div>
+
+                <!-- 든든한 가이드 -->
+                <div class="border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow">
+                    <div class="text-center">
+                        <div class="text-5xl mb-4">🥈</div>
+                        <h3 class="font-bold text-gray-900 mb-2">든든한 가이드</h3>
+                        <p class="text-sm text-gray-600 mb-4">총 답변 50개</p>
+                        
+                        <div class="space-y-2 mb-4">
+                            <div class="flex justify-between text-sm">
+                                <span>포인트</span>
+                                <span class="font-semibold text-blue-600">+30</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-200 rounded-full h-2 mb-2">
+                            <div class="bg-gray-400 h-2 rounded-full" style="width: 60%"></div>
+                        </div>
+                        <p class="text-xs text-gray-500">30/50 답변 완료</p>
+                    </div>
+                </div>
+
+                <!-- 제주 마스터 -->
+                <div class="border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow">
+                    <div class="text-center">
+                        <div class="text-5xl mb-4">🥇</div>
+                        <h3 class="font-bold text-gray-900 mb-2">제주 마스터</h3>
+                        <p class="text-sm text-gray-600 mb-4">총 답변 100개</p>
+                        
+                        <div class="space-y-2 mb-4">
+                            <div class="flex justify-between text-sm">
+                                <span>포인트</span>
+                                <span class="font-semibold text-blue-600">+50</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-200 rounded-full h-2 mb-2">
+                            <div class="bg-gray-400 h-2 rounded-full" style="width: 30%"></div>
+                        </div>
+                        <p class="text-xs text-gray-500">30/100 답변 완료</p>
+                    </div>
+                </div>
+
+                <!-- 제주 전설 -->
+                <div class="border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow">
+                    <div class="text-center">
+                        <div class="text-5xl mb-4">👑</div>
+                        <h3 class="font-bold text-gray-900 mb-2">제주 전설</h3>
+                        <p class="text-sm text-gray-600 mb-4">총 답변 300개</p>
+                        
+                        <div class="space-y-2 mb-4">
+                            <div class="flex justify-between text-sm">
+                                <span>포인트</span>
+                                <span class="font-semibold text-blue-600">+100</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-200 rounded-full h-2 mb-2">
+                            <div class="bg-gray-400 h-2 rounded-full" style="width: 10%"></div>
+                        </div>
+                        <p class="text-xs text-gray-500">30/300 답변 완료</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 현재 상태 요약 -->
+        <div class="bg-gradient-to-r from-gray-700 to-gray-900 rounded-2xl p-8 mb-8 text-white">
+            <h2 class="text-2xl font-bold mb-6">📊 나의 전문가 현황</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-blue-400">30</div>
+                    <div class="text-sm text-gray-300">총 답변 수</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-green-400">8</div>
+                    <div class="text-sm text-gray-300">채택된 답변</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-yellow-400">26.7%</div>
+                    <div class="text-sm text-gray-300">채택률</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-purple-400">1,250</div>
+                    <div class="text-sm text-gray-300">총 포인트</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 배지 획득 가이드 -->
+        <div class="bg-white rounded-2xl shadow-lg p-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">🎯 배지 획득 가이드</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">💡 효과적인 답변 작성법</h3>
+                    <ul class="space-y-3 text-gray-600">
+                        <li class="flex items-start">
+                            <span class="text-blue-500 mr-2">•</span>
+                            <span>구체적이고 실용적인 정보 제공</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-blue-500 mr-2">•</span>
+                            <span>현지인만이 알 수 있는 숨은 정보</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-blue-500 mr-2">•</span>
+                            <span>사진이나 링크로 근거 제시</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-blue-500 mr-2">•</span>
+                            <span>질문자의 상황에 맞는 맞춤형 답변</span>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">🚀 빠른 배지 획득 팁</h3>
+                    <ul class="space-y-3 text-gray-600">
+                        <li class="flex items-start">
+                            <span class="text-green-500 mr-2">•</span>
+                            <span>자신이 잘 아는 카테고리에 집중</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-500 mr-2">•</span>
+                            <span>질문자와의 소통으로 신뢰도 구축</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-500 mr-2">•</span>
+                            <span>정기적으로 답변하여 활동도 유지</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-500 mr-2">•</span>
+                            <span>최신 정보로 답변의 정확성 확보</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="mt-8 text-center">
+                <button class="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                    지금 답변하러 가기
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- 푸터 -->
+    <footer class="bg-gray-900 text-white py-12 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h4 class="text-lg font-semibold mb-4">동네물어봐</h4>
+                <p class="text-gray-400 text-sm">
+                    제주도 여행자와 현지 주민을 연결하는 실시간 Q&A 커뮤니티
+                </p>
+                <p class="text-gray-500 text-xs mt-4">
+                    © 2024 동네물어봐. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
