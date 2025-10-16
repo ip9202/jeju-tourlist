@@ -24,6 +24,13 @@ import {
   MapPin,
   Calendar,
 } from "lucide-react";
+import { cn } from "@/lib/utils";
+import {
+  getResponsiveCardClasses,
+  getResponsiveAvatarClasses,
+  getResponsiveSpacingClasses,
+  getTouchOptimizedClasses,
+} from "./responsive-utils";
 
 interface ExpertCardProps {
   expert: Expert;
@@ -80,13 +87,28 @@ export const ExpertCard: React.FC<ExpertCardProps> = ({
   if (variant === "compact") {
     return (
       <div
-        className={`bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow cursor-pointer ${className}`}
+        className={cn(
+          getResponsiveCardClasses("compact"),
+          getTouchOptimizedClasses(),
+          "cursor-pointer",
+          className
+        )}
         onClick={handleClick}
       >
-        <div className="flex items-center space-x-3">
+        <div
+          className={cn(
+            "flex items-center",
+            getResponsiveSpacingClasses("x", "md")
+          )}
+        >
           {/* 아바타 */}
           <div className="relative">
-            <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden">
+            <div
+              className={cn(
+                getResponsiveAvatarClasses("md"),
+                "rounded-full bg-gray-100 flex items-center justify-center overflow-hidden"
+              )}
+            >
               {expert.avatar ? (
                 <img
                   src={expert.avatar}

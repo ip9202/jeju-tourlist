@@ -15,6 +15,7 @@ import {
   User,
   ChevronDown,
   ChevronUp,
+  Trophy,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -297,6 +298,21 @@ export const Header: React.FC = () => {
                 <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium">
                   질문하기
                 </Button>
+              </Link>
+
+              {/* 전문가 대시보드 링크 */}
+              <Link
+                href="/experts"
+                className={cn(
+                  "flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
+                  pathname === "/experts"
+                    ? "bg-blue-100 text-blue-700"
+                    : "text-gray-700 hover:bg-gray-100"
+                )}
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <Trophy className="w-4 h-4" />
+                <span>전문가 대시보드</span>
               </Link>
 
               {/* 네비게이션 링크 */}
