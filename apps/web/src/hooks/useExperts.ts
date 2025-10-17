@@ -134,10 +134,10 @@ export const useExpertRanking = (
     await fetchExperts(options);
   }, [fetchExperts, options]);
 
-  // 초기 데이터 로드
+  // 초기 데이터 로드 (의존성 최적화로 무한 루프 방지)
   useEffect(() => {
     fetchExperts(options);
-  }, [fetchExperts, options]);
+  }, []);
 
   return {
     experts,

@@ -81,7 +81,7 @@ export const ExpertDashboardLayout: React.FC<ExpertDashboardLayoutProps> = ({
       limit,
     });
 
-  // 필터 변경 시 데이터 업데이트
+  // 필터 변경 시 데이터 업데이트 (updateFilter 의존성 제거로 무한 루프 방지)
   React.useEffect(() => {
     updateFilter({
       category: selectedCategory,
@@ -89,7 +89,7 @@ export const ExpertDashboardLayout: React.FC<ExpertDashboardLayoutProps> = ({
       page: currentPage,
       limit,
     });
-  }, [selectedCategory, sortBy, currentPage, limit, updateFilter]);
+  }, [selectedCategory, sortBy, currentPage, limit]);
 
   const handleCategoryChange = (category: any) => {
     updateCategory(category);
