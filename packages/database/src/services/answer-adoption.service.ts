@@ -166,7 +166,7 @@ export class AnswerAdoptionService {
    */
   private async processAnswerAdoption(data: AnswerAdoptionData, tx: any): Promise<any> {
       // 답변 채택 상태 업데이트
-      await tx.answer.update({
+      const answer = await tx.answer.update({
       where: { id: data.answerId },
       data: { adoptedAt: new Date() },
       include: {
@@ -182,7 +182,7 @@ export class AnswerAdoptionService {
       data: { acceptedAnswerId: data.answerId },
     });
 
-    return adoptedAnswer;
+    return answer;
   }
 
   /**
@@ -216,7 +216,7 @@ export class AnswerAdoptionService {
       include: { badge: true },
     });
 
-    const hasExpertBadge = userBadges.some(ub => 
+    const hasExpertBadge = userBadges.some((ub: any) => 
       ub.badge.type === "CATEGORY_EXPERT" || ub.badge.type === "ACTIVITY_LEVEL"
     );
 

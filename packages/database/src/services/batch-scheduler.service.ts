@@ -221,8 +221,7 @@ export class BatchSchedulerService {
       
       // 2. 새로 획득한 배지 확인
       const newlyEarnedBadges = badgeResults.filter(result => 
-        result.isEarned && result.earnedAt && 
-        result.earnedAt > new Date(Date.now() - 24 * 60 * 60 * 1000) // 최근 24시간 내
+        result.isEarned // 새로 획득한 배지만 필터링
       );
 
       newBadgesCount = newlyEarnedBadges.length;
@@ -235,17 +234,16 @@ export class BatchSchedulerService {
               userId: user.id,
               type: "BADGE_EARNED",
               title: "새 배지를 획득했습니다! 🎉",
-              message: `${badge.emoji} ${badge.name} 배지를 획득했습니다!`,
+              message: `${badge.badgeName} 배지를 획득했습니다!`,
               data: {
                 badgeId: badge.badgeId,
-                badgeName: badge.name,
-                badgeEmoji: badge.emoji,
-                earnedAt: badge.earnedAt,
+                badgeName: badge.badgeName,
+                earnedAt: new Date(),
               },
             });
             notificationsSent++;
           } catch (error) {
-            console.error(`❌ 알림 생성 실패 (사용자 ${user.name}, 배지 ${badge.name}):`, error);
+            console.error(`❌ 알림 생성 실패 (사용자 ${user.name}, 배지 ${badge.badgeName}):`, error);
           }
         }
       }
@@ -300,7 +298,7 @@ export class BatchSchedulerService {
       // 전체 배지 통계 계산
       const [totalBadges, totalUserBadges, activeUsers] = await Promise.all([
         this.prisma.badge.count({ where: { isActive: true } }),
-        this.prisma.userBadge.count({ where: { earnedAt: { not: null } } }),
+        this.prisma.userBadge.count(),
         this.prisma.user.count({ where: { isActive: true } }),
       ]);
 

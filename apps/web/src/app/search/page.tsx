@@ -8,6 +8,7 @@ import React, {
   useCallback,
 } from "react";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { Button, Input, Heading, Text } from "@jeju-tourlist/ui";
 import { Search, Filter } from "lucide-react";
 import { NetworkError } from "@/components/error/NetworkError";
@@ -191,7 +192,7 @@ function SearchPageContent() {
           {!loading && !error && questions.length > 0 && (
             <div className="space-y-4">
               <Text className="text-gray-600">
-                '{searchTerm}'에 대한 검색 결과 {questions.length}개
+                &apos;{searchTerm}&apos;에 대한 검색 결과 {questions.length}개
               </Text>
 
               {questions.map(question => (

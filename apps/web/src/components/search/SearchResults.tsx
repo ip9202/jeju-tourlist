@@ -229,7 +229,7 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
           <div>
             <h2 className="text-xl font-bold text-gray-900 mb-2">검색 결과</h2>
             <p className="text-gray-600">
-              "{query}"에 대한 검색 결과{" "}
+              &quot;{query}&quot;에 대한 검색 결과{" "}
               <span className="font-semibold text-indigo-600">
                 {totalCount}
               </span>

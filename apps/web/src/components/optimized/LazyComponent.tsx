@@ -99,10 +99,10 @@ export function DynamicComponent({
         setIsLoading(true)
         setError(null)
         
-        const module = await importFunction()
+        const importedModule = await importFunction()
         
         if (isMounted) {
-          setComponent(() => module.default)
+          setComponent(() => importedModule.default)
           setIsLoading(false)
         }
       } catch (err) {

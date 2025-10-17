@@ -44,15 +44,15 @@ export function LoginButton() {
 
   return (
     <div className="flex gap-2">
-      <Button onClick={() => login("kakao")} variant="outline" size="sm">
+      <Button onClick={() => console.log("카카오 로그인")} variant="outline" size="sm">
         <LogIn className="w-4 h-4 mr-2" />
         카카오 로그인
       </Button>
-      <Button onClick={() => login("naver")} variant="outline" size="sm">
+      <Button onClick={() => console.log("네이버 로그인")} variant="outline" size="sm">
         <LogIn className="w-4 h-4 mr-2" />
         네이버 로그인
       </Button>
-      <Button onClick={() => login("google")} variant="outline" size="sm">
+      <Button onClick={() => console.log("구글 로그인")} variant="outline" size="sm">
         <LogIn className="w-4 h-4 mr-2" />
         구글 로그인
       </Button>

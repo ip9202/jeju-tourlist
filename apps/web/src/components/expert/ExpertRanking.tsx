@@ -43,6 +43,17 @@ interface ExpertRankingProps {
   limit?: number;
   className?: string;
   onExpertClick?: (expert: Expert) => void;
+  // Optional props for external data (when not using internal hooks)
+  experts?: Expert[];
+  pagination?: {
+    currentPage: number;
+    totalPages: number;
+    totalCount: number;
+    hasNext: boolean;
+    hasPrev: boolean;
+  };
+  isLoading?: boolean;
+  error?: string | null;
 }
 
 export const ExpertRanking: React.FC<ExpertRankingProps> = ({
@@ -55,6 +66,11 @@ export const ExpertRanking: React.FC<ExpertRankingProps> = ({
   limit = 20,
   className = "",
   onExpertClick,
+  // External data props
+  experts: externalExperts,
+  pagination: externalPagination,
+  isLoading: externalIsLoading,
+  error: externalError,
 }) => {
   const [viewMode, setViewMode] = useState<"card" | "list">(variant);
 
@@ -68,24 +84,40 @@ export const ExpertRanking: React.FC<ExpertRankingProps> = ({
     updatePage,
   } = useExpertFilter(initialCategory, initialSortBy);
 
-  // 전문가 데이터 조회
-  const { experts, pagination, isLoading, error, refetch, updateFilter } =
-    useExpertRanking({
-      category: selectedCategory,
-      sortBy,
-      page: currentPage,
-      limit,
-    });
+  // 내부 훅을 사용할지 외부 데이터를 사용할지 결정
+  const useInternalData = !externalExperts && !externalPagination;
 
-  // 필터 변경 시 데이터 업데이트
+  // 전문가 데이터 조회 (내부 훅 사용 시)
+  const internalData = useExpertRanking({
+    category: selectedCategory,
+    sortBy,
+    page: currentPage,
+    limit,
+  });
+
+  // 필터 변경 시 데이터 업데이트 (내부 훅 사용 시)
   useEffect(() => {
-    updateFilter({
-      category: selectedCategory,
-      sortBy,
-      page: currentPage,
-      limit,
-    });
-  }, [selectedCategory, sortBy, currentPage, limit, updateFilter]);
+    if (useInternalData) {
+      internalData.updateFilter({
+        category: selectedCategory,
+        sortBy,
+        page: currentPage,
+        limit,
+      });
+    }
+  }, [selectedCategory, sortBy, currentPage, limit, useInternalData, internalData.updateFilter]);
+
+  // 최종 데이터 결정
+  const experts = externalExperts || internalData.experts || [];
+  const pagination = externalPagination || internalData.pagination || {
+    currentPage: 1,
+    totalPages: 0,
+    totalCount: 0,
+    hasNext: false,
+    hasPrev: false,
+  };
+  const isLoading = externalIsLoading !== undefined ? externalIsLoading : internalData.isLoading;
+  const error = externalError !== undefined ? externalError : internalData.error;
 
   const handleCategoryChange = (category: CategoryFilter) => {
     updateCategory(category);
@@ -100,7 +132,12 @@ export const ExpertRanking: React.FC<ExpertRankingProps> = ({
   };
 
   const handleRefresh = () => {
-    refetch();
+    if (useInternalData && internalData.refetch) {
+      internalData.refetch();
+    } else {
+      // 외부 데이터 사용 시 새로고침 로직
+      window.location.reload();
+    }
   };
 
   const getRankIcon = (rank: number) => {

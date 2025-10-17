@@ -227,7 +227,7 @@ export const SearchPage: React.FC = () => {
             </Button>
 
             <div className="text-sm text-gray-500">
-              검색어: "{searchQuery}" | 총 {searchQuery ? "검색 결과" : "질문"}{" "}
+              검색어: &quot;{searchQuery}&quot; | 총 {searchQuery ? "검색 결과" : "질문"}{" "}
               수
             </div>
           </div>

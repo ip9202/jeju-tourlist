@@ -114,24 +114,23 @@ app.use(morgan("combined"));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
-// Rate Limiting 적용 (개발 환경용 완화된 설정)
-const generalLimiter = rateLimit({
-  windowMs: 1 * 60 * 1000, // 1분
-  max: 100, // 최대 100 요청 (개발 환경용으로 완화)
-  message: {
-    success: false,
-    error: "너무 많은 요청입니다. 잠시 후 다시 시도해주세요.",
-    timestamp: new Date().toISOString(),
-  },
-  standardHeaders: true,
-  legacyHeaders: false,
-  skip: req => {
-    // 헬스체크와 인증 관련 요청은 제외
-    return req.path === "/health" || req.path.startsWith("/api/auth");
-  },
-});
-
-app.use(generalLimiter);
+// Rate Limiting 적용 (개발 환경에서 비활성화)
+if (process.env.NODE_ENV === "production") {
+  const generalLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15분
+    max: 100, // 최대 100 요청
+    message: {
+      success: false,
+      error: "너무 많은 요청입니다. 잠시 후 다시 시도해주세요.",
+      timestamp: new Date().toISOString(),
+    },
+    standardHeaders: true,
+    legacyHeaders: false,
+  });
+  app.use(generalLimiter);
+} else {
+  console.log("🔓 개발 환경: Rate Limiter 비활성화됨");
+}
 
 // 입력값 정제 (XSS 방지) - 임시 비활성화
 // app.use(

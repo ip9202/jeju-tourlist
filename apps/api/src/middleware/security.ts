@@ -286,25 +286,25 @@ export function fileUploadSecurityMiddleware(
  * - DDoS 공격 방지
  * - API 남용 방지
  */
-export const securityRateLimit = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15분
-  max: 100, // 최대 100 요청
-  message: {
-    success: false,
-    message: "너무 많은 요청이 발생했습니다. 잠시 후 다시 시도해주세요.",
-  },
-  standardHeaders: true,
-  legacyHeaders: false,
-  // IP별 제한
-  keyGenerator: (req) => {
-    return req.ip || req.connection.remoteAddress || "unknown";
-  },
-  // 스킵 조건
-  skip: (req) => {
-    // 개발 환경에서 localhost 스킵
-    return process.env.NODE_ENV === "development" && req.ip === "::1";
-  },
-});
+export const securityRateLimit = process.env.NODE_ENV === "production"
+  ? rateLimit({
+      windowMs: 15 * 60 * 1000, // 15분
+      max: 100, // 최대 100 요청
+      message: {
+        success: false,
+        message: "너무 많은 요청이 발생했습니다. 잠시 후 다시 시도해주세요.",
+      },
+      standardHeaders: true,
+      legacyHeaders: false,
+      // IP별 제한
+      keyGenerator: (req) => {
+        return req.ip || req.connection.remoteAddress || "unknown";
+      },
+    })
+  : (req: any, res: any, next: any) => {
+      console.log("🔓 개발 환경: Security Rate Limiter 비활성화됨");
+      next();
+    };
 
 /**
  * 보안 헤더 미들웨어

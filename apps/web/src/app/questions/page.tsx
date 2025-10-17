@@ -278,7 +278,7 @@ function QuestionsPageContent() {
               </div>
               <p className="text-gray-600">{error}</p>
               <button
-                onClick={searchQuestions}
+                onClick={() => searchQuestions()}
                 className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
               >
                 다시 시도

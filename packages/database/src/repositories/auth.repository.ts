@@ -193,7 +193,6 @@ export class AuthRepository implements IAuthRepository {
       where: { id: userId },
       data: {
         isVerified: true,
-        emailVerified: new Date(),
       },
     });
   }
@@ -233,9 +232,6 @@ export class AuthRepository implements IAuthRepository {
   ): Promise<EmailVerificationToken | null> {
     return this.prisma.emailVerificationToken.findUnique({
       where: { token },
-      include: {
-        user: true,
-      },
     });
   }
 
@@ -292,9 +288,6 @@ export class AuthRepository implements IAuthRepository {
   ): Promise<PasswordResetToken | null> {
     return this.prisma.passwordResetToken.findUnique({
       where: { token },
-      include: {
-        user: true,
-      },
     });
   }
 

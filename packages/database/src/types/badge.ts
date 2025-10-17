@@ -160,15 +160,6 @@ export interface BadgeEligibilityResult {
   message: string;
 }
 
-/**
- * 답변 채택 데이터
- */
-export interface AnswerAdoptionData {
-  questionId: string;
-  answerId: string;
-  adopterId: string; // 질문 작성자 ID
-  answererId: string; // 답변 작성자 ID
-}
 
 /**
  * 전문가 포인트 지급 결과

@@ -374,7 +374,7 @@ test.describe('데스크톱 반응형 테스트', () => {
       // 스크롤 가능한 경우에만 테스트
       if (bodyHeight > viewportHeight) {
         // 스크롤 이벤트 성능 측정
-        let scrollEvents = 0;
+        const scrollEvents = 0;
         
         // 스크롤 이벤트 리스너 등록
         await page.evaluate(() => {

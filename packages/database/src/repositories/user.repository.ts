@@ -250,9 +250,12 @@ export class UserRepository
    */
   async create(data: CreateUserData): Promise<User> {
     try {
+      const { email, provider, ...userData } = data;
       return await this.prisma.user.create({
         data: {
-          ...data,
+          ...userData,
+          email: email || "", // email이 없으면 빈 문자열로 설정
+          provider: provider || "email", // provider가 없으면 "email"로 설정
           createdAt: new Date(),
           updatedAt: new Date(),
         },

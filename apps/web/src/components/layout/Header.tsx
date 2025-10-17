@@ -210,15 +210,15 @@ export const Header: React.FC = () => {
                             {user?.email}
                           </p>
                         </div>
-                        <HeaderBadgeNotification userId={user.id} />
+                        <HeaderBadgeNotification userId={user?.id || ""} />
                       </div>
                       <div className="mt-2">
-                        <HeaderBadgeStats userId={user.id} />
+                        <HeaderBadgeStats userId={user?.id || ""} />
                       </div>
                     </div>
 
                     {/* 배지 섹션 */}
-                    <HeaderUserBadge userId={user.id} />
+                    <HeaderUserBadge userId={user?.id || ""} />
 
                     <div className="border-t border-gray-100 my-1"></div>
 

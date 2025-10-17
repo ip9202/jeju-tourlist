@@ -11,11 +11,14 @@
     "grepInvert": null,
     "maxFailures": 0,
     "metadata": {
-      "actualWorkers": 1
+      "actualWorkers": 3
     },
     "preserveOutput": "always",
     "reporter": [
-      ["html", null],
+      [
+        "html",
+        null
+      ],
       [
         "json",
         {
@@ -40,13 +43,20 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 1
+          "actualWorkers": 3
         },
         "id": "chromium",
         "name": "chromium",
         "testDir": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e",
-        "testIgnore": ["**/node_modules/**", "**/dist/**", "**/.next/**"],
-        "testMatch": ["**/e2e/**/*.test.ts", "**/e2e/**/*.spec.ts"],
+        "testIgnore": [
+          "**/node_modules/**",
+          "**/dist/**",
+          "**/.next/**"
+        ],
+        "testMatch": [
+          "**/e2e/**/*.test.ts",
+          "**/e2e/**/*.spec.ts"
+        ],
         "timeout": 30000
       },
       {
@@ -54,13 +64,20 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 1
+          "actualWorkers": 3
         },
         "id": "firefox",
         "name": "firefox",
         "testDir": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e",
-        "testIgnore": ["**/node_modules/**", "**/dist/**", "**/.next/**"],
-        "testMatch": ["**/e2e/**/*.test.ts", "**/e2e/**/*.spec.ts"],
+        "testIgnore": [
+          "**/node_modules/**",
+          "**/dist/**",
+          "**/.next/**"
+        ],
+        "testMatch": [
+          "**/e2e/**/*.test.ts",
+          "**/e2e/**/*.spec.ts"
+        ],
         "timeout": 30000
       },
       {
@@ -68,13 +85,20 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 1
+          "actualWorkers": 3
         },
         "id": "webkit",
         "name": "webkit",
         "testDir": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e",
-        "testIgnore": ["**/node_modules/**", "**/dist/**", "**/.next/**"],
-        "testMatch": ["**/e2e/**/*.test.ts", "**/e2e/**/*.spec.ts"],
+        "testIgnore": [
+          "**/node_modules/**",
+          "**/dist/**",
+          "**/.next/**"
+        ],
+        "testMatch": [
+          "**/e2e/**/*.test.ts",
+          "**/e2e/**/*.spec.ts"
+        ],
         "timeout": 30000
       },
       {
@@ -82,13 +106,20 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 1
+          "actualWorkers": 3
         },
         "id": "Mobile Chrome",
         "name": "Mobile Chrome",
         "testDir": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e",
-        "testIgnore": ["**/node_modules/**", "**/dist/**", "**/.next/**"],
-        "testMatch": ["**/e2e/**/*.test.ts", "**/e2e/**/*.spec.ts"],
+        "testIgnore": [
+          "**/node_modules/**",
+          "**/dist/**",
+          "**/.next/**"
+        ],
+        "testMatch": [
+          "**/e2e/**/*.test.ts",
+          "**/e2e/**/*.spec.ts"
+        ],
         "timeout": 30000
       },
       {
@@ -96,13 +127,20 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 1
+          "actualWorkers": 3
         },
         "id": "Mobile Safari",
         "name": "Mobile Safari",
         "testDir": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e",
-        "testIgnore": ["**/node_modules/**", "**/dist/**", "**/.next/**"],
-        "testMatch": ["**/e2e/**/*.test.ts", "**/e2e/**/*.spec.ts"],
+        "testIgnore": [
+          "**/node_modules/**",
+          "**/dist/**",
+          "**/.next/**"
+        ],
+        "testMatch": [
+          "**/e2e/**/*.test.ts",
+          "**/e2e/**/*.spec.ts"
+        ],
         "timeout": 30000
       },
       {
@@ -110,13 +148,20 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 1
+          "actualWorkers": 3
         },
         "id": "Mobile Safari iPad",
         "name": "Mobile Safari iPad",
         "testDir": "/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/src/__tests__/e2e",
-        "testIgnore": ["**/node_modules/**", "**/dist/**", "**/.next/**"],
-        "testMatch": ["**/e2e/**/*.test.ts", "**/e2e/**/*.spec.ts"],
+        "testIgnore": [
+          "**/node_modules/**",
+          "**/dist/**",
+          "**/.next/**"
+        ],
+        "testMatch": [
+          "**/e2e/**/*.test.ts",
+          "**/e2e/**/*.spec.ts"
+        ],
         "timeout": 30000
       }
     ],
@@ -129,20 +174,20 @@
   },
   "suites": [
     {
-      "title": "registration.spec.ts",
-      "file": "registration.spec.ts",
+      "title": "basic-page.e2e.test.ts",
+      "file": "basic-page.e2e.test.ts",
       "column": 0,
       "line": 0,
       "specs": [],
       "suites": [
         {
-          "title": "회원가입 테스트",
-          "file": "registration.spec.ts",
+          "title": "기본 페이지 테스트",
+          "file": "basic-page.e2e.test.ts",
           "line": 3,
           "column": 6,
           "specs": [
             {
-              "title": "회원가입 폼 제출이 정상적으로 작동한다",
+              "title": "홈페이지가 로드된다",
               "ok": true,
               "tags": [],
               "tests": [
@@ -157,34 +202,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 11742,
+                      "duration": 15397,
                       "errors": [],
-                      "stdout": [
-                        {
-                          "text": "📄 페이지 제목: 동네물어봐 - 제주 여행 Q&A 커뮤니티\n"
-                        },
-                        {
-                          "text": "📧 이메일 입력 필드: \u001b[33mtrue\u001b[39m\n"
-                        },
-                        {
-                          "text": "📄 페이지 텍스트: (self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])self.__next_f.push([1,\"1:HL[\\\"/_next/static/media/bb3ef058b751a6ad-s.p.woff2\\\",\\\"font\\\",{\\\"crossOrigin\\\":\\\"\\\",\\\"type\\\":\\\"font/woff2\\\"}]\\n2:HL[\\\"/_next/static/css/app/layout.css?v=1760480249499\\\",\\\"style\\\"]\\n0:D{\\\"name\\\":\\\"r2\\\",\\\"env\\\":\\\"Server\\\"}\\n\"])self.__next_f.push([1,\"3:I[\\\"(app-pages-browser)/../../node_modules/next/dist/client/components/app-router.js\\\",[\\\"app-pages-internals\\\",\\\"static/chunks/app-pages-internals.js\\\"],\\\"\\\"]\\n5:I[\\\"(app-pages-browser)/../../node_modules/next/dist/client/components/client-page.js\\\",[\\\"app-pages-internals\\\",\\\"static/chunks/app-pages-internals.js\\\"],\\\"ClientPageRoot\\\"]\\n6:I[\\\"(app-pages-browser)/./src/app/auth/signup/page.tsx\\\",[\\\"app/auth/signup/page\\\",\\\"static/chunks/app/auth/signup/page.js\\\"],\\\"default\\\",1]\\n7:I[\\\"(app-pages-browser)/../../node_modules/next/dist/client/components/layout-router.js\\\",[\\\"app-pages-internals\\\",\\\"static/chunks/app-pages-internals.js\\\"],\\\"\\\"]\\n8:I[\\\"(app-pages-browser)/../../node_modules/next/dist/client/components/render-from-template-context.js\\\",[\\\"app-pages-internals\\\",\\\"static/chunks/app-pages-internals.js\\\"],\\\"\\\"]\\na:I[\\\"(app-pages-browser)/./src/contexts/AuthContext.tsx\\\",[\\\"app/layout\\\",\\\"static/chunks/app/layout.js\\\"],\\\"AuthProvider\\\"]\\nb:I[\\\"(app-pages-browser)/./src/components/providers/DynamicSocketProvider.tsx\\\",[\\\"app/layout\\\",\\\"static/chunks/app/layout.js\\\"],\\\"DynamicSocketProvider\\\"]\\nc:I[\\\"(app-pages-browser)/./src/app/not-found.tsx\\\",[\\\"app/not-found\\\",\\\"static/chunks/app/not-found.js\\\"],\\\"default\\\"]\\nf:I[\\\"(app-pages-browser)/../../node_modules/next/dist/client/components/error-boundary.js\\\",[\\\"app-pages-internals\\\",\\\"static/chunks/app-pages-internals.js\\\"],\\\"\\\"]\\n4:D{\\\"name\\\":\\\"\\\",\\\"env\\\":\\\"Server\\\"}\\n9:D{\\\"name\\\":\\\"RootLayout\\\",\\\"env\\\":\\\"Server\\\"}\\n9:[\\\"$\\\",\\\"html\\\",null,{\\\"lang\\\":\\\"ko\\\",\\\"children\\\":[\\\"$\\\",\\\"body\\\",null,{\\\"className\\\":\\\"__variable_3c557b antialiased\\\",\\\"style\\\":{\\\"fontFamily\\\":\\\"Pretendard Variable, Pretendard, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans KR, Helvetica Neue, Arial, sans-serif\\\"},\\\"children\\\":[\\\"$\\\",\\\"$La\\\",null,{\\\"children\\\":[\\\"$\\\",\\\"$Lb\\\",null,{\\\"children\\\":[\\\"$\\\",\\\"$L7\\\",null,{\\\"parallelRouterKey\\\":\\\"children\\\",\\\"segmentPath\\\":[\\\"children\\\"],\\\"error\\\":\\\"$undefined\\\",\\\"errorStyles\\\":\\\"$undefined\\\",\\\"errorScripts\\\":\\\"$undefined\\\",\\\"template\\\":[\\\"$\\\",\\\"$L8\\\",null,{}],\\\"templateStyles\\\":\\\"$undefined\\\",\\\"templateScripts\\\":\\\"$undefined\\\",\\\"notFound\\\":[\\\"$\\\",\\\"$Lc\\\",null,{}],\\\"notFoundStyles\\\":[]}]}]}]}]}]\\nd:D{\\\"name\\\":\\\"rQ\\\",\\\"env\\\":\\\"Serve\"])self.__next_f.push([1,\"r\\\"}\\nd:null\\ne:D{\\\"name\\\":\\\"\\\",\\\"env\\\":\\\"Server\\\"}\\n10:[]\\n0:[\\\"$\\\",\\\"$L3\\\",null,{\\\"buildId\\\":\\\"development\\\",\\\"assetPrefix\\\":\\\"\\\",\\\"urlParts\\\":[\\\"\\\",\\\"auth\\\",\\\"signup\\\"],\\\"initialTree\\\":[\\\"\\\",{\\\"children\\\":[\\\"auth\\\",{\\\"children\\\":[\\\"signup\\\",{\\\"children\\\":[\\\"__PAGE__\\\",{}]}]}]},\\\"$undefined\\\",\\\"$undefined\\\",true],\\\"initialSeedData\\\":[\\\"\\\",{\\\"children\\\":[\\\"auth\\\",{\\\"children\\\":[\\\"signup\\\",{\\\"children\\\":[\\\"__PAGE__\\\",{},[[\\\"$L4\\\",[\\\"$\\\",\\\"$L5\\\",null,{\\\"props\\\":{\\\"params\\\":{},\\\"searchParams\\\":{}},\\\"Component\\\":\\\"$6\\\"}],null],null],null]},[null,[\\\"$\\\",\\\"$L7\\\",null,{\\\"parallelRouterKey\\\":\\\"children\\\",\\\"segmentPath\\\":[\\\"children\\\",\\\"auth\\\",\\\"children\\\",\\\"signup\\\",\\\"children\\\"],\\\"error\\\":\\\"$undefined\\\",\\\"errorStyles\\\":\\\"$undefined\\\",\\\"errorScripts\\\":\\\"$undefined\\\",\\\"template\\\":[\\\"$\\\",\\\"$L8\\\",null,{}],\\\"templateStyles\\\":\\\"$undefined\\\",\\\"templateScripts\\\":\\\"$undefined\\\",\\\"notFound\\\":\\\"$undefined\\\",\\\"notFoundStyles\\\":\\\"$undefined\\\"}]],null]},[null,[\\\"$\\\",\\\"$L7\\\",null,{\\\"parallelRouterKey\\\":\\\"children\\\",\\\"segmentPath\\\":[\\\"children\\\",\\\"auth\\\",\\\"children\\\"],\\\"error\\\":\\\"$undefined\\\",\\\"errorStyles\\\":\\\"$undefined\\\",\\\"errorScripts\\\":\\\"$undefined\\\",\\\"template\\\":[\\\"$\\\",\\\"$L8\\\",null,{}],\\\"templateStyles\\\":\\\"$undefined\\\",\\\"templateScripts\\\":\\\"$undefined\\\",\\\"notFound\\\":\\\"$undefined\\\",\\\"notFoundStyles\\\":\\\"$undefined\\\"}]],null]},[[[[\\\"$\\\",\\\"link\\\",\\\"0\\\",{\\\"rel\\\":\\\"stylesheet\\\",\\\"href\\\":\\\"/_next/static/css/app/layout.css?v=1760480249499\\\",\\\"precedence\\\":\\\"next_static/css/app/layout.css\\\",\\\"crossOrigin\\\":\\\"$undefined\\\"}]],\\\"$9\\\"],null],null],\\\"couldBeIntercepted\\\":false,\\\"initialHead\\\":[\\\"$d\\\",\\\"$Le\\\"],\\\"globalErrorComponent\\\":\\\"$f\\\",\\\"missingSlots\\\":\\\"$W10\\\"}]\\n\"])self.__next_f.push([1,\"e:[[\\\"$\\\",\\\"meta\\\",\\\"0\\\",{\\\"name\\\":\\\"viewport\\\",\\\"content\\\":\\\"width=device-width, initial-scale=1\\\"}],[\\\"$\\\",\\\"meta\\\",\\\"1\\\",{\\\"charSet\\\":\\\"utf-8\\\"}],[\\\"$\\\",\\\"title\\\",\\\"2\\\",{\\\"children\\\":\\\"동네물어봐 - 제주 여행 Q\\u0026A 커뮤니티\\\"}],[\\\"$\\\",\\\"meta\\\",\\\"3\\\",{\\\"name\\\":\\\"description\\\",\\\"content\\\":\\\"제주 여행에 대한 모든 질문과 답변을 공유하는 커뮤니티입니다.\\\"}],[\\\"$\\\",\\\"link\\\",\\\"4\\\",{\\\"rel\\\":\\\"icon\\\",\\\"href\\\":\\\"/favicon.ico\\\",\\\"type\\\":\\\"image/x-icon\\\",\\\"sizes\\\":\\\"16x16\\\"}],[\\\"$\\\",\\\"meta\\\",\\\"5\\\",{\\\"name\\\":\\\"next-size-adjust\\\"}]]\\n4:null\\n\"])동네물어봐제주 여행 Q&A질문 목록카테고리전문가질문하기로그인회원가입제주 여행 커뮤니티에 참여하세요이메일✓ 사용 가능한 이메일입니다비밀번호강함안전한 비밀번호입니다.비밀번호 확인이름닉네임닉네임은 최대 20자까지 입력 가능합니다.이용약관에 동의합니다. *이용약관에 동의해주세요.개인정보처리방침에 동의합니다. *마케팅 정보 수신에 동의합니다. (선택)회원가입또는이미 계정이 있으신가요?로그인하기회원가입 혜택무제한 질문제한 없이 질문하세요전문가 답변현지 전문가 답변실시간 알림답변 알림 받기포인트 적립활동 시 포인트동네물어봐제주도 여행자와 현지 주민을 연결하는 실시간 Q&A 커뮤니티서비스질문하기답변하기전문가커뮤니티지원고객센터이용가이드자주묻는질문문의하기회사회사소개채용정보이용약관개인정보처리방침© 2024 동네물어봐. All rights reserved.\n"
-                        },
-                        {
-                          "text": "🔍 성공 메시지: \u001b[33mfalse\u001b[39m\n"
-                        },
-                        {
-                          "text": "🔍 에러 메시지: \u001b[33mfalse\u001b[39m\n"
-                        },
-                        {
-                          "text": "🔍 알림 요소: \u001b[33mtrue\u001b[39m\n"
-                        },
-                        {
-                          "text": "📢 알림 메시지가 표시됨\n"
-                        }
-                      ],
+                      "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-14T22:17:26.815Z",
+                      "startTime": "2025-10-16T11:40:46.311Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -192,9 +215,77 @@
                   "status": "expected"
                 }
               ],
-              "id": "1e5aa7b6f95ae669165d-a4b43f3edd880ee62d88",
-              "file": "registration.spec.ts",
-              "line": 28,
+              "id": "5289335fd141da2d78f4-9e4d60e3ad4866a8b576",
+              "file": "basic-page.e2e.test.ts",
+              "line": 4,
+              "column": 7
+            },
+            {
+              "title": "전문가 페이지가 로드된다",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 23532,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-16T11:40:46.332Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "5289335fd141da2d78f4-c5e1f00864c492c711a3",
+              "file": "basic-page.e2e.test.ts",
+              "line": 9,
+              "column": 7
+            },
+            {
+              "title": "질문 페이지가 로드된다",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 14291,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-16T11:40:46.314Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "5289335fd141da2d78f4-76c28a7b7ccfa1ebaa3c",
+              "file": "basic-page.e2e.test.ts",
+              "line": 20,
               "column": 7
             }
           ]
@@ -204,9 +295,9 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-10-14T22:17:26.352Z",
-    "duration": 14112.833,
-    "expected": 1,
+    "startTime": "2025-10-16T11:40:45.206Z",
+    "duration": 26976.954999999998,
+    "expected": 3,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

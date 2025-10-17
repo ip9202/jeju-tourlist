@@ -239,9 +239,11 @@ export class QuestionRepository
 
   async create(data: CreateQuestionData): Promise<Question> {
     try {
+      const { authorId, ...questionData } = data;
       return await this.prisma.question.create({
         data: {
-          ...data,
+          ...questionData,
+          authorId: authorId || "", // authorId가 없으면 빈 문자열로 설정
           createdAt: new Date(),
           updatedAt: new Date(),
         },

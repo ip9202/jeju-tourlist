@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Avatar, Button } from "@jeju-tourlist/ui";
 import { safeFormatDate } from "@/lib/dateUtils";
+import { CheckCircle, Calendar, MapPin, Edit, Settings } from "lucide-react";
 
 /**
  * 사용자 프로필 데이터 타입

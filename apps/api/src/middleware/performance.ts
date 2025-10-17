@@ -225,33 +225,33 @@ export const securityHeadersMiddleware = helmet({
  * - DDoS 공격 방지
  * - 공정한 리소스 사용 보장
  */
-export const rateLimitMiddleware = rateLimit({
-  // 시간 윈도우 (15분)
-  windowMs: 15 * 60 * 1000,
-  
-  // 최대 요청 수
-  max: 100,
-  
-  // 메시지
-  message: {
-    success: false,
-    message: "너무 많은 요청이 발생했습니다. 잠시 후 다시 시도해주세요.",
-  },
-  
-  // 표준 헤더 설정
-  standardHeaders: true,
-  legacyHeaders: false,
-  
-  // IP별 제한
-  keyGenerator: (req) => {
-    return req.ip || req.connection.remoteAddress || "unknown";
-  },
-  
-  // 스킵 조건 (개발 환경에서 스킵)
-  skip: (req) => {
-    return process.env.NODE_ENV === "development" && req.ip === "::1";
-  },
-});
+export const rateLimitMiddleware = process.env.NODE_ENV === "production" 
+  ? rateLimit({
+      // 시간 윈도우 (15분)
+      windowMs: 15 * 60 * 1000,
+      
+      // 최대 요청 수
+      max: 100,
+      
+      // 메시지
+      message: {
+        success: false,
+        message: "너무 많은 요청이 발생했습니다. 잠시 후 다시 시도해주세요.",
+      },
+      
+      // 표준 헤더 설정
+      standardHeaders: true,
+      legacyHeaders: false,
+      
+      // IP별 제한
+      keyGenerator: (req) => {
+        return req.ip || req.connection.remoteAddress || "unknown";
+      },
+    })
+  : (req: any, res: any, next: any) => {
+      console.log("🔓 개발 환경: Performance Rate Limiter 비활성화됨");
+      next();
+    };
 
 /**
  * 캐시 헤더 미들웨어
