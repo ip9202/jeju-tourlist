@@ -8,7 +8,7 @@
 
 - **프론트엔드**: Next.js 14 + TypeScript + Tailwind CSS + shadcn/ui
 - **백엔드**: Node.js + Express.js + PostgreSQL + Prisma ORM
-- **실시간**: Socket.io + NextAuth.js
+- **실시간**: Socket.io + 커스텀 JWT 인증
 
 ---
 
@@ -59,7 +59,7 @@ docker-compose up -d
 
 ### 주요 이슈 해결
 
-- ✅ NextAuth 세션 유지 문제
+- ✅ 커스텀 인증 시스템 구현 완료
 - ✅ Docker 환경 동기화
 - ✅ 전문가 대시보드 무한 루프 (useEffect 의존성 최적화)
 - ✅ API 404 에러 (환경변수 설정)
@@ -77,8 +77,8 @@ docker-compose up -d
 
 ```bash
 # Health Check
-curl http://localhost:3000/api/auth/session
 curl http://localhost:4000/health
+curl http://localhost:4000/api/auth/me
 
 # Prisma Studio
 docker-compose up -d prisma-studio
