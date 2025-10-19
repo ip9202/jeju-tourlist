@@ -3,6 +3,7 @@
 ## 꼭 해야 할일
 
 - 모든 답변은 한국어로 한다.
+- auto compact 이후 에도 꼭 한국어로 한다.
 - 모든 시간은 한국시간 기준으로 한다. 현재 시간을 확인하고 지정한다.
 
 ## 🎯 프로젝트 개요
@@ -84,12 +85,17 @@ docker-compose up -d
   - `~/.zprofile`: 환경변수 영구 설정
   - Docker 내부: `postgres:5432` (컨테이너 간 통신)
   - Prisma 마이그레이션: 3개 모두 완료 ✅
-- ✅ **Prisma Studio 데이터베이스 연결 오류 해결 (2025-10-19)**
+- ✅ **Prisma Studio ���이터베이스 연결 오류 해결 (2025-10-19)**
   - docker-compose.yml의 Prisma Studio DATABASE_URL을 asklocal_dev에서 jeju_tourlist로 수정
   - 캐시 정리 후 컨테이너 재시작
 - ✅ **데이터베이스 초기화 및 테스트 데이터 생성 (2025-10-19)**
   - 모든 테이블 데이터 삭제 및 정리
   - 새로운 테스트 데이터로 완전 초기화
+- ✅ **회원가입(이메일) 버그 해결 (2025-10-19 15:11)**
+  - 문제: providerId NOT NULL 제약조건 위반
+  - 원인: Prisma 스키마에서는 nullable(String?)이지만 DB에서는 NOT NULL로 생성됨
+  - 해결: 마이그레이션 `20251019_make_provider_id_nullable` 생성
+  - 결과: /api/auth/register 엔드포인트 정상 작동 ✅
 
 ### 데이터 현황
 
@@ -161,6 +167,6 @@ curl -X POST http://localhost:4000/api/auth/login \
 
 ---
 
-**마지막 업데이트**: 2025-10-19
-**현재 작업**: 데이터베이스 초기화 및 설정 완료 ✅
-**시스템 상태**: 모든 서비스 정상 작동 ✅ (API + Web + DB + Prisma Studio)
+**마지막 업데이트**: 2025-10-19 15:18 (한국시간)
+**현재 작업**: 회원가입 기능 완료 ✅
+**시스템 상태**: 모든 서비스 정상 작동 ✅ (API + Web + DB + 회원가입/로그인)
