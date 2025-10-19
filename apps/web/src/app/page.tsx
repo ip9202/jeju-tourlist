@@ -39,17 +39,17 @@ const categoryIcons: Record<string, string> = {
   기타: "📝",
 };
 
-// 카테고리별 배경 색상 (플랫 디자인)
-const categoryColors: Record<string, { bg: string; icon: string }> = {
-  관광지: { bg: "from-blue-50 to-blue-100", icon: "text-blue-200" },
-  맛집: { bg: "from-orange-50 to-orange-100", icon: "text-orange-200" },
-  숙박: { bg: "from-purple-50 to-purple-100", icon: "text-purple-200" },
-  교통: { bg: "from-red-50 to-red-100", icon: "text-red-200" },
-  쇼핑: { bg: "from-pink-50 to-pink-100", icon: "text-pink-200" },
-  액티비티: { bg: "from-green-50 to-green-100", icon: "text-green-200" },
-  날씨: { bg: "from-cyan-50 to-cyan-100", icon: "text-cyan-200" },
-  안전: { bg: "from-yellow-50 to-yellow-100", icon: "text-yellow-200" },
-  기타: { bg: "from-gray-50 to-gray-100", icon: "text-gray-200" },
+// 카테고리별 설명
+const categoryDescriptions: Record<string, string> = {
+  관광지: "제주도의 주요 관광지, 숨은 명소, 트래킹 코스 등",
+  맛집: "제주 로컬 식당, 해산물, 특산 음식 추천",
+  숙박: "호텔, 펜션, 게스트하우스, 에어비앤비 정보",
+  교통: "공항 교통, 렌터카, 대중교통, 이동 팁",
+  쇼핑: "면세점, 기념품, 로컬 상점 정보",
+  액티비티: "스노클링, 서핑, 트래킹, 수상 스포츠",
+  날씨: "계절별 날씨, 복장 정보, 우천 대비",
+  안전: "여행 안전 정보, 보험, 응급 상황",
+  기타: "위 카테고리에 해당하지 않는 질문들",
 };
 
 // 카테고리 ID -> 한글명 매핑
@@ -185,43 +185,30 @@ export default async function Home() {
                 <Link
                   key={category.id}
                   href="/categories"
-                  className="relative h-32 rounded-xl overflow-hidden hover:shadow-lg transition-shadow cursor-pointer border border-gray-100 block group"
+                  className="bg-white rounded-lg border border-gray-200 p-4 text-left hover:shadow-lg transition-shadow cursor-pointer block flex flex-col h-full"
                 >
-                  {/* 그래디언트 배경 */}
-                  <div
-                    className={`absolute inset-0 bg-gradient-to-br ${
-                      categoryColors[categoryName]?.bg ||
-                      categoryColors["기타"].bg
-                    }`}
-                  ></div>
+                  {/* 아이콘 */}
+                  <div className="text-4xl mb-2">{icon}</div>
 
-                  {/* 큰 아이콘 배경 */}
-                  <div
-                    className={`absolute -right-6 -bottom-6 opacity-20 ${
-                      categoryColors[categoryName]?.icon ||
-                      categoryColors["기타"].icon
-                    }`}
-                  >
-                    <div className="w-32 h-32">
-                      {icon === "📝" ? (
-                        "?"
-                      ) : (
-                        <div className="text-4xl">{icon}</div>
-                      )}
-                    </div>
-                  </div>
+                  {/* 카테고리명 */}
+                  <h4 className="font-bold text-gray-900 mb-0.5 text-sm">
+                    {categoryName}
+                  </h4>
 
-                  {/* 콘텐츠 */}
-                  <div className="absolute inset-0 flex flex-col justify-between p-3 z-10">
-                    <div className="text-2xl">{icon}</div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900 text-sm">
-                        {categoryName}
-                      </h4>
-                      <p className="text-gray-600 text-xs">
-                        {Math.floor(Math.random() * 20 + 5)}개 질문
-                      </p>
-                    </div>
+                  {/* 질문 개수 */}
+                  <p className="text-gray-500 text-xs mb-1.5">
+                    {Math.floor(Math.random() * 20 + 5)}개 질문
+                  </p>
+
+                  {/* 설명 */}
+                  <p className="text-gray-600 text-xs flex-grow mb-2 line-clamp-2">
+                    {categoryDescriptions[categoryName] || ""}
+                  </p>
+
+                  {/* 질문 보기 링크 */}
+                  <div className="text-blue-600 text-xs font-medium flex items-center gap-1">
+                    질문 보기
+                    <ChevronRight className="w-3 h-3" />
                   </div>
                 </Link>
               );
