@@ -144,7 +144,7 @@ export default function QuestionDetailPage() {
 
     try {
       // API 호출 (api 클라이언트 사용 - 자동으로 Authorization 헤더 포함)
-      const response = await api.post("/answers", {
+      const response = await api.post("/api/answers", {
         content: newAnswer.trim(),
         questionId: params.id,
         authorId: user.id,

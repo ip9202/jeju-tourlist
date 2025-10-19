@@ -113,7 +113,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   ): Promise<{ success: boolean; message: string }> => {
     try {
       setIsLoading(true);
-      const response = await api.post<LoginResponse>("/auth/login", {
+      const response = await api.post<LoginResponse>("/api/auth/login", {
         email,
         password,
       });
@@ -155,7 +155,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (typeof window !== "undefined") {
         const token = localStorage.getItem("auth_token");
         if (token) {
-          await api.post("/auth/logout");
+          await api.post("/api/auth/logout");
         }
       }
     } catch (error) {

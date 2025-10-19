@@ -228,7 +228,7 @@ export const EnhancedAnswerCard: React.FC<EnhancedAnswerCardProps> = ({
 
     try {
       // API 호출 (api 클라이언트 사용 - 자동으로 Authorization 헤더 포함)
-      const result = await api.post("/answer-comments", {
+      const result = await api.post("/api/answer-comments", {
         content,
         answerId: answer.id,
         authorId: user?.id || "",
@@ -316,7 +316,7 @@ export const EnhancedAnswerCard: React.FC<EnhancedAnswerCardProps> = ({
       const parentDepth = parentComment?.depth ?? 0;
 
       // API 호출 (api 클라이언트 사용 - 자동으로 Authorization 헤더 포함)
-      const result = await api.post("/answer-comments", {
+      const result = await api.post("/api/answer-comments", {
         content,
         answerId: answer.id,
         authorId: user?.id || "",
