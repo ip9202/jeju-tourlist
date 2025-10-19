@@ -1,5 +1,21 @@
 import React from "react";
-import { Search, Star, Clock, Users, Heart, ChevronRight } from "lucide-react";
+import {
+  Search,
+  Star,
+  Clock,
+  Users,
+  Heart,
+  ChevronRight,
+  Landmark,
+  Utensils,
+  Bed,
+  Car,
+  ShoppingBag,
+  Waves,
+  Cloud,
+  Shield,
+  MoreHorizontal,
+} from "lucide-react";
 import Link from "next/link";
 import { Header } from "@/components/layout/Header";
 
@@ -26,17 +42,17 @@ interface Expert {
   nickname: string;
 }
 
-// 카테고리별 아이콘 매핑
-const categoryIcons: Record<string, string> = {
-  관광지: "🏛️",
-  맛집: "🍽️",
-  숙박: "🏨",
-  교통: "🚗",
-  액티비티: "🏄",
-  쇼핑: "🛍️",
-  날씨: "🌤️",
-  안전: "🛡️",
-  기타: "📝",
+// 카테고리별 아이콘 매핑 (Lucide React)
+const categoryIcons: Record<string, React.ReactNode> = {
+  관광지: <Landmark className="w-8 h-8" />,
+  맛집: <Utensils className="w-8 h-8" />,
+  숙박: <Bed className="w-8 h-8" />,
+  교통: <Car className="w-8 h-8" />,
+  쇼핑: <ShoppingBag className="w-8 h-8" />,
+  액티비티: <Waves className="w-8 h-8" />,
+  날씨: <Cloud className="w-8 h-8" />,
+  안전: <Shield className="w-8 h-8" />,
+  기타: <MoreHorizontal className="w-8 h-8" />,
 };
 
 // 카테고리별 설명
@@ -180,7 +196,9 @@ export default async function Home() {
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 p-1">
             {displayCategories.map((category: Category) => {
               const categoryName = category.name || "기타";
-              const icon = categoryIcons[categoryName] || "📝";
+              const icon = categoryIcons[categoryName] || (
+                <MoreHorizontal className="w-8 h-8" />
+              );
               return (
                 <Link
                   key={category.id}
@@ -188,7 +206,7 @@ export default async function Home() {
                   className="bg-white rounded-lg border border-gray-200 p-4 text-left hover:shadow-lg transition-shadow cursor-pointer block flex flex-col h-full"
                 >
                   {/* 아이콘 */}
-                  <div className="text-4xl mb-2">{icon}</div>
+                  <div className="mb-2 text-blue-500">{icon}</div>
 
                   {/* 카테고리명 */}
                   <h4 className="font-bold text-gray-900 mb-0.5 text-sm">
