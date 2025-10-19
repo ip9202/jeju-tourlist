@@ -11,6 +11,27 @@ declare global {
 }
 
 /**
+ * 인증 미들웨어 팩토리
+ */
+export function createAuthMiddleware(_authService?: any) {
+  return {
+    authenticate: authMiddleware,
+    requireAdmin: (req: Request, res: Response, next: NextFunction) => {
+      // 임시 구현: 관리자 권한 확인
+      if (req.user?.role !== "admin") {
+        res.status(403).json({
+          success: false,
+          error: "관리자 권한이 필요합니다.",
+          timestamp: new Date().toISOString(),
+        });
+        return;
+      }
+      next();
+    },
+  };
+}
+
+/**
  * JWT 인증 미들웨어
  * Single Responsibility Principle: 인증 검증만 담당
  */

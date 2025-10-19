@@ -157,7 +157,12 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/questions", createQuestionRouter(prisma));
 app.use("/api/answers", createAnswerRouter(prisma));
 app.use("/api/answers", createAnswerAdoptionRouter(prisma));
-app.use("/api/answer-comments", createAnswerCommentRouter(prisma));
+try {
+  app.use("/api/answer-comments", createAnswerCommentRouter(prisma));
+  console.log("✅ Answer Comments Router registered");
+} catch (error) {
+  console.error("❌ Failed to register Answer Comments Router:", error);
+}
 app.use("/api/categories", createCategoryRouter(prisma));
 app.use("/api/batch", createBatchSchedulerRouter(prisma));
 
@@ -175,7 +180,7 @@ app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 // TODO: Phase 7 테스트 후 활성화
 // app.use("/api/auth", authLimiter, createAuthRouter());
-// app.use("/api/users", createUserRouter());
+app.use("/api/users", createUserRouter(prisma));
 // app.use("/api", createUserActivityRouter(prisma));
 
 // API 라우트

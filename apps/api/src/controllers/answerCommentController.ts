@@ -38,7 +38,8 @@ export class AnswerCommentController {
         authorId: req.user?.id || validatedData.authorId || "temp-user-id",
       };
 
-      const comment = await this.answerCommentService.createComment(dataWithUser);
+      const comment =
+        await this.answerCommentService.createComment(dataWithUser);
 
       const response: ApiResponse = {
         success: true,
@@ -152,16 +153,19 @@ export class AnswerCommentController {
         }
       );
 
-      const totalCount = await this.answerCommentService.getCommentStats(answerId);
+      const totalCount =
+        await this.answerCommentService.getCommentStats(answerId);
 
-      const response: PaginatedResponse = {
+      const response: PaginatedResponse<any> = {
         success: true,
         data: comments,
         pagination: {
           page: parseInt(page as string),
           limit: parseInt(limit as string),
           total: totalCount.totalComments,
-          totalPages: Math.ceil(totalCount.totalComments / parseInt(limit as string)),
+          totalPages: Math.ceil(
+            totalCount.totalComments / parseInt(limit as string)
+          ),
         },
         message: "답변 댓글 목록을 성공적으로 조회했습니다.",
         timestamp: new Date().toISOString(),
@@ -219,7 +223,7 @@ export class AnswerCommentController {
         }
       );
 
-      const response: PaginatedResponse = {
+      const response: PaginatedResponse<any> = {
         success: true,
         data: comments,
         pagination: {

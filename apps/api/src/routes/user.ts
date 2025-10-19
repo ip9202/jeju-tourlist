@@ -10,7 +10,7 @@ import { createAuthMiddleware } from "../middleware/auth";
  * 사용자 라우터
  * Single Responsibility Principle: 사용자 관련 라우팅만 담당
  */
-export function createUserRouter(): Router {
+export function createUserRouter(prisma?: any): Router {
   const router = Router();
 
   // 의존성 주입 (Dependency Inversion Principle)
@@ -22,7 +22,11 @@ export function createUserRouter(): Router {
     passwordService,
     userRepository
   );
-  const userController = new UserController(userRepository, authService);
+  const userController = new UserController(
+    userRepository,
+    authService,
+    prisma
+  );
   const authMiddleware = createAuthMiddleware(authService);
 
   // 모든 사용자 라우트는 인증 필요

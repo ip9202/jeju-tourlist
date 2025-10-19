@@ -20,6 +20,12 @@ export default function ProfilePage() {
     profileImage: user?.profileImage || "",
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [stats, setStats] = useState({
+    questionsCount: 0,
+    answersCount: 0,
+    likesReceived: 0,
+    points: 0,
+  });
 
   useEffect(() => {
     if (user) {
@@ -27,8 +33,42 @@ export default function ProfilePage() {
         name: user.name,
         profileImage: user.profileImage || "",
       });
+      // 통계 조회
+      fetchStats();
     }
   }, [user]);
+
+  const fetchStats = async () => {
+    try {
+      const token = localStorage.getItem("auth_token");
+      if (!token) {
+        console.error("No auth token found");
+        return;
+      }
+
+      // 직접 API 서버로 요청 (프록시 우회)
+      const apiBaseUrl =
+        process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+      const response = await fetch(`${apiBaseUrl}/api/users/me/stats`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success && data.data) {
+          setStats(data.data);
+        }
+      } else {
+        console.error("Failed to fetch stats - status:", response.status);
+      }
+    } catch (error) {
+      console.error("Failed to fetch stats:", error);
+    }
+  };
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -206,19 +246,27 @@ export default function ProfilePage() {
             <h2 className="text-xl font-bold text-gray-900 mb-4">활동 통계</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="text-center">
-                <div className="text-2xl font-bold text-indigo-600">0</div>
+                <div className="text-2xl font-bold text-indigo-600">
+                  {stats.questionsCount}
+                </div>
                 <div className="text-sm text-gray-600">질문</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-indigo-600">0</div>
+                <div className="text-2xl font-bold text-indigo-600">
+                  {stats.answersCount}
+                </div>
                 <div className="text-sm text-gray-600">답변</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-indigo-600">0</div>
+                <div className="text-2xl font-bold text-indigo-600">
+                  {stats.likesReceived}
+                </div>
                 <div className="text-sm text-gray-600">받은 좋아요</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-indigo-600">0</div>
+                <div className="text-2xl font-bold text-indigo-600">
+                  {stats.points}
+                </div>
                 <div className="text-sm text-gray-600">포인트</div>
               </div>
             </div>

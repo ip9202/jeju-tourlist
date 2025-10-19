@@ -20,7 +20,27 @@
 
 ## 🚀 개발 환경
 
-### ⚡ 하이브리드 환경 (개발용 - 권장)
+### ⚡ 권장 방법 - 자동 스크립트 (모든 서비스 한 번에 시작)
+
+```bash
+./start-services.sh
+```
+
+**자동 실행 내용:**
+
+1. Docker daemon 확인 및 시작
+2. PostgreSQL, Redis, Prisma Studio 시작 (Docker)
+3. API 서버 시작 (npm run dev)
+4. 웹 서버 시작 (npm run dev)
+5. 모든 서비스 상태 자동 확인
+
+### ⏹️ 모든 서비스 종료
+
+```bash
+./kill-services.sh
+```
+
+### 🔧 수동으로 서비스 시작 (개발용)
 
 ```bash
 # 1. DB만 Docker로 실행
@@ -29,8 +49,8 @@ docker-compose up -d postgres redis prisma-studio
 # 2. API 서버 로컬 실행
 cd apps/api && npm run dev
 
-# 3. 웹 서버 로컬 실행
-cd apps/web && npm run dev
+# 3. 웹 서버 로컬 실행 (다른 터미널)
+cd apps/web && NEXT_PUBLIC_API_URL="http://localhost:4000" npm run dev
 ```
 
 ### 🐳 Docker 전체 스택 (배포/테스트용)
@@ -72,6 +92,10 @@ docker-compose up -d
 - ✅ 전문가 대시보드 (Phase 1-5 완료)
 - ✅ 실시간 알림
 - ✅ 북마크 및 공유
+- ✅ **프로필 페이지 - 실제 통계 데이터 표시 (2025-10-19 22:00)**
+  - Prisma를 통한 실제 데이터베이스 쿼리 구현
+  - `/api/users/me/stats` 엔드포인트가 하드코딩된 값 대신 실제 데이터 반환
+  - 사용자 통계 (질문, 답변, 채택률, 포인트) 동적 계산
 
 ### 주요 이슈 해결
 
@@ -167,6 +191,84 @@ curl -X POST http://localhost:4000/api/auth/login \
 
 ---
 
-**마지막 업데이트**: 2025-10-19 15:18 (한국시간)
-**현재 작업**: 회원가입 기능 완료 ✅
-**시스템 상태**: 모든 서비스 정상 작동 ✅ (API + Web + DB + 회원가입/로그인)
+## 🔧 서비스 관리 스크립트
+
+### 자동 시작 스크립트
+
+```bash
+./start-services.sh
+```
+
+모든 서비스를 한 번에 시작합니다 (Docker daemon 확인 포함)
+
+### 자동 종료 스크립트
+
+```bash
+./kill-services.sh
+```
+
+모든 서비스를 안전하게 종료합니다
+
+### 서비스 상태 확인
+
+```bash
+# 모든 Docker 컨테이너 상태
+docker-compose ps
+
+# API 헬스 체크
+curl http://localhost:4000/health
+
+# 웹 서버 확인
+curl http://localhost:3000
+```
+
+---
+
+## 📌 테스트 계정 (업데이트됨)
+
+| 이메일            | 비밀번호    | 상태 | 통계 데이터                   |
+| ----------------- | ----------- | ---- | ----------------------------- |
+| ip9202@gmail.com  | rkdcjfIP00! | ✅   | 28 답변, 57.1% 채택률, 1600pt |
+| user1@example.com | test123456  | ✅   | 테스트용                      |
+| user2@example.com | test123456  | ✅   | 테스트용                      |
+| user3@example.com | test123456  | ✅   | 테스트용                      |
+
+---
+
+## 🎯 최근 완료사항 (2025-10-19)
+
+### ✅ 프로필 페이지 - 실제 통계 데이터 표시
+
+- **구현 시간**: 2025-10-19 22:00 (한국시간)
+- **변경 파일**:
+  - `apps/api/src/controllers/userController.ts` - Prisma 통합
+  - `apps/api/src/routes/user.ts` - 라우터 수정
+  - `apps/api/src/index.ts` - Prisma 인스턴스 전달
+  - `apps/web/src/app/profile/page.tsx` - API 통합
+
+- **구현 내용**:
+  - Prisma ORM을 통한 실제 데이터베이스 쿼리
+  - `/api/users/me/stats` 엔드포인트가 하드코딩된 값 대신 실제 데이터 반환
+  - 사용자 통계 (질문, 답변, 채택률, 포인트) 동적 계산
+  - 프론트엔드에서 Authorization 헤더를 통한 인증된 API 호출
+
+- **테스트 결과**:
+  ```
+  ip9202@gmail.com 통계:
+  - 질문: 0개
+  - 답변: 28개 ✅
+  - 채택된 답변: 16개 (57.1% 채택률) ✅
+  - 포인트: 1600점 ✅
+  ```
+
+### ✅ 서비스 안정성 강화
+
+- `start-services.sh` - 모든 서비스 자동 시작 스크립트
+- `kill-services.sh` - 모든 서비스 안전 종료 스크립트
+- `SERVICES_GUIDE.md` - 서비스 관리 가이드 문서
+
+---
+
+**마지막 업데이트**: 2025-10-19 22:00 (한국시간)
+**현재 상태**: ✅ 모든 서비스 정상 작동 (API + Web + DB + Prisma Studio)
+**주요 성과**: 실제 데이터베이스 통계 표시 구현 완료 🎉

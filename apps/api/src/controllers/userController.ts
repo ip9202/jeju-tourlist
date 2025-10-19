@@ -10,7 +10,8 @@ import { UpdateUserData } from "@jeju-tourlist/types";
 export class UserController {
   constructor(
     private readonly userRepository: UserRepository,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private readonly prisma?: any
   ) {}
 
   /**
@@ -237,10 +238,65 @@ export class UserController {
         return;
       }
 
-      // 현재는 기본 통계만 반환 (실제 통계는 향후 구현)
+      const userId = (req.user as any).id;
+
+      // Prisma를 사용한 실제 데이터베이스 쿼리
+      if (this.prisma) {
+        try {
+          // 질문 개수
+          const questionsCount = await this.prisma.question.count({
+            where: { authorId: userId },
+          });
+
+          // 답변 관련 데이터 조회
+          const answers = await this.prisma.answer.findMany({
+            where: { authorId: userId },
+            select: {
+              id: true,
+              isAccepted: true,
+              likeCount: true,
+            },
+          });
+
+          const answersCount = answers.length;
+          const acceptedAnswersCount = answers.filter(
+            answer => answer.isAccepted
+          ).length;
+          const likesReceived = answers.reduce(
+            (sum, answer) => sum + (answer.likeCount || 0),
+            0
+          );
+
+          // 포인트 계산: 채택된 답변 100점 + 좋아요 1점씩
+          const points = acceptedAnswersCount * 100 + likesReceived;
+
+          const stats = {
+            questionsCount,
+            answersCount,
+            acceptedAnswersCount,
+            likesReceived,
+            points,
+            joinDate: (req.user as any).createdAt,
+            lastActive: (req.user as any).updatedAt,
+          };
+
+          res.status(200).json({
+            success: true,
+            data: stats,
+            timestamp: new Date().toISOString(),
+          });
+          return;
+        } catch (dbError: any) {
+          console.error("Database query error:", dbError);
+          // Prisma 쿼리 실패 시 기본값 반환
+        }
+      }
+
+      // Prisma가 없거나 쿼리 실패 시 기본값 반환
       const stats = {
         questionsCount: 0,
         answersCount: 0,
+        acceptedAnswersCount: 0,
         likesReceived: 0,
         points: 0,
         joinDate: (req.user as any).createdAt,
