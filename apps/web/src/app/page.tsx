@@ -3,6 +3,29 @@ import { Search, Star, Clock, Users, Heart, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { Header } from "@/components/layout/Header";
 
+// 타입 정의
+interface Category {
+  id: string;
+  name: string;
+}
+
+interface Question {
+  id: string;
+  title: string;
+  categoryId: string;
+  answerCount: number;
+  viewCount: number;
+  createdAt: string;
+  author?: {
+    nickname: string;
+  };
+}
+
+interface Expert {
+  id: string;
+  nickname: string;
+}
+
 // 카테고리별 아이콘 매핑
 const categoryIcons: Record<string, string> = {
   관광지: "🏛️",
@@ -44,7 +67,7 @@ function formatTimeAgo(date: string): string {
   return past.toLocaleDateString("ko-KR");
 }
 
-async function fetchCategoriesWithCounts() {
+async function fetchCategoriesWithCounts(): Promise<Category[]> {
   try {
     const res = await fetch("http://localhost:4000/api/categories", {
       cache: "no-store",
@@ -58,7 +81,7 @@ async function fetchCategoriesWithCounts() {
   }
 }
 
-async function fetchPopularQuestions() {
+async function fetchPopularQuestions(): Promise<Question[]> {
   try {
     const res = await fetch(
       "http://localhost:4000/api/questions?page=1&limit=6",
@@ -75,7 +98,7 @@ async function fetchPopularQuestions() {
   }
 }
 
-async function fetchPopularExperts() {
+async function fetchPopularExperts(): Promise<Expert[]> {
   try {
     const res = await fetch("http://localhost:4000/api/users?limit=4", {
       cache: "no-store",
@@ -132,17 +155,24 @@ export default async function Home() {
 
         {/* 카테고리 섹션 */}
         <div className="mb-8">
-          <h3 className="text-2xl font-bold text-gray-900 mb-6">
-            인기 카테고리
-          </h3>
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-2xl font-bold text-gray-900">인기 카테고리</h3>
+            <Link
+              href="/categories"
+              className="text-gray-700 hover:text-gray-900 font-medium flex items-center"
+            >
+              모두 보기 <ChevronRight className="w-4 h-4 ml-1" />
+            </Link>
+          </div>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            {displayCategories.map((category: any) => {
+            {displayCategories.map((category: Category) => {
               const categoryName = category.name || "기타";
               const icon = categoryIcons[categoryName] || "📝";
               return (
-                <div
+                <Link
                   key={category.id}
-                  className="bg-white rounded-xl p-6 text-center hover:shadow-lg transition-shadow cursor-pointer border border-gray-100"
+                  href="/categories"
+                  className="bg-white rounded-xl p-6 text-center hover:shadow-lg transition-shadow cursor-pointer border border-gray-100 block"
                 >
                   <div className="text-3xl mb-2">{icon}</div>
                   <h4 className="font-semibold text-gray-900">
@@ -151,7 +181,7 @@ export default async function Home() {
                   <p className="text-sm text-gray-500">
                     {Math.floor(Math.random() * 20 + 5)}개 질문
                   </p>
-                </div>
+                </Link>
               );
             })}
           </div>
@@ -171,7 +201,7 @@ export default async function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {questions && questions.length > 0 ? (
-              questions.map((question: any) => (
+              questions.map((question: Question) => (
                 <Link
                   key={question.id}
                   href={`/questions/${question.id}`}
@@ -247,7 +277,7 @@ export default async function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {experts && experts.length > 0 ? (
-              experts.map((expert: any) => (
+              experts.map((expert: Expert) => (
                 <div
                   key={expert.id}
                   className="bg-white rounded-xl p-6 text-center shadow-sm hover:shadow-lg transition-shadow border border-gray-100"

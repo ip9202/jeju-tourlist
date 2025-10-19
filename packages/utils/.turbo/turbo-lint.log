@@ -1,0 +1,8 @@
+
+> @jeju-tourlist/utils@1.0.0 lint /Users/ip9202/develop/vibe/jeju-tourlist/packages/utils
+> eslint src --ext .ts
+
+Invalid option '--ext' - perhaps you meant '-c'?
+You're using eslint.config.js, some command line flags are no longer available. Please see https://eslint.org/docs/latest/use/command-line-interface for details.
+ ELIFECYCLE  Command failed with exit code 2.
+ WARN   Local package.json exists, but node_modules missing, did you mean to install?

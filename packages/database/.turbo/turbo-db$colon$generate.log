@@ -1,0 +1,7 @@
+
+> @jeju-tourlist/database@1.0.0 db:generate /Users/ip9202/develop/vibe/jeju-tourlist/packages/database
+> prisma generate
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+ ELIFECYCLE  Command failed.
