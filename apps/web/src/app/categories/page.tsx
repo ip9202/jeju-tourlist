@@ -179,7 +179,7 @@ export default function CategoriesPage() {
         </div>
 
         {/* 카테고리 그리드 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-12 p-1">
           {categories.map(category => (
             <button
               key={category.id}

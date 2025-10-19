@@ -177,7 +177,7 @@ export default async function Home() {
               모두 보기 <ChevronRight className="w-4 h-4 ml-1" />
             </Link>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 p-1">
             {displayCategories.map((category: Category) => {
               const categoryName = category.name || "기타";
               const icon = categoryIcons[categoryName] || "📝";
