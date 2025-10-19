@@ -42,16 +42,16 @@ const categoryIcons: Record<string, string> = {
 // 카테고리별 배경 이미지 URL (Unsplash)
 const categoryBackgrounds: Record<string, string> = {
   관광지:
-    "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=500&h=300&fit=crop&q=80",
-  맛집: "https://images.unsplash.com/photo-1495521821757-a1efb6729352?w=500&h=300&fit=crop&q=80",
-  숙박: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=500&h=300&fit=crop&q=80",
-  교통: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=500&h=300&fit=crop&q=80",
-  쇼핑: "https://images.unsplash.com/photo-1555139175-f7fe7edc87ab?w=500&h=300&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&h=300&fit=crop&q=80",
+  맛집: "https://images.unsplash.com/photo-1504674900769-7be61bdd52de?w=500&h=300&fit=crop&q=80",
+  숙박: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=500&h=300&fit=crop&q=80",
+  교통: "https://images.unsplash.com/photo-1552820728-8ac41f1ce891?w=500&h=300&fit=crop&q=80",
+  쇼핑: "https://images.unsplash.com/photo-1519452575417-564c1401ecc0?w=500&h=300&fit=crop&q=80",
   액티비티:
-    "https://images.unsplash.com/photo-1551821440-07dc9b722acf?w=500&h=300&fit=crop&q=80",
-  날씨: "https://images.unsplash.com/photo-1495566893256-4e657beefed2?w=500&h=300&fit=crop&q=80",
-  안전: "https://images.unsplash.com/photo-1474654987521-d1019bab350f?w=500&h=300&fit=crop&q=80",
-  기타: "https://images.unsplash.com/photo-1452587925148-ce544e77e70d?w=500&h=300&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=300&fit=crop&q=80",
+  날씨: "https://images.unsplash.com/photo-1534274988757-a28bf1ad0e1f?w=500&h=300&fit=crop&q=80",
+  안전: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=500&h=300&fit=crop&q=80",
+  기타: "https://images.unsplash.com/photo-1504681869696-d977e3a11778?w=500&h=300&fit=crop&q=80",
 };
 
 // 카테고리 ID -> 한글명 매핑
