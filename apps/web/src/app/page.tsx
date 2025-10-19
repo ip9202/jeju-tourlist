@@ -39,19 +39,17 @@ const categoryIcons: Record<string, string> = {
   기타: "📝",
 };
 
-// 카테고리별 배경 이미지 URL (Unsplash)
-const categoryBackgrounds: Record<string, string> = {
-  관광지:
-    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&h=300&fit=crop&q=80",
-  맛집: "https://images.unsplash.com/photo-1504674900769-7be61bdd52de?w=500&h=300&fit=crop&q=80",
-  숙박: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=500&h=300&fit=crop&q=80",
-  교통: "https://images.unsplash.com/photo-1552820728-8ac41f1ce891?w=500&h=300&fit=crop&q=80",
-  쇼핑: "https://images.unsplash.com/photo-1519452575417-564c1401ecc0?w=500&h=300&fit=crop&q=80",
-  액티비티:
-    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=300&fit=crop&q=80",
-  날씨: "https://images.unsplash.com/photo-1534274988757-a28bf1ad0e1f?w=500&h=300&fit=crop&q=80",
-  안전: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=500&h=300&fit=crop&q=80",
-  기타: "https://images.unsplash.com/photo-1504681869696-d977e3a11778?w=500&h=300&fit=crop&q=80",
+// 카테고리별 배경 색상 (플랫 디자인)
+const categoryColors: Record<string, { bg: string; icon: string }> = {
+  관광지: { bg: "from-blue-50 to-blue-100", icon: "text-blue-200" },
+  맛집: { bg: "from-orange-50 to-orange-100", icon: "text-orange-200" },
+  숙박: { bg: "from-purple-50 to-purple-100", icon: "text-purple-200" },
+  교통: { bg: "from-red-50 to-red-100", icon: "text-red-200" },
+  쇼핑: { bg: "from-pink-50 to-pink-100", icon: "text-pink-200" },
+  액티비티: { bg: "from-green-50 to-green-100", icon: "text-green-200" },
+  날씨: { bg: "from-cyan-50 to-cyan-100", icon: "text-cyan-200" },
+  안전: { bg: "from-yellow-50 to-yellow-100", icon: "text-yellow-200" },
+  기타: { bg: "from-gray-50 to-gray-100", icon: "text-gray-200" },
 };
 
 // 카테고리 ID -> 한글명 매핑
@@ -189,29 +187,38 @@ export default async function Home() {
                   href="/categories"
                   className="relative h-32 rounded-xl overflow-hidden hover:shadow-lg transition-shadow cursor-pointer border border-gray-100 block group"
                 >
-                  {/* 배경 이미지 */}
-                  <img
-                    src={
-                      categoryBackgrounds[categoryName] ||
-                      categoryBackgrounds["기타"]
-                    }
-                    alt={categoryName}
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
+                  {/* 그래디언트 배경 */}
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-br ${
+                      categoryColors[categoryName]?.bg ||
+                      categoryColors["기타"].bg
+                    }`}
+                  ></div>
 
-                  {/* 오버레이 */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent"></div>
+                  {/* 큰 아이콘 배경 */}
+                  <div
+                    className={`absolute -right-6 -bottom-6 opacity-20 ${
+                      categoryColors[categoryName]?.icon ||
+                      categoryColors["기타"].icon
+                    }`}
+                  >
+                    <div className="w-32 h-32">
+                      {icon === "📝" ? (
+                        "?"
+                      ) : (
+                        <div className="text-4xl">{icon}</div>
+                      )}
+                    </div>
+                  </div>
 
                   {/* 콘텐츠 */}
-                  <div className="absolute inset-0 flex flex-col justify-between p-3">
-                    <div className="text-white text-2xl drop-shadow-lg">
-                      {icon}
-                    </div>
+                  <div className="absolute inset-0 flex flex-col justify-between p-3 z-10">
+                    <div className="text-2xl">{icon}</div>
                     <div>
-                      <h4 className="font-semibold text-white drop-shadow-lg text-sm">
+                      <h4 className="font-semibold text-gray-900 text-sm">
                         {categoryName}
                       </h4>
-                      <p className="text-gray-100 text-xs drop-shadow-lg">
+                      <p className="text-gray-600 text-xs">
                         {Math.floor(Math.random() * 20 + 5)}개 질문
                       </p>
                     </div>
