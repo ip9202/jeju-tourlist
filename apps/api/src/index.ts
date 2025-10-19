@@ -60,6 +60,7 @@ import { createAnswerAdoptionRouter } from "./routes/answer-adoption";
 import { createAnswerCommentRouter } from "./routes/answerComment";
 import { createBatchSchedulerRouter } from "./routes/batch-scheduler";
 import { createStatsRouter } from "./routes/stats";
+import { createUserRouter } from "./routes/user";
 import {
   SocketConfig,
   createAuthMiddleware,
