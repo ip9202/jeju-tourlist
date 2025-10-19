@@ -37,11 +37,16 @@ docker-compose up -d
 
 | 서비스        | 포트 | URL                   |
 | ------------- | ---- | --------------------- |
-| Web Server    | 3000 | http://localhost:3000 |
+| Web Server    | 3001 | http://localhost:3001 |
 | API Server    | 4000 | http://localhost:4000 |
 | PostgreSQL    | 5433 | -                     |
 | Redis         | 6379 | -                     |
 | Prisma Studio | 5555 | http://localhost:5555 |
+
+**포트 주의사항**:
+
+- PostgreSQL: 호스트에서 5433으로 접근 (Docker 내부: 5432)
+- 웹서버: 포트 3000 사용 중일 경우 3001로 자동 변경
 
 ---
 
@@ -63,6 +68,12 @@ docker-compose up -d
 - ✅ Docker 환경 동기화
 - ✅ 전문가 대시보드 무한 루프 (useEffect 의존성 최적화)
 - ✅ API 404 에러 (환경변수 설정)
+- ✅ **데이터베이스 포트 충돌 해결 (2025-10-19)**
+  - `.env.local`: `postgresql://test:test@localhost:5433/jeju_tourlist`
+  - `packages/database/.env`: `postgresql://test:test@localhost:5433/jeju_tourlist?schema=public`
+  - `~/.zprofile`: 환경변수 영구 설정
+  - Docker 내부: `postgres:5432` (컨테이너 간 통신)
+  - Prisma 마이그레이션: 3개 모두 완료 ✅
 
 ### 데이터 현황
 
@@ -106,6 +117,6 @@ curl -X POST http://localhost:4000/api/batch/run
 
 ---
 
-**마지막 업데이트**: 2025-10-17
-**현재 작업**: 전문가 대시보드 Phase 5 완료 ✅
-**시스템 상태**: 모든 핵심 기능 정상 작동 ✅
+**마지막 업데이트**: 2025-10-19
+**현재 작업**: 데이터베이스 포트 충돌 해결 ✅
+**시스템 상태**: 모든 서비스 정상 작동 ✅ (API + Web + DB)
