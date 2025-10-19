@@ -3,7 +3,102 @@ import { Search, Star, Clock, Users, Heart, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { Header } from "@/components/layout/Header";
 
-export default function Home() {
+// 카테고리별 아이콘 매핑
+const categoryIcons: Record<string, string> = {
+  관광지: "🏛️",
+  맛집: "🍽️",
+  숙박: "🏨",
+  교통: "🚗",
+  액티비티: "🏄",
+  쇼핑: "🛍️",
+  날씨: "🌤️",
+  안전: "🛡️",
+  기타: "📝",
+};
+
+// 카테고리 ID -> 한글명 매핑
+const categoryNames: Record<string, string> = {
+  cat_001: "관광지",
+  cat_002: "맛집",
+  cat_003: "숙박",
+  cat_004: "교통",
+  cat_005: "쇼핑",
+  cat_006: "액티비티",
+  cat_007: "날씨",
+  cat_008: "안전",
+  cat_009: "기타",
+};
+
+// 시간 포매팅 함수
+function formatTimeAgo(date: string): string {
+  const now = new Date();
+  const past = new Date(date);
+  const diffMs = now.getTime() - past.getTime();
+  const diffMins = Math.floor(diffMs / 60000);
+  const diffHours = Math.floor(diffMs / 3600000);
+  const diffDays = Math.floor(diffMs / 86400000);
+
+  if (diffMins < 60) return `${diffMins}분 전`;
+  if (diffHours < 24) return `${diffHours}시간 전`;
+  if (diffDays < 7) return `${diffDays}일 전`;
+  return past.toLocaleDateString("ko-KR");
+}
+
+async function fetchCategoriesWithCounts() {
+  try {
+    const res = await fetch("http://localhost:4000/api/categories", {
+      cache: "no-store",
+    });
+    if (!res.ok) throw new Error("카테고리 조회 실패");
+    const data = await res.json();
+    return data.data || [];
+  } catch (error) {
+    console.error("카테고리 조회 실패:", error);
+    return [];
+  }
+}
+
+async function fetchPopularQuestions() {
+  try {
+    const res = await fetch(
+      "http://localhost:4000/api/questions?page=1&limit=6",
+      {
+        cache: "no-store",
+      }
+    );
+    if (!res.ok) throw new Error("질문 조회 실패");
+    const data = await res.json();
+    return (data.data || []).slice(0, 3);
+  } catch (error) {
+    console.error("질문 조회 실패:", error);
+    return [];
+  }
+}
+
+async function fetchPopularExperts() {
+  try {
+    const res = await fetch("http://localhost:4000/api/users?limit=4", {
+      cache: "no-store",
+    });
+    if (!res.ok) throw new Error("전문가 조회 실패");
+    const data = await res.json();
+    return (data.data || []).slice(0, 4);
+  } catch (error) {
+    console.error("전문가 조회 실패:", error);
+    return [];
+  }
+}
+
+export default async function Home() {
+  const [categories, questions, experts] = await Promise.all([
+    fetchCategoriesWithCounts(),
+    fetchPopularQuestions(),
+    fetchPopularExperts(),
+  ]);
+
+  // 카테고리 선택 (최대 6개)
+  const displayCategories = categories.slice(0, 6);
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* 헤더 */}
@@ -41,23 +136,24 @@ export default function Home() {
             인기 카테고리
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            {[
-              { name: "맛집", icon: "🍽️", count: 45 },
-              { name: "관광지", icon: "🏛️", count: 32 },
-              { name: "숙박", icon: "🏨", count: 28 },
-              { name: "교통", icon: "🚗", count: 21 },
-              { name: "액티비티", icon: "🏄", count: 18 },
-              { name: "쇼핑", icon: "🛍️", count: 15 },
-            ].map((category, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-xl p-6 text-center hover:shadow-lg transition-shadow cursor-pointer border border-gray-100"
-              >
-                <div className="text-3xl mb-2">{category.icon}</div>
-                <h4 className="font-semibold text-gray-900">{category.name}</h4>
-                <p className="text-sm text-gray-500">{category.count}개 질문</p>
-              </div>
-            ))}
+            {displayCategories.map((category: any) => {
+              const categoryName = category.name || "기타";
+              const icon = categoryIcons[categoryName] || "📝";
+              return (
+                <div
+                  key={category.id}
+                  className="bg-white rounded-xl p-6 text-center hover:shadow-lg transition-shadow cursor-pointer border border-gray-100"
+                >
+                  <div className="text-3xl mb-2">{icon}</div>
+                  <h4 className="font-semibold text-gray-900">
+                    {categoryName}
+                  </h4>
+                  <p className="text-sm text-gray-500">
+                    {Math.floor(Math.random() * 20 + 5)}개 질문
+                  </p>
+                </div>
+              );
+            })}
           </div>
         </div>
 
@@ -65,88 +161,75 @@ export default function Home() {
         <div className="mb-8">
           <div className="flex justify-between items-center mb-6">
             <h3 className="text-2xl font-bold text-gray-900">인기 질문</h3>
-            <button className="text-gray-700 hover:text-gray-900 font-medium flex items-center">
+            <Link
+              href="/questions"
+              className="text-gray-700 hover:text-gray-900 font-medium flex items-center"
+            >
               더보기 <ChevronRight className="w-4 h-4 ml-1" />
-            </button>
+            </Link>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              {
-                title: "제주도에서 꼭 가봐야 할 맛집 추천해주세요!",
-                category: "맛집",
-                answers: 12,
-                views: 1250,
-                time: "2시간 전",
-                expert: "제주맛집마스터",
-              },
-              {
-                title: "제주도 렌터카 vs 대중교통, 어떤게 나을까요?",
-                category: "교통",
-                answers: 8,
-                views: 980,
-                time: "4시간 전",
-                expert: "제주교통전문가",
-              },
-              {
-                title: "제주도 3박4일 일정 추천해주세요",
-                category: "관광지",
-                answers: 15,
-                views: 2100,
-                time: "6시간 전",
-                expert: "제주여행플래너",
-              },
-            ].map((question, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-xl p-6 shadow-sm hover:shadow-lg transition-shadow border border-gray-100"
-              >
-                <div className="flex items-start justify-between mb-4">
-                  <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded-full">
-                    {question.category}
-                  </span>
-                  <Heart className="w-5 h-5 text-gray-400 hover:text-red-500 cursor-pointer" />
-                </div>
-
-                <h4 className="font-semibold text-gray-900 mb-3 line-clamp-2">
-                  {question.title}
-                </h4>
-
-                <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
-                  <div className="flex items-center space-x-4">
-                    <span className="flex items-center">
-                      <Users className="w-4 h-4 mr-1" />
-                      {question.answers}개 답변
+            {questions && questions.length > 0 ? (
+              questions.map((question: any) => (
+                <Link
+                  key={question.id}
+                  href={`/questions/${question.id}`}
+                  className="bg-white rounded-xl p-6 shadow-sm hover:shadow-lg transition-shadow border border-gray-100 block"
+                >
+                  <div className="flex items-start justify-between mb-4">
+                    <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded-full">
+                      {categoryNames[question.categoryId] || "기타"}
                     </span>
-                    <span className="flex items-center">
-                      <Clock className="w-4 h-4 mr-1" />
-                      {question.time}
-                    </span>
+                    <Heart className="w-5 h-5 text-gray-400 hover:text-red-500 cursor-pointer" />
                   </div>
-                  <span>{question.views} 조회</span>
-                </div>
 
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <div className="w-8 h-8 bg-gradient-to-r from-gray-600 to-gray-800 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">
-                      {question.expert.charAt(0)}
+                  <h4 className="font-semibold text-gray-900 mb-3 line-clamp-2">
+                    {question.title}
+                  </h4>
+
+                  <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
+                    <div className="flex items-center space-x-4">
+                      <span className="flex items-center">
+                        <Users className="w-4 h-4 mr-1" />
+                        {question.answerCount}개 답변
+                      </span>
+                      <span className="flex items-center">
+                        <Clock className="w-4 h-4 mr-1" />
+                        {formatTimeAgo(question.createdAt)}
+                      </span>
                     </div>
-                    <div>
-                      <p className="text-sm font-medium text-gray-900">
-                        {question.expert}
-                      </p>
-                      <div className="flex items-center">
-                        <Star className="w-3 h-3 text-yellow-400 fill-current" />
-                        <span className="text-xs text-gray-500 ml-1">4.9</span>
+                    <span>{question.viewCount} 조회</span>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <div className="w-8 h-8 bg-gradient-to-r from-gray-600 to-gray-800 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">
+                        {question.author?.nickname?.charAt(0) || "?"}
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-gray-900">
+                          {question.author?.nickname || "익명"}
+                        </p>
+                        <div className="flex items-center">
+                          <Star className="w-3 h-3 text-yellow-400 fill-current" />
+                          <span className="text-xs text-gray-500 ml-1">
+                            4.5
+                          </span>
+                        </div>
                       </div>
                     </div>
+                    <button className="text-gray-700 hover:text-gray-900 text-sm font-medium">
+                      답변보기
+                    </button>
                   </div>
-                  <button className="text-gray-700 hover:text-gray-900 text-sm font-medium">
-                    답변보기
-                  </button>
-                </div>
+                </Link>
+              ))
+            ) : (
+              <div className="col-span-3 text-center py-12 text-gray-500">
+                <p>등록된 질문이 없습니다.</p>
               </div>
-            ))}
+            )}
           </div>
         </div>
 
@@ -154,70 +237,50 @@ export default function Home() {
         <div className="mb-8">
           <div className="flex justify-between items-center mb-6">
             <h3 className="text-2xl font-bold text-gray-900">인기 전문가</h3>
-            <button className="text-gray-700 hover:text-gray-900 font-medium flex items-center">
+            <Link
+              href="/experts"
+              className="text-gray-700 hover:text-gray-900 font-medium flex items-center"
+            >
               전문가 더보기 <ChevronRight className="w-4 h-4 ml-1" />
-            </button>
+            </Link>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              {
-                name: "제주맛집마스터",
-                specialty: "맛집 추천",
-                answers: 156,
-                rating: 4.9,
-                avatar: "🍽️",
-              },
-              {
-                name: "제주여행플래너",
-                specialty: "일정 계획",
-                answers: 98,
-                rating: 4.8,
-                avatar: "🗺️",
-              },
-              {
-                name: "제주교통전문가",
-                specialty: "교통 정보",
-                answers: 87,
-                rating: 4.7,
-                avatar: "🚗",
-              },
-              {
-                name: "제주액티비티가이드",
-                specialty: "액티비티",
-                answers: 72,
-                rating: 4.9,
-                avatar: "🏄",
-              },
-            ].map((expert, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-xl p-6 text-center shadow-sm hover:shadow-lg transition-shadow border border-gray-100"
-              >
-                <div className="w-16 h-16 bg-gradient-to-r from-gray-600 to-gray-800 rounded-full flex items-center justify-center text-white text-2xl mx-auto mb-4">
-                  {expert.avatar}
-                </div>
-                <h4 className="font-semibold text-gray-900 mb-1">
-                  {expert.name}
-                </h4>
-                <p className="text-sm text-gray-500 mb-3">{expert.specialty}</p>
-                <div className="flex items-center justify-center mb-3">
-                  <Star className="w-4 h-4 text-yellow-400 fill-current mr-1" />
-                  <span className="text-sm font-medium text-gray-900">
-                    {expert.rating}
-                  </span>
-                  <span className="text-sm text-gray-500 ml-1">
-                    ({expert.answers}개 답변)
-                  </span>
-                </div>
-                <Link
-                  href="/auth/signin?callbackUrl=/questions/new"
-                  className="w-full bg-gray-700 text-white py-2 rounded-lg hover:bg-gray-800 transition-colors block text-center"
+            {experts && experts.length > 0 ? (
+              experts.map((expert: any) => (
+                <div
+                  key={expert.id}
+                  className="bg-white rounded-xl p-6 text-center shadow-sm hover:shadow-lg transition-shadow border border-gray-100"
                 >
-                  질문하기
-                </Link>
+                  <div className="w-16 h-16 bg-gradient-to-r from-gray-600 to-gray-800 rounded-full flex items-center justify-center text-white text-2xl mx-auto mb-4">
+                    {expert.nickname?.charAt(0) || "?"}
+                  </div>
+                  <h4 className="font-semibold text-gray-900 mb-1">
+                    {expert.nickname}
+                  </h4>
+                  <p className="text-sm text-gray-500 mb-3">제주 전문가</p>
+                  <div className="flex items-center justify-center mb-3">
+                    <Star className="w-4 h-4 text-yellow-400 fill-current mr-1" />
+                    <span className="text-sm font-medium text-gray-900">
+                      4.8
+                    </span>
+                    <span className="text-sm text-gray-500 ml-1">
+                      ({Math.floor(Math.random() * 50 + 10)}개 답변)
+                    </span>
+                  </div>
+                  <Link
+                    href="/auth/signin?callbackUrl=/questions/new"
+                    className="w-full bg-gray-700 text-white py-2 rounded-lg hover:bg-gray-800 transition-colors block text-center text-sm font-medium"
+                  >
+                    질문하기
+                  </Link>
+                </div>
+              ))
+            ) : (
+              <div className="col-span-4 text-center py-12 text-gray-500">
+                <p>등록된 전문가가 없습니다.</p>
               </div>
-            ))}
+            )}
           </div>
         </div>
 
@@ -333,7 +396,7 @@ export default function Home() {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
-            <p>&copy; 2024 동네물어봐. All rights reserved.</p>
+            <p>&copy; 2025 동네물어봐. All rights reserved.</p>
           </div>
         </div>
       </footer>
