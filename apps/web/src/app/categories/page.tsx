@@ -32,6 +32,21 @@ const categoryIcons: Record<string, React.ReactNode> = {
   기타: <MoreHorizontal className="w-7 h-7" />,
 };
 
+// 카테고리별 배경 이미지 URL (Unsplash)
+const categoryBackgrounds: Record<string, string> = {
+  관광지:
+    "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=500&h=300&fit=crop&q=80",
+  맛집: "https://images.unsplash.com/photo-1495521821757-a1efb6729352?w=500&h=300&fit=crop&q=80",
+  숙박: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=500&h=300&fit=crop&q=80",
+  교통: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=500&h=300&fit=crop&q=80",
+  쇼핑: "https://images.unsplash.com/photo-1555139175-f7fe7edc87ab?w=500&h=300&fit=crop&q=80",
+  액티비티:
+    "https://images.unsplash.com/photo-1551821440-07dc9b722acf?w=500&h=300&fit=crop&q=80",
+  날씨: "https://images.unsplash.com/photo-1495566893256-4e657beefed2?w=500&h=300&fit=crop&q=80",
+  안전: "https://images.unsplash.com/photo-1474654987521-d1019bab350f?w=500&h=300&fit=crop&q=80",
+  기타: "https://images.unsplash.com/photo-1452587925148-ce544e77e70d?w=500&h=300&fit=crop&q=80",
+};
+
 // 시간 포매팅
 function formatTimeAgo(date: string): string {
   const now = new Date();
@@ -171,23 +186,43 @@ export default function CategoriesPage() {
             <button
               key={category.id}
               onClick={() => setSelectedCategory(category.id)}
-              className={`p-4 rounded-lg border-2 transition-all text-left ${
+              className={`relative h-40 rounded-xl overflow-hidden border-2 transition-all text-left group ${
                 selectedCategory === category.id
-                  ? "bg-blue-50 border-blue-500"
-                  : "bg-white border-gray-200 hover:border-blue-300"
+                  ? "border-blue-500 ring-2 ring-blue-300"
+                  : "border-gray-200 hover:border-blue-300"
               }`}
             >
-              <div className="flex items-start justify-between mb-3">
-                <div className="text-blue-500">
-                  {categoryIcons[category.name] || (
-                    <MoreHorizontal className="w-6 h-6" />
-                  )}
+              {/* 배경 이미지 */}
+              <img
+                src={
+                  categoryBackgrounds[category.name] ||
+                  categoryBackgrounds["기타"]
+                }
+                alt={category.name}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+
+              {/* 오버레이 */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent"></div>
+
+              {/* 콘텐츠 */}
+              <div className="absolute inset-0 flex flex-col justify-between p-4">
+                <div className="flex justify-between items-start">
+                  <div className="text-white text-2xl drop-shadow-lg">
+                    {categoryIcons[category.name] || (
+                      <MoreHorizontal className="w-6 h-6" />
+                    )}
+                  </div>
+                </div>
+                <div>
+                  <h3 className="font-bold text-white text-lg drop-shadow-lg">
+                    {category.name}
+                  </h3>
+                  <p className="text-gray-100 text-sm drop-shadow-lg">
+                    {questions.length}개 질문
+                  </p>
                 </div>
               </div>
-              <h3 className="font-semibold text-gray-900 mb-1">
-                {category.name}
-              </h3>
-              <p className="text-sm text-gray-600">{questions.length}개 질문</p>
             </button>
           ))}
         </div>

@@ -39,6 +39,21 @@ const categoryIcons: Record<string, string> = {
   기타: "📝",
 };
 
+// 카테고리별 배경 이미지 URL (Unsplash)
+const categoryBackgrounds: Record<string, string> = {
+  관광지:
+    "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=500&h=300&fit=crop&q=80",
+  맛집: "https://images.unsplash.com/photo-1495521821757-a1efb6729352?w=500&h=300&fit=crop&q=80",
+  숙박: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=500&h=300&fit=crop&q=80",
+  교통: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=500&h=300&fit=crop&q=80",
+  쇼핑: "https://images.unsplash.com/photo-1555139175-f7fe7edc87ab?w=500&h=300&fit=crop&q=80",
+  액티비티:
+    "https://images.unsplash.com/photo-1551821440-07dc9b722acf?w=500&h=300&fit=crop&q=80",
+  날씨: "https://images.unsplash.com/photo-1495566893256-4e657beefed2?w=500&h=300&fit=crop&q=80",
+  안전: "https://images.unsplash.com/photo-1474654987521-d1019bab350f?w=500&h=300&fit=crop&q=80",
+  기타: "https://images.unsplash.com/photo-1452587925148-ce544e77e70d?w=500&h=300&fit=crop&q=80",
+};
+
 // 카테고리 ID -> 한글명 매핑
 const categoryNames: Record<string, string> = {
   cat_001: "관광지",
@@ -172,15 +187,35 @@ export default async function Home() {
                 <Link
                   key={category.id}
                   href="/categories"
-                  className="bg-white rounded-xl p-6 text-center hover:shadow-lg transition-shadow cursor-pointer border border-gray-100 block"
+                  className="relative h-32 rounded-xl overflow-hidden hover:shadow-lg transition-shadow cursor-pointer border border-gray-100 block group"
                 >
-                  <div className="text-3xl mb-2">{icon}</div>
-                  <h4 className="font-semibold text-gray-900">
-                    {categoryName}
-                  </h4>
-                  <p className="text-sm text-gray-500">
-                    {Math.floor(Math.random() * 20 + 5)}개 질문
-                  </p>
+                  {/* 배경 이미지 */}
+                  <img
+                    src={
+                      categoryBackgrounds[categoryName] ||
+                      categoryBackgrounds["기타"]
+                    }
+                    alt={categoryName}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+
+                  {/* 오버레이 */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent"></div>
+
+                  {/* 콘텐츠 */}
+                  <div className="absolute inset-0 flex flex-col justify-between p-3">
+                    <div className="text-white text-2xl drop-shadow-lg">
+                      {icon}
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-white drop-shadow-lg text-sm">
+                        {categoryName}
+                      </h4>
+                      <p className="text-gray-100 text-xs drop-shadow-lg">
+                        {Math.floor(Math.random() * 20 + 5)}개 질문
+                      </p>
+                    </div>
+                  </div>
                 </Link>
               );
             })}
