@@ -117,7 +117,7 @@ export const ExpertCard: React.FC<ExpertCardProps> = ({
                 />
               ) : (
                 <div className="w-full h-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-semibold text-lg">
-                  {expert.name.charAt(0)}
+                  {expert.nickname.charAt(0)}
                 </div>
               )}
             </div>
@@ -134,7 +134,7 @@ export const ExpertCard: React.FC<ExpertCardProps> = ({
           <div className="flex-1 min-w-0">
             <div className="flex items-center space-x-2">
               <h3 className="font-semibold text-gray-900 truncate">
-                {expert.name}
+                {expert.nickname}
               </h3>
               {expert.primaryBadge && (
                 <div
@@ -147,7 +147,6 @@ export const ExpertCard: React.FC<ExpertCardProps> = ({
                 </div>
               )}
             </div>
-            <p className="text-sm text-gray-600 truncate">{expert.nickname}</p>
             {showStats && (
               <div className="flex items-center space-x-3 mt-1">
                 <div className="flex items-center space-x-1 text-xs text-gray-500">
@@ -190,7 +189,7 @@ export const ExpertCard: React.FC<ExpertCardProps> = ({
                   />
                 ) : (
                   <div className="w-full h-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-semibold text-xl">
-                    {expert.name.charAt(0)}
+                    {expert.nickname.charAt(0)}
                   </div>
                 )}
               </div>
@@ -207,7 +206,7 @@ export const ExpertCard: React.FC<ExpertCardProps> = ({
             <div>
               <div className="flex items-center space-x-2 mb-1">
                 <h3 className="text-xl font-bold text-gray-900">
-                  {expert.name}
+                  {expert.nickname}
                 </h3>
                 {expert.primaryBadge && (
                   <div
@@ -222,7 +221,6 @@ export const ExpertCard: React.FC<ExpertCardProps> = ({
                   </div>
                 )}
               </div>
-              <p className="text-gray-600 mb-2">{expert.nickname}</p>
               <div className="flex items-center space-x-4 text-sm text-gray-500">
                 <div className="flex items-center space-x-1">
                   <Calendar className="w-4 h-4" />
@@ -333,7 +331,7 @@ export const ExpertCard: React.FC<ExpertCardProps> = ({
                 />
               ) : (
                 <div className="w-full h-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-semibold">
-                  {expert.name.charAt(0)}
+                  {expert.nickname.charAt(0)}
                 </div>
               )}
             </div>
@@ -349,7 +347,7 @@ export const ExpertCard: React.FC<ExpertCardProps> = ({
           {/* 이름과 배지 */}
           <div>
             <div className="flex items-center space-x-2">
-              <h3 className="font-semibold text-gray-900">{expert.name}</h3>
+              <h3 className="font-semibold text-gray-900">{expert.nickname}</h3>
               {expert.primaryBadge && (
                 <div
                   className="w-5 h-5 rounded-full flex items-center justify-center"
@@ -361,7 +359,6 @@ export const ExpertCard: React.FC<ExpertCardProps> = ({
                 </div>
               )}
             </div>
-            <p className="text-sm text-gray-600">{expert.nickname}</p>
           </div>
         </div>
 

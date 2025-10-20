@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Filter } from "lucide-react";
 import { type Question, type SearchFilters } from "@/hooks/useQuestionSearch";
 import { Header } from "@/components/layout/Header";
@@ -14,11 +15,14 @@ interface Category {
 }
 
 function QuestionsPageContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState<SearchFilters>({
     categoryId: "",
     status: "all",
@@ -34,6 +38,19 @@ function QuestionsPageContent() {
 
   const isLoadingRef = useRef(false);
   const [isInitialized, setIsInitialized] = useState(false);
+
+  // URL 파라미터에서 검색어와 필터 초기화
+  useEffect(() => {
+    const query = searchParams.get("query");
+    const categoryId = searchParams.get("categoryId");
+
+    if (query) {
+      setSearchTerm(decodeURIComponent(query));
+    }
+    if (categoryId) {
+      setFilters(prev => ({ ...prev, categoryId }));
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     loadCategories();
@@ -67,7 +84,7 @@ function QuestionsPageContent() {
     }
   };
 
-  const searchQuestions = async (searchTerm?: string) => {
+  const searchQuestions = async () => {
     if (isLoadingRef.current) return;
 
     isLoadingRef.current = true;
@@ -81,9 +98,10 @@ function QuestionsPageContent() {
       if (filters.sortBy) params.append("sortBy", filters.sortBy);
       if (filters.sortOrder) params.append("sortOrder", filters.sortOrder);
 
-      // searchTerm 파라미터가 전달된 경우에만 검색어 추가
+      // 검색어 추가 (헤더에서 받은 query 파라미터 포함)
       if (searchTerm && searchTerm.trim()) {
         params.append("query", searchTerm.trim());
+        console.log("🔍 검색어 적용:", searchTerm);
       }
       if (filters.categoryId) {
         params.append("categoryId", filters.categoryId);
@@ -137,7 +155,29 @@ function QuestionsPageContent() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  // 검색 초기화 함수
+  const handleResetSearch = () => {
+    setSearchTerm("");
+    setFilters({
+      categoryId: "",
+      status: "all",
+      sortBy: "createdAt",
+      sortOrder: "desc",
+    });
+    setPagination(prev => ({ ...prev, page: 1 }));
+    router.push("/questions");
+  };
+
+  // 검색어가 있을 때 검색 실행
+  useEffect(() => {
+    if (searchTerm.trim()) {
+      setPagination(prev => ({ ...prev, page: 1 }));
+      searchQuestions();
+    }
+  }, [searchTerm]);
+
   const filteredQuestions = questions;
+  const hasActiveSearch = searchTerm.trim().length > 0;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -147,12 +187,26 @@ function QuestionsPageContent() {
       {/* 페이지 헤더 */}
       <header className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">
-            질문 목록
-          </h1>
-          <p className="text-sm sm:text-base text-gray-600">
-            제주 여행에 대한 모든 궁금증을 해결해보세요
-          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">
+                질문 목록
+              </h1>
+              <p className="text-sm sm:text-base text-gray-600">
+                {hasActiveSearch
+                  ? `'${searchTerm}' 검색 결과`
+                  : "제주 여행에 대한 모든 궁금증을 해결해보세요"}
+              </p>
+            </div>
+            {hasActiveSearch && (
+              <button
+                onClick={handleResetSearch}
+                className="px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors"
+              >
+                검색 초기화
+              </button>
+            )}
+          </div>
         </div>
       </header>
 
@@ -315,31 +369,48 @@ function QuestionsPageContent() {
             {/* 질문 그리드 */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {loading ? (
-                <div className="text-center py-12">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-                  <p className="mt-4 text-gray-600">질문을 불러오는 중...</p>
+                <div className="col-span-full text-center py-12">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                  <p className="text-gray-600 font-medium">
+                    질문을 불러오는 중...
+                  </p>
+                  {hasActiveSearch && (
+                    <p className="text-sm text-gray-500 mt-2">
+                      '{searchTerm}' 검색 중
+                    </p>
+                  )}
                 </div>
               ) : error ? (
-                <div className="text-center py-12">
+                <div className="col-span-full text-center py-12">
                   <div className="text-red-500 text-lg font-medium mb-2">
                     오류가 발생했습니다
                   </div>
-                  <p className="text-gray-600">{error}</p>
+                  <p className="text-gray-600 mb-4">{error}</p>
                   <button
                     onClick={() => searchQuestions()}
-                    className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+                    className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 font-medium"
                   >
                     다시 시도
                   </button>
                 </div>
               ) : filteredQuestions.length === 0 ? (
-                <div className="text-center py-12">
+                <div className="col-span-full text-center py-12">
                   <div className="text-gray-500 text-lg font-medium mb-2">
                     질문이 없습니다
                   </div>
-                  <p className="text-gray-400">
-                    다른 검색어나 필터를 시도해보세요
+                  <p className="text-gray-400 mb-4">
+                    {hasActiveSearch
+                      ? "다른 검색어를 시도해보세요"
+                      : "다른 검색어나 필터를 시도해보세요"}
                   </p>
+                  {hasActiveSearch && (
+                    <button
+                      onClick={handleResetSearch}
+                      className="px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors"
+                    >
+                      검색 초기화
+                    </button>
+                  )}
                 </div>
               ) : (
                 filteredQuestions.map(question => (

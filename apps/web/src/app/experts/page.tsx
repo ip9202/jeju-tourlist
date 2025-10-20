@@ -41,12 +41,11 @@ interface ExpertDashboardPageProps {
 export default function ExpertDashboardPage({
   searchParams,
 }: ExpertDashboardPageProps) {
-
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* 페이지 헤더 */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
@@ -59,7 +58,6 @@ export default function ExpertDashboardPage({
               </p>
             </div>
           </div>
-
         </div>
 
         {/* 전문가 랭킹 */}
@@ -72,7 +70,6 @@ export default function ExpertDashboardPage({
           initialSortBy={searchParams?.sortBy || "points"}
           limit={20}
         />
-
       </main>
 
       <Footer />

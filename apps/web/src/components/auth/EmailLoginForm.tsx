@@ -95,14 +95,16 @@ export function EmailLoginForm({ callbackUrl = "/" }: EmailLoginFormProps) {
       {/* 이메일 입력 */}
       <div className="space-y-2">
         <Label htmlFor="login-email">이메일</Label>
-        <Input
-          id="login-email"
-          type="email"
-          placeholder="example@email.com"
-          {...register("email")}
-          disabled={isSubmitting}
-          aria-invalid={!!errors.email}
-        />
+        <div className="relative overflow-visible">
+          <Input
+            id="login-email"
+            type="email"
+            placeholder="example@email.com"
+            {...register("email")}
+            disabled={isSubmitting}
+            aria-invalid={!!errors.email}
+          />
+        </div>
         {errors.email && (
           <p className="text-sm text-destructive">{errors.email.message}</p>
         )}
@@ -111,7 +113,7 @@ export function EmailLoginForm({ callbackUrl = "/" }: EmailLoginFormProps) {
       {/* 비밀번호 입력 */}
       <div className="space-y-2">
         <Label htmlFor="login-password">비밀번호</Label>
-        <div className="relative">
+        <div className="relative overflow-visible">
           <Input
             id="login-password"
             type={showPassword ? "text" : "password"}

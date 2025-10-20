@@ -151,6 +151,7 @@ app.use("/health", healthRoutes);
 // API 라우트
 app.use("/api/points", pointRoutes);
 app.use("/api/badges", badgeRoutes);
+app.use("/badges", badgeRoutes); // 호환성을 위해 /api 없는 경로도 마운트
 app.use("/api/admin", adminRoutes);
 // app.use("/api/notifications", notificationRoutes);
 

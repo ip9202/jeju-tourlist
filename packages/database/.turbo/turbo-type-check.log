@@ -34,10 +34,13 @@ src/repositories/enhanced-user.repository.ts(288,23): error TS2339: Property 'of
 src/repositories/enhanced-user.repository.ts(327,32): error TS2339: Property 'buildWhereClause' does not exist on type 'EnhancedUserRepository'.
 src/repositories/enhanced-user.repository.ts(329,32): error TS2339: Property 'prisma' does not exist on type 'EnhancedUserRepository'.
 src/repositories/enhanced-user.repository.ts(366,32): error TS2339: Property 'prisma' does not exist on type 'EnhancedUserRepository'.
-src/repositories/question.repository.ts(243,9): error TS2322: Type '{ createdAt: Date; updatedAt: Date; title: string; content: string; tags: string[]; attachments: string[]; authorId?: string | undefined; categoryId?: string | null | undefined; location?: string | undefined; latitude?: number | undefined; longitude?: number | undefined; }' is not assignable to type '(Without<QuestionCreateInput, QuestionUncheckedCreateInput> & QuestionUncheckedCreateInput) | (Without<...> & QuestionCreateInput)'.
-  Type '{ createdAt: Date; updatedAt: Date; title: string; content: string; tags: string[]; attachments: string[]; authorId?: string | undefined; categoryId?: string | null | undefined; location?: string | undefined; latitude?: number | undefined; longitude?: number | undefined; }' is not assignable to type 'Without<QuestionUncheckedCreateInput, QuestionCreateInput> & QuestionCreateInput'.
-    Type '{ createdAt: Date; updatedAt: Date; title: string; content: string; tags: string[]; attachments: string[]; authorId?: string | undefined; categoryId?: string | null | undefined; location?: string | undefined; latitude?: number | undefined; longitude?: number | undefined; }' is not assignable to type 'Without<QuestionUncheckedCreateInput, QuestionCreateInput>'.
-      Types of property 'authorId' are incompatible.
-        Type 'string | undefined' is not assignable to type 'undefined'.
-          Type 'string' is not assignable to type 'undefined'.
+src/scripts/batch-scheduler.ts(17,39): error TS2307: Cannot find module '@jeju-tourlist/database/services/batch-scheduler.service' or its corresponding type declarations.
+src/scripts/batch-scheduler.ts(64,29): error TS7006: Parameter 'error' implicitly has an 'any' type.
+src/services/badge.service.v2.ts(81,32): error TS2339: Property 'isEarned' does not exist on type '{ id: string; userId: string; badgeId: string; earnedAt: Date; notified: boolean; }'.
+src/services/badge.service.v2.ts(153,30): error TS2339: Property 'isEarned' does not exist on type '{ id: string; userId: string; badgeId: string; earnedAt: Date; notified: boolean; }'.
+src/services/badge.service.v2.ts(203,31): error TS7053: Element implicitly has an 'any' type because expression of type '"prisma"' can't be used to index type 'IBadgeRepository'.
+  Property 'prisma' does not exist on type 'IBadgeRepository'.
+src/services/badge.service.v2.ts(257,21): error TS2339: Property 'isEarned' does not exist on type '{ id: string; userId: string; badgeId: string; earnedAt: Date; notified: boolean; }'.
+src/services/badge.service.v2.ts(262,11): error TS7053: Element implicitly has an 'any' type because expression of type '"prisma"' can't be used to index type 'IBadgeRepository'.
+  Property 'prisma' does not exist on type 'IBadgeRepository'.
  ELIFECYCLE  Command failed with exit code 1.

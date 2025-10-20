@@ -63,15 +63,17 @@ export function RegisterForm({ callbackUrl = "/" }: RegisterFormProps) {
       <div className="space-y-2">
         <Label htmlFor="register-email">이메일</Label>
         <div className="space-y-1">
-          <Input
-            id="register-email"
-            type="email"
-            placeholder="example@email.com"
-            {...register("email")}
-            onChange={handleEmailChange}
-            disabled={isSubmitting}
-            aria-invalid={!!errors.email}
-          />
+          <div className="relative overflow-visible">
+            <Input
+              id="register-email"
+              type="email"
+              placeholder="example@email.com"
+              {...register("email")}
+              onChange={handleEmailChange}
+              disabled={isSubmitting}
+              aria-invalid={!!errors.email}
+            />
+          </div>
           {/* 이메일 중복체크 상태 표시 */}
           {email && emailCheck.state !== "idle" && (
             <div className="flex items-center space-x-2">
@@ -129,7 +131,7 @@ export function RegisterForm({ callbackUrl = "/" }: RegisterFormProps) {
       {/* 비밀번호 */}
       <div className="space-y-2">
         <Label htmlFor="register-password">비밀번호</Label>
-        <div className="relative">
+        <div className="relative overflow-visible">
           <Input
             id="register-password"
             type={showPassword ? "text" : "password"}
@@ -162,7 +164,7 @@ export function RegisterForm({ callbackUrl = "/" }: RegisterFormProps) {
       {/* 비밀번호 확인 */}
       <div className="space-y-2">
         <Label htmlFor="register-password-confirm">비밀번호 확인</Label>
-        <div className="relative">
+        <div className="relative overflow-visible">
           <Input
             id="register-password-confirm"
             type={showPasswordConfirm ? "text" : "password"}
@@ -196,14 +198,16 @@ export function RegisterForm({ callbackUrl = "/" }: RegisterFormProps) {
       {/* 이름 */}
       <div className="space-y-2">
         <Label htmlFor="register-name">이름</Label>
-        <Input
-          id="register-name"
-          type="text"
-          placeholder="홍길동"
-          {...register("name")}
-          disabled={isSubmitting}
-          aria-invalid={!!errors.name}
-        />
+        <div className="relative overflow-visible">
+          <Input
+            id="register-name"
+            type="text"
+            placeholder="홍길동"
+            {...register("name")}
+            disabled={isSubmitting}
+            aria-invalid={!!errors.name}
+          />
+        </div>
         {errors.name && (
           <p className="text-sm text-destructive">{errors.name.message}</p>
         )}
@@ -212,14 +216,16 @@ export function RegisterForm({ callbackUrl = "/" }: RegisterFormProps) {
       {/* 닉네임 */}
       <div className="space-y-2">
         <Label htmlFor="register-nickname">닉네임</Label>
-        <Input
-          id="register-nickname"
-          type="text"
-          placeholder="제주여행러"
-          {...register("nickname")}
-          disabled={isSubmitting}
-          aria-invalid={!!errors.nickname}
-        />
+        <div className="relative overflow-visible">
+          <Input
+            id="register-nickname"
+            type="text"
+            placeholder="제주여행러"
+            {...register("nickname")}
+            disabled={isSubmitting}
+            aria-invalid={!!errors.nickname}
+          />
+        </div>
         {errors.nickname && (
           <p className="text-sm text-destructive">{errors.nickname.message}</p>
         )}

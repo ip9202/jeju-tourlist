@@ -113,7 +113,7 @@ export const ExpertListItem: React.FC<ExpertListItemProps> = ({
               />
             ) : (
               <div className="w-full h-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-semibold text-sm">
-                {expert.name.charAt(0)}
+                {expert.nickname.charAt(0)}
               </div>
             )}
           </div>
@@ -123,7 +123,7 @@ export const ExpertListItem: React.FC<ExpertListItemProps> = ({
         <div className="flex-1 min-w-0">
           <div className="flex items-center space-x-2">
             <h3 className="font-semibold text-gray-900 truncate">
-              {expert.name}
+              {expert.nickname}
             </h3>
             {expert.primaryBadge && (
               <div
@@ -136,7 +136,6 @@ export const ExpertListItem: React.FC<ExpertListItemProps> = ({
               </div>
             )}
           </div>
-          <p className="text-sm text-gray-600 truncate">{expert.nickname}</p>
         </div>
 
         {/* 통계 */}
@@ -208,7 +207,7 @@ export const ExpertListItem: React.FC<ExpertListItemProps> = ({
                 />
               ) : (
                 <div className="w-full h-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-semibold text-lg">
-                  {expert.name.charAt(0)}
+                  {expert.nickname.charAt(0)}
                 </div>
               )}
             </div>
@@ -227,7 +226,7 @@ export const ExpertListItem: React.FC<ExpertListItemProps> = ({
               <div className="flex-1 min-w-0">
                 <div className="flex items-center space-x-2 mb-1">
                   <h3 className="text-lg font-bold text-gray-900 truncate">
-                    {expert.name}
+                    {expert.nickname}
                   </h3>
                   {expert.primaryBadge && (
                     <div
@@ -242,7 +241,6 @@ export const ExpertListItem: React.FC<ExpertListItemProps> = ({
                     </div>
                   )}
                 </div>
-                <p className="text-gray-600 mb-2">{expert.nickname}</p>
                 <div className="flex items-center space-x-4 text-sm text-gray-500 mb-3">
                   <div className="flex items-center space-x-1">
                     <Calendar className="w-4 h-4" />
@@ -363,7 +361,7 @@ export const ExpertListItem: React.FC<ExpertListItemProps> = ({
             />
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-semibold">
-              {expert.name.charAt(0)}
+              {expert.nickname.charAt(0)}
             </div>
           )}
         </div>
@@ -393,7 +391,6 @@ export const ExpertListItem: React.FC<ExpertListItemProps> = ({
             </div>
           )}
         </div>
-        <p className="text-sm text-gray-600 truncate mb-2">{expert.nickname}</p>
 
         {/* 통계 */}
         {showStats && (

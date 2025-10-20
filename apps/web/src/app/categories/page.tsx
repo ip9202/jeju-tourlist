@@ -138,16 +138,18 @@ export default function CategoriesPage() {
       {/* 메인 콘텐츠 */}
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* 카테고리 헤더 */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">카테고리</h1>
-          <p className="text-gray-600 mb-6">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">
+            카테고리
+          </h1>
+          <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">
             제주도 여행에 필요한 정보를 카테고리별로 찾아보세요
           </p>
 
-          <div className="flex gap-2 flex-wrap">
+          <div className="flex gap-1.5 sm:gap-2 flex-wrap">
             <button
               onClick={() => setSortBy("latest")}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+              className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all ${
                 sortBy === "latest"
                   ? "bg-blue-500 text-white"
                   : "bg-white border border-gray-300 text-gray-700 hover:border-blue-500"
@@ -157,7 +159,7 @@ export default function CategoriesPage() {
             </button>
             <button
               onClick={() => setSortBy("popular")}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+              className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all ${
                 sortBy === "popular"
                   ? "bg-blue-500 text-white"
                   : "bg-white border border-gray-300 text-gray-700 hover:border-blue-500"
@@ -167,7 +169,7 @@ export default function CategoriesPage() {
             </button>
             <button
               onClick={() => setSortBy("views")}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+              className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all ${
                 sortBy === "views"
                   ? "bg-blue-500 text-white"
                   : "bg-white border border-gray-300 text-gray-700 hover:border-blue-500"
@@ -179,41 +181,45 @@ export default function CategoriesPage() {
         </div>
 
         {/* 카테고리 그리드 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-12 p-1">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 md:gap-4 mb-12 p-1">
           {categories.map(category => (
             <button
               key={category.id}
               onClick={() => setSelectedCategory(category.id)}
-              className={`bg-white rounded-xl border border-gray-200 p-6 text-left hover:shadow-lg transition-shadow cursor-pointer flex flex-col h-full ${
+              className={`bg-white rounded-lg sm:rounded-xl border border-gray-200 p-2 sm:p-3 md:p-4 text-left hover:shadow-lg transition-shadow cursor-pointer flex flex-row gap-2 sm:gap-3 md:gap-4 items-start h-full ${
                 selectedCategory === category.id ? "ring-2 ring-blue-500" : ""
               }`}
             >
-              {/* 아이콘 */}
-              <div className="text-5xl mb-4 text-blue-500">
+              {/* 아이콘 - 좌측 고정 */}
+              <div className="text-2xl sm:text-3xl md:text-4xl text-blue-500 flex-shrink-0 pt-0.5">
                 {categoryIcons[category.name] || (
-                  <MoreHorizontal className="w-12 h-12" />
+                  <MoreHorizontal className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10" />
                 )}
               </div>
 
-              {/* 카테고리명 */}
-              <h3 className="font-bold text-gray-900 text-lg mb-1">
-                {category.name}
-              </h3>
+              {/* 우측 텍스트 영역 */}
+              <div className="flex flex-col flex-grow min-w-0">
+                {/* 카테고리명 */}
+                <h3 className="font-bold text-gray-900 text-sm sm:text-base md:text-lg mb-0.5 line-clamp-1">
+                  {category.name}
+                </h3>
 
-              {/* 질문 개수 */}
-              <p className="text-gray-500 text-sm mb-3">
-                {questions.length}개 질문
-              </p>
+                {/* 질문 개수 */}
+                <p className="text-gray-500 text-xs sm:text-sm mb-1">
+                  {questions.length}개 질문
+                </p>
 
-              {/* 설명 */}
-              <p className="text-gray-600 text-sm flex-grow mb-4 line-clamp-2">
-                {categoryDescriptions[category.name] || ""}
-              </p>
+                {/* 설명 */}
+                <p className="text-gray-600 text-xs flex-grow mb-1.5 sm:mb-2 line-clamp-1 sm:line-clamp-2">
+                  {categoryDescriptions[category.name] || ""}
+                </p>
 
-              {/* 질문 보기 링크 */}
-              <div className="text-blue-600 text-sm font-medium flex items-center gap-1 mt-auto">
-                질문 보기
-                <ArrowRight className="w-4 h-4" />
+                {/* 질문 보기 링크 */}
+                <div className="text-blue-600 text-xs sm:text-sm font-medium flex items-center gap-0.5 flex-shrink-0">
+                  <span className="hidden sm:inline">질문 보기</span>
+                  <span className="sm:hidden">보기</span>
+                  <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                </div>
               </div>
             </button>
           ))}
