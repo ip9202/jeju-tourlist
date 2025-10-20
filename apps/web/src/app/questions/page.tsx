@@ -1,9 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, useRef, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
 // import { Button, Heading, Text } from "@jeju-tourlist/ui";
-import { Filter, Search, Clock, Users, Eye, Heart } from "lucide-react";
+import { Filter, Users, Eye } from "lucide-react";
 import { type Question, type SearchFilters } from "@/hooks/useQuestionSearch";
 import { Header } from "@/components/layout/Header";
 // import { Footer } from "@/components/layout/Footer";
@@ -17,10 +16,8 @@ interface Category {
 }
 
 function QuestionsPageContent() {
-  const searchParams = useSearchParams();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [filters, setFilters] = useState<SearchFilters>({
@@ -42,17 +39,6 @@ function QuestionsPageContent() {
   useEffect(() => {
     loadCategories();
   }, []);
-
-  // URL 파라미터에서 검색어 읽어오기 (query 또는 search 파라미터 지원)
-  useEffect(() => {
-    const queryParam = searchParams.get("query");
-    const searchParam = searchParams.get("search");
-    const searchTerm = queryParam || searchParam;
-
-    if (searchTerm) {
-      setSearchTerm(searchTerm);
-    }
-  }, [searchParams]);
 
   // 필터나 페이지가 변경될 때만 자동 검색
   useEffect(() => {
@@ -152,19 +138,6 @@ function QuestionsPageContent() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleSearch = () => {
-    console.log("🔍 검색 버튼 클릭 - 검색어:", searchTerm);
-    setPagination(prev => ({ ...prev, page: 1 })); // 검색 시 첫 페이지로
-    searchQuestions(searchTerm); // 검색어 전달
-  };
-
-  const handleSearchKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      console.log("⌨️ Enter 키 입력 - 검색어:", searchTerm);
-      handleSearch();
-    }
-  };
-
   // API에서 이미 필터링된 데이터를 받으므로 추가 필터링 불필요
   const filteredQuestions = questions;
 
@@ -175,51 +148,26 @@ function QuestionsPageContent() {
 
       {/* 메인 컨텐츠 */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* 검색 섹션 */}
-        <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
-          <div className="text-center mb-6">
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">
-              제주 여행 질문 모음
-            </h2>
-            <p className="text-gray-600">
-              제주 여행에 대한 모든 궁금증을 해결해보세요
-            </p>
-          </div>
-
-          <div className="max-w-2xl mx-auto">
-            <div className="relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <input
-                type="text"
-                placeholder="궁금한 제주 여행 정보를 검색해보세요"
-                value={searchTerm}
-                onChange={e => setSearchTerm(e.target.value)}
-                onKeyPress={handleSearchKeyPress}
-                className="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-xl text-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-              <button
-                onClick={handleSearch}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-700 text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition-colors"
-              >
-                검색
-              </button>
-            </div>
-          </div>
+        {/* 페이지 타이틀 */}
+        <div className="mb-6">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1">
+            제주 여행 질문
+          </h1>
+          <p className="text-gray-600 text-sm md:text-base">
+            제주 여행에 대한 모든 궁금증을 해결해보세요
+          </p>
         </div>
 
         {/* 필터 섹션 */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-8">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <Filter className="w-5 h-5 text-gray-500" />
-                <span className="text-sm font-medium text-gray-700">필터</span>
-              </div>
-
+        <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4 md:p-6 mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 md:gap-4">
+            {/* 카테고리 필터 */}
+            <div className="flex items-center space-x-2 md:space-x-3">
+              <Filter className="w-5 h-5 text-gray-500 flex-shrink-0" />
               <select
                 value={filters.categoryId}
                 onChange={e => handleFilterChange("categoryId", e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="px-3 md:px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="">전체 카테고리</option>
                 {categories.map(category => (
@@ -232,7 +180,7 @@ function QuestionsPageContent() {
               <select
                 value={filters.status}
                 onChange={e => handleFilterChange("status", e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="px-3 md:px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="all">전체 상태</option>
                 <option value="unresolved">미해결</option>
@@ -240,32 +188,34 @@ function QuestionsPageContent() {
               </select>
             </div>
 
-            <div className="flex items-center space-x-4">
-              <select
-                value={`${filters.sortBy}-${filters.sortOrder}`}
-                onChange={e => {
-                  const [sortBy, sortOrder] = e.target.value.split("-");
-                  setFilters(prev => ({
-                    ...prev,
-                    sortBy: sortBy as any,
-                    sortOrder: sortOrder as any,
-                  }));
-                }}
-                className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="createdAt-desc">최신순</option>
-                <option value="createdAt-asc">오래된순</option>
-                <option value="views-desc">조회수 높은순</option>
-                <option value="views-asc">조회수 낮은순</option>
-                <option value="answers-desc">답변 많은순</option>
-                <option value="answers-asc">답변 적은순</option>
-              </select>
-            </div>
+            {/* 정렬 필터 */}
+            <select
+              value={`${filters.sortBy}-${filters.sortOrder}`}
+              onChange={e => {
+                const [sortBy, sortOrder] = e.target.value.split("-");
+                setFilters(prev => ({
+                  ...prev,
+                  sortBy: (sortBy || "createdAt") as
+                    | "createdAt"
+                    | "viewCount"
+                    | "likeCount",
+                  sortOrder: (sortOrder || "desc") as "asc" | "desc",
+                }));
+              }}
+              className="px-3 md:px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              <option value="createdAt-desc">최신순</option>
+              <option value="createdAt-asc">오래된순</option>
+              <option value="viewCount-desc">조회수 높은순</option>
+              <option value="viewCount-asc">조회수 낮은순</option>
+              <option value="likeCount-desc">좋아요 많은순</option>
+              <option value="likeCount-asc">좋아요 적은순</option>
+            </select>
           </div>
         </div>
 
-        {/* 질문 목록 */}
-        <div className="space-y-6">
+        {/* 질문 목록 - 그리드 레이아웃 */}
+        <div>
           {loading ? (
             <div className="text-center py-12">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
@@ -292,13 +242,15 @@ function QuestionsPageContent() {
               <p className="text-gray-400">다른 검색어나 필터를 시도해보세요</p>
             </div>
           ) : (
-            filteredQuestions.map(question => (
-              <div
-                key={question.id}
-                className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-shadow border border-gray-100 p-6"
-              >
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center space-x-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+              {filteredQuestions.map(question => (
+                <Link
+                  key={question.id}
+                  href={`/questions/${question.id}`}
+                  className="bg-white rounded-lg shadow-sm hover:shadow-md border border-gray-100 hover:border-gray-200 transition-all p-4 md:p-5 flex flex-col"
+                >
+                  {/* 카테고리 & 상태 배지 */}
+                  <div className="flex items-center space-x-2 mb-3">
                     <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded-full">
                       {question.category?.name || "일반"}
                     </span>
@@ -308,60 +260,31 @@ function QuestionsPageContent() {
                       </span>
                     )}
                   </div>
-                  <Heart className="w-5 h-5 text-gray-400 hover:text-red-500 cursor-pointer" />
-                </div>
 
-                <h3 className="text-lg font-semibold text-gray-900 mb-3 line-clamp-2">
-                  <Link
-                    href={`/questions/${question.id}`}
-                    className="hover:text-blue-600"
-                  >
+                  {/* 제목 */}
+                  <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-3 line-clamp-2 flex-grow">
                     {question.title}
-                  </Link>
-                </h3>
+                  </h3>
 
-                <p className="text-gray-600 mb-4 line-clamp-2">
-                  {question.content}
-                </p>
-
-                <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
-                  <div className="flex items-center space-x-4">
-                    <span className="flex items-center">
-                      <Users className="w-4 h-4 mr-1" />
-                      {question.answerCount || 0}개 답변
-                    </span>
-                    <span className="flex items-center">
-                      <Eye className="w-4 h-4 mr-1" />
-                      {question.viewCount || 0} 조회
-                    </span>
-                    <span className="flex items-center">
-                      <Clock className="w-4 h-4 mr-1" />
+                  {/* 메타 정보 */}
+                  <div className="flex items-center justify-between text-xs md:text-sm text-gray-500 pt-3 border-t border-gray-100">
+                    <div className="flex items-center space-x-3">
+                      <span className="flex items-center">
+                        <Users className="w-3 h-3 md:w-4 md:h-4 mr-1" />
+                        {question.answerCount || 0}
+                      </span>
+                      <span className="flex items-center">
+                        <Eye className="w-3 h-3 md:w-4 md:h-4 mr-1" />
+                        {question.viewCount || 0}
+                      </span>
+                    </div>
+                    <span className="text-xs text-gray-400">
                       {safeFormatSimpleDate(question.createdAt)}
                     </span>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-6 h-6 bg-gradient-to-r from-gray-600 to-gray-800 rounded-full flex items-center justify-center text-white text-xs font-bold">
-                      {question.author?.name?.charAt(0) || "U"}
-                    </div>
-                    <span className="text-sm text-gray-600">
-                      {question.author?.name || "익명"}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    {/* Tags removed as not in Question type */}
-                  </div>
-                  <Link
-                    href={`/questions/${question.id}`}
-                    className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-                  >
-                    답변보기 →
-                  </Link>
-                </div>
-              </div>
-            ))
+                </Link>
+              ))}
+            </div>
           )}
         </div>
 
