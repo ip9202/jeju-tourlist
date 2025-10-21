@@ -114,6 +114,18 @@ export function createAnswerRouter(prisma: PrismaClient): Router {
   router.get("/:id/stats", answerController.getAnswerStats);
 
   /**
+   * @route POST /api/answers/:answerId/comments
+   * @desc 답변에 댓글 생성 (중첩 댓글 포함)
+   * @access Private
+   * @param { string } answerId - 답변 ID
+   * @body { content: string, parentId?: string, depth?: number }
+   */
+  router.post("/:answerId/comments", authMiddleware, (req, res) => {
+    req.body.answerId = req.params.answerId;
+    answerCommentController.createComment(req, res);
+  });
+
+  /**
    * @route GET /api/answers/:answerId/comments
    * @desc 답변별 댓글 목록 조회
    * @access Public

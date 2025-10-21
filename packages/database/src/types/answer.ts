@@ -4,7 +4,7 @@ import { z } from "zod";
 export const CreateAnswerSchema = z.object({
   content: z.string().min(10).max(5000),
   authorId: z.string().min(1), // CUID 제약 제거하여 임시 사용자 ID 허용
-  questionId: z.string().cuid(),
+  questionId: z.string().min(1), // 접두사(q_)가 있거나 없는 CUID 모두 허용
 });
 
 export type CreateAnswerData = z.infer<typeof CreateAnswerSchema>;

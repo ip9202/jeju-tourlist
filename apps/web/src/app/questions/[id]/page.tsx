@@ -146,19 +146,29 @@ export default function QuestionDetailPage() {
     setAnswerError("");
 
     try {
-      // API 호출 (api 클라이언트 사용 - 자동으로 Authorization 헤더 포함)
-      const response = await api.post("/api/answers", {
-        content: content.trim(),
-        questionId: params.id,
-        authorId: user.id,
-        parentId: parentId,
-      });
+      let response;
 
-      if (!response.success) {
-        throw new Error(response.error || "답변 작성에 실패했습니다.");
+      if (parentId) {
+        // 중첩 댓글: POST /api/answers/:answerId/comments
+        response = await api.post(`/api/answers/${parentId}/comments`, {
+          content: content.trim(),
+          authorId: user.id,
+          parentId: undefined, // 1단계 중첩만 지원
+        });
+      } else {
+        // 메인 답변: POST /api/answers
+        response = await api.post("/api/answers", {
+          content: content.trim(),
+          questionId: params.id,
+          authorId: user.id,
+        });
       }
 
-      // 새 답변을 목록에 추가 (API 응답에 author 정보가 포함됨)
+      if (!response.success) {
+        throw new Error(response.error || "작성에 실패했습니다.");
+      }
+
+      // 새 답변/댓글을 목록에 추가 (API 응답에 author 정보가 포함됨)
       if (response.data.author) {
         if (parentId) {
           // 대댓글인 경우 - 부모 답변의 replyCount 증가
@@ -178,19 +188,19 @@ export default function QuestionDetailPage() {
         }
       }
 
-      // 답변 개수 업데이트
-      if (question) {
+      // 메인 답변인 경우 답변 개수 업데이트 (대댓글은 업데이트하지 않음)
+      if (question && !parentId) {
         setQuestion({
           ...question,
           answerCount: question.answerCount + 1,
         });
       }
     } catch (error) {
-      console.error("답변 작성 실패:", error);
+      console.error("작성 실패:", error);
       setAnswerError(
         error instanceof Error
           ? error.message
-          : "답변 작성 중 오류가 발생했습니다."
+          : "작성 중 오류가 발생했습니다."
       );
     } finally {
       setIsSubmitting(false);
