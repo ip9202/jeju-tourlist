@@ -148,70 +148,70 @@
 
 #### **2-1: facebook-qa.css 생성**
 
-- ☐ CSS 파일 생성
-- ☐ 색상 변수 정의
-  - ☐ --fb-bg: #f0f2f5
-  - ☐ --fb-white: #ffffff
-  - ☐ --fb-text-primary: #050505
-  - ☐ --fb-text-secondary: #65676b
-  - ☐ --fb-primary: #0a66c2
-- ☐ 타이포그래피 변수
-  - ☐ --fb-font-title: 14px, 600 weight
-  - ☐ --fb-font-body: 13px, 400 weight
-  - ☐ --fb-font-small: 12px, 400 weight
-- ☐ 간격 변수
-  - ☐ --fb-spacing-xs: 8px
-  - ☐ --fb-spacing-sm: 12px
-  - ☐ --fb-spacing-md: 16px
+- ☑ CSS 파일 생성
+- ☑ 색상 변수 정의
+  - ☑ --fb-bg: #f0f2f5
+  - ☑ --fb-white: #ffffff
+  - ☑ --fb-text-primary: #050505
+  - ☑ --fb-text-secondary: #65676b
+  - ☑ --fb-primary: #0a66c2
+- ☑ 타이포그래피 변수
+  - ☑ --fb-font-title: 14px, 600 weight
+  - ☑ --fb-font-body: 13px, 400 weight
+  - ☑ --fb-font-small: 12px, 400 weight
+- ☑ 간격 변수
+  - ☑ --fb-spacing-xs: 8px
+  - ☑ --fb-spacing-sm: 12px
+  - ☑ --fb-spacing-md: 16px
 
 #### **2-2: 컴포넌트 스타일 정의**
 
-- ☐ .fb-question-card 스타일
-  - ☐ 배경색, 패딩, 테두리 반경
-  - ☐ 섹션별 테두리
-- ☐ .fb-answer-bubble 스타일
-  - ☐ 버블 모양 (18px border-radius)
-  - ☐ 그림자 효과
-  - ☐ 패딩
-- ☐ .fb-comment-input 스타일
-  - ☐ 라운드 입력창 (20px)
-  - ☐ 포커스 상태
-- ☐ .fb-reactions 스타일
-  - ☐ 리액션 표시 레이아웃
-  - ☐ 호버 효과
-- ☐ .fb-action-button 스타일
-  - ☐ 기본 스타일
-  - ☐ 호버 상태
-  - ☐ 활성 상태
+- ☑ .fb-question-card 스타일
+  - ☑ 배경색, 패딩, 테두리 반경
+  - ☑ 섹션별 테두리
+- ☑ .fb-answer-bubble 스타일
+  - ☑ 버블 모양 (18px border-radius)
+  - ☑ 그림자 효과
+  - ☑ 패딩
+- ☑ .fb-comment-input 스타일
+  - ☑ 라운드 입력창 (20px)
+  - ☑ 포커스 상태
+- ☑ .fb-reactions 스타일
+  - ☑ 리액션 표시 레이아웃
+  - ☑ 호버 효과
+- ☑ .fb-action-button 스타일
+  - ☑ 기본 스타일
+  - ☑ 호버 상태
+  - ☑ 활성 상태
 
 #### **2-3: Tailwind CSS 커스텀 설정**
 
-- ☐ tailwind.config.js 수정
-  - ☐ rounded-bubble: 18px 추가
-  - ☐ rounded-input: 20px 추가
-  - ☐ shadow-facebook: 0 1px 2px rgba(0,0,0,0.1) 추가
-  - ☐ colors.facebook 팔레트 추가
+- ☑ tailwind.config.js 수정
+  - ☑ rounded-bubble: 18px 추가
+  - ☑ rounded-input: 20px 추가
+  - ☑ shadow-facebook: 0 1px 2px rgba(0,0,0,0.1) 추가
+  - ☑ colors.facebook 팔레트 추가
 
 #### **2-4: 반응형 미디어 쿼리**
 
-- ☐ 데스크톱 (≥1024px) 스타일
-  - ☐ 전체 스타일 적용
-  - ☐ 버튼 라벨 + 아이콘
-- ☐ 태블릿 (600-1024px) 스타일
-  - ☐ 버튼 크기 조정
-  - ☐ 폰트 크기 축소 (13px → 12px)
-  - ☐ 버튼 라벨 숨김
-- ☐ 모바일 (< 600px) 스타일
-  - ☐ 패딩 감소
-  - ☐ 폰트 크기 재조정
-  - ☐ 터치 최적화 (44px 버튼)
+- ☑ 데스크톱 (≥1024px) 스타일
+  - ☑ 전체 스타일 적용
+  - ☑ 버튼 라벨 + 아이콘
+- ☑ 태블릿 (600-1024px) 스타일
+  - ☑ 버튼 크기 조정
+  - ☑ 폰트 크기 축소 (13px → 12px)
+  - ☑ 버튼 라벨 숨김
+- ☑ 모바일 (< 600px) 스타일
+  - ☑ 패딩 감소
+  - ☑ 폰트 크기 재조정
+  - ☑ 터치 최적화 (44px 버튼)
 
 #### **Phase 2 마무리**
 
-- ☐ Lint 실행 및 수정 (`npm run lint`)
-- ☐ Type Check 실행 및 수정 (`npm run type-check`)
-- ☐ Git 커밋: `style: 페이스북 스타일 Q&A CSS 시스템 구축`
-- ☐ **☑ Phase 2 완료 체크**
+- ☑ Lint 실행 및 수정 (`npm run lint`)
+- ☑ Type Check 실행 및 수정 (`npm run type-check`)
+- ☑ Git 커밋: `style: 페이스북 스타일 Q&A CSS 시스템 구축`
+- ☑ **☑ Phase 2 완료 체크**
 
 ---
 
