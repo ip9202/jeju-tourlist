@@ -55,7 +55,7 @@ export const FacebookAnswerCard: React.FC<FacebookAnswerCardProps> = ({
 
   return (
     <div
-      className={`flex gap-3 py-3 ${marginLeft}`}
+      className={`flex gap-3 py-3 md:gap-2 md:py-2 sm:gap-1.5 sm:py-1.5 ${marginLeft}`}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
     >
@@ -66,20 +66,20 @@ export const FacebookAnswerCard: React.FC<FacebookAnswerCardProps> = ({
           `https://ui-avatars.com/api/?name=${encodeURIComponent(answer.author.name)}&background=0a66c2&color=fff`
         }
         alt={answer.author.name}
-        className="w-8 h-8 rounded-full object-cover flex-shrink-0"
+        className="w-8 h-8 rounded-full object-cover flex-shrink-0 md:w-7 md:h-7 sm:w-6 sm:h-6"
       />
 
       {/* Content Bubble */}
       <div className="flex-1">
         <div
           className={`
-            rounded-2xl px-4 py-2 transition-colors
+            rounded-2xl px-4 py-2 transition-colors md:rounded-xl md:px-3 md:py-1.5 sm:rounded-lg sm:px-2.5 sm:py-1
             ${isHovering ? "bg-gray-200" : "bg-gray-100"}
           `}
         >
           {/* Header */}
-          <div className="flex items-center gap-2 mb-1">
-            <span className="font-semibold text-sm text-gray-900">
+          <div className="flex items-center gap-2 mb-1 md:gap-1.5 md:mb-0.5 sm:gap-1 sm:mb-0.5">
+            <span className="font-semibold text-sm text-gray-900 md:text-sm sm:text-xs">
               {answer.author.name}
             </span>
 
@@ -93,7 +93,7 @@ export const FacebookAnswerCard: React.FC<FacebookAnswerCardProps> = ({
           </div>
 
           {/* Content */}
-          <p className="text-sm text-gray-800 leading-relaxed mb-2">
+          <p className="text-sm text-gray-800 leading-relaxed mb-2 md:text-sm md:mb-1.5 sm:text-xs sm:mb-1">
             {answer.content}
           </p>
 
@@ -102,13 +102,13 @@ export const FacebookAnswerCard: React.FC<FacebookAnswerCardProps> = ({
             <img
               src={answer.imageUrl}
               alt="Answer image"
-              className="rounded-lg max-w-xs mb-2"
+              className="rounded-lg max-w-xs mb-2 md:max-w-sm md:mb-1.5 sm:max-w-xs sm:mb-1"
             />
           )}
         </div>
 
         {/* Metadata and Actions */}
-        <div className="flex items-center gap-4 mt-1 pl-3 text-xs text-gray-600">
+        <div className="flex items-center gap-4 mt-1 pl-3 text-xs text-gray-600 md:gap-2 md:mt-0.5 md:pl-2 sm:gap-1 sm:mt-0.5 sm:pl-1.5 sm:text-xs">
           {/* Time */}
           <span>{timeAgo}</span>
 
@@ -137,9 +137,10 @@ export const FacebookAnswerCard: React.FC<FacebookAnswerCardProps> = ({
           <button
             onClick={handleLike}
             disabled={isLoading}
-            className={`font-semibold hover:text-red-600 transition-colors ${
+            className={`font-semibold hover:text-red-600 transition-colors md:text-xs sm:text-xs ${
               answer.isLiked ? "text-red-600" : ""
             }`}
+            title="좋아요"
           >
             좋아요
           </button>
@@ -147,9 +148,10 @@ export const FacebookAnswerCard: React.FC<FacebookAnswerCardProps> = ({
           <button
             onClick={handleDislike}
             disabled={isLoading}
-            className={`font-semibold hover:text-gray-600 transition-colors ${
+            className={`font-semibold hover:text-gray-600 transition-colors md:text-xs sm:text-xs ${
               answer.isDisliked ? "text-gray-600" : ""
             }`}
+            title="싫어요"
           >
             싫어요
           </button>
@@ -157,7 +159,8 @@ export const FacebookAnswerCard: React.FC<FacebookAnswerCardProps> = ({
           <button
             onClick={handleReply}
             disabled={isLoading}
-            className="font-semibold hover:text-blue-600 transition-colors"
+            className="font-semibold hover:text-blue-600 transition-colors md:text-xs sm:text-xs"
+            title="답글"
           >
             답글
           </button>
@@ -175,7 +178,7 @@ export const FacebookAnswerCard: React.FC<FacebookAnswerCardProps> = ({
 
         {/* Reply Count */}
         {(answer.replyCount || 0) > 0 && (
-          <button className="mt-2 pl-3 text-xs font-semibold text-blue-600 hover:text-blue-700 transition-colors">
+          <button className="mt-2 pl-3 text-xs font-semibold text-blue-600 hover:text-blue-700 transition-colors md:mt-1 md:pl-2 sm:mt-0.5 sm:pl-1.5 sm:text-xs">
             답글 {answer.replyCount}개 보기
           </button>
         )}

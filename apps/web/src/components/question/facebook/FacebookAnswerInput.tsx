@@ -51,14 +51,14 @@ export const FacebookAnswerInput: React.FC<FacebookAnswerInputProps> = ({
   return (
     <div
       className={`
-        rounded-lg bg-white border transition-all
+        rounded-lg bg-white border transition-all md:rounded-md sm:rounded-none
         ${isFocused ? "border-blue-400 shadow-md" : "border-gray-200 shadow-sm"}
-        ${isReply ? "ml-10" : "mb-4"}
+        ${isReply ? "ml-10 md:ml-8 sm:ml-6" : "mb-4 md:mb-3 sm:mb-2"}
       `}
     >
       {/* Reply Header */}
       {isReply && parentAuthorName && (
-        <div className="px-4 pt-3 pb-0 text-xs text-gray-600 flex items-center justify-between">
+        <div className="px-4 pt-3 pb-0 text-xs text-gray-600 flex items-center justify-between md:px-3 md:pt-2 md:text-xs sm:px-2 sm:pt-1.5 sm:text-xs">
           <span>
             <span className="font-semibold text-gray-900">
               @{parentAuthorName}
@@ -75,7 +75,7 @@ export const FacebookAnswerInput: React.FC<FacebookAnswerInputProps> = ({
       )}
 
       {/* Input Container */}
-      <div className="p-3 flex gap-3">
+      <div className="p-3 flex gap-3 md:p-2 md:gap-2 sm:p-1.5 sm:gap-1.5">
         {/* Avatar */}
         {user && (
           <img
@@ -84,7 +84,7 @@ export const FacebookAnswerInput: React.FC<FacebookAnswerInputProps> = ({
               `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=0a66c2&color=fff`
             }
             alt={user.name}
-            className="w-8 h-8 rounded-full object-cover flex-shrink-0"
+            className="w-8 h-8 rounded-full object-cover flex-shrink-0 md:w-7 md:h-7 sm:w-6 sm:h-6"
           />
         )}
 
@@ -109,34 +109,37 @@ export const FacebookAnswerInput: React.FC<FacebookAnswerInputProps> = ({
             className={`
               w-full bg-gray-100 border-0 rounded-full focus:bg-white focus:outline-none
               focus:ring-2 focus:ring-blue-400 px-4 py-2 text-sm resize-none
-              transition-all placeholder-gray-500
-              ${isExpanded ? "py-3 rounded-lg" : "py-2 rounded-full"}
+              transition-all placeholder-gray-500 md:px-3 md:py-1.5 md:text-sm sm:px-2.5 sm:py-1 sm:text-xs
+              ${isExpanded ? "py-3 rounded-lg md:py-2.5 sm:py-2" : "py-2 rounded-full"}
             `}
             rows={isExpanded ? 3 : 1}
           />
 
           {/* Action Buttons */}
           {isExpanded && (
-            <div className="mt-2 flex items-center justify-between">
-              <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-                <Smile size={18} className="text-gray-600" />
+            <div className="mt-2 flex items-center justify-between md:mt-1.5 sm:mt-1">
+              <button className="p-2 hover:bg-gray-100 rounded-full transition-colors md:p-1.5 sm:p-1">
+                <Smile
+                  size={18}
+                  className="text-gray-600 md:w-5 md:h-5 sm:w-4 sm:h-4"
+                />
               </button>
 
-              <div className="flex gap-2">
+              <div className="flex gap-2 md:gap-1.5 sm:gap-1">
                 <button
                   onClick={handleCancel}
                   disabled={isLoading}
-                  className="px-4 py-2 text-sm font-semibold text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50"
+                  className="px-4 py-2 text-sm font-semibold text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 md:px-3 md:py-1.5 md:text-xs sm:px-2 sm:py-1 sm:text-xs"
                 >
                   취소
                 </button>
                 <button
                   onClick={handleSubmit}
                   disabled={!content.trim() || isLoading}
-                  className="px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-300 disabled:opacity-50 flex items-center gap-2"
+                  className="px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-300 disabled:opacity-50 flex items-center gap-2 md:px-3 md:py-1.5 md:text-xs sm:px-2 sm:py-1 sm:text-xs sm:min-h-[44px]"
                 >
-                  <Send size={16} />
-                  등록
+                  <Send size={16} className="md:w-4 md:h-4 sm:w-4 sm:h-4" />
+                  <span className="sm:hidden">등록</span>
                 </button>
               </div>
             </div>
