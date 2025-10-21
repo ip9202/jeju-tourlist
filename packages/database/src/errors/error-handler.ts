@@ -76,10 +76,11 @@ function handleKnownRequestError(
 
   switch (code) {
     case "P2002": // Unique constraint violation
+      const target = Array.isArray(meta?.target) ? meta.target : [meta?.target];
       return new DuplicateRecordError(
-        meta?.target?.[0] || "record",
-        meta?.target?.[0] || "field",
-        meta?.target?.[1] || "value",
+        target[0] || "record",
+        target[0] || "field",
+        target[0] || "value",
         { ...context, prismaCode: code, meta }
       );
 

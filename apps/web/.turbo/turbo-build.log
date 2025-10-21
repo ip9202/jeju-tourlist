@@ -1,0 +1,11 @@
+
+> @jeju-tourlist/web@1.0.0 build /Users/ip9202/develop/vibe/jeju-tourlist/apps/web
+> next build
+
+ ⚠ You are using a non-standard "NODE_ENV" value in your environment. This creates inconsistencies in the project and is strongly advised against. Read more: https://nextjs.org/docs/messages/non-standard-node-env
+  ▲ Next.js 14.2.33
+  - Environments: .env.local
+  - Experiments (use with caution):
+    · memoryBasedWorkersCount
+
+   Creating an optimized production build ...

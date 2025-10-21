@@ -10,7 +10,7 @@
 /**
  * 데이터베이스 기본 에러 클래스
  */
-export abstract class DatabaseError extends Error {
+export class DatabaseError extends Error {
   public readonly code: string;
   public readonly statusCode: number;
   public readonly timestamp: Date;

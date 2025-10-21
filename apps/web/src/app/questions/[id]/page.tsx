@@ -12,7 +12,7 @@ import {
   MessageCircle,
 } from "lucide-react";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import { EnhancedAnswerCard } from "@/components/question/EnhancedAnswerCard";
+import { FacebookAnswerThread } from "@/components/question/facebook";
 import { SubPageHeader } from "@/components/layout/SubPageHeader";
 import { Header } from "@/components/layout/Header";
 import { api } from "@/lib/apiClient";
@@ -65,6 +65,8 @@ interface Answer {
   isDisliked?: boolean;
   isAuthor?: boolean;
   isQuestionAuthor?: boolean;
+  parentId?: string | null;
+  replyCount?: number;
 }
 
 export default function QuestionDetailPage() {
@@ -75,7 +77,6 @@ export default function QuestionDetailPage() {
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [newAnswer, setNewAnswer] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [answerError, setAnswerError] = useState("");
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -120,9 +121,7 @@ export default function QuestionDetailPage() {
     }
   }, [params.id]);
 
-  const handleAnswerSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
+  const handleAnswerSubmit = async (content: string, parentId?: string) => {
     // 로그인 체크
     if (!user?.id) {
       setAnswerError("로그인이 필요합니다.");
@@ -133,17 +132,15 @@ export default function QuestionDetailPage() {
     }
 
     // 답변 검증
-    if (!newAnswer.trim()) {
+    if (!content.trim()) {
       setAnswerError("답변을 입력해주세요");
       return;
     }
 
-    if (newAnswer.trim().length < 10) {
+    if (content.trim().length < 10) {
       setAnswerError("답변을 10자 이상 입력해주세요");
       return;
     }
-
-    if (isSubmitting) return;
 
     setIsSubmitting(true);
     setAnswerError("");
@@ -151,9 +148,10 @@ export default function QuestionDetailPage() {
     try {
       // API 호출 (api 클라이언트 사용 - 자동으로 Authorization 헤더 포함)
       const response = await api.post("/api/answers", {
-        content: newAnswer.trim(),
+        content: content.trim(),
         questionId: params.id,
         authorId: user.id,
+        parentId: parentId,
       });
 
       if (!response.success) {
@@ -162,9 +160,23 @@ export default function QuestionDetailPage() {
 
       // 새 답변을 목록에 추가 (API 응답에 author 정보가 포함됨)
       if (response.data.author) {
-        setAnswers(prev => [response.data, ...prev]);
+        if (parentId) {
+          // 대댓글인 경우 - 부모 답변의 replyCount 증가
+          setAnswers(prev =>
+            prev.map(answer =>
+              answer.id === parentId
+                ? {
+                    ...answer,
+                    replyCount: (answer.replyCount || 0) + 1,
+                  }
+                : answer
+            ).concat(response.data)
+          );
+        } else {
+          // 메인 답변인 경우
+          setAnswers(prev => [response.data, ...prev]);
+        }
       }
-      setNewAnswer("");
 
       // 답변 개수 업데이트
       if (question) {
@@ -291,105 +303,6 @@ export default function QuestionDetailPage() {
     }
   };
 
-  /**
-   * 답변 채택 핸들러
-   */
-  const handleAnswerAccept = async (answerId: string) => {
-    try {
-      const response = await fetch(`/api/answers/${answerId}/accept`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          questionId: params.id,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("답변 채택에 실패했습니다");
-      }
-
-      // 로컬 상태 업데이트 - 다른 답변들의 채택 해제
-      setAnswers(prev =>
-        prev.map(answer => ({
-          ...answer,
-          isAccepted: answer.id === answerId,
-        }))
-      );
-    } catch (error) {
-      console.error("답변 채택 실패:", error);
-    }
-  };
-
-  /**
-   * 답변 수정 핸들러
-   */
-  const handleAnswerEdit = (answerId: string) => {
-    console.log("답변 수정:", answerId);
-    // 실제로는 수정 모달이나 페이지로 이동
-  };
-
-  /**
-   * 답변 삭제 핸들러
-   */
-  const handleAnswerDelete = async (answerId: string) => {
-    if (!window.confirm("답변을 삭제하시겠습니까?")) return;
-
-    try {
-      const response = await fetch(`/api/answers/${answerId}`, {
-        method: "DELETE",
-      });
-
-      if (!response.ok) {
-        throw new Error("답변 삭제에 실패했습니다");
-      }
-
-      // 로컬 상태에서 제거
-      setAnswers(prev => prev.filter(answer => answer.id !== answerId));
-
-      // 답변 개수 업데이트
-      if (question) {
-        setQuestion({
-          ...question,
-          answerCount: question.answerCount - 1,
-        });
-      }
-    } catch (error) {
-      console.error("답변 삭제 실패:", error);
-    }
-  };
-
-  /**
-   * 북마크 핸들러
-   */
-  const handleBookmark = async (answerId: string) => {
-    console.log("북마크:", answerId);
-    // 실제로는 북마크 API 호출
-  };
-
-  /**
-   * 공유 핸들러
-   */
-  const handleShare = (answerId?: string) => {
-    console.log("공유:", answerId || question?.id);
-    // 실제로는 공유 기능 구현
-  };
-
-  /**
-   * 헤더 공유 버튼 핸들러
-   */
-  const handleHeaderShare = () => {
-    handleShare();
-  };
-
-  /**
-   * 헤더 북마크 버튼 핸들러
-   */
-  const handleHeaderBookmark = () => {
-    handleBookmark(question?.id || "");
-  };
-
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -459,7 +372,7 @@ export default function QuestionDetailPage() {
             <Button
               variant="ghost"
               size="sm"
-              onClick={handleHeaderShare}
+              onClick={() => {}}
               className="text-gray-600 hover:text-gray-900"
             >
               <Share2 className="w-4 h-4" />
@@ -467,7 +380,7 @@ export default function QuestionDetailPage() {
             <Button
               variant="ghost"
               size="sm"
-              onClick={handleHeaderBookmark}
+              onClick={() => {}}
               className="text-gray-600 hover:text-gray-900"
             >
               <Bookmark className="w-4 h-4" />
@@ -590,7 +503,7 @@ export default function QuestionDetailPage() {
           </div>
         </div>
 
-        {/* 답변 섹션 */}
+        {/* 답변 섹션 - FacebookAnswerThread 사용 */}
         <div className="bg-white rounded-lg shadow-md p-8 mb-8">
           <div className="flex items-center justify-between mb-6">
             <Heading
@@ -602,51 +515,53 @@ export default function QuestionDetailPage() {
             </Heading>
           </div>
 
-          {/* 답변 목록 */}
-          <div className="space-y-6" data-testid="answer-list">
-            {answers.map(answer => (
-              <EnhancedAnswerCard
-                key={answer.id}
-                answer={{
-                  id: answer.id,
-                  content: answer.content,
-                  author: {
-                    id: answer.author.id,
-                    name: answer.author.name,
-                    avatar: answer.author.avatar || undefined,
-                  },
-                  likeCount: answer.likeCount,
-                  dislikeCount: answer.dislikeCount || 0,
-                  commentCount: answer.commentCount || 0,
-                  createdAt: answer.createdAt,
-                  updatedAt: answer.createdAt,
-                  isAccepted: answer.isAccepted,
-                  isLiked: answer.isLiked,
-                  isDisliked: answer.isDisliked,
-                  isAuthor: answer.isAuthor,
-                  isQuestionAuthor: answer.isQuestionAuthor,
-                }}
-                onLike={handleAnswerLike}
-                onDislike={handleAnswerDislike}
-                onAccept={handleAnswerAccept}
-                onEdit={handleAnswerEdit}
-                onDelete={handleAnswerDelete}
-                onBookmark={handleBookmark}
-                onShare={handleShare}
-                showComments={true}
-                maxComments={5}
-                className="border border-gray-200"
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* 답변 작성 폼 */}
-        <div className="bg-white rounded-lg shadow-md p-8">
-          <Heading level={3} className="text-lg font-bold text-gray-900 mb-4">
-            답변 작성
-          </Heading>
-          {!user ? (
+          {/* Facebook 스타일 답변 스레드 */}
+          {user && question ? (
+            <FacebookAnswerThread
+              question={{
+                id: question.id,
+                title: question.title,
+                content: question.content,
+                author: {
+                  id: question.author.id,
+                  name: question.author.name,
+                  avatar: question.author.avatar || undefined,
+                },
+                createdAt: question.createdAt,
+                likeCount: question.likeCount,
+                answerCount: question.answerCount,
+                viewCount: question.viewCount,
+                tags: question.tags,
+              }}
+              answers={answers.map(answer => ({
+                id: answer.id,
+                content: answer.content,
+                author: {
+                  id: answer.author.id,
+                  name: answer.author.name,
+                  avatar: answer.author.avatar || undefined,
+                },
+                createdAt: answer.createdAt,
+                likeCount: answer.likeCount,
+                dislikeCount: answer.dislikeCount || 0,
+                isLiked: answer.isLiked || false,
+                isDisliked: answer.isDisliked || false,
+                isAccepted: answer.isAccepted,
+                parentId: answer.parentId || undefined,
+                replyCount: answer.replyCount || 0,
+              }))}
+              currentUser={{
+                id: user.id,
+                name: user.name || user.email,
+              }}
+              onSubmitAnswer={handleAnswerSubmit}
+              onLike={handleAnswerLike}
+              onDislike={handleAnswerDislike}
+              onReply={() => {}}
+              isLoading={isSubmitting}
+              maxDepth={2}
+            />
+          ) : (
             <div className="text-center py-8">
               <Text className="text-gray-600 mb-4">
                 답변을 작성하려면 로그인이 필요합니다.
@@ -655,37 +570,15 @@ export default function QuestionDetailPage() {
                 로그인하기
               </Button>
             </div>
-          ) : (
-            <form onSubmit={handleAnswerSubmit} className="space-y-4">
-              <div>
-                <textarea
-                  value={newAnswer}
-                  onChange={e => setNewAnswer(e.target.value)}
-                  placeholder="답변을 작성해주세요..."
-                  rows={6}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  data-testid="answer-content"
-                  disabled={isSubmitting}
-                />
-              </div>
-              {answerError && (
-                <div
-                  className="text-red-600 text-sm mt-2"
-                  data-testid="answer-error"
-                >
-                  {answerError}
-                </div>
-              )}
-              <div className="flex justify-end">
-                <Button
-                  type="submit"
-                  data-testid="submit-answer"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? "작성 중..." : "답변 작성"}
-                </Button>
-              </div>
-            </form>
+          )}
+
+          {answerError && (
+            <div
+              className="text-red-600 text-sm mt-4"
+              data-testid="answer-error"
+            >
+              {answerError}
+            </div>
           )}
         </div>
       </div>
