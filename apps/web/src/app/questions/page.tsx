@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Filter } from "lucide-react";
+
 import { type Question, type SearchFilters } from "@/hooks/useQuestionSearch";
 import { Header } from "@/components/layout/Header";
 import { safeFormatSimpleDate } from "@/lib/dateUtils";
@@ -21,7 +21,7 @@ function QuestionsPageContent() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showMobileFilters, setShowMobileFilters] = useState(false);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState<SearchFilters>({
     categoryId: "",
@@ -185,14 +185,15 @@ function QuestionsPageContent() {
       <Header />
 
       {/* 페이지 헤더 */}
-      <header className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* 페이지 제목 및 설명 */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
                 질문 목록
               </h1>
-              <p className="text-sm sm:text-base text-gray-600">
+              <p className="text-lg text-gray-600">
                 {hasActiveSearch
                   ? `'${searchTerm}' 검색 결과`
                   : "제주 여행에 대한 모든 궁금증을 해결해보세요"}
@@ -208,21 +209,8 @@ function QuestionsPageContent() {
             )}
           </div>
         </div>
-      </header>
 
-      {/* 모바일 필터 버튼 (md 미만에서만 표시) */}
-      <div className="md:hidden sticky top-16 z-40 bg-white border-b border-gray-200 px-4 py-3">
-        <button
-          onClick={() => setShowMobileFilters(!showMobileFilters)}
-          className="w-full flex items-center justify-between px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium text-sm transition-colors"
-        >
-          <span>필터</span>
-          <Filter className="w-5 h-5" />
-        </button>
-      </div>
-
-      {/* 메인 콘텐츠 */}
-      <main className="max-w-full lg:max-w-7xl mx-auto px-3 md:px-4 lg:px-8 py-8">
+        {/* 메인 콘텐츠 - main 태그는 위에서 열었음 */}
         {/* 태블릿 필터 버튼 (md ~ lg 미만에서만 표시) */}
         <div className="hidden md:block lg:hidden mb-6">
           <div className="flex gap-2 overflow-x-auto pb-4">
@@ -515,7 +503,7 @@ function QuestionsPageContent() {
 
       {/* 푸터 */}
       <footer className="bg-gray-900 text-gray-400 py-8 mt-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm">
           <p>&copy; 2024 동네물어봐. All rights reserved.</p>
         </div>
       </footer>

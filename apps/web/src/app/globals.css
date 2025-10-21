@@ -179,8 +179,16 @@
   }
   
   /* 모든 인터랙티브 요소에 터치 타겟 적용 (체크박스 제외) */
-  button:not([role="checkbox"]), [role="button"]:not([role="checkbox"]), a[href], input:not([type="checkbox"]), select, textarea {
+  button:not([role="checkbox"]), [role="button"]:not([role="checkbox"]), a[href], input:not([type="checkbox"]):not([type="radio"]), select, textarea {
     @apply min-h-[44px] min-w-[44px];
+  }
+  
+  /* 라디오버튼 스타일 (기본 크기 유지) */
+  input[type="radio"] {
+    width: 1rem;
+    height: 1rem;
+    min-width: auto;
+    min-height: auto;
   }
   
   /* 아이콘 버튼 특별 처리 */

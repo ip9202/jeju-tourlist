@@ -435,7 +435,7 @@ export const Header: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <form
             onSubmit={handleSearch}
-            className="flex items-center border border-gray-300 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-blue-500"
+            className="flex items-center border border-gray-300 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-blue-500 bg-white"
           >
             {/* 카테고리선택 (검색창 왼쪽) */}
             <select
@@ -470,25 +470,28 @@ export const Header: React.FC = () => {
               <Search className="w-5 h-5" />
             </button>
           </form>
-        </div>
-      </div>
 
-      {/* Row 3: 인기검색어 */}
-      <div className="bg-gray-50 border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-xs font-medium text-gray-500">
-              인기 검색어
-            </span>
-            {popularSearches.map(search => (
-              <button
-                key={search}
-                onClick={() => handlePopularSearch(search)}
-                className="px-3 py-1 bg-white hover:bg-gray-100 rounded-full text-xs font-medium text-gray-700 transition-colors border border-gray-200"
-              >
-                {search}
-              </button>
-            ))}
+          {/* 인기검색어 - 당근마켓 스타일 */}
+          <div className="relative">
+            <div className="overflow-hidden">
+              <div className="inline-flex items-center py-0 pr-10 overflow-x-auto scrollbar-hide">
+                <span className="text-xs font-medium text-gray-500 mr-4 flex-shrink-0">
+                  인기 검색어
+                </span>
+                <ul className="flex items-center gap-3">
+                  {popularSearches.map(search => (
+                    <li key={search} className="flex-shrink-0">
+                      <button
+                        onClick={() => handlePopularSearch(search)}
+                        className="text-xs text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap"
+                      >
+                        {search}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </div>
