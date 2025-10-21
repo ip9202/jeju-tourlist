@@ -42,7 +42,7 @@ const sizeConfig = {
   },
 };
 
-export const FacebookBadge: React.FC<FacebookBadgeProps> = ({
+const FacebookBadgeComponent: React.FC<FacebookBadgeProps> = ({
   type,
   size = "md",
 }) => {
@@ -64,5 +64,7 @@ export const FacebookBadge: React.FC<FacebookBadgeProps> = ({
     </span>
   );
 };
+
+export const FacebookBadge = React.memo(FacebookBadgeComponent);
 
 export default FacebookBadge;

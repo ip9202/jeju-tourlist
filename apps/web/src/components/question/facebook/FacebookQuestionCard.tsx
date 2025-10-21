@@ -13,7 +13,7 @@ import {
   Eye,
 } from "lucide-react";
 
-export const FacebookQuestionCard: React.FC<FacebookQuestionCardProps> = ({
+const FacebookQuestionCardComponent: React.FC<FacebookQuestionCardProps> = ({
   question,
   onShare,
   onBookmark,
@@ -201,5 +201,7 @@ export const FacebookQuestionCard: React.FC<FacebookQuestionCardProps> = ({
     </div>
   );
 };
+
+export const FacebookQuestionCard = React.memo(FacebookQuestionCardComponent);
 
 export default FacebookQuestionCard;

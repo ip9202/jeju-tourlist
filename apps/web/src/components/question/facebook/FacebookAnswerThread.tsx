@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { FacebookAnswerThreadProps, Answer } from "./types";
 import { sortByBadgePriority } from "./utils";
 import FacebookAnswerInput from "./FacebookAnswerInput";
@@ -8,7 +8,6 @@ import FacebookAnswerCard from "./FacebookAnswerCard";
 
 export const FacebookAnswerThread: React.FC<FacebookAnswerThreadProps> = ({
   answers,
-  question: _question,
   currentUser,
   onSubmitAnswer,
   onLike,
@@ -47,31 +46,39 @@ export const FacebookAnswerThread: React.FC<FacebookAnswerThreadProps> = ({
     return { topLevelAnswers: sortedTopLevel, answerMap: map };
   }, [answers]);
 
-  const handleSubmitAnswer = async (content: string) => {
-    try {
-      await onSubmitAnswer(content, replyingToId || undefined);
-      setReplyingToId(null);
-    } catch (error) {
-      console.error("Failed to submit answer:", error);
-    }
-  };
+  const handleSubmitAnswer = useCallback(
+    async (content: string) => {
+      try {
+        await onSubmitAnswer(content, replyingToId || undefined);
+        setReplyingToId(null);
+      } catch (error) {
+        console.error("Failed to submit answer:", error);
+      }
+    },
+    [replyingToId, onSubmitAnswer]
+  );
 
-  const handleReply = (answerId: string) => {
-    setReplyingToId(answerId);
-    if (onReply) {
-      onReply(answerId);
-    }
-  };
+  const handleReply = useCallback(
+    (answerId: string) => {
+      setReplyingToId(answerId);
+      if (onReply) {
+        onReply(answerId);
+      }
+    },
+    [onReply]
+  );
 
-  const toggleExpandReplies = (answerId: string) => {
-    const newExpanded = new Set(expandedReplies);
-    if (newExpanded.has(answerId)) {
-      newExpanded.delete(answerId);
-    } else {
-      newExpanded.add(answerId);
-    }
-    setExpandedReplies(newExpanded);
-  };
+  const toggleExpandReplies = useCallback((answerId: string) => {
+    setExpandedReplies(prev => {
+      const newExpanded = new Set(prev);
+      if (newExpanded.has(answerId)) {
+        newExpanded.delete(answerId);
+      } else {
+        newExpanded.add(answerId);
+      }
+      return newExpanded;
+    });
+  }, []);
 
   const renderAnswer = (answer: Answer, depth: number = 0): React.ReactNode => {
     const replies = answerMap.get(answer.id) || [];

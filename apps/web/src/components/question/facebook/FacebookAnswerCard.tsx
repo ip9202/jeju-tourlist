@@ -8,7 +8,7 @@ import { formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
 import { Heart, ThumbsDown, MoreHorizontal } from "lucide-react";
 
-export const FacebookAnswerCard: React.FC<FacebookAnswerCardProps> = ({
+const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
   answer,
   isNested = false,
   depth = 0,
@@ -186,5 +186,7 @@ export const FacebookAnswerCard: React.FC<FacebookAnswerCardProps> = ({
     </div>
   );
 };
+
+export const FacebookAnswerCard = React.memo(FacebookAnswerCardComponent);
 
 export default FacebookAnswerCard;
