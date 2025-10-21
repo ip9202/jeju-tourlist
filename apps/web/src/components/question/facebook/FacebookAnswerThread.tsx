@@ -7,7 +7,7 @@ import FacebookAnswerCard from "./FacebookAnswerCard";
 
 export const FacebookAnswerThread: React.FC<FacebookAnswerThreadProps> = ({
   answers,
-  _question,
+  question: _question,
   currentUser,
   onSubmitAnswer,
   onLike,

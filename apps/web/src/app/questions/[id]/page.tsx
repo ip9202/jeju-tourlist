@@ -16,6 +16,12 @@ import { EnhancedAnswerCard } from "@/components/question/EnhancedAnswerCard";
 import { SubPageHeader } from "@/components/layout/SubPageHeader";
 import { Header } from "@/components/layout/Header";
 import { api } from "@/lib/apiClient";
+import {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  handleApiError,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  isValidApiResponse,
+} from "@/lib/facebook-qa-converter";
 
 interface Question {
   id: string;
