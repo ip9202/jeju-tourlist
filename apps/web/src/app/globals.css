@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Facebook 스타일 Q&A 시스템 */
+@import '../styles/facebook-qa.css';
+
 
 
 @layer base {

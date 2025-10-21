@@ -86,12 +86,47 @@ module.exports = {
   				'3': 'hsl(var(--chart-3))',
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
+  			},
+  			facebook: {
+  				primary: '#0a66c2',
+  				'primary-light': '#e7f3ff',
+  				'primary-hover': '#004399',
+  				bg: '#f0f2f5',
+  				'bg-secondary': '#ffffff',
+  				'bg-tertiary': '#e5e7eb',
+  				'text-primary': '#050505',
+  				'text-secondary': '#65676b',
+  				'text-tertiary': '#90949c',
+  				border: '#ccc',
+  				'border-light': '#e5e7eb',
+  				divider: '#f0f2f5',
+  				'badge-accepted': '#10b981',
+  				'badge-accepted-bg': '#d1fae5',
+  				'badge-expert': '#3b82f6',
+  				'badge-expert-bg': '#dbeafe',
+  				'badge-newbie': '#f59e0b',
+  				'badge-newbie-bg': '#fef3c7',
+  				like: '#e4405f',
+  				dislike: '#90949c'
   			}
   		},
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
-  			sm: 'calc(var(--radius) - 4px)'
+  			sm: 'calc(var(--radius) - 4px)',
+  			fb: {
+  				sm: '4px',
+  				md: '8px',
+  				lg: '12px',
+  				xl: '16px',
+  				full: '20px',
+  				bubble: '18px'
+  			}
+  		},
+  		boxShadow: {
+  			'fb-sm': '0 1px 2px rgba(0, 0, 0, 0.05)',
+  			'fb-md': '0 4px 6px rgba(0, 0, 0, 0.07)',
+  			'fb-lg': '0 10px 15px rgba(0, 0, 0, 0.1)'
   		},
   		keyframes: {
   			'accordion-down': {

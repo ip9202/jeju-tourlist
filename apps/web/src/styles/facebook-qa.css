@@ -1,0 +1,644 @@
+/**
+ * Facebook 스타일 Q&A CSS 변수 및 스타일 정의
+ * 페이스북 스타일의 계층적 댓글 UI를 위한 스타일 시스템
+ */
+
+:root {
+  /* ═══════════════════════════════════════════════════
+     색상 팔레트
+     ═══════════════════════════════════════════════════ */
+
+  /* 주색상 */
+  --fb-primary: #0a66c2;
+  --fb-primary-light: #e7f3ff;
+  --fb-primary-hover: #004399;
+
+  /* 배경색 */
+  --fb-bg: #f0f2f5;
+  --fb-bg-secondary: #ffffff;
+  --fb-bg-tertiary: #e5e7eb;
+
+  /* 텍스트 색상 */
+  --fb-text-primary: #050505;
+  --fb-text-secondary: #65676b;
+  --fb-text-tertiary: #90949c;
+
+  /* 상태 색상 */
+  --fb-border: #ccc;
+  --fb-border-light: #e5e7eb;
+  --fb-divider: #f0f2f5;
+
+  /* 배지 색상 */
+  --fb-badge-accepted: #10b981;
+  --fb-badge-accepted-bg: #d1fae5;
+  --fb-badge-expert: #3b82f6;
+  --fb-badge-expert-bg: #dbeafe;
+  --fb-badge-newbie: #f59e0b;
+  --fb-badge-newbie-bg: #fef3c7;
+
+  /* 반응 색상 */
+  --fb-like: #e4405f;
+  --fb-dislike: #90949c;
+
+  /* ═══════════════════════════════════════════════════
+     타이포그래피
+     ═══════════════════════════════════════════════════ */
+
+  /* 제목 */
+  --fb-font-title: 600 0.875rem / 1.25rem -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Helvetica, Arial, sans-serif;
+
+  /* 본문 */
+  --fb-font-body: 400 0.8125rem / 1.3125rem -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Helvetica, Arial, sans-serif;
+
+  /* 캡션 */
+  --fb-font-caption: 400 0.75rem / 1rem -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Helvetica, Arial, sans-serif;
+
+  /* ═══════════════════════════════════════════════════
+     간격 (spacing)
+     ═══════════════════════════════════════════════════ */
+
+  --fb-spacing-xs: 4px;
+  --fb-spacing-sm: 8px;
+  --fb-spacing-md: 12px;
+  --fb-spacing-lg: 16px;
+  --fb-spacing-xl: 20px;
+  --fb-spacing-2xl: 24px;
+
+  /* ═══════════════════════════════════════════════════
+     Border Radius
+     ═══════════════════════════════════════════════════ */
+
+  --fb-radius-sm: 4px;
+  --fb-radius-md: 8px;
+  --fb-radius-lg: 12px;
+  --fb-radius-xl: 16px;
+  --fb-radius-full: 20px;
+  --fb-radius-bubble: 18px;
+
+  /* ═══════════════════════════════════════════════════
+     그림자 (shadows)
+     ═══════════════════════════════════════════════════ */
+
+  --fb-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --fb-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --fb-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+
+  /* ═══════════════════════════════════════════════════
+     트랜지션
+     ═══════════════════════════════════════════════════ */
+
+  --fb-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --fb-transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --fb-transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ═══════════════════════════════════════════════════
+   Facebook 질문 카드
+   ═══════════════════════════════════════════════════ */
+
+.facebook-question-card {
+  background-color: var(--fb-bg-secondary);
+  border-radius: var(--fb-radius-md);
+  box-shadow: var(--fb-shadow-sm);
+  border: 1px solid var(--fb-border-light);
+  transition: box-shadow var(--fb-transition-fast);
+}
+
+.facebook-question-card:hover {
+  box-shadow: var(--fb-shadow-md);
+}
+
+.facebook-question-header {
+  padding: var(--fb-spacing-lg);
+  border-bottom: 1px solid var(--fb-border-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.facebook-question-author {
+  display: flex;
+  align-items: center;
+  gap: var(--fb-spacing-md);
+}
+
+.facebook-question-author-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.facebook-question-author-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.facebook-question-author-name {
+  font: var(--fb-font-title);
+  color: var(--fb-text-primary);
+  margin: 0;
+}
+
+.facebook-question-author-time {
+  font: var(--fb-font-caption);
+  color: var(--fb-text-tertiary);
+  margin: 0;
+}
+
+.facebook-question-content {
+  padding: var(--fb-spacing-lg);
+}
+
+.facebook-question-title {
+  font: var(--fb-font-title);
+  color: var(--fb-text-primary);
+  margin: 0 0 var(--fb-spacing-md) 0;
+  line-height: 1.3;
+}
+
+.facebook-question-body {
+  font: var(--fb-font-body);
+  color: var(--fb-text-secondary);
+  margin: 0 0 var(--fb-spacing-md) 0;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.facebook-question-images {
+  display: grid;
+  gap: var(--fb-spacing-md);
+  margin-bottom: var(--fb-spacing-md);
+}
+
+.facebook-question-images.grid-1 {
+  grid-template-columns: 1fr;
+}
+
+.facebook-question-images.grid-2 {
+  grid-template-columns: 1fr 1fr;
+}
+
+.facebook-question-images.grid-3 {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.facebook-question-image {
+  width: 100%;
+  height: 192px;
+  object-fit: cover;
+  border-radius: var(--fb-radius-md);
+}
+
+.facebook-question-tags {
+  display: flex;
+  gap: var(--fb-spacing-sm);
+  margin-bottom: var(--fb-spacing-md);
+  flex-wrap: wrap;
+}
+
+.facebook-question-tag {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--fb-primary-light);
+  color: var(--fb-primary);
+  font: var(--fb-font-caption);
+  padding: var(--fb-spacing-xs) var(--fb-spacing-sm);
+  border-radius: var(--fb-radius-full);
+  white-space: nowrap;
+}
+
+.facebook-question-stats {
+  padding: var(--fb-spacing-md) var(--fb-spacing-lg);
+  border-top: 1px solid var(--fb-border-light);
+  border-bottom: 1px solid var(--fb-border-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font: var(--fb-font-caption);
+  color: var(--fb-text-tertiary);
+}
+
+.facebook-question-stat-item {
+  display: flex;
+  align-items: center;
+  gap: var(--fb-spacing-xs);
+}
+
+.facebook-question-actions {
+  padding: var(--fb-spacing-sm) var(--fb-spacing-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--fb-spacing-sm);
+}
+
+.facebook-question-action-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--fb-spacing-sm);
+  padding: var(--fb-spacing-md);
+  font: var(--fb-font-caption);
+  font-weight: 600;
+  border: none;
+  border-radius: var(--fb-radius-md);
+  cursor: pointer;
+  transition: background-color var(--fb-transition-fast);
+}
+
+.facebook-question-action-btn:hover {
+  background-color: var(--fb-bg);
+}
+
+.facebook-question-action-btn.liked {
+  color: var(--fb-like);
+  background-color: var(--fb-primary-light);
+}
+
+.facebook-question-action-btn.liked:hover {
+  background-color: var(--fb-primary-light);
+}
+
+.facebook-question-action-btn.bookmarked {
+  color: var(--fb-primary);
+  background-color: var(--fb-primary-light);
+}
+
+.facebook-question-action-btn.bookmarked:hover {
+  background-color: var(--fb-primary-light);
+}
+
+.facebook-question-action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ═══════════════════════════════════════════════════
+   Facebook 답변 입력
+   ═══════════════════════════════════════════════════ */
+
+.facebook-answer-input {
+  background-color: var(--fb-bg-secondary);
+  border: 1px solid var(--fb-border-light);
+  border-radius: var(--fb-radius-md);
+  box-shadow: var(--fb-shadow-sm);
+  transition: all var(--fb-transition-fast);
+  margin-bottom: var(--fb-spacing-lg);
+}
+
+.facebook-answer-input.focused {
+  border-color: var(--fb-primary);
+  box-shadow: var(--fb-shadow-md);
+}
+
+.facebook-answer-input.reply {
+  margin-left: var(--fb-spacing-2xl);
+}
+
+.facebook-answer-input-reply-header {
+  padding: var(--fb-spacing-md) var(--fb-spacing-lg) 0;
+  font: var(--fb-font-caption);
+  color: var(--fb-text-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.facebook-answer-input-reply-target {
+  font-weight: 600;
+  color: var(--fb-text-primary);
+}
+
+.facebook-answer-input-container {
+  padding: var(--fb-spacing-md);
+  display: flex;
+  gap: var(--fb-spacing-md);
+}
+
+.facebook-answer-input-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.facebook-answer-input-area {
+  flex: 1;
+}
+
+.facebook-answer-input-field {
+  width: 100%;
+  background-color: var(--fb-bg);
+  border: none;
+  border-radius: var(--fb-radius-full);
+  padding: var(--fb-spacing-md) var(--fb-spacing-lg);
+  font: var(--fb-font-body);
+  color: var(--fb-text-primary);
+  resize: none;
+  transition: all var(--fb-transition-fast);
+}
+
+.facebook-answer-input-field::placeholder {
+  color: var(--fb-text-tertiary);
+}
+
+.facebook-answer-input-field:focus {
+  outline: none;
+  background-color: var(--fb-bg-secondary);
+  border: 1px solid var(--fb-primary);
+  box-shadow: 0 0 0 3px var(--fb-primary-light);
+}
+
+.facebook-answer-input-field:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.facebook-answer-input-actions {
+  margin-top: var(--fb-spacing-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.facebook-answer-input-button-group {
+  display: flex;
+  gap: var(--fb-spacing-sm);
+}
+
+.facebook-answer-input-btn {
+  padding: var(--fb-spacing-md) var(--fb-spacing-lg);
+  font: var(--fb-font-caption);
+  font-weight: 600;
+  border: none;
+  border-radius: var(--fb-radius-md);
+  cursor: pointer;
+  transition: all var(--fb-transition-fast);
+}
+
+.facebook-answer-input-btn-cancel {
+  background-color: var(--fb-bg);
+  color: var(--fb-text-primary);
+}
+
+.facebook-answer-input-btn-cancel:hover {
+  background-color: var(--fb-bg-tertiary);
+}
+
+.facebook-answer-input-btn-submit {
+  background-color: var(--fb-primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: var(--fb-spacing-xs);
+}
+
+.facebook-answer-input-btn-submit:hover {
+  background-color: var(--fb-primary-hover);
+}
+
+.facebook-answer-input-btn-submit:disabled {
+  background-color: var(--fb-bg-tertiary);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* ═══════════════════════════════════════════════════
+   Facebook 답변 카드
+   ═══════════════════════════════════════════════════ */
+
+.facebook-answer-card {
+  display: flex;
+  gap: var(--fb-spacing-md);
+  padding: var(--fb-spacing-md) 0;
+}
+
+.facebook-answer-card.nested {
+  margin-left: var(--fb-spacing-2xl);
+}
+
+.facebook-answer-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.facebook-answer-bubble {
+  flex: 1;
+  background-color: var(--fb-bg);
+  border-radius: var(--fb-radius-bubble);
+  padding: var(--fb-spacing-md) var(--fb-spacing-lg);
+  transition: background-color var(--fb-transition-fast);
+}
+
+.facebook-answer-bubble:hover {
+  background-color: var(--fb-bg-tertiary);
+}
+
+.facebook-answer-header {
+  display: flex;
+  align-items: center;
+  gap: var(--fb-spacing-sm);
+  margin-bottom: var(--fb-spacing-xs);
+}
+
+.facebook-answer-author {
+  font: var(--fb-font-title);
+  color: var(--fb-text-primary);
+  margin: 0;
+}
+
+.facebook-answer-badges {
+  display: flex;
+  align-items: center;
+  gap: var(--fb-spacing-xs);
+}
+
+.facebook-answer-body {
+  font: var(--fb-font-body);
+  color: var(--fb-text-primary);
+  margin: 0 0 var(--fb-spacing-md) 0;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.facebook-answer-image {
+  max-width: 300px;
+  border-radius: var(--fb-radius-md);
+  margin-bottom: var(--fb-spacing-md);
+}
+
+.facebook-answer-footer {
+  display: flex;
+  align-items: center;
+  gap: var(--fb-spacing-lg);
+  margin-top: var(--fb-spacing-sm);
+  font: var(--fb-font-caption);
+  color: var(--fb-text-tertiary);
+}
+
+.facebook-answer-reactions {
+  display: flex;
+  align-items: center;
+  gap: var(--fb-spacing-md);
+}
+
+.facebook-answer-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--fb-spacing-md);
+}
+
+.facebook-answer-action-btn {
+  padding: 0;
+  background: none;
+  border: none;
+  color: var(--fb-text-tertiary);
+  font: var(--fb-font-caption);
+  font-weight: 600;
+  cursor: pointer;
+  transition: color var(--fb-transition-fast);
+}
+
+.facebook-answer-action-btn:hover {
+  color: var(--fb-text-secondary);
+}
+
+.facebook-answer-action-btn.liked {
+  color: var(--fb-like);
+}
+
+.facebook-answer-action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ═══════════════════════════════════════════════════
+   Facebook 배지
+   ═══════════════════════════════════════════════════ */
+
+.facebook-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fb-spacing-xs);
+  border-radius: var(--fb-radius-full);
+  font-weight: 600;
+}
+
+.facebook-badge.sm {
+  font: var(--fb-font-caption);
+  padding: var(--fb-spacing-xs) var(--fb-spacing-sm);
+}
+
+.facebook-badge.md {
+  font: var(--fb-font-body);
+  padding: var(--fb-spacing-xs) var(--fb-spacing-md);
+}
+
+.facebook-badge.lg {
+  font: var(--fb-font-title);
+  padding: var(--fb-spacing-md) var(--fb-spacing-lg);
+}
+
+.facebook-badge.accepted {
+  background-color: var(--fb-badge-accepted-bg);
+  color: var(--fb-badge-accepted);
+}
+
+.facebook-badge.expert {
+  background-color: var(--fb-badge-expert-bg);
+  color: var(--fb-badge-expert);
+}
+
+.facebook-badge.newbie {
+  background-color: var(--fb-badge-newbie-bg);
+  color: var(--fb-badge-newbie);
+}
+
+/* ═══════════════════════════════════════════════════
+   반응형 디자인
+   ═══════════════════════════════════════════════════ */
+
+@media (max-width: 1024px) {
+  .facebook-answer-input.reply {
+    margin-left: var(--fb-spacing-xl);
+  }
+
+  .facebook-answer-card.nested {
+    margin-left: var(--fb-spacing-xl);
+  }
+
+  .facebook-question-images.grid-3 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .facebook-question-card {
+    border-radius: var(--fb-radius-sm);
+  }
+
+  .facebook-question-header {
+    padding: var(--fb-spacing-md);
+  }
+
+  .facebook-question-content {
+    padding: var(--fb-spacing-md);
+  }
+
+  .facebook-question-stats {
+    padding: var(--fb-spacing-md);
+  }
+
+  .facebook-question-actions {
+    padding: var(--fb-spacing-sm);
+  }
+
+  .facebook-answer-input.reply {
+    margin-left: var(--fb-spacing-lg);
+  }
+
+  .facebook-answer-input-container {
+    padding: var(--fb-spacing-md);
+    gap: var(--fb-spacing-sm);
+  }
+
+  .facebook-answer-card.nested {
+    margin-left: var(--fb-spacing-lg);
+  }
+
+  .facebook-answer-bubble {
+    border-radius: var(--fb-radius-lg);
+    padding: var(--fb-spacing-sm) var(--fb-spacing-md);
+  }
+
+  .facebook-question-images.grid-2,
+  .facebook-question-images.grid-3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   다크모드
+   ═══════════════════════════════════════════════════ */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fb-bg-secondary: #242526;
+    --fb-bg: #3a3b3c;
+    --fb-bg-tertiary: #4a4b4d;
+    --fb-text-primary: #e4e6eb;
+    --fb-text-secondary: #b0b3b8;
+    --fb-text-tertiary: #8a8d91;
+    --fb-border: #3a3b3c;
+    --fb-border-light: #404040;
+    --fb-divider: #3a3b3c;
+  }
+}
