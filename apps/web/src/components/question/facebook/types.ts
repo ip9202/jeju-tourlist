@@ -9,6 +9,8 @@ export interface User {
   name: string;
   avatar?: string;
   email?: string;
+  createdAt?: string; // 계정 생성 날짜 (신입 판별용)
+  badge?: BadgeType; // 사용자 배지 (전문가)
 }
 
 export interface Question {

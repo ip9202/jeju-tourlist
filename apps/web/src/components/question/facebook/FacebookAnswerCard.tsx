@@ -3,9 +3,10 @@
 import React, { useState } from "react";
 import { FacebookAnswerCardProps } from "./types";
 import FacebookBadge from "./FacebookBadge";
+import { getBadgeType } from "./utils";
 import { formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
-import { Heart, ThumbsDown, MoreHorizontal, Check } from "lucide-react";
+import { Heart, ThumbsDown, MoreHorizontal } from "lucide-react";
 
 export const FacebookAnswerCard: React.FC<FacebookAnswerCardProps> = ({
   answer,
@@ -83,14 +84,12 @@ export const FacebookAnswerCard: React.FC<FacebookAnswerCardProps> = ({
             </span>
 
             {/* Badges */}
-            {answer.badge && <FacebookBadge type={answer.badge} size="sm" />}
-
-            {answer.isAccepted && (
-              <span className="inline-flex items-center gap-1 text-xs text-green-600">
-                <Check size={14} />
-                채택됨
-              </span>
-            )}
+            {(() => {
+              const badgeType = getBadgeType(answer);
+              return badgeType ? (
+                <FacebookBadge type={badgeType} size="sm" />
+              ) : null;
+            })()}
           </div>
 
           {/* Content */}

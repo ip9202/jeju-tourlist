@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import { FacebookAnswerThreadProps, Answer } from "./types";
+import { sortByBadgePriority } from "./utils";
 import FacebookAnswerInput from "./FacebookAnswerInput";
 import FacebookAnswerCard from "./FacebookAnswerCard";
 
@@ -21,7 +22,7 @@ export const FacebookAnswerThread: React.FC<FacebookAnswerThreadProps> = ({
     new Set()
   );
 
-  // 최상위 답변과 중첩 답변 분리
+  // 최상위 답변과 중첩 답변 분리 + 배지 우선순위로 정렬
   const { topLevelAnswers, answerMap } = useMemo(() => {
     const map = new Map<string, Answer[]>();
     const topLevel: Answer[] = [];
@@ -40,7 +41,10 @@ export const FacebookAnswerThread: React.FC<FacebookAnswerThreadProps> = ({
       }
     });
 
-    return { topLevelAnswers: topLevel, answerMap: map };
+    // 배지 우선순위로 정렬 (채택됨 > 전문가 > 신입)
+    const sortedTopLevel = sortByBadgePriority(topLevel);
+
+    return { topLevelAnswers: sortedTopLevel, answerMap: map };
   }, [answers]);
 
   const handleSubmitAnswer = async (content: string) => {
