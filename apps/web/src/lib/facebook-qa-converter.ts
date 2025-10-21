@@ -251,12 +251,11 @@ export const handleApiError = (error: unknown): string => {
  * @returns 유효 여부
  */
 export const isValidApiResponse = (response: unknown): boolean => {
-  return (
-    response &&
-    typeof response === "object" &&
-    (response as Record<string, unknown>).success === true &&
-    (response as Record<string, unknown>).data !== undefined
-  );
+  if (!response || typeof response !== "object") {
+    return false;
+  }
+  const data = response as Record<string, unknown>;
+  return Boolean(data.success === true && data.data !== undefined);
 };
 
 /**

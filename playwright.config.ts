@@ -113,15 +113,8 @@ export default defineConfig({
   /* 테스트 타임아웃 설정 (30초) */
   timeout: 30000,
 
-  /* 글로벌 셋업/티어다운 - 데이터베이스 없이 테스트 */
-  // globalSetup: require.resolve('./apps/web/src/__tests__/global-setup.ts'),
-  // globalTeardown: require.resolve('./apps/web/src/__tests__/global-teardown.ts'),
-
   /* 테스트 매칭 패턴 */
   testMatch: ["**/e2e/**/*.test.ts", "**/e2e/**/*.spec.ts"],
-
-  /* 무시할 파일 패턴 */
-  testIgnore: ["**/node_modules/**", "**/dist/**", "**/.next/**"],
 
   /* 환경변수 설정 */
   expect: {
