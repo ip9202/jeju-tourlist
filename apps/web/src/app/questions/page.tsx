@@ -222,7 +222,7 @@ function QuestionsPageContent() {
       </div>
 
       {/* 메인 콘텐츠 */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-full lg:max-w-7xl mx-auto px-3 md:px-4 lg:px-8 py-8">
         {/* 태블릿 필터 버튼 (md ~ lg 미만에서만 표시) */}
         <div className="hidden md:block lg:hidden mb-6">
           <div className="flex gap-2 overflow-x-auto pb-4">
@@ -256,7 +256,7 @@ function QuestionsPageContent() {
         </div>
 
         {/* 그리드 레이아웃 */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5">
           {/* 좌측 필터 사이드바 (lg 이상에서만 표시) */}
           <aside className="hidden lg:block lg:col-span-1">
             <div className="sticky-sidebar bg-white rounded-lg border border-gray-200 p-5 space-y-4">
@@ -369,7 +369,7 @@ function QuestionsPageContent() {
           </aside>
 
           {/* 우측 질문 목록 */}
-          <section className="lg:col-span-3">
+          <section className="col-span-full lg:col-span-3">
             {/* 질문 그리드 */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {loading ? (
