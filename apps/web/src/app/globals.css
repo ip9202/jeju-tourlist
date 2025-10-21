@@ -309,3 +309,9 @@
     background-color: hsl(var(--foreground));
   }
 }
+
+/* 디자인 파일 동기화 - sticky sidebar */
+.sticky-sidebar {
+  position: sticky;
+  top: 140px;
+}

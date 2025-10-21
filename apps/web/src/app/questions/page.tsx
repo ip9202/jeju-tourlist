@@ -259,7 +259,7 @@ function QuestionsPageContent() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
           {/* 좌측 필터 사이드바 (lg 이상에서만 표시) */}
           <aside className="hidden lg:block lg:col-span-1">
-            <div className="sticky top-32 bg-white rounded-lg border border-gray-200 p-5 space-y-4">
+            <div className="sticky-sidebar bg-white rounded-lg border border-gray-200 p-5 space-y-4">
               {/* 카테고리 필터 */}
               <div>
                 <h3 className="text-xs font-bold text-gray-900 mb-2 uppercase">
