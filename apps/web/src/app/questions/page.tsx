@@ -256,16 +256,16 @@ function QuestionsPageContent() {
         </div>
 
         {/* 그리드 레이아웃 */}
-        <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
           {/* 좌측 필터 사이드바 (lg 이상에서만 표시) */}
           <aside className="hidden lg:block lg:col-span-1">
-            <div className="sticky top-32 bg-white rounded-lg border border-gray-200 p-6 space-y-6">
+            <div className="sticky top-32 bg-white rounded-lg border border-gray-200 p-5 space-y-4">
               {/* 카테고리 필터 */}
               <div>
-                <h3 className="text-sm font-bold text-gray-900 mb-3">
+                <h3 className="text-xs font-bold text-gray-900 mb-2 uppercase">
                   카테고리
                 </h3>
-                <div className="space-y-2">
+                <div className="space-y-1">
                   <label className="flex items-center gap-3 cursor-pointer hover:bg-gray-50 p-2 rounded">
                     <input
                       type="checkbox"
@@ -297,9 +297,11 @@ function QuestionsPageContent() {
               </div>
 
               {/* 상태 필터 */}
-              <div className="border-t border-gray-200 pt-6">
-                <h3 className="text-sm font-bold text-gray-900 mb-3">상태</h3>
-                <div className="space-y-2">
+              <div className="border-t border-gray-200 pt-4">
+                <h3 className="text-xs font-bold text-gray-900 mb-2 uppercase">
+                  상태
+                </h3>
+                <div className="space-y-1">
                   <label className="flex items-center gap-3 cursor-pointer hover:bg-gray-50 p-2 rounded">
                     <input
                       type="radio"
@@ -336,8 +338,10 @@ function QuestionsPageContent() {
               </div>
 
               {/* 정렬 필터 */}
-              <div className="border-t border-gray-200 pt-6">
-                <h3 className="text-sm font-bold text-gray-900 mb-3">정렬</h3>
+              <div className="border-t border-gray-200 pt-4">
+                <h3 className="text-xs font-bold text-gray-900 mb-2 uppercase">
+                  정렬
+                </h3>
                 <select
                   value={`${filters.sortBy}-${filters.sortOrder}`}
                   onChange={e => {
@@ -417,10 +421,10 @@ function QuestionsPageContent() {
                   <Link
                     key={question.id}
                     href={`/questions/${question.id}`}
-                    className="bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow"
+                    className="bg-white rounded-lg border border-gray-200 p-3 hover:shadow-md transition-shadow"
                   >
                     {/* 카테고리 & 상태 배지 */}
-                    <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-start justify-between mb-2">
                       <div className="flex items-center gap-2">
                         <span className="inline-block bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
                           {question.category?.name || "일반"}
@@ -442,14 +446,14 @@ function QuestionsPageContent() {
                     </h3>
 
                     {/* 메타 정보 */}
-                    <div className="flex items-center gap-3 mb-3 flex-wrap text-xs sm:text-sm text-gray-500">
+                    <div className="flex items-center gap-3 mb-2 flex-wrap text-xs sm:text-sm text-gray-500">
                       <span>💬 {question.answerCount || 0}개 답변</span>
                       <span>👁️ {question.viewCount || 0} 조회</span>
                       <span>⏰ {safeFormatSimpleDate(question.createdAt)}</span>
                     </div>
 
                     {/* 작성자 및 보기 버튼 */}
-                    <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+                    <div className="flex items-center justify-between pt-2 border-t border-gray-100">
                       <div className="flex items-center gap-2">
                         <div className="w-6 h-6 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center text-white text-xs font-bold">
                           {question.author?.name?.charAt(0) || "U"}
