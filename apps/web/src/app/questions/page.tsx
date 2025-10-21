@@ -256,7 +256,7 @@ function QuestionsPageContent() {
         </div>
 
         {/* 그리드 레이아웃 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
           {/* 좌측 필터 사이드바 (lg 이상에서만 표시) */}
           <aside className="hidden lg:block lg:col-span-1">
             <div className="sticky-sidebar bg-white rounded-lg border border-gray-200 p-5 space-y-4">
