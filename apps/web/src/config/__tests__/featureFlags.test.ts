@@ -245,3 +245,181 @@ describe("featureFlags", () => {
     });
   });
 });
+
+/**
+ * SSR 환경 및 환경 변수 조합 테스트
+ * Line 39 (SSR 환경) 커버리지 개선
+ */
+describe("getCurrentRolloutStage - SSR 환경 처리 추가", () => {
+  it("window 객체가 없는 SSR 환경에서도 안전하게 동작해야 함", () => {
+    const originalWindow = global.window;
+
+    try {
+      // @ts-expect-error - test environment requires window deletion
+      delete (global as Record<string, unknown>).window;
+
+      const stage = getCurrentRolloutStage();
+      expect(stage).toBe("development");
+      expect(typeof stage).toBe("string");
+    } finally {
+      (global as Record<string, unknown>).window = originalWindow;
+    }
+  });
+
+  it("SSR 환경에서도 다른 환경 변수 무시하고 development 반환", () => {
+    const originalWindow = global.window;
+    process.env.NEXT_PUBLIC_ROLLOUT_STAGE = "stage-3";
+
+    try {
+      // @ts-expect-error - test environment requires window deletion
+      delete (global as Record<string, unknown>).window;
+
+      const stage = getCurrentRolloutStage();
+      expect(stage).toBe("development");
+    } finally {
+      (global as Record<string, unknown>).window = originalWindow;
+      delete process.env.NEXT_PUBLIC_ROLLOUT_STAGE;
+    }
+  });
+});
+
+/**
+ * shouldUseFacebookUI 함수의 모든 경로 커버리지 테스트
+ */
+describe("shouldUseFacebookUI - 모든 경로 커버리지", () => {
+  it("환경 변수 NEXT_PUBLIC_USE_FACEBOOK_UI이 true일 때 userId 무관하게 true 반환", () => {
+    process.env.NEXT_PUBLIC_USE_FACEBOOK_UI = "true";
+
+    expect(shouldUseFacebookUI()).toBe(true);
+    expect(shouldUseFacebookUI("user-123")).toBe(true);
+    expect(shouldUseFacebookUI("any-user")).toBe(true);
+
+    delete process.env.NEXT_PUBLIC_USE_FACEBOOK_UI;
+  });
+
+  it("환경 변수 NEXT_PUBLIC_USE_FACEBOOK_UI이 false일 때 userId 무관하게 false 반환", () => {
+    process.env.NEXT_PUBLIC_USE_FACEBOOK_UI = "false";
+
+    expect(shouldUseFacebookUI()).toBe(false);
+    expect(shouldUseFacebookUI("user-123")).toBe(false);
+
+    delete process.env.NEXT_PUBLIC_USE_FACEBOOK_UI;
+  });
+
+  it("development 단계에서 명시적으로 true 반환 (롤아웃 로직)", () => {
+    delete process.env.NEXT_PUBLIC_USE_FACEBOOK_UI;
+    process.env.NEXT_PUBLIC_ROLLOUT_STAGE = "development";
+
+    const result1 = shouldUseFacebookUI("user-123");
+    const result2 = shouldUseFacebookUI("test-user");
+    const result3 = shouldUseFacebookUI("admin");
+
+    expect(result1).toBe(true);
+    expect(result2).toBe(true);
+    expect(result3).toBe(true);
+
+    delete process.env.NEXT_PUBLIC_ROLLOUT_STAGE;
+  });
+
+  it("stage-1 (5%)에서 정확한 경계값 테스트", () => {
+    delete process.env.NEXT_PUBLIC_USE_FACEBOOK_UI;
+    process.env.NEXT_PUBLIC_ROLLOUT_STAGE = "stage-1";
+
+    // 경계값이 5인 경우를 찾기 위해 여러 사용자 테스트
+    let foundLowHash = false;
+    let foundHighHash = false;
+
+    for (let i = 0; i < 100; i++) {
+      const userId = `boundary-test-${i}`;
+      const hash = hashUserId(userId);
+      const result = shouldUseFacebookUI(userId);
+
+      if (hash < 5) {
+        foundLowHash = true;
+        expect(result).toBe(true);
+      } else {
+        foundHighHash = true;
+        expect(result).toBe(false);
+      }
+    }
+
+    expect(foundLowHash).toBe(true);
+    expect(foundHighHash).toBe(true);
+
+    delete process.env.NEXT_PUBLIC_ROLLOUT_STAGE;
+  });
+});
+
+/**
+ * hashUserId 함수의 분포 테스트
+ */
+describe("hashUserId - 분포 및 경계 테스트", () => {
+  it("매우 긴 userId도 0-99 범위 내 해시값 반환", () => {
+    const longUserId = "a".repeat(1000);
+    const hash = hashUserId(longUserId);
+    expect(hash).toBeGreaterThanOrEqual(0);
+    expect(hash).toBeLessThan(100);
+  });
+
+  it("숫자만으로 이루어진 userId 해싱", () => {
+    const hash = hashUserId("123456789");
+    expect(hash).toBeGreaterThanOrEqual(0);
+    expect(hash).toBeLessThan(100);
+  });
+
+  it("유니코드 문자 포함 userId 해싱", () => {
+    const hash = hashUserId("사용자123");
+    expect(hash).toBeGreaterThanOrEqual(0);
+    expect(hash).toBeLessThan(100);
+  });
+
+  it("해시 분포가 적당히 균등해야 함", () => {
+    const hashes = [];
+    for (let i = 0; i < 500; i++) {
+      hashes.push(hashUserId(`user-${i}`));
+    }
+
+    // 모든 해시가 0-99 범위 내
+    expect(Math.min(...hashes)).toBeGreaterThanOrEqual(0);
+    expect(Math.max(...hashes)).toBeLessThan(100);
+
+    // 분포가 너무 편향되지 않았는지 확인
+    const average = hashes.reduce((a, b) => a + b, 0) / hashes.length;
+    expect(average).toBeGreaterThan(35);
+    expect(average).toBeLessThan(65);
+  });
+});
+
+/**
+ * getFeatureFlagStatus 함수의 환경 변수 우선순위 테스트
+ */
+describe("getFeatureFlagStatus - 환경 변수 우선순위", () => {
+  it("환경 변수 NEXT_PUBLIC_USE_FACEBOOK_UI이 설정되면 우선 사용", () => {
+    process.env.NEXT_PUBLIC_USE_FACEBOOK_UI = "true";
+    process.env.NEXT_PUBLIC_ROLLOUT_STAGE = "stage-1";
+
+    const status = getFeatureFlagStatus("user-123");
+
+    expect(status.useFacebookUI).toBe(true);
+    expect(status.userHash).toBeDefined();
+
+    delete process.env.NEXT_PUBLIC_USE_FACEBOOK_UI;
+    delete process.env.NEXT_PUBLIC_ROLLOUT_STAGE;
+  });
+
+  it("환경 변수가 false일 때도 올바르게 반영", () => {
+    process.env.NEXT_PUBLIC_USE_FACEBOOK_UI = "false";
+
+    const status = getFeatureFlagStatus("user-123");
+
+    expect(status.useFacebookUI).toBe(false);
+
+    delete process.env.NEXT_PUBLIC_USE_FACEBOOK_UI;
+  });
+
+  it("userId 없을 때 userHash는 null이어야 함", () => {
+    const status = getFeatureFlagStatus();
+
+    expect(status.userHash).toBeNull();
+  });
+});

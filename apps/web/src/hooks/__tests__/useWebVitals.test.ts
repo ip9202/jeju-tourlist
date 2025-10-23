@@ -19,6 +19,7 @@ class MockPerformanceObserver {
     mockObserverCallback(callback);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   observe(_options?: PerformanceObserverInit) {
     // 모킹된 관찰 시작
   }
@@ -151,6 +152,156 @@ describe("useWebVitals hook", () => {
 
       expect(_analyticsResult.current).toBeDefined();
       expect(_vitalResult.current).toBeUndefined();
+    });
+  });
+
+  /**
+   * useWebVitals Observer 콜백 검증
+   */
+  describe("Observer 생성 및 콜백", () => {
+    let capturedCallbacks: PerformanceObserverCallback[] = [];
+
+    beforeEach(() => {
+      capturedCallbacks = [];
+      mockObserverCallback.mockClear();
+
+      class CallbackCapturingObserver {
+        constructor(callback: PerformanceObserverCallback) {
+          capturedCallbacks.push(callback);
+          mockObserverCallback(callback);
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        observe(_options?: PerformanceObserverInit) {
+          // observe 호출
+        }
+
+        disconnect() {
+          // disconnect 호출
+        }
+      }
+
+      // @ts-expect-error - test environment requires mock PerformanceObserver
+      window.PerformanceObserver = CallbackCapturingObserver;
+    });
+
+    it("LCP, FCP, CLS, INP 각 observer의 콜백이 캡처되어야 함", () => {
+      renderHook(() => useWebVitals());
+
+      expect(capturedCallbacks.length).toBeGreaterThanOrEqual(3);
+    });
+
+    it("LCP 콜백이 정상적으로 실행되어야 함", () => {
+      renderHook(() => useWebVitals());
+
+      if (capturedCallbacks.length > 0) {
+        const lcpCallback = capturedCallbacks[0];
+        const mockEntryList: Record<string, unknown> = {
+          getEntries: () => [
+            { startTime: 1000, duration: 0 },
+            { startTime: 1500, duration: 0 },
+          ],
+        };
+
+        expect(() => {
+          lcpCallback(mockEntryList, {} as PerformanceObserver);
+        }).not.toThrow();
+      }
+    });
+
+    it("FCP 콜백이 정상적으로 실행되어야 함", () => {
+      renderHook(() => useWebVitals());
+
+      if (capturedCallbacks.length > 1) {
+        const fcpCallback = capturedCallbacks[1];
+        const mockEntryList: Record<string, unknown> = {
+          getEntries: () => [
+            { name: "first-contentful-paint", startTime: 800 },
+          ],
+        };
+
+        expect(() => {
+          fcpCallback(mockEntryList, {} as PerformanceObserver);
+        }).not.toThrow();
+      }
+    });
+
+    it("CLS 콜백이 정상적으로 실행되어야 함", () => {
+      renderHook(() => useWebVitals());
+
+      if (capturedCallbacks.length > 2) {
+        const clsCallback = capturedCallbacks[2];
+        const mockEntryList: Record<string, unknown> = {
+          getEntries: () => [
+            { hadRecentInput: false, value: 0.05 },
+            { hadRecentInput: false, value: 0.03 },
+          ],
+        };
+
+        expect(() => {
+          clsCallback(mockEntryList, {} as PerformanceObserver);
+        }).not.toThrow();
+      }
+    });
+
+    it("INP 콜백이 정상적으로 실행되어야 함", () => {
+      renderHook(() => useWebVitals());
+
+      if (capturedCallbacks.length > 3) {
+        const inpCallback = capturedCallbacks[3];
+        const mockEntryList: Record<string, unknown> = {
+          getEntries: () => [{ duration: 100 }, { duration: 200 }],
+        };
+
+        expect(() => {
+          inpCallback(mockEntryList, {} as PerformanceObserver);
+        }).not.toThrow();
+      }
+    });
+  });
+
+  /**
+   * 에러 처리 및 console 로깅
+   */
+  describe("에러 처리", () => {
+    it("Observer 생성 실패 시 console.warn을 호출해야 함", () => {
+      const consoleWarnSpy = jest.spyOn(console, "warn").mockImplementation();
+
+      let callCount = 0;
+      (window.PerformanceObserver as Record<string, unknown>) = jest.fn(() => {
+        callCount++;
+        if (callCount === 1) {
+          throw new Error("Observer creation failed");
+        }
+        return new MockPerformanceObserver(() => {});
+      });
+
+      renderHook(() => useWebVitals());
+
+      expect(consoleWarnSpy).toHaveBeenCalled();
+      consoleWarnSpy.mockRestore();
+    });
+
+    it("PerformanceObserver 미지원 시 경고를 로깅해야 함", () => {
+      const consoleWarnSpy = jest.spyOn(console, "warn").mockImplementation();
+      const originalPerformanceObserver = window.PerformanceObserver;
+
+      try {
+        // @ts-expect-error - test environment requires PerformanceObserver deletion
+        delete window.PerformanceObserver;
+
+        renderHook(() => useWebVitals());
+
+        expect(consoleWarnSpy).toHaveBeenCalledWith(
+          expect.stringContaining("[WebVitals]")
+        );
+      } finally {
+        Object.defineProperty(window, "PerformanceObserver", {
+          value: originalPerformanceObserver,
+          configurable: true,
+        });
+        consoleWarnSpy.mockRestore();
+      }
     });
   });
 });
