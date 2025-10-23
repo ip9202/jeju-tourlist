@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
+import { useNewFacebookUI } from "@/hooks/useNewFacebookUI";
 import { Button, Heading, Text, ImageLightbox } from "@jeju-tourlist/ui";
 import {
   ArrowLeft,
@@ -73,6 +74,7 @@ export default function QuestionDetailPage() {
   const params = useParams();
   const router = useRouter();
   const { user } = useAuth();
+  const { useFacebookUI } = useNewFacebookUI();
   const [question, setQuestion] = useState<Question | null>(null);
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [loading, setLoading] = useState(true);
@@ -173,14 +175,16 @@ export default function QuestionDetailPage() {
         if (parentId) {
           // 대댓글인 경우 - 부모 답변의 replyCount 증가
           setAnswers(prev =>
-            prev.map(answer =>
-              answer.id === parentId
-                ? {
-                    ...answer,
-                    replyCount: (answer.replyCount || 0) + 1,
-                  }
-                : answer
-            ).concat(response.data)
+            prev
+              .map(answer =>
+                answer.id === parentId
+                  ? {
+                      ...answer,
+                      replyCount: (answer.replyCount || 0) + 1,
+                    }
+                  : answer
+              )
+              .concat(response.data)
           );
         } else {
           // 메인 답변인 경우
@@ -198,9 +202,7 @@ export default function QuestionDetailPage() {
     } catch (error) {
       console.error("작성 실패:", error);
       setAnswerError(
-        error instanceof Error
-          ? error.message
-          : "작성 중 오류가 발생했습니다."
+        error instanceof Error ? error.message : "작성 중 오류가 발생했습니다."
       );
     } finally {
       setIsSubmitting(false);
@@ -527,50 +529,58 @@ export default function QuestionDetailPage() {
 
           {/* Facebook 스타일 답변 스레드 */}
           {user && question ? (
-            <FacebookAnswerThread
-              question={{
-                id: question.id,
-                title: question.title,
-                content: question.content,
-                author: {
-                  id: question.author.id,
-                  name: question.author.name,
-                  avatar: question.author.avatar || undefined,
-                },
-                createdAt: question.createdAt,
-                likeCount: question.likeCount,
-                answerCount: question.answerCount,
-                viewCount: question.viewCount,
-                tags: question.tags,
-              }}
-              answers={answers.map(answer => ({
-                id: answer.id,
-                content: answer.content,
-                author: {
-                  id: answer.author.id,
-                  name: answer.author.name,
-                  avatar: answer.author.avatar || undefined,
-                },
-                createdAt: answer.createdAt,
-                likeCount: answer.likeCount,
-                dislikeCount: answer.dislikeCount || 0,
-                isLiked: answer.isLiked || false,
-                isDisliked: answer.isDisliked || false,
-                isAccepted: answer.isAccepted,
-                parentId: answer.parentId || undefined,
-                replyCount: answer.replyCount || 0,
-              }))}
-              currentUser={{
-                id: user.id,
-                name: user.name || user.email,
-              }}
-              onSubmitAnswer={handleAnswerSubmit}
-              onLike={handleAnswerLike}
-              onDislike={handleAnswerDislike}
-              onReply={() => {}}
-              isLoading={isSubmitting}
-              maxDepth={2}
-            />
+            useFacebookUI ? (
+              <FacebookAnswerThread
+                question={{
+                  id: question.id,
+                  title: question.title,
+                  content: question.content,
+                  author: {
+                    id: question.author.id,
+                    name: question.author.name,
+                    avatar: question.author.avatar || undefined,
+                  },
+                  createdAt: question.createdAt,
+                  likeCount: question.likeCount,
+                  answerCount: question.answerCount,
+                  viewCount: question.viewCount,
+                  tags: question.tags,
+                }}
+                answers={answers.map(answer => ({
+                  id: answer.id,
+                  content: answer.content,
+                  author: {
+                    id: answer.author.id,
+                    name: answer.author.name,
+                    avatar: answer.author.avatar || undefined,
+                  },
+                  createdAt: answer.createdAt,
+                  likeCount: answer.likeCount,
+                  dislikeCount: answer.dislikeCount || 0,
+                  isLiked: answer.isLiked || false,
+                  isDisliked: answer.isDisliked || false,
+                  isAccepted: answer.isAccepted,
+                  parentId: answer.parentId || undefined,
+                  replyCount: answer.replyCount || 0,
+                }))}
+                currentUser={{
+                  id: user.id,
+                  name: user.name || user.email,
+                }}
+                onSubmitAnswer={handleAnswerSubmit}
+                onLike={handleAnswerLike}
+                onDislike={handleAnswerDislike}
+                onReply={() => {}}
+                isLoading={isSubmitting}
+                maxDepth={2}
+              />
+            ) : (
+              <div className="text-center py-8">
+                <Text className="text-gray-600 mb-4">
+                  기존 답변 시스템입니다.
+                </Text>
+              </div>
+            )
           ) : (
             <div className="text-center py-8">
               <Text className="text-gray-600 mb-4">
