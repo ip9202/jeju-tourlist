@@ -200,35 +200,43 @@ export default async function Home() {
                 <MoreHorizontal className="w-8 h-8" />
               );
               return (
-                <Link
+                <div
                   key={category.id}
-                  href="/categories"
-                  className="bg-white rounded-lg border border-gray-200 p-4 text-left hover:shadow-lg transition-shadow cursor-pointer block flex flex-col h-full"
+                  className="bg-white rounded-lg border border-gray-200 p-4 text-left hover:shadow-lg transition-shadow flex flex-col h-full"
                 >
-                  {/* 아이콘 */}
-                  <div className="mb-2 text-blue-500">{icon}</div>
+                  {/* 클릭 가능한 카테고리 선택 영역 */}
+                  <Link
+                    href={`/categories?selectedId=${category.id}`}
+                    className="flex-grow block"
+                  >
+                    {/* 아이콘 */}
+                    <div className="mb-2 text-blue-500">{icon}</div>
 
-                  {/* 카테고리명 */}
-                  <h4 className="font-bold text-gray-900 mb-0.5 text-sm">
-                    {categoryName}
-                  </h4>
+                    {/* 카테고리명 */}
+                    <h4 className="font-bold text-gray-900 mb-0.5 text-sm">
+                      {categoryName}
+                    </h4>
 
-                  {/* 질문 개수 */}
-                  <p className="text-gray-500 text-xs mb-1.5">
-                    {Math.floor(Math.random() * 20 + 5)}개 질문
-                  </p>
+                    {/* 질문 개수 */}
+                    <p className="text-gray-500 text-xs mb-1.5">
+                      {Math.floor(Math.random() * 20 + 5)}개 질문
+                    </p>
 
-                  {/* 설명 */}
-                  <p className="text-gray-600 text-xs flex-grow mb-2 line-clamp-2">
-                    {categoryDescriptions[categoryName] || ""}
-                  </p>
+                    {/* 설명 */}
+                    <p className="text-gray-600 text-xs flex-grow mb-2 line-clamp-2">
+                      {categoryDescriptions[categoryName] || ""}
+                    </p>
+                  </Link>
 
                   {/* 질문 보기 링크 */}
-                  <div className="text-blue-600 text-xs font-medium flex items-center gap-1">
+                  <Link
+                    href={`/questions?categoryId=${category.id}`}
+                    className="text-blue-600 hover:text-blue-800 text-xs font-medium flex items-center gap-1"
+                  >
                     질문 보기
                     <ChevronRight className="w-3 h-3" />
-                  </div>
-                </Link>
+                  </Link>
+                </div>
               );
             })}
           </div>

@@ -11,10 +11,11 @@ import {
   Bookmark,
   Heart,
   MessageCircle,
+  Trash2,
 } from "lucide-react";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { FacebookAnswerThread } from "@/components/question/facebook";
-import { SubPageHeader } from "@/components/layout/SubPageHeader";
+
 import { Header } from "@/components/layout/Header";
 import { api } from "@/lib/apiClient";
 import {
@@ -374,36 +375,42 @@ export default function QuestionDetailPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      {/* 간결한 헤더 */}
-      <SubPageHeader
-        title={question?.title || "질문 상세"}
-        showBackButton={true}
-        showHomeButton={true}
-        actions={
-          <div className="flex items-center space-x-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => {}}
-              className="text-gray-600 hover:text-gray-900"
-            >
-              <Share2 className="w-4 h-4" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => {}}
-              className="text-gray-600 hover:text-gray-900"
-            >
-              <Bookmark className="w-4 h-4" />
-            </Button>
-          </div>
-        }
-      />
 
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* 질문 상세 */}
         <div className="bg-white rounded-lg shadow-md p-8 mb-8">
+          {/* 질문 제목 및 액션 버튼 */}
+          <div className="flex items-start justify-between mb-6 pb-6 border-b border-gray-200">
+            <h1 className="text-2xl font-bold text-gray-900 flex-grow pr-4">
+              {question.title}
+            </h1>
+            <div className="flex items-center space-x-2 flex-shrink-0">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {}}
+                className="text-gray-600 hover:text-gray-900"
+              >
+                <Share2 className="w-4 h-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {}}
+                className="text-gray-600 hover:text-gray-900"
+              >
+                <Bookmark className="w-4 h-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleDeleteQuestion}
+                className="text-gray-600 hover:text-red-600"
+              >
+                <Trash2 className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
           <div className="mb-6">
             <div className="flex items-center space-x-4 text-xs text-gray-500 mb-3">
               <span>조회 {question.viewCount}</span>
@@ -425,18 +432,6 @@ export default function QuestionDetailPage() {
                 ))}
               </div>
             )}
-            {/* 작성자만 표시 - 임시로 모든 사용자에게 표시 */}
-            <div className="flex space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleDeleteQuestion}
-                className="text-red-600 hover:bg-red-50 text-xs px-2 py-1"
-                data-testid="delete-question-button"
-              >
-                삭제
-              </Button>
-            </div>
           </div>
 
           <div className="mb-6">

@@ -23,14 +23,10 @@ export function createCategoryRouter(prisma: PrismaClient): Router {
       const categories = await prisma.category.findMany({
         where: includeInactive === "true" ? {} : { isActive: true },
         orderBy: { order: "asc" },
-        select: {
-          id: true,
-          name: true,
-          description: true,
-          color: true,
-          icon: true,
-          order: true,
-          isActive: true,
+        include: {
+          _count: {
+            select: { questions: true },
+          },
         },
       });
 

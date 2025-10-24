@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import {
   Landmark,
   Utensils,
@@ -15,6 +16,7 @@ import {
   MessageSquare,
   Eye,
   Clock,
+  ChevronDown,
 } from "lucide-react";
 import Link from "next/link";
 import { Header } from "@/components/layout/Header";
@@ -63,6 +65,9 @@ function formatTimeAgo(date: string): string {
 interface Category {
   id: string;
   name: string;
+  _count?: {
+    questions: number;
+  };
 }
 
 interface Question {
@@ -78,11 +83,26 @@ interface Question {
 }
 
 export default function CategoriesPage() {
+  const searchParams = useSearchParams();
+  const selectedIdFromUrl = searchParams.get("selectedId");
+
   const [categories, setCategories] = useState<Category[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>("cat_002"); // 맛집 기본값
-  const [questions, setQuestions] = useState<Question[]>([]);
-  const [sortBy, setSortBy] = useState<string>("latest");
-  const [loading, setLoading] = useState(true);
+  const [expandedCategory, setExpandedCategory] = useState<string | null>(
+    selectedIdFromUrl || null
+  );
+  const [questionsMap, setQuestionsMap] = useState<Record<string, Question[]>>(
+    {}
+  );
+  const [loadingMap, setLoadingMap] = useState<Record<string, boolean>>({});
+  const [sortByMap, setSortByMap] = useState<Record<string, string>>({}); // 각 카테고리별 정렬
+
+  // URL의 selectedId가 변경되면 expandedCategory 업데이트
+  useEffect(() => {
+    if (selectedIdFromUrl) {
+      setExpandedCategory(selectedIdFromUrl);
+      loadCategoryQuestions(selectedIdFromUrl);
+    }
+  }, [selectedIdFromUrl]);
 
   // 카테고리 로드
   useEffect(() => {
@@ -93,42 +113,75 @@ export default function CategoriesPage() {
         });
         const data = await res.json();
         setCategories(data.data || []);
-        setLoading(false);
       } catch (error) {
         console.error("카테고리 로드 실패:", error);
-        setLoading(false);
       }
     };
 
     fetchCategories();
   }, []);
 
-  // 선택된 카테고리의 질문 로드
-  useEffect(() => {
-    const fetchQuestions = async () => {
-      try {
-        let url = `http://localhost:4000/api/questions?categoryId=${selectedCategory}&limit=10`;
+  // 특정 카테고리의 질문 로드
+  const loadCategoryQuestions = async (
+    categoryId: string,
+    forceRefresh: boolean = false
+  ) => {
+    // 이미 로드된 경우 스킵 (forceRefresh가 false일 때만)
+    if (!forceRefresh && questionsMap[categoryId]) {
+      return;
+    }
 
-        if (sortBy === "popular") {
-          url += "&sort=answerCount";
-        } else if (sortBy === "views") {
-          url += "&sort=viewCount";
-        }
+    setLoadingMap(prev => ({ ...prev, [categoryId]: true }));
 
-        const res = await fetch(url, { cache: "no-store" });
-        const data = await res.json();
-        setQuestions(data.data || []);
-      } catch (error) {
-        console.error("질문 로드 실패:", error);
-        setQuestions([]);
+    try {
+      let url = `http://localhost:4000/api/questions?categoryId=${categoryId}&limit=10`;
+
+      const sort = sortByMap[categoryId] || "latest";
+      if (sort === "popular") {
+        url += "&sortBy=answerCount";
+      } else if (sort === "views") {
+        url += "&sortBy=viewCount";
       }
-    };
 
-    fetchQuestions();
-  }, [selectedCategory, sortBy]);
+      const res = await fetch(url, { cache: "no-store" });
+      const data = await res.json();
+      setQuestionsMap(prev => ({
+        ...prev,
+        [categoryId]: data.data || [],
+      }));
+    } catch (error) {
+      console.error("질문 로드 실패:", error);
+      setQuestionsMap(prev => ({
+        ...prev,
+        [categoryId]: [],
+      }));
+    } finally {
+      setLoadingMap(prev => ({ ...prev, [categoryId]: false }));
+    }
+  };
 
-  const selectedCategoryName =
-    categories.find(c => c.id === selectedCategory)?.name || "카테고리";
+  // 카테고리 토글
+  const handleCategoryToggle = (categoryId: string) => {
+    if (expandedCategory === categoryId) {
+      // 이미 열려있으면 닫기
+      setExpandedCategory(null);
+    } else {
+      // 새로운 카테고리 열기
+      setExpandedCategory(categoryId);
+      // 질문 로드
+      loadCategoryQuestions(categoryId);
+    }
+  };
+
+  // 정렬 변경 핸들러
+  const handleSortChange = (categoryId: string, sortValue: string) => {
+    setSortByMap(prev => ({
+      ...prev,
+      [categoryId]: sortValue,
+    }));
+    // 질문 다시 로드
+    loadCategoryQuestions(categoryId, true);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -142,175 +195,153 @@ export default function CategoriesPage() {
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">
             카테고리
           </h1>
-          <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">
+          <p className="text-sm sm:text-base text-gray-600">
             제주도 여행에 필요한 정보를 카테고리별로 찾아보세요
           </p>
-
-          <div className="flex gap-1.5 sm:gap-2 flex-wrap">
-            <button
-              onClick={() => setSortBy("latest")}
-              className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all ${
-                sortBy === "latest"
-                  ? "bg-blue-500 text-white"
-                  : "bg-white border border-gray-300 text-gray-700 hover:border-blue-500"
-              }`}
-            >
-              최신순
-            </button>
-            <button
-              onClick={() => setSortBy("popular")}
-              className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all ${
-                sortBy === "popular"
-                  ? "bg-blue-500 text-white"
-                  : "bg-white border border-gray-300 text-gray-700 hover:border-blue-500"
-              }`}
-            >
-              인기순
-            </button>
-            <button
-              onClick={() => setSortBy("views")}
-              className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all ${
-                sortBy === "views"
-                  ? "bg-blue-500 text-white"
-                  : "bg-white border border-gray-300 text-gray-700 hover:border-blue-500"
-              }`}
-            >
-              조회순
-            </button>
-          </div>
         </div>
 
-        {/* 카테고리 그리드 */}
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 md:gap-4 mb-12 p-1">
+        {/* 카테고리 아코디언 */}
+        <div className="space-y-2">
           {categories.map(category => (
-            <button
+            <div
               key={category.id}
-              onClick={() => setSelectedCategory(category.id)}
-              className={`bg-white rounded-lg sm:rounded-xl border border-gray-200 p-2 sm:p-3 md:p-4 text-left hover:shadow-lg transition-shadow cursor-pointer flex flex-row gap-2 sm:gap-3 md:gap-4 items-start h-full ${
-                selectedCategory === category.id ? "ring-2 ring-blue-500" : ""
-              }`}
+              className="bg-white rounded-lg border border-gray-200 overflow-hidden"
             >
-              {/* 아이콘 - 좌측 고정 */}
-              <div className="text-2xl sm:text-3xl md:text-4xl text-blue-500 flex-shrink-0 pt-0.5">
-                {categoryIcons[category.name] || (
-                  <MoreHorizontal className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10" />
-                )}
-              </div>
+              {/* 카테고리 헤더 (토글 버튼) */}
+              <button
+                onClick={() => handleCategoryToggle(category.id)}
+                className={`w-full px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between hover:bg-gray-50 transition-colors ${
+                  expandedCategory === category.id ? "bg-blue-50" : ""
+                }`}
+              >
+                <div className="flex items-center gap-3 flex-grow text-left">
+                  {/* 아이콘 */}
+                  <div className="text-blue-500 flex-shrink-0">
+                    {categoryIcons[category.name] || (
+                      <MoreHorizontal className="w-6 h-6" />
+                    )}
+                  </div>
 
-              {/* 우측 텍스트 영역 */}
-              <div className="flex flex-col flex-grow min-w-0">
-                {/* 카테고리명 */}
-                <h3 className="font-bold text-gray-900 text-sm sm:text-base md:text-lg mb-0.5 line-clamp-1">
-                  {category.name}
-                </h3>
-
-                {/* 질문 개수 */}
-                <p className="text-gray-500 text-xs sm:text-sm mb-1">
-                  {questions.length}개 질문
-                </p>
-
-                {/* 설명 */}
-                <p className="text-gray-600 text-xs flex-grow mb-1.5 sm:mb-2 line-clamp-1 sm:line-clamp-2">
-                  {categoryDescriptions[category.name] || ""}
-                </p>
-
-                {/* 질문 보기 링크 */}
-                <div className="text-blue-600 text-xs sm:text-sm font-medium flex items-center gap-0.5 flex-shrink-0">
-                  <span className="hidden sm:inline">질문 보기</span>
-                  <span className="sm:hidden">보기</span>
-                  <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                  {/* 카테고리 정보 */}
+                  <div className="flex-grow">
+                    <h3 className="font-bold text-gray-900 text-sm sm:text-base">
+                      {category.name}
+                    </h3>
+                    <p className="text-gray-500 text-xs sm:text-sm">
+                      {category._count?.questions || 0}개 질문 ·{" "}
+                      {categoryDescriptions[category.name]}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </button>
-          ))}
-        </div>
 
-        {/* 선택된 카테고리의 질문 섹션 */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-500">
-              {categoryIcons[selectedCategoryName] || (
-                <MoreHorizontal className="w-6 h-6" />
+                {/* 토글 아이콘 */}
+                <ChevronDown
+                  className={`w-5 h-5 text-gray-400 flex-shrink-0 transition-transform ${
+                    expandedCategory === category.id ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+
+              {/* 확장된 콘텐츠 */}
+              {expandedCategory === category.id && (
+                <div className="border-t border-gray-200 p-4 sm:p-6 bg-gray-50">
+                  {/* 정렬 필터 및 전체 질문 보기 */}
+                  <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+                    {/* 정렬 필터 */}
+                    <div className="flex gap-1.5 sm:gap-2">
+                      <button
+                        onClick={() => handleSortChange(category.id, "latest")}
+                        className={`px-2 sm:px-3 py-1 rounded text-xs sm:text-sm font-medium transition-all ${
+                          (sortByMap[category.id] || "latest") === "latest"
+                            ? "bg-blue-500 text-white"
+                            : "bg-white border border-gray-300 text-gray-700 hover:border-blue-500"
+                        }`}
+                      >
+                        최신순
+                      </button>
+                      <button
+                        onClick={() => handleSortChange(category.id, "popular")}
+                        className={`px-2 sm:px-3 py-1 rounded text-xs sm:text-sm font-medium transition-all ${
+                          (sortByMap[category.id] || "latest") === "popular"
+                            ? "bg-blue-500 text-white"
+                            : "bg-white border border-gray-300 text-gray-700 hover:border-blue-500"
+                        }`}
+                      >
+                        인기순
+                      </button>
+                      <button
+                        onClick={() => handleSortChange(category.id, "views")}
+                        className={`px-2 sm:px-3 py-1 rounded text-xs sm:text-sm font-medium transition-all ${
+                          (sortByMap[category.id] || "latest") === "views"
+                            ? "bg-blue-500 text-white"
+                            : "bg-white border border-gray-300 text-gray-700 hover:border-blue-500"
+                        }`}
+                      >
+                        조회순
+                      </button>
+                    </div>
+
+                    {/* 전체 질문 보기 링크 */}
+                    <Link
+                      href={`/questions?categoryId=${category.id}`}
+                      className="text-blue-600 hover:text-blue-800 text-xs sm:text-sm font-medium flex items-center gap-1 transition-colors"
+                    >
+                      전체 질문 보기
+                      <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4" />
+                    </Link>
+                  </div>
+
+                  {/* 질문 리스트 */}
+                  {loadingMap[category.id] ? (
+                    <div className="space-y-3">
+                      {[...Array(2)].map((_, i) => (
+                        <div
+                          key={i}
+                          className="p-3 bg-white rounded-lg animate-pulse"
+                        >
+                          <div className="h-5 bg-gray-300 rounded mb-2 w-3/4"></div>
+                          <div className="h-3 bg-gray-300 rounded w-1/2"></div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : questionsMap[category.id]?.length > 0 ? (
+                    <div className="space-y-3">
+                      {questionsMap[category.id].map(question => (
+                        <Link
+                          key={question.id}
+                          href={`/questions/${question.id}`}
+                          className="block p-3 sm:p-4 bg-white border border-gray-200 rounded-lg hover:border-blue-500 hover:shadow-md transition-all"
+                        >
+                          <h4 className="font-semibold text-gray-900 mb-2 line-clamp-2 text-sm">
+                            {question.title}
+                          </h4>
+
+                          <div className="flex items-center gap-3 text-xs text-gray-600 flex-wrap">
+                            <span className="flex items-center gap-1">
+                              <MessageSquare className="w-3 h-3" />
+                              {question.answerCount}개 답변
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <Eye className="w-3 h-3" />
+                              {question.viewCount} 조회
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <Clock className="w-3 h-3" />
+                              {formatTimeAgo(question.createdAt)}
+                            </span>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-6 text-gray-500 text-sm">
+                      등록된 질문이 없습니다.
+                    </div>
+                  )}
+                </div>
               )}
             </div>
-            <h2 className="text-xl font-bold text-gray-900">
-              {selectedCategoryName}의 질문
-            </h2>
-          </div>
-
-          {loading ? (
-            <div className="space-y-4">
-              {[...Array(3)].map((_, i) => (
-                <div
-                  key={i}
-                  className="p-4 bg-gray-100 rounded-lg animate-pulse"
-                >
-                  <div className="h-6 bg-gray-300 rounded mb-2 w-3/4"></div>
-                  <div className="h-4 bg-gray-300 rounded w-1/2"></div>
-                </div>
-              ))}
-            </div>
-          ) : questions.length > 0 ? (
-            <div className="space-y-4">
-              {questions.map(question => (
-                <Link
-                  key={question.id}
-                  href={`/questions/${question.id}`}
-                  className="block p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:shadow-md transition-all"
-                >
-                  <div className="flex items-start justify-between mb-3">
-                    <span className="inline-block bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                      {selectedCategoryName}
-                    </span>
-                  </div>
-
-                  <h3 className="font-semibold text-gray-900 mb-3 line-clamp-2">
-                    {question.title}
-                  </h3>
-
-                  <div className="flex items-center gap-4 mb-3 flex-wrap text-sm text-gray-600">
-                    <span className="flex items-center gap-1">
-                      <MessageSquare className="w-4 h-4" />
-                      {question.answerCount}개 답변
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Eye className="w-4 h-4" />
-                      {question.viewCount} 조회
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Clock className="w-4 h-4" />
-                      {formatTimeAgo(question.createdAt)}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-                    <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white text-xs font-bold">
-                        {question.author.nickname.charAt(0)}
-                      </div>
-                      <span className="text-sm font-medium text-gray-900">
-                        {question.author.nickname}
-                      </span>
-                    </div>
-                    <button className="text-blue-500 hover:text-blue-700 text-sm font-medium flex items-center gap-1">
-                      답변 보기
-                      <ArrowRight className="w-4 h-4" />
-                    </button>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-12 text-gray-500">
-              <p>등록된 질문이 없습니다.</p>
-              <Link
-                href="/questions/new"
-                className="text-blue-500 hover:text-blue-700 mt-2 inline-block font-medium"
-              >
-                첫 번째 질문을 올려보세요 →
-              </Link>
-            </div>
-          )}
+          ))}
         </div>
       </main>
 

@@ -3,23 +3,11 @@
 > tsc
 
 src/__tests__/setup.ts(83,38): error TS18046: 'error' is of type 'unknown'.
-src/errors/error-handler.ts(35,12): error TS2511: Cannot create an instance of an abstract class.
-src/errors/error-handler.ts(62,10): error TS2511: Cannot create an instance of an abstract class.
-src/errors/error-handler.ts(80,9): error TS7053: Element implicitly has an 'any' type because expression of type '0' can't be used to index type '{}'.
-  Property '0' does not exist on type '{}'.
-src/errors/error-handler.ts(81,9): error TS7053: Element implicitly has an 'any' type because expression of type '0' can't be used to index type '{}'.
-  Property '0' does not exist on type '{}'.
-src/errors/error-handler.ts(82,9): error TS7053: Element implicitly has an 'any' type because expression of type '1' can't be used to index type '{}'.
-  Property '1' does not exist on type '{}'.
-src/errors/error-handler.ts(88,9): error TS2345: Argument of type '{}' is not assignable to parameter of type 'string'.
-src/errors/error-handler.ts(102,9): error TS2345: Argument of type '{}' is not assignable to parameter of type 'string'.
-src/errors/error-handler.ts(110,9): error TS2345: Argument of type '{}' is not assignable to parameter of type 'string'.
-src/errors/error-handler.ts(117,9): error TS2345: Argument of type '{}' is not assignable to parameter of type 'string'.
-src/errors/error-handler.ts(123,9): error TS2345: Argument of type '{}' is not assignable to parameter of type 'string'.
-src/errors/error-handler.ts(129,14): error TS2511: Cannot create an instance of an abstract class.
-src/errors/error-handler.ts(144,14): error TS2511: Cannot create an instance of an abstract class.
-src/errors/error-handler.ts(173,10): error TS2511: Cannot create an instance of an abstract class.
-src/errors/error-handler.ts(188,10): error TS2511: Cannot create an instance of an abstract class.
+src/errors/error-handler.ts(89,9): error TS2345: Argument of type '{}' is not assignable to parameter of type 'string'.
+src/errors/error-handler.ts(103,9): error TS2345: Argument of type '{}' is not assignable to parameter of type 'string'.
+src/errors/error-handler.ts(111,9): error TS2345: Argument of type '{}' is not assignable to parameter of type 'string'.
+src/errors/error-handler.ts(118,9): error TS2345: Argument of type '{}' is not assignable to parameter of type 'string'.
+src/errors/error-handler.ts(124,9): error TS2345: Argument of type '{}' is not assignable to parameter of type 'string'.
 src/repositories/enhanced-user.repository.ts(37,45): error TS2314: Generic type 'BaseRepository<T, CreateData, UpdateData, SearchOptions>' requires 4 type argument(s).
 src/repositories/enhanced-user.repository.ts(52,31): error TS2339: Property 'prisma' does not exist on type 'EnhancedUserRepository'.
 src/repositories/enhanced-user.repository.ts(99,31): error TS2339: Property 'prisma' does not exist on type 'EnhancedUserRepository'.
