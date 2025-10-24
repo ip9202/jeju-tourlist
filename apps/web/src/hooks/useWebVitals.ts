@@ -38,8 +38,10 @@ export const useWebVitals = () => {
      * LCP (Largest Contentful Paint) 수집
      * 페이지에서 가장 큰 콘텐츠가 화면에 렌더링되는 시간
      */
+    let lcpObserver: PerformanceObserver | null = null;
+
     try {
-      const lcpObserver = new PerformanceObserver(entryList => {
+      lcpObserver = new PerformanceObserver(entryList => {
         const entries = entryList.getEntries();
         const lastEntry = entries[entries.length - 1] as PerformanceEntry & {
           duration?: number;
@@ -56,13 +58,17 @@ export const useWebVitals = () => {
         entryTypes: ["largest-contentful-paint"],
         buffered: true,
       });
-
-      // 페이지 언로드 시 옵저버 정리
-      return () => lcpObserver.disconnect();
     } catch (error) {
       // eslint-disable-next-line no-console
       console.warn("[WebVitals] LCP observer failed:", error);
     }
+
+    // 페이지 언로드 시 옵저버 정리
+    return () => {
+      if (lcpObserver) {
+        lcpObserver.disconnect();
+      }
+    };
   }, [trackPerformance]);
 
   useEffect(() => {
@@ -72,8 +78,10 @@ export const useWebVitals = () => {
      * FCP (First Contentful Paint) 수집
      * 페이지에서 첫 번째 콘텐츠가 렌더링되는 시간
      */
+    let fcpObserver: PerformanceObserver | null = null;
+
     try {
-      const fcpObserver = new PerformanceObserver(entryList => {
+      fcpObserver = new PerformanceObserver(entryList => {
         const entries = entryList.getEntries();
         entries.forEach(entry => {
           if (entry.name === "first-contentful-paint") {
@@ -90,12 +98,16 @@ export const useWebVitals = () => {
         entryTypes: ["paint"],
         buffered: true,
       });
-
-      return () => fcpObserver.disconnect();
     } catch (error) {
       // eslint-disable-next-line no-console
       console.warn("[WebVitals] FCP observer failed:", error);
     }
+
+    return () => {
+      if (fcpObserver) {
+        fcpObserver.disconnect();
+      }
+    };
   }, [trackPerformance]);
 
   useEffect(() => {
@@ -106,10 +118,12 @@ export const useWebVitals = () => {
      * 페이지 로드 중 발생하는 의도하지 않은 레이아웃 변화의 누적값
      * 낮을수록 좋음 (목표: 0.1 이하)
      */
+    let clsObserver: PerformanceObserver | null = null;
+
     try {
       let clsValue = 0;
 
-      const clsObserver = new PerformanceObserver(entryList => {
+      clsObserver = new PerformanceObserver(entryList => {
         for (const entry of entryList.getEntries()) {
           // 사용자 입력으로 인한 변화는 제외
           const layoutShiftEntry = entry as PerformanceEntry & {
@@ -132,12 +146,16 @@ export const useWebVitals = () => {
         type: "layout-shift",
         buffered: true,
       });
-
-      return () => clsObserver.disconnect();
     } catch (error) {
       // eslint-disable-next-line no-console
       console.warn("[WebVitals] CLS observer failed:", error);
     }
+
+    return () => {
+      if (clsObserver) {
+        clsObserver.disconnect();
+      }
+    };
   }, [trackPerformance]);
 
   useEffect(() => {
@@ -150,10 +168,12 @@ export const useWebVitals = () => {
      *
      * 참고: 모든 브라우저에서 지원하지 않음
      */
+    let inpObserver: PerformanceObserver | null = null;
+
     try {
       let maxINP = 0;
 
-      const inpObserver = new PerformanceObserver(entryList => {
+      inpObserver = new PerformanceObserver(entryList => {
         for (const entry of entryList.getEntries()) {
           const interactionEntry = entry as PerformanceEntry & {
             duration?: number;
@@ -174,13 +194,17 @@ export const useWebVitals = () => {
         type: "interaction",
         buffered: true,
       } as PerformanceObserverInit);
-
-      return () => inpObserver.disconnect();
     } catch (error) {
       // INP를 지원하지 않는 브라우저는 조용히 실패
       // eslint-disable-next-line no-console
       console.debug("[WebVitals] INP observer not supported");
     }
+
+    return () => {
+      if (inpObserver) {
+        inpObserver.disconnect();
+      }
+    };
   }, [trackPerformance]);
 
   // 훅 자체로는 반환값이 필요 없음 (부작용 전용)
