@@ -1,0 +1,14 @@
+
+> @jeju-tourlist/utils@1.0.0 test /Users/ip9202/develop/vibe/jeju-tourlist/packages/utils
+> jest "--coverage" "--collectCoverageFrom=apps/web/src/config/**/*.ts" "--collectCoverageFrom=apps/web/src/hooks/useAnalytics.ts" "--collectCoverageFrom=apps/web/src/hooks/useWebVitals.ts" "apps/web/src/"
+
+No tests found, exiting with code 1
+Run with `--passWithNoTests` to exit with code 0
+In /Users/ip9202/develop/vibe/jeju-tourlist/packages/utils
+  10 files checked.
+  testMatch: **/__tests__/**/*.test.ts, **/?(*.)+(spec|test).ts - 1 match
+  testPathIgnorePatterns: /node_modules/ - 10 matches
+  testRegex:  - 0 matches
+Pattern: apps/web/src/ - 0 matches
+ ELIFECYCLE  Test failed. See above for more details.
+ WARN   Local package.json exists, but node_modules missing, did you mean to install?

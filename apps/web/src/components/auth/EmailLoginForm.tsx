@@ -79,7 +79,7 @@ export function EmailLoginForm({ callbackUrl = "/" }: EmailLoginFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6">
       {/* 에러/성공 메시지 */}
       {submitError && (
         <Alert variant={isSuccess ? "default" : "destructive"}>
@@ -88,13 +88,17 @@ export function EmailLoginForm({ callbackUrl = "/" }: EmailLoginFormProps) {
           ) : (
             <AlertCircle className="h-4 w-4" />
           )}
-          <AlertDescription>{submitError}</AlertDescription>
+          <AlertDescription className="text-xs sm:text-sm">
+            {submitError}
+          </AlertDescription>
         </Alert>
       )}
 
       {/* 이메일 입력 */}
-      <div className="space-y-2">
-        <Label htmlFor="login-email">이메일</Label>
+      <div className="space-y-1 sm:space-y-2">
+        <Label htmlFor="login-email" className="text-xs sm:text-sm">
+          이메일
+        </Label>
         <div className="relative overflow-visible">
           <Input
             id="login-email"
@@ -103,16 +107,21 @@ export function EmailLoginForm({ callbackUrl = "/" }: EmailLoginFormProps) {
             {...register("email")}
             disabled={isSubmitting}
             aria-invalid={!!errors.email}
+            className="text-xs sm:text-sm"
           />
         </div>
         {errors.email && (
-          <p className="text-sm text-destructive">{errors.email.message}</p>
+          <p className="text-xs sm:text-sm text-destructive">
+            {errors.email.message}
+          </p>
         )}
       </div>
 
       {/* 비밀번호 입력 */}
-      <div className="space-y-2">
-        <Label htmlFor="login-password">비밀번호</Label>
+      <div className="space-y-1 sm:space-y-2">
+        <Label htmlFor="login-password" className="text-xs sm:text-sm">
+          비밀번호
+        </Label>
         <div className="relative overflow-visible">
           <Input
             id="login-password"
@@ -121,12 +130,13 @@ export function EmailLoginForm({ callbackUrl = "/" }: EmailLoginFormProps) {
             {...register("password")}
             disabled={isSubmitting}
             aria-invalid={!!errors.password}
+            className="text-xs sm:text-sm"
           />
           <Button
             type="button"
             variant="ghost"
             size="sm"
-            className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+            className="absolute right-0 top-0 h-full px-2 sm:px-3 py-2 hover:bg-transparent"
             onClick={() => setShowPassword(!showPassword)}
             disabled={isSubmitting}
             aria-label={showPassword ? "비밀번호 숨기기" : "비밀번호 보기"}
@@ -139,14 +149,16 @@ export function EmailLoginForm({ callbackUrl = "/" }: EmailLoginFormProps) {
           </Button>
         </div>
         {errors.password && (
-          <p className="text-sm text-destructive">{errors.password.message}</p>
+          <p className="text-xs sm:text-sm text-destructive">
+            {errors.password.message}
+          </p>
         )}
       </div>
 
       {/* 로그인 버튼 */}
       <Button
         type="submit"
-        className="w-full"
+        className="w-full text-xs sm:text-sm"
         disabled={isSubmitting}
         aria-disabled={isSubmitting}
       >

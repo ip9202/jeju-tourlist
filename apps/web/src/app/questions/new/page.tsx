@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
-import { Button, Input, Textarea } from "@jeju-tourlist/ui";
+import { Button } from "@jeju-tourlist/ui";
 import { AlertCircle, CheckCircle, ArrowLeft } from "lucide-react";
 import { Header } from "@/components/layout/Header";
 import { api } from "@/lib/apiClient";
@@ -239,73 +239,71 @@ export default function NewQuestionPage() {
       {/* 헤더 */}
       <Header />
 
-      {/* 메인 컨텐츠 */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* 메인 콘텐츠 */}
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* 페이지 헤더 */}
-        <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
-          <div className="flex items-center mb-6">
-            <Link
-              href="/questions"
-              className="flex items-center text-gray-600 hover:text-gray-900 mr-4"
-            >
-              <ArrowLeft className="w-5 h-5 mr-2" />
-              질문 목록으로
-            </Link>
-          </div>
-
-          <div className="text-center">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              새로운 질문 작성하기
-            </h1>
-            <p className="text-gray-600">
-              제주 여행에 대한 궁금한 점을 현지 전문가들에게 물어보세요
-            </p>
-          </div>
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">
+            새로운 질문 작성하기
+          </h1>
+          <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">
+            제주 여행에 대한 궁금한 점을 현지 전문가들에게 물어보세요
+          </p>
+          <Link
+            href="/questions"
+            className="inline-flex items-center text-blue-600 hover:text-blue-700 text-sm font-medium"
+          >
+            <ArrowLeft className="w-4 h-4 mr-1" />
+            질문 목록으로
+          </Link>
         </div>
 
         {/* 질문 작성 폼 */}
-        <div className="bg-white rounded-2xl shadow-lg p-8">
-          <form onSubmit={handleSubmit} className="space-y-8">
+        <div className="bg-white rounded-lg border border-gray-200 p-6 sm:p-8">
+          <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
             {/* 제목 입력 */}
             <div>
               <label
                 htmlFor="title"
-                className="block text-lg font-semibold text-gray-900 mb-3"
+                className="block text-sm font-semibold text-gray-900 mb-2"
               >
                 질문 제목 *
               </label>
-              <Input
+              <input
                 id="title"
                 data-testid="question-title"
+                type="text"
                 value={formData.title}
                 onChange={e => handleInputChange("title", e.target.value)}
                 placeholder="예: 제주도에서 꼭 가봐야 할 맛집 추천해주세요!"
-                className={`w-full text-lg py-3 ${errors.title ? "border-red-500" : ""}`}
+                className={`w-full px-4 py-2 border rounded-lg text-sm transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset ${
+                  errors.title ? "border-red-500" : "border-gray-300"
+                } disabled:cursor-not-allowed disabled:opacity-50`}
                 disabled={isSubmitting}
               />
               {errors.title && (
                 <div
-                  className="mt-3 flex items-center text-red-600"
+                  className="mt-2 flex items-center text-red-600"
                   data-testid="title-error"
                 >
-                  <AlertCircle className="w-5 h-5 mr-2" />
+                  <AlertCircle className="w-4 h-4 mr-2" />
                   <span className="text-sm">{errors.title}</span>
                 </div>
               )}
               {validation.title && (
                 <div
-                  className="mt-3 flex items-center text-orange-600"
+                  className="mt-2 flex items-center text-orange-600"
                   data-testid="title-validation"
                 >
-                  <AlertCircle className="w-5 h-5 mr-2" />
+                  <AlertCircle className="w-4 h-4 mr-2" />
                   <span className="text-sm">{validation.title}</span>
                 </div>
               )}
               {formData.title.length > 0 &&
                 !errors.title &&
                 !validation.title && (
-                  <div className="mt-3 flex items-center text-green-600">
-                    <CheckCircle className="w-5 h-5 mr-2" />
+                  <div className="mt-2 flex items-center text-green-600">
+                    <CheckCircle className="w-4 h-4 mr-2" />
                     <span className="text-sm">제목이 적절합니다</span>
                   </div>
                 )}
@@ -315,35 +313,37 @@ export default function NewQuestionPage() {
             <div>
               <label
                 htmlFor="content"
-                className="block text-lg font-semibold text-gray-900 mb-3"
+                className="block text-sm font-semibold text-gray-900 mb-2"
               >
                 질문 내용 *
               </label>
-              <Textarea
+              <textarea
                 id="content"
                 data-testid="question-content"
                 value={formData.content}
                 onChange={e => handleInputChange("content", e.target.value)}
                 placeholder="질문 내용을 자세히 입력해주세요. 예를 들어, 가족 여행인지, 예산은 어느 정도인지, 특별히 관심 있는 부분이 있는지 등을 포함해주시면 더 정확한 답변을 받을 수 있습니다."
-                rows={10}
-                className={`w-full text-lg ${errors.content ? "border-red-500" : ""}`}
+                rows={8}
+                className={`w-full px-4 py-2 border rounded-lg text-sm transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset resize-none ${
+                  errors.content ? "border-red-500" : "border-gray-300"
+                } disabled:cursor-not-allowed disabled:opacity-50`}
                 disabled={isSubmitting}
               />
               {errors.content && (
                 <div
-                  className="mt-3 flex items-center text-red-600"
+                  className="mt-2 flex items-center text-red-600"
                   data-testid="content-error"
                 >
-                  <AlertCircle className="w-5 h-5 mr-2" />
+                  <AlertCircle className="w-4 h-4 mr-2" />
                   <span className="text-sm">{errors.content}</span>
                 </div>
               )}
               {validation.content && (
                 <div
-                  className="mt-3 flex items-center text-orange-600"
+                  className="mt-2 flex items-center text-orange-600"
                   data-testid="content-validation"
                 >
-                  <AlertCircle className="w-5 h-5 mr-2" />
+                  <AlertCircle className="w-4 h-4 mr-2" />
                   <span className="text-sm">{validation.content}</span>
                 </div>
               )}
@@ -353,7 +353,7 @@ export default function NewQuestionPage() {
             <div>
               <label
                 htmlFor="categoryId"
-                className="block text-lg font-semibold text-gray-900 mb-3"
+                className="block text-sm font-semibold text-gray-900 mb-2"
               >
                 카테고리
               </label>
@@ -368,7 +368,7 @@ export default function NewQuestionPage() {
                   onChange={e =>
                     handleInputChange("categoryId", e.target.value)
                   }
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset disabled:cursor-not-allowed disabled:opacity-50"
                   disabled={isSubmitting}
                 >
                   <option value="">카테고리 선택 (선택사항)</option>
@@ -386,16 +386,17 @@ export default function NewQuestionPage() {
             <div>
               <label
                 htmlFor="hashtags"
-                className="block text-lg font-semibold text-gray-900 mb-3"
+                className="block text-sm font-semibold text-gray-900 mb-2"
               >
                 해시태그
               </label>
-              <Input
+              <input
                 id="hashtags"
+                type="text"
                 value={formData.hashtags}
                 onChange={e => handleInputChange("hashtags", e.target.value)}
                 placeholder="#제주여행 #가족여행 #맛집 (쉼표로 구분)"
-                className="w-full text-lg py-3"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset disabled:cursor-not-allowed disabled:opacity-50"
                 disabled={isSubmitting}
               />
             </div>
@@ -404,7 +405,7 @@ export default function NewQuestionPage() {
             <div>
               <label
                 htmlFor="file"
-                className="block text-lg font-semibold text-gray-900 mb-3"
+                className="block text-sm font-semibold text-gray-900 mb-2"
               >
                 첨부 파일 (선택사항)
               </label>
@@ -414,28 +415,28 @@ export default function NewQuestionPage() {
                 data-testid="file-upload"
                 onChange={handleFileChange}
                 accept="image/*,.pdf,.doc,.docx"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset disabled:cursor-not-allowed disabled:opacity-50"
                 disabled={isSubmitting}
               />
               {errors.file && (
                 <div
-                  className="mt-3 flex items-center text-red-600"
+                  className="mt-2 flex items-center text-red-600"
                   data-testid="file-error"
                 >
-                  <AlertCircle className="w-5 h-5 mr-2" />
+                  <AlertCircle className="w-4 h-4 mr-2" />
                   <span className="text-sm">{errors.file}</span>
                 </div>
               )}
             </div>
 
             {/* 제출 버튼 */}
-            <div className="flex justify-center space-x-6 pt-6">
+            <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
               <Button
                 type="button"
                 variant="secondary"
                 onClick={() => router.back()}
                 disabled={isSubmitting}
-                className="px-8 py-3 text-lg"
+                className="px-6 py-2"
               >
                 취소
               </Button>
@@ -444,20 +445,20 @@ export default function NewQuestionPage() {
                 variant="default"
                 data-testid="submit-question"
                 disabled={isSubmitting}
-                className="px-8 py-3 text-lg bg-blue-600 text-white hover:bg-blue-700 min-w-[160px]"
+                className="px-6 py-2 bg-blue-600 text-white hover:bg-blue-700 min-w-[120px]"
               >
-                {isSubmitting ? "작성 중..." : "질문 작성하기"}
+                {isSubmitting ? "작성 중..." : "질문 작성"}
               </Button>
             </div>
           </form>
         </div>
 
         {/* 도움말 섹션 */}
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 mt-8">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">
+        <div className="bg-white rounded-lg border border-gray-200 p-6 sm:p-8 mt-8">
+          <h3 className="text-lg font-bold text-gray-900 mb-4">
             💡 좋은 질문을 작성하는 팁
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
               <h4 className="font-semibold text-gray-800 mb-2">
                 구체적으로 작성하세요
@@ -479,6 +480,15 @@ export default function NewQuestionPage() {
           </div>
         </div>
       </main>
+
+      {/* 푸터 */}
+      <footer className="bg-gray-900 text-gray-400 py-8 mt-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm">
+          <p>
+            &copy; 2025 동네물어봐. 제주도 여행 정보를 전문가와 함께 공유하세요.
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }

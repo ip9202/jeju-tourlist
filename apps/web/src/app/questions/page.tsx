@@ -21,11 +21,12 @@ function QuestionsPageContent() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState<SearchFilters>({
     categoryId: "",
-    status: "all",
+    status: "",
     sortBy: "createdAt",
     sortOrder: "desc",
   });
@@ -106,7 +107,7 @@ function QuestionsPageContent() {
       if (filters.categoryId) {
         params.append("categoryId", filters.categoryId);
       }
-      if (filters.status && filters.status !== "all") {
+      if (filters.status) {
         params.append("status", filters.status);
       }
 
@@ -160,7 +161,7 @@ function QuestionsPageContent() {
     setSearchTerm("");
     setFilters({
       categoryId: "",
-      status: "all",
+      status: "",
       sortBy: "createdAt",
       sortOrder: "desc",
     });
@@ -237,10 +238,98 @@ function QuestionsPageContent() {
                 {category.name}
               </button>
             ))}
-            <button className="flex-shrink-0 px-4 py-2 bg-blue-100 border border-blue-300 rounded-full text-sm font-medium text-blue-600 whitespace-nowrap">
+            <button
+              onClick={() => {
+                console.log("⚙️ 상세필터 클릭!");
+                setIsFilterOpen(!isFilterOpen);
+              }}
+              className="flex-shrink-0 px-4 py-2 bg-blue-100 border border-blue-300 rounded-full text-sm font-medium text-blue-600 whitespace-nowrap hover:bg-blue-200 transition-colors"
+            >
               ⚙️ 상세필터
             </button>
           </div>
+
+          {/* 태블릿 상세 필터 드로워 */}
+          {isFilterOpen && (
+            <div className="hidden md:block lg:hidden mt-4 bg-white rounded-lg border border-gray-200 p-4 space-y-4">
+              {/* 상태 필터 */}
+              <div>
+                <h3 className="text-xs font-bold text-gray-900 mb-2 uppercase">
+                  상태
+                </h3>
+                <div className="space-y-2">
+                  <label className="flex items-center gap-3 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="tablet-status"
+                      checked={filters.status === ""}
+                      onChange={() => handleFilterChange("status", "")}
+                      className="w-4 h-4"
+                    />
+                    <span className="text-sm text-gray-700">전체</span>
+                  </label>
+                  <label className="flex items-center gap-3 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="tablet-status"
+                      checked={filters.status === "ACTIVE"}
+                      onChange={() => handleFilterChange("status", "ACTIVE")}
+                      className="w-4 h-4"
+                    />
+                    <span className="text-sm text-gray-700">활성</span>
+                  </label>
+                  <label className="flex items-center gap-3 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="tablet-status"
+                      checked={filters.status === "CLOSED"}
+                      onChange={() => handleFilterChange("status", "CLOSED")}
+                      className="w-4 h-4"
+                    />
+                    <span className="text-sm text-gray-700">종료</span>
+                  </label>
+                </div>
+              </div>
+
+              {/* 정렬 필터 */}
+              <div className="border-t border-gray-200 pt-4">
+                <h3 className="text-xs font-bold text-gray-900 mb-2 uppercase">
+                  정렬
+                </h3>
+                <select
+                  value={`${filters.sortBy}-${filters.sortOrder}`}
+                  onChange={e => {
+                    const [sortBy, sortOrder] = e.target.value.split("-");
+                    setFilters(prev => ({
+                      ...prev,
+                      sortBy: (sortBy || "createdAt") as
+                        | "createdAt"
+                        | "viewCount"
+                        | "likeCount",
+                      sortOrder: (sortOrder || "desc") as "asc" | "desc",
+                    }));
+                  }}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                >
+                  <option value="createdAt-desc">최신순</option>
+                  <option value="createdAt-asc">오래된순</option>
+                  <option value="answerCount-desc">답변 많은순</option>
+                  <option value="answerCount-asc">답변 적은순</option>
+                  <option value="viewCount-desc">조회수 높은순</option>
+                  <option value="viewCount-asc">조회수 낮은순</option>
+                  <option value="likeCount-desc">좋아요 많은순</option>
+                  <option value="likeCount-asc">좋아요 적은순</option>
+                </select>
+              </div>
+
+              <button
+                onClick={() => setIsFilterOpen(false)}
+                className="w-full py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700"
+              >
+                필터 적용 완료
+              </button>
+            </div>
+          )}
         </div>
 
         {/* 그리드 레이아웃 */}
@@ -293,9 +382,9 @@ function QuestionsPageContent() {
                   <label className="flex items-center gap-3 cursor-pointer hover:bg-gray-50 p-2 rounded">
                     <input
                       type="radio"
-                      name="status"
-                      checked={filters.status === "all"}
-                      onChange={() => handleFilterChange("status", "all")}
+                      name="desktop-status"
+                      checked={filters.status === ""}
+                      onChange={() => handleFilterChange("status", "")}
                       className="w-4 h-4"
                     />
                     <span className="text-sm text-gray-700">전체</span>
@@ -303,24 +392,22 @@ function QuestionsPageContent() {
                   <label className="flex items-center gap-3 cursor-pointer hover:bg-gray-50 p-2 rounded">
                     <input
                       type="radio"
-                      name="status"
-                      checked={filters.status === "unanswered"}
-                      onChange={() =>
-                        handleFilterChange("status", "unanswered")
-                      }
+                      name="desktop-status"
+                      checked={filters.status === "ACTIVE"}
+                      onChange={() => handleFilterChange("status", "ACTIVE")}
                       className="w-4 h-4"
                     />
-                    <span className="text-sm text-gray-700">미해결</span>
+                    <span className="text-sm text-gray-700">활성</span>
                   </label>
                   <label className="flex items-center gap-3 cursor-pointer hover:bg-gray-50 p-2 rounded">
                     <input
                       type="radio"
-                      name="status"
-                      checked={filters.status === "answered"}
-                      onChange={() => handleFilterChange("status", "answered")}
+                      name="desktop-status"
+                      checked={filters.status === "CLOSED"}
+                      onChange={() => handleFilterChange("status", "CLOSED")}
                       className="w-4 h-4"
                     />
-                    <span className="text-sm text-gray-700">해결됨</span>
+                    <span className="text-sm text-gray-700">종료</span>
                   </label>
                 </div>
               </div>

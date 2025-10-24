@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@jeju-tourlist/ui";
 import {
@@ -26,6 +26,7 @@ import {
 export const Header: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const { user, isAuthenticated, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState("");
@@ -56,6 +57,24 @@ export const Header: React.FC = () => {
     { id: "transport", name: "교통" },
     { id: "shopping", name: "쇼핑" },
   ];
+
+  // URL 파라미터에서 검색어 동기화
+  React.useEffect(() => {
+    const query = searchParams.get("query");
+    const categoryId = searchParams.get("categoryId");
+
+    if (query) {
+      setSearchQuery(decodeURIComponent(query));
+    } else {
+      setSearchQuery("");
+    }
+
+    if (categoryId) {
+      setSelectedCategory(categoryId);
+    } else {
+      setSelectedCategory("");
+    }
+  }, [searchParams]);
 
   // 드롭다운 위치 계산
   React.useEffect(() => {

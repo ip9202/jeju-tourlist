@@ -72,7 +72,23 @@ class ApiClient {
         body: data ? JSON.stringify(data) : undefined,
       });
 
-      return await response.json();
+      const responseData = await response.json();
+
+      // HTTP 상태 코드가 에러인 경우 처리
+      if (!response.ok) {
+        console.error(`API POST ${response.status}:`, responseData);
+        return {
+          success: false,
+          message:
+            responseData.message ||
+            responseData.error?.message ||
+            "요청에 실패했습니다.",
+          data: responseData.data,
+          error: responseData.error?.code || `HTTP ${response.status}`,
+        };
+      }
+
+      return responseData;
     } catch (error) {
       console.error("API POST error:", error);
       return {

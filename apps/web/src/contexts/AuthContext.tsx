@@ -118,8 +118,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         password,
       });
 
-      const loginData = response.data as LoginResponseData | undefined;
-      if (response.success && loginData?.user) {
+      console.log("🔐 로그인 응답:", response);
+
+      if (response.success && response.data?.user) {
+        const loginData = response.data as LoginResponseData;
         // 클라이언트 사이드에서만 localStorage 접근
         if (typeof window !== "undefined") {
           // 임시로 사용자 ID를 토큰으로 사용 (나중에 JWT로 변경 필요)
