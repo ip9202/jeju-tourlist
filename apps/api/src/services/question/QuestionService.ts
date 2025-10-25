@@ -1,4 +1,6 @@
 import { QuestionRepository } from "./QuestionRepository";
+import { AuditLogService } from "../auditLog/AuditLogService";
+import { AnswerService } from "../answer/AnswerService";
 import {
   CreateQuestionData,
   UpdateQuestionData,
@@ -23,9 +25,14 @@ import { PrismaClient } from "@prisma/client";
  */
 export class QuestionService {
   private readonly questionRepository: QuestionRepository;
+  private readonly auditLogService: AuditLogService;
 
-  constructor(private readonly prisma: PrismaClient) {
+  constructor(
+    private readonly prisma: PrismaClient,
+    private answerService?: AnswerService
+  ) {
     this.questionRepository = new QuestionRepository(prisma);
+    this.auditLogService = new AuditLogService(prisma);
   }
 
   /**
@@ -115,10 +122,48 @@ export class QuestionService {
    * @throws {Error} 권한이 없거나 질문을 찾을 수 없을 때 에러 발생
    */
   async deleteQuestion(id: string, userId: string) {
-    // 권한 확인
+    // 1. 권한 확인
     await this.checkQuestionOwnership(id, userId);
 
-    return await this.questionRepository.delete(id);
+    // 2. 모든 답변 삭제 (AnswerService에 위임)
+    if (this.answerService) {
+      const answers = await this.prisma.answer.findMany({
+        where: { questionId: id },
+        select: { id: true },
+      });
+
+      for (const answer of answers) {
+        await this.answerService.deleteAnswer(answer.id, userId);
+      }
+    }
+
+    // 3. 자신의 질문만 삭제
+    const question = await this.prisma.question.update({
+      where: { id },
+      data: {
+        status: "DELETED",
+        acceptedAnswerId: null, // 참조 무결성: acceptedAnswerId 초기화
+        updatedAt: new Date(),
+      },
+    });
+
+    // 4. 감시 로그
+    await this.auditLogService
+      .logDelete({
+        targetType: "QUESTION",
+        targetId: id,
+        userId,
+        reason: "User requested deletion",
+        details: {
+          timestamp: new Date().toISOString(),
+          action: "SOFT_DELETE",
+        },
+      })
+      .catch(error => {
+        console.error("Failed to log audit: ", error);
+      });
+
+    return question;
   }
 
   /**

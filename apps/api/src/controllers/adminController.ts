@@ -1,26 +1,27 @@
 /**
  * 관리자 컨트롤러
- * 
+ *
  * @description
  * - 관리자 대시보드 API 엔드포인트 처리
  * - 콘텐츠 관리 및 사용자 관리 기능
  * - 시스템 설정 및 통계 관리
  * - SOLID 원칙 중 SRP(단일 책임 원칙) 준수
- * 
+ *
  * @author 동네물어봐 개발팀
  * @version 1.0.0
  */
 
-import { Request, Response } from 'express';
-import { AdminService } from '@jeju-tourlist/database';
-import { ModerationService } from '@jeju-tourlist/database';
-import { BadgeService } from '@jeju-tourlist/database';
-import { prisma } from '@jeju-tourlist/database';
-import { createResponse } from '../utils/response';
+import { Request, Response } from "express";
+import { AdminService } from "@jeju-tourlist/database";
+import { ModerationService } from "@jeju-tourlist/database";
+import { BadgeService } from "@jeju-tourlist/database";
+import { prisma } from "@jeju-tourlist/database";
+import { createResponse } from "../utils/response";
+import { AuditLogService } from "../services/auditLog/AuditLogService";
 
 /**
  * 관리자 컨트롤러 클래스
- * 
+ *
  * @description
  * - 관리자 관련 모든 HTTP 요청 처리
  * - 권한 검증 및 응답 생성
@@ -30,20 +31,22 @@ export class AdminController {
   private adminService: AdminService;
   private moderationService: ModerationService;
   private badgeService: BadgeService;
+  private auditLogService: AuditLogService;
 
   constructor() {
     this.adminService = new AdminService(prisma);
     this.moderationService = new ModerationService(prisma);
     this.badgeService = new BadgeService(prisma);
+    this.auditLogService = new AuditLogService(prisma);
   }
 
   /**
    * 관리자 권한 검증 미들웨어
-   * 
+   *
    * @description
    * - 관리자 권한 확인
    * - 인증된 사용자만 접근 가능
-   * 
+   *
    * @param req - Express 요청 객체
    * @param res - Express 응답 객체
    * @param next - 다음 미들웨어 함수
@@ -60,11 +63,11 @@ export class AdminController {
 
   /**
    * 대시보드 통계 조회
-   * 
+   *
    * @description
    * - 관리자 대시보드용 종합 통계
    * - 사용자, 콘텐츠, 신고 현황
-   * 
+   *
    * @route GET /api/admin/dashboard
    * @access Private (Admin only)
    */
@@ -72,24 +75,30 @@ export class AdminController {
     try {
       this.checkAdminAuth(req, res, async () => {
         const stats = await this.adminService.getDashboardStats();
-        
-        res.json(createResponse(true, '대시보드 통계를 조회했습니다.', stats));
+
+        res.json(createResponse(true, "대시보드 통계를 조회했습니다.", stats));
       });
     } catch (error) {
-      console.error('대시보드 통계 조회 오류:', error);
-      res.status(500).json(
-        createResponse(false, '대시보드 통계 조회 중 오류가 발생했습니다.', null)
-      );
+      console.error("대시보드 통계 조회 오류:", error);
+      res
+        .status(500)
+        .json(
+          createResponse(
+            false,
+            "대시보드 통계 조회 중 오류가 발생했습니다.",
+            null
+          )
+        );
     }
   };
 
   /**
    * 사용자 관리 데이터 조회
-   * 
+   *
    * @description
    * - 관리자용 사용자 목록 조회
    * - 페이지네이션 및 필터링 지원
-   * 
+   *
    * @route GET /api/admin/users
    * @access Private (Admin only)
    */
@@ -101,79 +110,91 @@ export class AdminController {
           limit = 20,
           search,
           isActive,
-          sortBy = 'createdAt',
-          sortOrder = 'desc',
+          sortBy = "createdAt",
+          sortOrder = "desc",
         } = req.query;
 
         const options = {
           page: parseInt(page as string) || 1,
           limit: parseInt(limit as string) || 20,
           search: search as string,
-          isActive: isActive === 'true' ? true : isActive === 'false' ? false : undefined,
+          isActive:
+            isActive === "true"
+              ? true
+              : isActive === "false"
+                ? false
+                : undefined,
           sortBy: sortBy as any,
           sortOrder: sortOrder as any,
         };
 
         const result = await this.adminService.getUserManagementData(options);
-        
-        res.json(createResponse(true, '사용자 목록을 조회했습니다.', result));
+
+        res.json(createResponse(true, "사용자 목록을 조회했습니다.", result));
       });
     } catch (error) {
-      console.error('사용자 목록 조회 오류:', error);
-      res.status(500).json(
-        createResponse(false, '사용자 목록 조회 중 오류가 발생했습니다.', null)
-      );
+      console.error("사용자 목록 조회 오류:", error);
+      res
+        .status(500)
+        .json(
+          createResponse(
+            false,
+            "사용자 목록 조회 중 오류가 발생했습니다.",
+            null
+          )
+        );
     }
   };
 
   /**
    * 콘텐츠 관리 데이터 조회
-   * 
+   *
    * @description
    * - 관리자용 질문/답변 목록 조회
    * - 페이지네이션 및 필터링 지원
-   * 
+   *
    * @route GET /api/admin/content
    * @access Private (Admin only)
    */
   getContent = async (req: Request, res: Response) => {
     try {
       this.checkAdminAuth(req, res, async () => {
-        const {
-          page = 1,
-          limit = 20,
-          type,
-          status,
-          search,
-        } = req.query;
+        const { page = 1, limit = 20, type, status, search } = req.query;
 
         const options = {
           page: parseInt(page as string) || 1,
           limit: parseInt(limit as string) || 20,
-          type: type as 'question' | 'answer',
+          type: type as "question" | "answer",
           status: status as string,
           search: search as string,
         };
 
-        const result = await this.adminService.getContentManagementData(options);
-        
-        res.json(createResponse(true, '콘텐츠 목록을 조회했습니다.', result));
+        const result =
+          await this.adminService.getContentManagementData(options);
+
+        res.json(createResponse(true, "콘텐츠 목록을 조회했습니다.", result));
       });
     } catch (error) {
-      console.error('콘텐츠 목록 조회 오류:', error);
-      res.status(500).json(
-        createResponse(false, '콘텐츠 목록 조회 중 오류가 발생했습니다.', null)
-      );
+      console.error("콘텐츠 목록 조회 오류:", error);
+      res
+        .status(500)
+        .json(
+          createResponse(
+            false,
+            "콘텐츠 목록 조회 중 오류가 발생했습니다.",
+            null
+          )
+        );
     }
   };
 
   /**
    * 신고 목록 조회
-   * 
+   *
    * @description
    * - 관리자용 신고 목록 조회
    * - 상태별 필터링 지원
-   * 
+   *
    * @route GET /api/admin/reports
    * @access Private (Admin only)
    */
@@ -185,8 +206,8 @@ export class AdminController {
           targetType,
           page = 1,
           limit = 20,
-          sortBy = 'createdAt',
-          sortOrder = 'desc',
+          sortBy = "createdAt",
+          sortOrder = "desc",
         } = req.query;
 
         const options = {
@@ -199,24 +220,26 @@ export class AdminController {
         };
 
         const result = await this.moderationService.getReports(options);
-        
-        res.json(createResponse(true, '신고 목록을 조회했습니다.', result));
+
+        res.json(createResponse(true, "신고 목록을 조회했습니다.", result));
       });
     } catch (error) {
-      console.error('신고 목록 조회 오류:', error);
-      res.status(500).json(
-        createResponse(false, '신고 목록 조회 중 오류가 발생했습니다.', null)
-      );
+      console.error("신고 목록 조회 오류:", error);
+      res
+        .status(500)
+        .json(
+          createResponse(false, "신고 목록 조회 중 오류가 발생했습니다.", null)
+        );
     }
   };
 
   /**
    * 신고 처리
-   * 
+   *
    * @description
    * - 관리자가 신고를 검토하고 처리
    * - 승인/거부 결정
-   * 
+   *
    * @route POST /api/admin/reports/:id/process
    * @access Private (Admin only)
    */
@@ -228,15 +251,15 @@ export class AdminController {
         const adminId = req.user?.id;
 
         if (!adminId) {
-          return res.status(401).json(
-            createResponse(false, '인증이 필요합니다.', null)
-          );
+          return res
+            .status(401)
+            .json(createResponse(false, "인증이 필요합니다.", null));
         }
 
-        if (!status || !['APPROVED', 'REJECTED'].includes(status)) {
-          return res.status(400).json(
-            createResponse(false, '유효하지 않은 상태입니다.', null)
-          );
+        if (!status || !["APPROVED", "REJECTED"].includes(status)) {
+          return res
+            .status(400)
+            .json(createResponse(false, "유효하지 않은 상태입니다.", null));
         }
 
         const result = await this.moderationService.processReport({
@@ -245,31 +268,31 @@ export class AdminController {
           status: status as any,
           adminNote,
         });
-        
-        res.json(createResponse(true, '신고를 처리했습니다.', { report: result }));
+
+        res.json(
+          createResponse(true, "신고를 처리했습니다.", { report: result })
+        );
       });
     } catch (error) {
-      console.error('신고 처리 오류:', error);
-      
-      if (error instanceof Error && error.message.includes('이미 처리된')) {
-        return res.status(409).json(
-          createResponse(false, error.message, null)
-        );
+      console.error("신고 처리 오류:", error);
+
+      if (error instanceof Error && error.message.includes("이미 처리된")) {
+        return res.status(409).json(createResponse(false, error.message, null));
       }
 
-      res.status(500).json(
-        createResponse(false, '신고 처리 중 오류가 발생했습니다.', null)
-      );
+      res
+        .status(500)
+        .json(createResponse(false, "신고 처리 중 오류가 발생했습니다.", null));
     }
   };
 
   /**
    * 사용자 상태 변경
-   * 
+   *
    * @description
    * - 사용자 활성화/비활성화
    * - 관리자 전용 기능
-   * 
+   *
    * @route PUT /api/admin/users/:id/status
    * @access Private (Admin only)
    */
@@ -279,31 +302,37 @@ export class AdminController {
         const { id } = req.params;
         const { isActive } = req.body;
 
-        if (typeof isActive !== 'boolean') {
-          return res.status(400).json(
-            createResponse(false, '유효하지 않은 상태입니다.', null)
-          );
+        if (typeof isActive !== "boolean") {
+          return res
+            .status(400)
+            .json(createResponse(false, "유효하지 않은 상태입니다.", null));
         }
 
         const user = await this.adminService.updateUserStatus(id, isActive);
-        
-        res.json(createResponse(true, '사용자 상태를 변경했습니다.', { user }));
+
+        res.json(createResponse(true, "사용자 상태를 변경했습니다.", { user }));
       });
     } catch (error) {
-      console.error('사용자 상태 변경 오류:', error);
-      res.status(500).json(
-        createResponse(false, '사용자 상태 변경 중 오류가 발생했습니다.', null)
-      );
+      console.error("사용자 상태 변경 오류:", error);
+      res
+        .status(500)
+        .json(
+          createResponse(
+            false,
+            "사용자 상태 변경 중 오류가 발생했습니다.",
+            null
+          )
+        );
     }
   };
 
   /**
    * 콘텐츠 상태 변경
-   * 
+   *
    * @description
    * - 질문/답변 상태 변경
    * - 숨김/삭제/복구 처리
-   * 
+   *
    * @route PUT /api/admin/content/:type/:id/status
    * @access Private (Admin only)
    */
@@ -313,41 +342,51 @@ export class AdminController {
         const { type, id } = req.params;
         const { status } = req.body;
 
-        if (!['question', 'answer'].includes(type)) {
-          return res.status(400).json(
-            createResponse(false, '유효하지 않은 콘텐츠 타입입니다.', null)
-          );
+        if (!["question", "answer"].includes(type)) {
+          return res
+            .status(400)
+            .json(
+              createResponse(false, "유효하지 않은 콘텐츠 타입입니다.", null)
+            );
         }
 
         if (!status) {
-          return res.status(400).json(
-            createResponse(false, '상태가 필요합니다.', null)
-          );
+          return res
+            .status(400)
+            .json(createResponse(false, "상태가 필요합니다.", null));
         }
 
         const content = await this.adminService.updateContentStatus(
-          type as 'question' | 'answer',
+          type as "question" | "answer",
           id,
           status
         );
-        
-        res.json(createResponse(true, '콘텐츠 상태를 변경했습니다.', { content }));
+
+        res.json(
+          createResponse(true, "콘텐츠 상태를 변경했습니다.", { content })
+        );
       });
     } catch (error) {
-      console.error('콘텐츠 상태 변경 오류:', error);
-      res.status(500).json(
-        createResponse(false, '콘텐츠 상태 변경 중 오류가 발생했습니다.', null)
-      );
+      console.error("콘텐츠 상태 변경 오류:", error);
+      res
+        .status(500)
+        .json(
+          createResponse(
+            false,
+            "콘텐츠 상태 변경 중 오류가 발생했습니다.",
+            null
+          )
+        );
     }
   };
 
   /**
    * 신고 통계 조회
-   * 
+   *
    * @description
    * - 신고 관련 통계 정보
    * - 기간별 신고 현황
-   * 
+   *
    * @route GET /api/admin/reports/stats
    * @access Private (Admin only)
    */
@@ -358,23 +397,25 @@ export class AdminController {
         const days = parseInt(period as string) || 30;
 
         const stats = await this.moderationService.getReportStats(days);
-        
-        res.json(createResponse(true, '신고 통계를 조회했습니다.', stats));
+
+        res.json(createResponse(true, "신고 통계를 조회했습니다.", stats));
       });
     } catch (error) {
-      console.error('신고 통계 조회 오류:', error);
-      res.status(500).json(
-        createResponse(false, '신고 통계 조회 중 오류가 발생했습니다.', null)
-      );
+      console.error("신고 통계 조회 오류:", error);
+      res
+        .status(500)
+        .json(
+          createResponse(false, "신고 통계 조회 중 오류가 발생했습니다.", null)
+        );
     }
   };
 
   /**
    * 시스템 설정 조회
-   * 
+   *
    * @description
    * - 시스템 전반의 설정 정보
-   * 
+   *
    * @route GET /api/admin/settings
    * @access Private (Admin only)
    */
@@ -382,23 +423,29 @@ export class AdminController {
     try {
       this.checkAdminAuth(req, res, async () => {
         const settings = await this.adminService.getSystemSettings();
-        
-        res.json(createResponse(true, '시스템 설정을 조회했습니다.', settings));
+
+        res.json(createResponse(true, "시스템 설정을 조회했습니다.", settings));
       });
     } catch (error) {
-      console.error('시스템 설정 조회 오류:', error);
-      res.status(500).json(
-        createResponse(false, '시스템 설정 조회 중 오류가 발생했습니다.', null)
-      );
+      console.error("시스템 설정 조회 오류:", error);
+      res
+        .status(500)
+        .json(
+          createResponse(
+            false,
+            "시스템 설정 조회 중 오류가 발생했습니다.",
+            null
+          )
+        );
     }
   };
 
   /**
    * 시스템 설정 업데이트
-   * 
+   *
    * @description
    * - 시스템 설정 변경
-   * 
+   *
    * @route PUT /api/admin/settings
    * @access Private (Admin only)
    */
@@ -407,25 +454,38 @@ export class AdminController {
       this.checkAdminAuth(req, res, async () => {
         const settings = req.body;
 
-        const updatedSettings = await this.adminService.updateSystemSettings(settings);
-        
-        res.json(createResponse(true, '시스템 설정을 업데이트했습니다.', updatedSettings));
+        const updatedSettings =
+          await this.adminService.updateSystemSettings(settings);
+
+        res.json(
+          createResponse(
+            true,
+            "시스템 설정을 업데이트했습니다.",
+            updatedSettings
+          )
+        );
       });
     } catch (error) {
-      console.error('시스템 설정 업데이트 오류:', error);
-      res.status(500).json(
-        createResponse(false, '시스템 설정 업데이트 중 오류가 발생했습니다.', null)
-      );
+      console.error("시스템 설정 업데이트 오류:", error);
+      res
+        .status(500)
+        .json(
+          createResponse(
+            false,
+            "시스템 설정 업데이트 중 오류가 발생했습니다.",
+            null
+          )
+        );
     }
   };
 
   /**
    * 배지 계산 수동 실행
-   * 
+   *
    * @description
    * - 관리자가 수동으로 배지 계산 실행
    * - 모든 사용자에 대해 배지 조건 검사
-   * 
+   *
    * @route POST /api/admin/badges/calculate
    * @access Private (Admin only)
    */
@@ -443,23 +503,23 @@ export class AdminController {
           result = await this.badgeService.calculateAllUserBadges();
         }
 
-        res.json(createResponse(true, '배지 계산을 완료했습니다.', result));
+        res.json(createResponse(true, "배지 계산을 완료했습니다.", result));
       });
     } catch (error) {
-      console.error('배지 계산 오류:', error);
-      res.status(500).json(
-        createResponse(false, '배지 계산 중 오류가 발생했습니다.', null)
-      );
+      console.error("배지 계산 오류:", error);
+      res
+        .status(500)
+        .json(createResponse(false, "배지 계산 중 오류가 발생했습니다.", null));
     }
   };
 
   /**
    * 배지 통계 조회
-   * 
+   *
    * @description
    * - 배지 시스템 전체 통계
    * - 배지별 획득 현황, 사용자별 배지 분포
-   * 
+   *
    * @route GET /api/admin/badges/stats
    * @access Private (Admin only)
    */
@@ -471,13 +531,381 @@ export class AdminController {
 
         const stats = await this.badgeService.getBadgeSystemStats(days);
 
-        res.json(createResponse(true, '배지 통계를 조회했습니다.', stats));
+        res.json(createResponse(true, "배지 통계를 조회했습니다.", stats));
       });
     } catch (error) {
-      console.error('배지 통계 조회 오류:', error);
-      res.status(500).json(
-        createResponse(false, '배지 통계 조회 중 오류가 발생했습니다.', null)
-      );
+      console.error("배지 통계 조회 오류:", error);
+      res
+        .status(500)
+        .json(
+          createResponse(false, "배지 통계 조회 중 오류가 발생했습니다.", null)
+        );
+    }
+  };
+
+  /**
+   * Phase 1.3: 삭제된 질문 목록 조회 (관리자 전용)
+   */
+  getDeletedQuestions = async (req: Request, res: Response) => {
+    try {
+      this.checkAdminAuth(req, res, async () => {
+        const { page = 1, limit = 20 } = req.query;
+
+        const deletedQuestions = await prisma.question.findMany({
+          where: { status: "DELETED" },
+          select: {
+            id: true,
+            title: true,
+            content: true,
+            authorId: true,
+            author: {
+              select: {
+                id: true,
+                email: true,
+                nickname: true,
+              },
+            },
+            updatedAt: true,
+          },
+          orderBy: { updatedAt: "desc" },
+          skip: (parseInt(page as string) - 1) * parseInt(limit as string),
+          take: parseInt(limit as string),
+        });
+
+        const total = await prisma.question.count({
+          where: { status: "DELETED" },
+        });
+
+        res.json(
+          createResponse(true, "삭제된 질문을 조회했습니다.", {
+            deletedQuestions,
+            pagination: {
+              page: parseInt(page as string),
+              limit: parseInt(limit as string),
+              total,
+              totalPages: Math.ceil(total / parseInt(limit as string)),
+            },
+          })
+        );
+      });
+    } catch (error) {
+      console.error("삭제된 질문 조회 오류:", error);
+      res
+        .status(500)
+        .json(
+          createResponse(
+            false,
+            "삭제된 질문 조회 중 오류가 발생했습니다.",
+            null
+          )
+        );
+    }
+  };
+
+  /**
+   * Phase 1.3: 삭제된 답변 목록 조회 (관리자 전용)
+   */
+  getDeletedAnswers = async (req: Request, res: Response) => {
+    try {
+      this.checkAdminAuth(req, res, async () => {
+        const { page = 1, limit = 20 } = req.query;
+
+        const deletedAnswers = await prisma.answer.findMany({
+          where: { status: "DELETED" },
+          select: {
+            id: true,
+            content: true,
+            authorId: true,
+            questionId: true,
+            author: {
+              select: {
+                id: true,
+                email: true,
+                nickname: true,
+              },
+            },
+            updatedAt: true,
+          },
+          orderBy: { updatedAt: "desc" },
+          skip: (parseInt(page as string) - 1) * parseInt(limit as string),
+          take: parseInt(limit as string),
+        });
+
+        const total = await prisma.answer.count({
+          where: { status: "DELETED" },
+        });
+
+        res.json(
+          createResponse(true, "삭제된 답변을 조회했습니다.", {
+            deletedAnswers,
+            pagination: {
+              page: parseInt(page as string),
+              limit: parseInt(limit as string),
+              total,
+              totalPages: Math.ceil(total / parseInt(limit as string)),
+            },
+          })
+        );
+      });
+    } catch (error) {
+      console.error("삭제된 답변 조회 오류:", error);
+      res
+        .status(500)
+        .json(
+          createResponse(
+            false,
+            "삭제된 답변 조회 중 오류가 발생했습니다.",
+            null
+          )
+        );
+    }
+  };
+
+  /**
+   * Phase 1.3: 삭제된 댓글 목록 조회 (관리자 전용)
+   */
+  getDeletedComments = async (req: Request, res: Response) => {
+    try {
+      this.checkAdminAuth(req, res, async () => {
+        const { page = 1, limit = 20 } = req.query;
+
+        const deletedComments = await prisma.answerComment.findMany({
+          where: { status: "DELETED" },
+          select: {
+            id: true,
+            content: true,
+            authorId: true,
+            answerId: true,
+            author: {
+              select: {
+                id: true,
+                email: true,
+                nickname: true,
+              },
+            },
+            updatedAt: true,
+          },
+          orderBy: { updatedAt: "desc" },
+          skip: (parseInt(page as string) - 1) * parseInt(limit as string),
+          take: parseInt(limit as string),
+        });
+
+        const total = await prisma.answerComment.count({
+          where: { status: "DELETED" },
+        });
+
+        res.json(
+          createResponse(true, "삭제된 댓글을 조회했습니다.", {
+            deletedComments,
+            pagination: {
+              page: parseInt(page as string),
+              limit: parseInt(limit as string),
+              total,
+              totalPages: Math.ceil(total / parseInt(limit as string)),
+            },
+          })
+        );
+      });
+    } catch (error) {
+      console.error("삭제된 댓글 조회 오류:", error);
+      res
+        .status(500)
+        .json(
+          createResponse(
+            false,
+            "삭제된 댓글 조회 중 오류가 발생했습니다.",
+            null
+          )
+        );
+    }
+  };
+
+  /**
+   * Phase 1.3: 질문 복구 (관리자 전용)
+   */
+  restoreQuestion = async (req: Request, res: Response) => {
+    try {
+      this.checkAdminAuth(req, res, async () => {
+        const { id } = req.params;
+        const adminId = req.user?.id;
+
+        if (!adminId) {
+          return res
+            .status(401)
+            .json(createResponse(false, "인증이 필요합니다.", null));
+        }
+
+        const question = await prisma.question.findUnique({
+          where: { id },
+        });
+
+        if (!question) {
+          return res
+            .status(404)
+            .json(createResponse(false, "질문을 찾을 수 없습니다.", null));
+        }
+
+        if (question.status !== "DELETED") {
+          return res
+            .status(400)
+            .json(createResponse(false, "삭제된 질문이 아닙니다.", null));
+        }
+
+        const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+        if (question.updatedAt < thirtyDaysAgo) {
+          return res
+            .status(400)
+            .json(
+              createResponse(false, "30일이 경과하여 복구할 수 없습니다.", null)
+            );
+        }
+
+        const restoredQuestion = await prisma.question.update({
+          where: { id },
+          data: {
+            status: "ACTIVE",
+            updatedAt: new Date(),
+          },
+        });
+
+        await this.auditLogService
+          .logRestore({
+            targetType: "QUESTION",
+            targetId: id,
+            userId: adminId,
+            reason: "Admin restored deleted question",
+            details: {
+              timestamp: new Date().toISOString(),
+            },
+          })
+          .catch(error => {
+            console.error("Failed to log restore: ", error);
+          });
+
+        res.json(
+          createResponse(true, "질문을 복구했습니다.", {
+            question: restoredQuestion,
+          })
+        );
+      });
+    } catch (error) {
+      console.error("질문 복구 오류:", error);
+      res
+        .status(500)
+        .json(createResponse(false, "질문 복구 중 오류가 발생했습니다.", null));
+    }
+  };
+
+  /**
+   * Phase 1.3: 답변 복구 (관리자 전용)
+   */
+  restoreAnswer = async (req: Request, res: Response) => {
+    try {
+      this.checkAdminAuth(req, res, async () => {
+        const { id } = req.params;
+        const adminId = req.user?.id;
+
+        if (!adminId) {
+          return res
+            .status(401)
+            .json(createResponse(false, "인증이 필요합니다.", null));
+        }
+
+        const answer = await prisma.answer.findUnique({
+          where: { id },
+        });
+
+        if (!answer) {
+          return res
+            .status(404)
+            .json(createResponse(false, "답변을 찾을 수 없습니다.", null));
+        }
+
+        if (answer.status !== "DELETED") {
+          return res
+            .status(400)
+            .json(createResponse(false, "삭제된 답변이 아닙니다.", null));
+        }
+
+        const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+        if (answer.updatedAt < thirtyDaysAgo) {
+          return res
+            .status(400)
+            .json(
+              createResponse(false, "30일이 경과하여 복구할 수 없습니다.", null)
+            );
+        }
+
+        const restoredAnswer = await prisma.answer.update({
+          where: { id },
+          data: {
+            status: "ACTIVE",
+            updatedAt: new Date(),
+          },
+        });
+
+        await this.auditLogService
+          .logRestore({
+            targetType: "ANSWER",
+            targetId: id,
+            userId: adminId,
+            reason: "Admin restored deleted answer",
+            details: {
+              timestamp: new Date().toISOString(),
+            },
+          })
+          .catch(error => {
+            console.error("Failed to log restore: ", error);
+          });
+
+        res.json(
+          createResponse(true, "답변을 복구했습니다.", {
+            answer: restoredAnswer,
+          })
+        );
+      });
+    } catch (error) {
+      console.error("답변 복구 오류:", error);
+      res
+        .status(500)
+        .json(createResponse(false, "답변 복구 중 오류가 발생했습니다.", null));
+    }
+  };
+
+  /**
+   * Phase 1.3: 감시 로그 조회 (관리자 전용)
+   */
+  getAuditLogs = async (req: Request, res: Response) => {
+    try {
+      this.checkAdminAuth(req, res, async () => {
+        const { targetType, targetId } = req.params;
+
+        if (!["QUESTION", "ANSWER", "COMMENT"].includes(targetType)) {
+          return res
+            .status(400)
+            .json(
+              createResponse(false, "유효하지 않은 대상 타입입니다.", null)
+            );
+        }
+
+        const auditLogs = await this.auditLogService.getAuditLogs(
+          targetType as "QUESTION" | "ANSWER" | "COMMENT",
+          targetId
+        );
+
+        res.json(
+          createResponse(true, "감시 로그를 조회했습니다.", {
+            auditLogs,
+          })
+        );
+      });
+    } catch (error) {
+      console.error("감시 로그 조회 오류:", error);
+      res
+        .status(500)
+        .json(
+          createResponse(false, "감시 로그 조회 중 오류가 발생했습니다.", null)
+        );
     }
   };
 }

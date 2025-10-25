@@ -74,7 +74,7 @@ export class AnswerRepository {
    */
   async findById(id: string): Promise<Answer | null> {
     try {
-      return await this.prisma.answer.findUnique({
+      const answer = await this.prisma.answer.findUnique({
         where: { id },
         include: {
           author: {
@@ -105,6 +105,14 @@ export class AnswerRepository {
           },
         },
       });
+
+      // Phase 1: 삭제된 데이터 자동 필터링
+      // DELETED 상태인 답변은 조회 불가능하도록 처리
+      if (answer && answer.status === "DELETED") {
+        return null;
+      }
+
+      return answer;
     } catch (error) {
       throw new Error(
         `답변 조회 실패: ${error instanceof Error ? error.message : "알 수 없는 오류"}`

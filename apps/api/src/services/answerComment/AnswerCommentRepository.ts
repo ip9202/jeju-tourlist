@@ -94,9 +94,17 @@ export class AnswerCommentRepository {
    */
   async findById(id: string): Promise<AnswerComment | null> {
     try {
-      return await this.prisma.answerComment.findUnique({
+      const comment = await this.prisma.answerComment.findUnique({
         where: { id },
       });
+
+      // Phase 1: 삭제된 데이터 자동 필터링
+      // DELETED 상태인 댓글은 조회 불가능하도록 처리
+      if (comment && comment.status === "DELETED") {
+        return null;
+      }
+
+      return comment;
     } catch (error) {
       throw new Error(
         `답변 댓글 조회 실패: ${error instanceof Error ? error.message : "알 수 없는 오류"}`
@@ -126,7 +134,9 @@ export class AnswerCommentRepository {
         },
       });
 
-      if (!comment) return null;
+      // Phase 1: 삭제된 데이터 자동 필터링
+      // DELETED 상태인 댓글은 조회 불가능하도록 처리
+      if (!comment || comment.status === "DELETED") return null;
 
       return {
         id: comment.id,

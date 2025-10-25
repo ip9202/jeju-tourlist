@@ -168,18 +168,34 @@ export class AnswerCommentService {
    * @throws {Error} 권한 없음 또는 댓글을 찾을 수 없을 때 에러 발생
    */
   async deleteComment(id: string, userId: string) {
+    // 1. 권한 확인
     const comment = await this.answerCommentRepository.findById(id);
 
     if (!comment) {
-      throw new Error("답변 댓글을 찾을 수 없습니다.");
+      throw new Error("답변 댓글을 찾을 수 없습니다");
     }
 
     if (comment.authorId !== userId) {
-      throw new Error("댓글을 삭제할 권한이 없습니다.");
+      throw new Error("댓글을 삭제할 권한이 없습니다");
     }
 
-    // Phase 1.2: 삭제 작업 감시 로그 기록
-    // GDPR/개인정보보호법 요구사항 충족
+    // 2. 모든 대댓글 삭제 (재귀)
+    const replies = await this.prisma.answerComment.findMany({
+      where: { parentCommentId: id },
+      select: { id: true },
+    });
+
+    for (const reply of replies) {
+      await this.deleteComment(reply.id, userId);
+    }
+
+    // 3. 자신의 댓글만 삭제
+    await this.prisma.answerComment.update({
+      where: { id },
+      data: { status: "DELETED", updatedAt: new Date() },
+    });
+
+    // 4. 감시 로그
     await this.auditLogService
       .logDelete({
         targetType: "COMMENT",
@@ -193,10 +209,7 @@ export class AnswerCommentService {
       })
       .catch(error => {
         console.error("Failed to log audit: ", error);
-        // 감시 로그 실패가 삭제를 막지 않도록 처리
       });
-
-    await this.answerCommentRepository.update(id, { status: "DELETED" });
   }
 
   /**

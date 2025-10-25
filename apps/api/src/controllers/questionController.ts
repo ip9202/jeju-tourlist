@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { QuestionService } from "../services/question/QuestionService";
+import { AnswerService } from "../services/answer/AnswerService";
 import { PrismaClient } from "@prisma/client";
 import {
   CreateQuestionSchema,
@@ -20,7 +21,8 @@ export class QuestionController {
   private readonly questionService: QuestionService;
 
   constructor(private readonly prisma: PrismaClient) {
-    this.questionService = new QuestionService(prisma);
+    const answerService = new AnswerService(prisma);
+    this.questionService = new QuestionService(prisma, answerService);
   }
 
   /**

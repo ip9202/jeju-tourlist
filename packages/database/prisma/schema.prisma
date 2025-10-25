@@ -43,6 +43,7 @@ model User {
   reports            Report[]
   userBadges         UserBadge[]
   userProfile        UserProfile?
+  auditLogs          AuditLog[]
 
   @@index([email])
   @@index([provider, providerId])
@@ -435,4 +436,27 @@ model PasswordResetToken {
   @@index([email])
   @@index([token])
   @@map("password_reset_tokens")
+}
+
+// Phase 1: 감시 로그 (AuditLog)
+// 개인정보 삭제 정책 개선 - 모든 삭제 작업 추적
+model AuditLog {
+  id        String   @id @default(cuid())
+  action    String   // "DELETE", "RESTORE", "PERMANENTLY_DELETE" 등
+  targetType String  // "QUESTION", "ANSWER", "COMMENT"
+  targetId  String
+  userId    String   // 작업을 수행한 사용자
+  reason    String?  // 삭제 이유
+  status    String   // "DELETED", "RESTORED", "PERMANENTLY_DELETED"
+  details   Json?    // 추가 정보 (IP, User-Agent, 기타)
+  createdAt DateTime @default(now())
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([action])
+  @@index([targetType, targetId])
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("audit_logs")
 }

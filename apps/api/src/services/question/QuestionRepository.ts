@@ -83,7 +83,7 @@ export class QuestionRepository {
    */
   async findById(id: string): Promise<Question | null> {
     try {
-      return await this.prisma.question.findUnique({
+      const question = await this.prisma.question.findUnique({
         where: { id },
         include: {
           author: {
@@ -102,6 +102,7 @@ export class QuestionRepository {
             },
           },
           answers: {
+            where: { status: "ACTIVE" },
             include: {
               author: {
                 select: {
@@ -118,6 +119,14 @@ export class QuestionRepository {
           },
         },
       });
+
+      // Phase 1: 삭제된 데이터 자동 필터링
+      // DELETED 상태인 질문은 조회 불가능하도록 처리
+      if (question && question.status === "DELETED") {
+        return null;
+      }
+
+      return question;
     } catch (error) {
       throw new Error(
         `질문 조회 실패: ${error instanceof Error ? error.message : "알 수 없는 오류"}`
@@ -162,7 +171,8 @@ export class QuestionRepository {
 
       // 검색 조건 구성
       const where: Prisma.QuestionWhereInput = {
-        status: status || "ACTIVE",
+        // Phase 1: DELETED 상태 자동 제외 (기본값으로 ACTIVE만 조회)
+        status: status !== undefined ? status : "ACTIVE",
         ...(isResolved !== undefined && { isResolved }),
         ...(isPinned !== undefined && { isPinned }),
         ...(authorId && { authorId }),

@@ -22,12 +22,16 @@ import { PrismaClient } from "@prisma/client";
  * ```
  */
 import { AuditLogService } from "../auditLog/AuditLogService";
+import { AnswerCommentService } from "../answerComment/AnswerCommentService";
 
 export class AnswerService {
   private readonly answerRepository: AnswerRepository;
   private readonly auditLogService: AuditLogService;
 
-  constructor(private readonly prisma: PrismaClient) {
+  constructor(
+    private readonly prisma: PrismaClient,
+    private answerCommentService?: AnswerCommentService
+  ) {
     this.answerRepository = new AnswerRepository(prisma);
     this.auditLogService = new AuditLogService(prisma);
   }
@@ -184,11 +188,36 @@ export class AnswerService {
    * @throws {Error} 권한이 없거나 답변을 찾을 수 없을 때 에러 발생
    */
   async deleteAnswer(id: string, userId: string) {
-    // 권한 확인
+    // 1. 권한 확인
     await this.checkAnswerOwnership(id, userId);
 
-    // Phase 1.2: 삭제 작업 감시 로그 기록
-    // GDPR/개인정보보호법 요구사항 충족
+    // 2. 모든 댓글 삭제 (AnswerCommentService에 위임)
+    if (this.answerCommentService) {
+      const comments = await this.prisma.answerComment.findMany({
+        where: { answerId: id },
+        select: { id: true },
+      });
+
+      for (const comment of comments) {
+        await this.answerCommentService.deleteComment(comment.id, userId);
+      }
+    }
+
+    // 3. 자신의 답변만 삭제
+    const answer = await this.prisma.answer.findUnique({
+      where: { id },
+    });
+
+    if (!answer) {
+      throw new Error("답변을 찾을 수 없습니다");
+    }
+
+    const updatedAnswer = await this.prisma.answer.update({
+      where: { id },
+      data: { status: "DELETED", updatedAt: new Date() },
+    });
+
+    // 4. 감시 로그
     await this.auditLogService
       .logDelete({
         targetType: "ANSWER",
@@ -202,15 +231,12 @@ export class AnswerService {
       })
       .catch(error => {
         console.error("Failed to log audit: ", error);
-        // 감시 로그 실패가 삭제를 막지 않도록 처리
       });
-
-    const answer = await this.answerRepository.delete(id);
 
     // 질문의 답변 수 감소 (비동기)
     this.updateQuestionAnswerCount(answer.questionId).catch(console.error);
 
-    return answer;
+    return updatedAnswer;
   }
 
   /**
@@ -346,7 +372,7 @@ export class AnswerService {
     // 답변 존재 확인
     const answer = await this.prisma.answer.findUnique({
       where: { id: answerId },
-      select: { id: true, questionId: true },
+      select: { id: true, questionId: true, authorId: true },
     });
 
     if (!answer) {

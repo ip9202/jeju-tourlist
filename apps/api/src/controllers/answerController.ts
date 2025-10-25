@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { AnswerService } from "../services/answer/AnswerService";
+import { AnswerCommentService } from "../services/answerComment/AnswerCommentService";
 import { PrismaClient } from "@prisma/client";
 import {
   CreateAnswerSchema,
@@ -20,7 +21,8 @@ export class AnswerController {
   private readonly answerService: AnswerService;
 
   constructor(private readonly prisma: PrismaClient) {
-    this.answerService = new AnswerService(prisma);
+    const answerCommentService = new AnswerCommentService(prisma);
+    this.answerService = new AnswerService(prisma, answerCommentService);
   }
 
   /**
@@ -51,7 +53,9 @@ export class AnswerController {
     } catch (error) {
       if (error instanceof z.ZodError) {
         console.error("Zod validation error:", JSON.stringify(error, null, 2));
-        const errorMessages = error.issues?.map(e => `${e.path.join('.')}: ${e.message}`).join(", ");
+        const errorMessages = error.issues
+          ?.map(e => `${e.path.join(".")}: ${e.message}`)
+          .join(", ");
         const response: ApiResponse = {
           success: false,
           error: "입력 데이터가 올바르지 않습니다.",
