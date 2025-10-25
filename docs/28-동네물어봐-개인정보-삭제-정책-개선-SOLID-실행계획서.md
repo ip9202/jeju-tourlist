@@ -1206,11 +1206,11 @@ export function scheduleUserDeletionJob() {
 - [x] UserDeletionService 구현
 - [x] API 엔드포인트 3개
 - [x] 배치 작업 (userDeletionJob)
-- [ ] 모든 테스트 100% 통과
-- [ ] Lint/Error 0개
-- [ ] Git 커밋
+- [x] 모든 테스트 100% 통과
+- [x] Lint/Error 0개
+- [x] Git 커밋
 
-**Phase 4 완료**: ☑ (개발 완료, 테스트 대기 중)
+**Phase 4 완료**: ☑
 
 ---
 
@@ -1300,7 +1300,7 @@ export function scheduleUserDeletionJob() {
 | 1        | 접근 제어 강화         | 1일       | ☑    |
 | 2        | Cascade 소프트삭제     | 1-2일     | ☑    |
 | 3        | 자동 완전삭제 배치     | 1일       | ⏳    |
-| 4        | 회원정보 개인정보 삭제 | 2-3일     | ☑ (개발완료) |
+| 4        | 회원정보 개인정보 삭제 | 2-3일     | ☑ |
 | 5        | 테스트 및 검증         | 1-2일     | ☐     |
 | **전체** | **5 Phases**           | **6-9일** | **⏳** |
 
