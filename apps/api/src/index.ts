@@ -43,7 +43,7 @@ function validateEnv() {
   return { success: true, error: null };
 }
 import { ErrorHandler } from "./middleware/errorHandler";
-import { scheduleDeleteCleanupJob } from "./jobs/deleteCleanupJob";
+// import { scheduleDeleteCleanupJob } from "./jobs/deleteCleanupJob";
 import { scheduleUserDeletionJob } from "./jobs/userDeletionJob";
 // import { generalLimiter } from "./middleware/rateLimiter";
 // import { sanitizeInput } from "./middleware/validation";
@@ -210,7 +210,7 @@ app.use(ErrorHandler.handle);
 async function startServer() {
   try {
     // Phase 3: 삭제된 데이터 정리 배치 작업 스케줄
-    scheduleDeleteCleanupJob();
+    // scheduleDeleteCleanupJob();
 
     // Phase 4: 사용자 삭제 배치 작업 스케줄
     scheduleUserDeletionJob();
