@@ -856,15 +856,15 @@ it("should permanently delete data older than 30 days", async () => {
 
 ### Phase 3 체크리스트
 
-- [ ] DeletedDataCleanupService 구현
-- [ ] DeleteCleanupLog 테이블 생성
-- [ ] 배치 스케줄 설정
-- [ ] 수동 삭제 API
-- [ ] 모든 테스트 100% 통과
-- [ ] Lint/Error 0개
-- [ ] Git 커밋
+- [x] DeletedDataCleanupService 구현
+- [x] DeleteCleanupLog 테이블 생성
+- [x] 배치 스케줄 설정
+- [x] 수동 삭제 API
+- [x] 모든 테스트 100% 통과
+- [x] Lint/Error 0개
+- [x] Git 커밋
 
-**Phase 3 완료**: ☐
+**Phase 3 완료**: ☑
 
 ---
 
@@ -1299,7 +1299,7 @@ export function scheduleUserDeletionJob() {
 | -------- | ---------------------- | --------- | ----- |
 | 1        | 접근 제어 강화         | 1일       | ☑    |
 | 2        | Cascade 소프트삭제     | 1-2일     | ☑    |
-| 3        | 자동 완전삭제 배치     | 1일       | ⏳    |
+| 3        | 자동 완전삭제 배치     | 1일       | ☑    |
 | 4        | 회원정보 개인정보 삭제 | 2-3일     | ☑ |
 | 5        | 테스트 및 검증         | 1-2일     | ☐     |
 | **전체** | **5 Phases**           | **6-9일** | **⏳** |
