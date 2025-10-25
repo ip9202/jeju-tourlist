@@ -21,11 +21,15 @@ import { PrismaClient } from "@prisma/client";
  * const answers = await answerService.getAnswersByQuestionId("question123");
  * ```
  */
+import { AuditLogService } from "../auditLog/AuditLogService";
+
 export class AnswerService {
   private readonly answerRepository: AnswerRepository;
+  private readonly auditLogService: AuditLogService;
 
   constructor(private readonly prisma: PrismaClient) {
     this.answerRepository = new AnswerRepository(prisma);
+    this.auditLogService = new AuditLogService(prisma);
   }
 
   /**
@@ -80,7 +84,7 @@ export class AnswerService {
         },
       },
     });
-    
+
     return answerWithAuthor || answer;
   }
 
@@ -182,6 +186,24 @@ export class AnswerService {
   async deleteAnswer(id: string, userId: string) {
     // 권한 확인
     await this.checkAnswerOwnership(id, userId);
+
+    // Phase 1.2: 삭제 작업 감시 로그 기록
+    // GDPR/개인정보보호법 요구사항 충족
+    await this.auditLogService
+      .logDelete({
+        targetType: "ANSWER",
+        targetId: id,
+        userId,
+        reason: "User requested deletion",
+        details: {
+          timestamp: new Date().toISOString(),
+          action: "SOFT_DELETE",
+        },
+      })
+      .catch(error => {
+        console.error("Failed to log audit: ", error);
+        // 감시 로그 실패가 삭제를 막지 않도록 처리
+      });
 
     const answer = await this.answerRepository.delete(id);
 

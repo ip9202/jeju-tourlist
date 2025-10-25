@@ -21,11 +21,15 @@ import { PrismaClient } from "@prisma/client";
  * const comments = await answerCommentService.getCommentsByAnswerId("answer123");
  * ```
  */
+import { AuditLogService } from "../auditLog/AuditLogService";
+
 export class AnswerCommentService {
   private readonly answerCommentRepository: AnswerCommentRepository;
+  private readonly auditLogService: AuditLogService;
 
   constructor(private readonly prisma: PrismaClient) {
     this.answerCommentRepository = new AnswerCommentRepository(prisma);
+    this.auditLogService = new AuditLogService(prisma);
   }
 
   /**
@@ -77,7 +81,7 @@ export class AnswerCommentService {
         },
       },
     });
-    
+
     return commentWithAuthor || comment;
   }
 
@@ -173,6 +177,24 @@ export class AnswerCommentService {
     if (comment.authorId !== userId) {
       throw new Error("댓글을 삭제할 권한이 없습니다.");
     }
+
+    // Phase 1.2: 삭제 작업 감시 로그 기록
+    // GDPR/개인정보보호법 요구사항 충족
+    await this.auditLogService
+      .logDelete({
+        targetType: "COMMENT",
+        targetId: id,
+        userId,
+        reason: "User requested deletion",
+        details: {
+          timestamp: new Date().toISOString(),
+          action: "SOFT_DELETE",
+        },
+      })
+      .catch(error => {
+        console.error("Failed to log audit: ", error);
+        // 감시 로그 실패가 삭제를 막지 않도록 처리
+      });
 
     await this.answerCommentRepository.update(id, { status: "DELETED" });
   }
