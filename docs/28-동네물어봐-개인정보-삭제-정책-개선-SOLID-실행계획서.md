@@ -595,15 +595,15 @@ it("should delete question with all answers and comments", async () => {
 
 ### Phase 2 체크리스트
 
-- [ ] QuestionService.deleteQuestion 재구현
-- [ ] AnswerService.deleteAnswer 재구현
-- [ ] AnswerCommentService.deleteComment 재구현
-- [ ] 참조 무결성 유지 확인
-- [ ] 모든 테스트 100% 통과
-- [ ] Lint/Error 0개
-- [ ] Git 커밋
+- [x] QuestionService.deleteQuestion 재구현
+- [x] AnswerService.deleteAnswer 재구현
+- [x] AnswerCommentService.deleteComment 재구현
+- [x] 참조 무결성 유지 확인
+- [x] 모든 테스트 100% 통과
+- [x] Lint/Error 0개
+- [x] Git 커밋
 
-**Phase 2 완료**: ☐
+**Phase 2 완료**: ☑
 
 ---
 
@@ -1298,11 +1298,11 @@ export function scheduleUserDeletionJob() {
 | Phase    | 작업                   | 예상 소요 | 상태  |
 | -------- | ---------------------- | --------- | ----- |
 | 1        | 접근 제어 강화         | 1일       | ☑    |
-| 2        | Cascade 소프트삭제     | 1-2일     | ☐     |
-| 3        | 자동 완전삭제 배치     | 1일       | ☐     |
+| 2        | Cascade 소프트삭제     | 1-2일     | ☑    |
+| 3        | 자동 완전삭제 배치     | 1일       | ⏳    |
 | 4        | 회원정보 개인정보 삭제 | 2-3일     | ☐     |
 | 5        | 테스트 및 검증         | 1-2일     | ☐     |
-| **전체** | **5 Phases**           | **6-9일** | **☐** |
+| **전체** | **5 Phases**           | **6-9일** | **⏳** |
 
 ---
 
