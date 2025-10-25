@@ -43,6 +43,8 @@ function validateEnv() {
   return { success: true, error: null };
 }
 import { ErrorHandler } from "./middleware/errorHandler";
+import { scheduleDeleteCleanupJob } from "./jobs/deleteCleanupJob";
+import { scheduleUserDeletionJob } from "./jobs/userDeletionJob";
 // import { generalLimiter } from "./middleware/rateLimiter";
 // import { sanitizeInput } from "./middleware/validation";
 import { swaggerSpec, swaggerUiOptions } from "./config/swagger";
@@ -61,6 +63,7 @@ import { createAnswerCommentRouter } from "./routes/answerComment";
 import { createBatchSchedulerRouter } from "./routes/batch-scheduler";
 import { createStatsRouter } from "./routes/stats";
 import { createUserRouter } from "./routes/user";
+import { createUserDeletionRouter } from "./routes/userDeletion";
 import {
   SocketConfig,
   createAuthMiddleware,
@@ -183,6 +186,9 @@ app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 // TODO: Phase 7 테스트 후 활성화
 // app.use("/api/auth", authLimiter, createAuthRouter());
 app.use("/api/users", createUserRouter(prisma));
+
+// Phase 4: 사용자 삭제 라우터
+app.use("/api/users", createUserDeletionRouter(prisma));
 // app.use("/api", createUserActivityRouter(prisma));
 
 // API 라우트
@@ -203,6 +209,12 @@ app.use(ErrorHandler.handle);
 // Socket.io 서버 설정 및 초기화
 async function startServer() {
   try {
+    // Phase 3: 삭제된 데이터 정리 배치 작업 스케줄
+    scheduleDeleteCleanupJob();
+
+    // Phase 4: 사용자 삭제 배치 작업 스케줄
+    scheduleUserDeletionJob();
+
     // Socket.io 서버 생성
     const io = await SocketConfig.createServer(httpServer);
 

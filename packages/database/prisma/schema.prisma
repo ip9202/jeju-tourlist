@@ -44,6 +44,10 @@ model User {
   userBadges         UserBadge[]
   userProfile        UserProfile?
   auditLogs          AuditLog[]
+  deletionRequest    DeletionRequest?
+  isDeletionRequested Boolean       @default(false)
+  deletionRequestedAt DateTime?
+  willBeDeletedAt      DateTime?
 
   @@index([email])
   @@index([provider, providerId])
@@ -459,4 +463,50 @@ model AuditLog {
   @@index([status])
   @@index([createdAt])
   @@map("audit_logs")
+}
+
+// Phase 4: 회원정보 개인정보 삭제
+// 사용자 탈퇴 시 30일 유예 기간 후 자동 삭제
+model DeletionRequest {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  requestedAt     DateTime @default(now())
+  reason          String?
+  status          String   // "PENDING", "APPROVED", "COMPLETED", "CANCELLED"
+  willBeDeletedAt DateTime // 요청일 + 30일
+
+  requestIp       String?
+  requestUserAgent String?
+
+  completedAt     DateTime?
+  completedBy     String?  // "admin" 또는 "system"
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([status])
+  @@index([userId])
+  @@index([willBeDeletedAt])
+  @@map("deletion_requests")
+}
+
+// Phase 3: 삭제된 데이터 정리 로그
+// 자동으로 30일 이상 경과한 DELETED 데이터를 물리적으로 삭제한 기록
+model DeleteCleanupLog {
+  id                String   @id @default(cuid())
+  status            String   // "STARTED", "SUCCESS", "FAILED"
+  startedAt         DateTime @default(now())
+  completedAt       DateTime?
+  deletedComments   Int      @default(0)
+  deletedAnswers    Int      @default(0)
+  deletedQuestions  Int      @default(0)
+  errorMessage      String?
+  durationMs        Int?
+
+  @@index([status])
+  @@index([startedAt])
+  @@index([completedAt])
+  @@map("delete_cleanup_logs")
 }
