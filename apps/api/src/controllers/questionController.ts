@@ -31,6 +31,9 @@ export class QuestionController {
    */
   createQuestion = async (req: Request, res: Response) => {
     try {
+      // 디버그: 요청 본문 로깅
+      console.log("📝 [QuestionController] 요청 데이터:", JSON.stringify(req.body, null, 2));
+      
       // 요청 데이터 검증
       const validatedData = CreateQuestionSchema.parse(req.body);
 
@@ -52,6 +55,7 @@ export class QuestionController {
       res.status(201).json(response);
     } catch (error) {
       if (error instanceof z.ZodError) {
+        console.error("❌ [QuestionController] Zod 검증 오류:", error.issues);
         const response: ApiResponse = {
           success: false,
           error: "입력 데이터가 올바르지 않습니다.",
@@ -61,6 +65,7 @@ export class QuestionController {
         return res.status(400).json(response);
       }
 
+      console.error("❌ [QuestionController] 오류:", error);
       const response: ApiResponse = {
         success: false,
         error:
