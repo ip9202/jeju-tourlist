@@ -131,33 +131,8 @@ export default function CategoriesPage() {
       return;
     }
 
-    setLoadingMap(prev => ({ ...prev, [categoryId]: true }));
-
-    try {
-      let url = `http://localhost:4000/api/questions?categoryId=${categoryId}&limit=10`;
-
-      const sort = sortByMap[categoryId] || "latest";
-      if (sort === "popular") {
-        url += "&sortBy=answerCount";
-      } else if (sort === "views") {
-        url += "&sortBy=viewCount";
-      }
-
-      const res = await fetch(url, { cache: "no-store" });
-      const data = await res.json();
-      setQuestionsMap(prev => ({
-        ...prev,
-        [categoryId]: data.data || [],
-      }));
-    } catch (error) {
-      console.error("질문 로드 실패:", error);
-      setQuestionsMap(prev => ({
-        ...prev,
-        [categoryId]: [],
-      }));
-    } finally {
-      setLoadingMap(prev => ({ ...prev, [categoryId]: false }));
-    }
+    const sort = sortByMap[categoryId] || "latest";
+    await loadCategoryQuestionsWithSort(categoryId, sort);
   };
 
   // 카테고리 토글
@@ -175,12 +150,50 @@ export default function CategoriesPage() {
 
   // 정렬 변경 핸들러
   const handleSortChange = (categoryId: string, sortValue: string) => {
-    setSortByMap(prev => ({
-      ...prev,
-      [categoryId]: sortValue,
-    }));
-    // 질문 다시 로드
-    loadCategoryQuestions(categoryId, true);
+    // 상태 업데이트 후 콜백으로 질문 로드 (비동기 문제 해결)
+    setSortByMap(prev => {
+      const newSortByMap = {
+        ...prev,
+        [categoryId]: sortValue,
+      };
+      // 새로운 sortBy 값으로 바로 로드하기 위해 직접 호출
+      loadCategoryQuestionsWithSort(categoryId, sortValue);
+      return newSortByMap;
+    });
+  };
+
+  // 정렬값과 함께 질문 로드 (상태 업데이트 대기 없음)
+  const loadCategoryQuestionsWithSort = async (
+    categoryId: string,
+    sortValue: string
+  ) => {
+    setLoadingMap(prev => ({ ...prev, [categoryId]: true }));
+
+    try {
+      let url = `http://localhost:4000/api/questions?categoryId=${categoryId}&limit=10`;
+
+      if (sortValue === "popular") {
+        url += "&sortBy=answers";
+      } else if (sortValue === "views") {
+        url += "&sortBy=viewCount";
+      }
+      // "latest"는 기본값이므로 sortBy 파라미터 추가 안 함
+
+      const res = await fetch(url, { cache: "no-store" });
+      const data = await res.json();
+      setQuestionsMap(prev => ({
+        ...prev,
+        [categoryId]: data.data || [],
+      }));
+    } catch (error) {
+      console.error("질문 로드 실패:", error);
+      setQuestionsMap(prev => ({
+        ...prev,
+        [categoryId]: [],
+      }));
+    } finally {
+      setLoadingMap(prev => ({ ...prev, [categoryId]: false }));
+    }
   };
 
   return (
