@@ -5,10 +5,7 @@ export const CreateQuestionSchema = z.object({
   title: z.string().min(5).max(200),
   content: z.string().min(10).max(5000),
   authorId: z.string().min(1).optional(), // 선택적으로 변경
-  categoryId: z
-    .union([z.string().cuid(), z.string().max(0), z.null(), z.undefined()])
-    .optional()
-    .transform((val) => (val === "" ? null : val)),
+  categoryId: z.string().cuid().nullable().optional().transform(val => val === "" ? null : val),
   tags: z.array(z.string().min(1).max(30)).max(10).default([]),
   attachments: z.array(z.string().min(1)).max(5).default([]), // 최대 5개 파일 (상대/절대 경로 모두 허용)
   location: z.string().max(100).optional(),
