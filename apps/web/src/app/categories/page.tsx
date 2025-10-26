@@ -352,32 +352,45 @@ export default function CategoriesPage() {
                     </div>
                   ) : questionsMap[category.id]?.length > 0 ? (
                     <div className="space-y-3">
-                      {questionsMap[category.id].map(question => (
-                        <Link
-                          key={question.id}
-                          href={`/questions/${question.id}`}
-                          className="block p-3 sm:p-4 bg-white border border-gray-200 rounded-lg hover:border-blue-500 hover:shadow-md transition-all"
-                        >
-                          <h4 className="font-semibold text-gray-900 mb-2 line-clamp-2 text-sm">
-                            {question.title}
-                          </h4>
+                      {questionsMap[category.id].map(question => {
+                        const popularityScore =
+                          question.answerCount * 40 +
+                          question.viewCount * 0.3 +
+                          question.likeCount * 0.3;
 
-                          <div className="flex items-center gap-3 text-xs text-gray-600 flex-wrap">
-                            <span className="flex items-center gap-1">
-                              <MessageSquare className="w-3 h-3" />
-                              {question.answerCount}개 답변
-                            </span>
-                            <span className="flex items-center gap-1">
-                              <Eye className="w-3 h-3" />
-                              {question.viewCount} 조회
-                            </span>
-                            <span className="flex items-center gap-1">
-                              <Clock className="w-3 h-3" />
-                              {formatTimeAgo(question.createdAt)}
-                            </span>
-                          </div>
-                        </Link>
-                      ))}
+                        return (
+                          <Link
+                            key={question.id}
+                            href={`/questions/${question.id}`}
+                            className="block p-3 sm:p-4 bg-white border border-gray-200 rounded-lg hover:border-blue-500 hover:shadow-md transition-all"
+                          >
+                            <div className="flex items-start justify-between gap-2 mb-2">
+                              <h4 className="font-semibold text-gray-900 line-clamp-2 text-sm flex-1">
+                                {question.title}
+                              </h4>
+                              {/* 디버그: 혼합 점수 표시 */}
+                              <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded whitespace-nowrap">
+                                점수: {popularityScore.toFixed(1)}
+                              </span>
+                            </div>
+
+                            <div className="flex items-center gap-3 text-xs text-gray-600 flex-wrap">
+                              <span className="flex items-center gap-1">
+                                <MessageSquare className="w-3 h-3" />
+                                {question.answerCount}개 답변
+                              </span>
+                              <span className="flex items-center gap-1">
+                                <Eye className="w-3 h-3" />
+                                {question.viewCount} 조회
+                              </span>
+                              <span className="flex items-center gap-1">
+                                <Clock className="w-3 h-3" />
+                                {formatTimeAgo(question.createdAt)}
+                              </span>
+                            </div>
+                          </Link>
+                        );
+                      })}
                     </div>
                   ) : (
                     <div className="text-center py-6 text-gray-500 text-sm">
