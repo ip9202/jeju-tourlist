@@ -9,6 +9,6 @@ export const AUTH_CONSTANTS = {
 } as const;
 
 export const API_CONSTANTS = {
-  BASE_URL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api",
+  BASE_URL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000",
   TIMEOUT: 30000,
 } as const;
