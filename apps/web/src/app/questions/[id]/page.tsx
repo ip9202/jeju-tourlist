@@ -211,6 +211,12 @@ export default function QuestionDetailPage() {
   };
 
   const handleDeleteQuestion = async () => {
+    // 소유자 확인
+    if (question?.author.id !== user?.id) {
+      alert("자신의 질문만 삭제할 수 있습니다.");
+      return;
+    }
+
     if (!window.confirm("정말 이 질문을 삭제하시겠습니까?")) {
       return;
     }
@@ -380,11 +386,13 @@ export default function QuestionDetailPage() {
               {question.title}
             </h1>
             <div className="flex items-center space-x-2 flex-shrink-0">
+              {/* 공개 액션: 모든 사용자에게 표시 */}
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => {}}
                 className="text-gray-600 hover:text-gray-900"
+                title="공유"
               >
                 <Share2 className="w-4 h-4" />
               </Button>
@@ -393,17 +401,23 @@ export default function QuestionDetailPage() {
                 size="sm"
                 onClick={() => {}}
                 className="text-gray-600 hover:text-gray-900"
+                title="북마크"
               >
                 <Bookmark className="w-4 h-4" />
               </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleDeleteQuestion}
-                className="text-gray-600 hover:text-red-600"
-              >
-                <Trash2 className="w-4 h-4" />
-              </Button>
+
+              {/* 소유자 전용 액션: 자신의 질문일 때만 표시 */}
+              {question.author.id === user?.id && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleDeleteQuestion}
+                  className="text-gray-600 hover:text-red-600"
+                  title="삭제"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </Button>
+              )}
             </div>
           </div>
           <div className="mb-6">
