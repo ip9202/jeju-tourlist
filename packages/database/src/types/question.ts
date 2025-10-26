@@ -5,10 +5,14 @@ export const CreateQuestionSchema = z.object({
   title: z.string().min(5).max(200),
   content: z.string().min(10).max(5000),
   authorId: z.string().min(1).optional(), // 선택적으로 변경
-  categoryId: z.preprocess(
-    (val) => (val === "" ? null : val),
-    z.string().cuid().nullable().optional()
-  ),
+  categoryId: z
+    .union([z.string(), z.null(), z.undefined()])
+    .optional()
+    .transform(val => {
+      // 빈 문자열이나 undefined를 null로 변환
+      if (!val || val === "") return null;
+      return val;
+    }),
   tags: z.array(z.string().min(1).max(30)).max(10).default([]),
   attachments: z.array(z.string().min(1)).max(5).default([]), // 최대 5개 파일 (상대/절대 경로 모두 허용)
   location: z.string().max(100).optional(),
