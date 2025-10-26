@@ -222,8 +222,9 @@ export default function QuestionDetailPage() {
         throw new Error(response.error || "질문 삭제에 실패했습니다.");
       }
 
-      alert("질문이 삭제되었습니다.");
-      window.location.href = "/questions";
+      // alert 제거, router.replace() 사용으로 빠른 페이지 이동
+      // window.location.href 대신 Next.js router 사용 (SPA 방식)
+      router.replace("/questions");
     } catch (error) {
       console.error("질문 삭제 실패:", error);
       alert(

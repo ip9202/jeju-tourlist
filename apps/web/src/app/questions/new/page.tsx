@@ -215,9 +215,9 @@ export default function NewQuestionPage() {
         throw new Error(response.error || "질문 작성에 실패했습니다.");
       }
 
-      // 성공 시 질문 상세 페이지로 이동
-      alert("질문이 저장되었습니다!");
-      router.push(`/questions/${response.data.id}`);
+      // 성공 시 질문 상세 페이지로 이동 (alert 제거 - 더 빠른 UX)
+      // router.replace()는 router.push()보다 더 빠름 (히스토리 스택 변경 없음)
+      router.replace(`/questions/${response.data.id}`);
     } catch (error) {
       setErrors(prev => ({
         ...prev,
