@@ -160,7 +160,7 @@ export default function QuestionDetailPage() {
         });
       } else {
         // 메인 답변: POST /api/answers
-        response = await api.post("/api/answers", {
+        response = await api.post("/answers", {
           content: content.trim(),
           questionId: params.id,
           authorId: user.id,

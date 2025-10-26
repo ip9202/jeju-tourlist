@@ -209,7 +209,7 @@ export default function NewQuestionPage() {
       };
 
       // API 호출 (api 클라이언트 사용 - 자동으로 Authorization 헤더 포함)
-      const response = await api.post("/api/questions", requestData);
+      const response = await api.post("/questions", requestData);
 
       if (!response.success) {
         throw new Error(response.error || "질문 작성에 실패했습니다.");
