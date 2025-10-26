@@ -191,9 +191,23 @@ export class QuestionRepository {
       };
 
       // 정렬 조건 구성
-      const orderBy: Prisma.QuestionOrderByWithRelationInput = {
-        [sortBy]: sortOrder,
+      // 인기순(popularityScore)은 클라이언트 사이드에서 계산하므로
+      // DB 정렬은 viewCount로 기본 설정
+      let orderBy: Prisma.QuestionOrderByWithRelationInput = {
+        createdAt: "desc",
       };
+
+      if (sortBy === "viewCount" || sortBy === "likeCount") {
+        orderBy = { [sortBy]: sortOrder };
+      } else if (sortBy === "answers") {
+        // 답변 수는 계산 필드이므로 createdAt으로 먼저 정렬 후 클라이언트에서 처리
+        orderBy = { createdAt: "desc" };
+      } else if (sortBy !== "createdAt") {
+        // 그 외의 경우도 createdAt으로 정렬
+        orderBy = { createdAt: "desc" };
+      } else {
+        orderBy = { [sortBy]: sortOrder };
+      }
 
       // 페이지네이션 계산
       const skip = (page - 1) * limit;
@@ -233,8 +247,18 @@ export class QuestionRepository {
         this.prisma.question.count({ where }),
       ]);
 
+      // 인기도 점수 계산 함수
+      const calculatePopularityScore = (
+        answers: number,
+        views: number,
+        likes: number
+      ): number => {
+        // 가중치: 답변 40% + 조회 수 30% + 좋아요 30%
+        return answers * 40 + views * 0.3 + likes * 0.3;
+      };
+
       // QuestionListItem 형태로 변환
-      const questionListItems: QuestionListItem[] = questions.map(question => ({
+      let questionListItems: QuestionListItem[] = questions.map(question => ({
         id: question.id,
         title: question.title,
         content: question.content,
@@ -263,6 +287,23 @@ export class QuestionRepository {
         updatedAt: question.updatedAt,
         resolvedAt: question.resolvedAt,
       }));
+
+      // 인기순(popularityScore) 정렬이 요청된 경우 클라이언트 사이드에서 정렬
+      if (sortBy === "answers") {
+        questionListItems.sort((a, b) => {
+          const scoreA = calculatePopularityScore(
+            a.answerCount,
+            a.viewCount,
+            a.likeCount
+          );
+          const scoreB = calculatePopularityScore(
+            b.answerCount,
+            b.viewCount,
+            b.likeCount
+          );
+          return sortOrder === "desc" ? scoreB - scoreA : scoreA - scoreB;
+        });
+      }
 
       const totalPages = Math.ceil(total / limit);
 

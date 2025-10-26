@@ -162,6 +162,16 @@ export default function CategoriesPage() {
     });
   };
 
+  // 인기도 점수 계산 함수 (프론트엔드)
+  const calculatePopularityScore = (
+    answers: number,
+    views: number,
+    likes: number
+  ): number => {
+    // 가중치: 답변 40% + 조회 수 30% + 좋아요 30%
+    return answers * 40 + views * 0.3 + likes * 0.3;
+  };
+
   // 정렬값과 함께 질문 로드 (상태 업데이트 대기 없음)
   const loadCategoryQuestionsWithSort = async (
     categoryId: string,
@@ -172,6 +182,8 @@ export default function CategoriesPage() {
     try {
       let url = `http://localhost:4000/api/questions?categoryId=${categoryId}&limit=10`;
 
+      // 백엔드에서 원하는 정렬값 전달
+      // "popular"는 "answers"로 변환 (혼합 점수로 계산됨)
       if (sortValue === "popular") {
         url += "&sortBy=answers";
       } else if (sortValue === "views") {
@@ -181,9 +193,30 @@ export default function CategoriesPage() {
 
       const res = await fetch(url, { cache: "no-store" });
       const data = await res.json();
+
+      let questions = data.data || [];
+
+      // 인기순(popular) 정렬이 요청된 경우 클라이언트 사이드 정렬
+      // (백엔드에서 정렬하지 않으므로 프론트에서 정렬)
+      if (sortValue === "popular") {
+        questions = questions.sort((a: Question, b: Question) => {
+          const scoreA = calculatePopularityScore(
+            a.answerCount || 0,
+            a.viewCount || 0,
+            a.likeCount || 0
+          );
+          const scoreB = calculatePopularityScore(
+            b.answerCount || 0,
+            b.viewCount || 0,
+            b.likeCount || 0
+          );
+          return scoreB - scoreA; // 내림차순
+        });
+      }
+
       setQuestionsMap(prev => ({
         ...prev,
-        [categoryId]: data.data || [],
+        [categoryId]: questions,
       }));
     } catch (error) {
       console.error("질문 로드 실패:", error);

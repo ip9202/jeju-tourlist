@@ -313,8 +313,7 @@ function QuestionsPageContent() {
                 >
                   <option value="createdAt-desc">최신순</option>
                   <option value="createdAt-asc">오래된순</option>
-                  <option value="answerCount-desc">답변 많은순</option>
-                  <option value="answerCount-asc">답변 적은순</option>
+
                   <option value="viewCount-desc">조회수 높은순</option>
                   <option value="viewCount-asc">조회수 낮은순</option>
                   <option value="likeCount-desc">좋아요 많은순</option>
