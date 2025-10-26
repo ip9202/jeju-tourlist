@@ -74,7 +74,7 @@ function QuestionsPageContent() {
 
   const loadCategories = async () => {
     try {
-      const response = await fetch("/api/categories");
+      const response = await fetch("http://localhost:4000/categories");
       if (response.ok) {
         const data = await response.json();
         console.log("📦 카테고리 데이터:", data);

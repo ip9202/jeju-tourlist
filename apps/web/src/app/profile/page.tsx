@@ -87,7 +87,7 @@ export default function ProfilePage() {
 
     setIsLoading(true);
     try {
-      const response = await fetch("/api/users/me", {
+      const response = await fetch("http://localhost:4000/users/me", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

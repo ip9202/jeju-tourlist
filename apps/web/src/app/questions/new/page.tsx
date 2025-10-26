@@ -67,7 +67,7 @@ export default function NewQuestionPage() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch("/api/categories");
+        const response = await fetch("http://localhost:4000/categories");
         if (response.ok) {
           const data = await response.json();
           setCategories(data.data || []);
@@ -175,7 +175,7 @@ export default function NewQuestionPage() {
         const fileFormData = new FormData();
         fileFormData.append("file", formData.file);
 
-        const uploadResponse = await fetch("/api/upload", {
+        const uploadResponse = await fetch("http://localhost:4000/upload", {
           method: "POST",
           body: fileFormData,
         });

@@ -216,16 +216,10 @@ export default function QuestionDetailPage() {
     }
 
     try {
-      const response = await fetch(`/api/questions/${params.id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await api.delete(`/questions/${params.id}`);
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "질문 삭제에 실패했습니다.");
+      if (!response.success) {
+        throw new Error(response.error || "질문 삭제에 실패했습니다.");
       }
 
       alert("질문이 삭제되었습니다.");
