@@ -307,10 +307,17 @@ export function ExpertDashboardLayout({
                   <h3 className="font-semibold text-gray-900">
                     {expert.nickname}
                   </h3>
-                  {/* 카테고리 배지 표시 */}
+                  {/* 카테고리 배지 표시 - 중복 제거 */}
                   <div className="flex items-center gap-1 mt-1 flex-wrap">
                     {expert.badges
                       .filter(badge => badge.type === "CATEGORY_EXPERT")
+                      .reduce((unique: Badge[], badge) => {
+                        // 같은 카테고리의 배지가 이미 추가되었으면 스킵
+                        if (!unique.find(b => b.category === badge.category)) {
+                          unique.push(badge);
+                        }
+                        return unique;
+                      }, [])
                       .map(badge => (
                         <span
                           key={badge.id}
