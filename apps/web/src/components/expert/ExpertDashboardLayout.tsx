@@ -18,12 +18,15 @@ import {
   TrendingUp,
   Users,
   Award,
-  MapPin,
+  Landmark,
   Utensils,
   Bed,
   Car,
   ShoppingBag,
-  HelpCircle,
+  Waves,
+  Cloud,
+  Shield,
+  MoreHorizontal,
 } from "lucide-react";
 
 interface ExpertDashboardLayoutProps {
@@ -92,31 +95,40 @@ export function ExpertDashboardLayout({
   const [sortBy, setSortBy] = useState(initialSortBy);
   const [page, setPage] = useState(1);
 
-  // 카테고리별 아이콘 및 색상 매핑
+  // 카테고리별 아이콘 매핑 (categories/page.tsx와 동일)
+  const categoryIcons: Record<string, React.ReactNode> = {
+    관광지: <Landmark className="w-4 h-4" />,
+    맛집: <Utensils className="w-4 h-4" />,
+    숙박: <Bed className="w-4 h-4" />,
+    교통: <Car className="w-4 h-4" />,
+    쇼핑: <ShoppingBag className="w-4 h-4" />,
+    액티비티: <Waves className="w-4 h-4" />,
+    날씨: <Cloud className="w-4 h-4" />,
+    안전: <Shield className="w-4 h-4" />,
+    기타: <MoreHorizontal className="w-4 h-4" />,
+  };
+
+  // 카테고리별 색상 매핑
+  const categoryColorMap: Record<string, string> = {
+    관광지: "#FF6B6B",
+    맛집: "#4ECDC4",
+    숙박: "#45B7D1",
+    교통: "#96CEB4",
+    쇼핑: "#FFEAA7",
+    액티비티: "#45B7E1",
+    날씨: "#FFB84D",
+    안전: "#9B59B6",
+    기타: "#BDC3C7",
+  };
+
   const getCategoryIcon = (category: string | null) => {
     if (!category) return null;
-    const iconMap: Record<string, React.ReactNode> = {
-      관광지: <MapPin className="w-4 h-4" />,
-      맛집: <Utensils className="w-4 h-4" />,
-      숙박: <Bed className="w-4 h-4" />,
-      교통: <Car className="w-4 h-4" />,
-      쇼핑: <ShoppingBag className="w-4 h-4" />,
-      기타: <HelpCircle className="w-4 h-4" />,
-    };
-    return iconMap[category] || <HelpCircle className="w-4 h-4" />;
+    return categoryIcons[category] || <MoreHorizontal className="w-4 h-4" />;
   };
 
   const getCategoryColor = (category: string | null) => {
     if (!category) return "#999999";
-    const colorMap: Record<string, string> = {
-      관광지: "#FF6B6B",
-      맛집: "#4ECDC4",
-      숙박: "#45B7D1",
-      교통: "#96CEB4",
-      쇼핑: "#FFEAA7",
-      기타: "#DDA0DD",
-    };
-    return colorMap[category] || "#999999";
+    return categoryColorMap[category] || "#999999";
   };
 
   const categories = [
