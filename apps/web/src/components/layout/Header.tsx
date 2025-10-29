@@ -22,6 +22,7 @@ import {
   HeaderBadgeNotification,
   HeaderBadgeStats,
 } from "./HeaderUserBadge";
+import { PopularSearchTerms } from "./PopularSearchTerms";
 
 export const Header: React.FC = () => {
   const router = useRouter();
@@ -39,14 +40,8 @@ export const Header: React.FC = () => {
     right: 0,
   });
 
-  // 인기 검색어
-  const popularSearches = [
-    "한라산 등산",
-    "렌터카 추천",
-    "맛집 정보",
-    "날씨",
-    "숙박 추천",
-  ];
+  // @TAG-FE-COMPONENT-MODIFIED: Removed hardcoded popularSearches, now using PopularSearchTerms component
+  // Old implementation replaced with real-time data from API
 
   // 카테고리
   const categories = [
@@ -137,16 +132,7 @@ export const Header: React.FC = () => {
     }
   };
 
-  // 인기검색어 클릭
-  const handlePopularSearch = (search: string) => {
-    setSearchQuery(search);
-    const params = new URLSearchParams();
-    params.append("query", encodeURIComponent(search));
-    if (selectedCategory) {
-      params.append("categoryId", selectedCategory);
-    }
-    router.push(`/questions?${params.toString()}`);
-  };
+  // @TAG-FE-COMPONENT-MODIFIED: handlePopularSearch removed - now handled by SearchTermBadge component
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white shadow-sm">
@@ -490,25 +476,15 @@ export const Header: React.FC = () => {
             </button>
           </form>
 
-          {/* 인기검색어 - 당근마켓 스타일 */}
+          {/* 인기검색어 - Real-time data from API */}
           <div className="relative">
             <div className="overflow-hidden">
               <div className="inline-flex items-center py-0 pr-10 overflow-x-auto scrollbar-hide">
                 <span className="text-xs font-medium text-gray-500 mr-4 flex-shrink-0">
                   인기 검색어
                 </span>
-                <ul className="flex items-center gap-3">
-                  {popularSearches.map(search => (
-                    <li key={search} className="flex-shrink-0">
-                      <button
-                        onClick={() => handlePopularSearch(search)}
-                        className="text-xs text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap"
-                      >
-                        {search}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
+                {/* @TAG-FE-COMPONENT-MODIFIED: Integrated PopularSearchTerms component with real API data */}
+                <PopularSearchTerms className="flex items-center gap-3" />
               </div>
             </div>
           </div>
