@@ -21,7 +21,7 @@ export interface Question {
 
 export interface SearchFilters {
   categoryId?: string;
-  status?: "all" | "answered" | "unanswered";
+  status?: "" | "ACTIVE" | "CLOSED";
   sortBy?: "createdAt" | "viewCount" | "likeCount";
   sortOrder?: "asc" | "desc";
 }
@@ -84,10 +84,8 @@ export const useQuestionSearch = () => {
         params.append("categoryId", options.categoryId);
       }
 
-      if (options.status === "answered") {
-        params.append("isResolved", "true");
-      } else if (options.status === "unanswered") {
-        params.append("isResolved", "false");
+      if (options.status === "ACTIVE" || options.status === "CLOSED") {
+        params.append("status", options.status);
       }
 
       if (options.sortBy) {

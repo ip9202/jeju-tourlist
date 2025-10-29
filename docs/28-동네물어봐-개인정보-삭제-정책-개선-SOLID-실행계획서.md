@@ -68,7 +68,7 @@ AuditLogService.log() [분리된 책임]
 
 ### 1.1 AuditLog 테이블 생성
 
-- [ ] Prisma 스키마에 AuditLog 모델 추가
+- [x] Prisma 스키마에 AuditLog 모델 추가
 
 ```typescript
 model AuditLog {
@@ -91,14 +91,14 @@ model AuditLog {
 }
 ```
 
-- [ ] 마이그레이션 생성: `pnpm exec prisma migrate dev --name add-audit-log`
-- [ ] Lint/Error 체크: `pnpm run lint && pnpm run type-check` 통과
+- [x] 마이그레이션 생성: `pnpm exec prisma migrate dev --name add-audit-log`
+- [x] Lint/Error 체크: `pnpm run lint && pnpm run type-check` 통과
 
 ### 1.2 AuditLogService 구현 (새로운 Service)
 
 **SRP 준수**: 감시 로깅만 전담
 
-- [ ] 파일 생성: `apps/api/src/services/auditLog/AuditLogService.ts`
+- [x] 파일 생성: `apps/api/src/services/auditLog/AuditLogService.ts`
 
 ```typescript
 import { PrismaClient } from "@jeju-tourlist/database";
@@ -141,13 +141,13 @@ export class AuditLogService {
 }
 ```
 
-- [ ] Lint/Error 체크: `pnpm run lint && pnpm run type-check` 통과
+- [x] Lint/Error 체크: `pnpm run lint && pnpm run type-check` 통과
 
 ### 1.3 QuestionService에 AuditLogService 주입
 
 **DIP 준수**: Service 간 의존성 명확화
 
-- [ ] `apps/api/src/services/question/QuestionService.ts` 수정
+- [x] `apps/api/src/services/question/QuestionService.ts` 수정
 
 ```typescript
 export class QuestionService {
@@ -177,13 +177,13 @@ export class QuestionService {
 }
 ```
 
-- [ ] Lint/Error 체크: `pnpm run lint && pnpm run type-check` 통과
+- [x] Lint/Error 체크: `pnpm run lint && pnpm run type-check` 통과
 
 ### 1.4 Repository 레벨 필터링
 
 **목표**: 모든 조회 메서드에서 DELETED 자동 제외
 
-- [ ] `QuestionRepository.getQuestion()` 수정
+- [x] `QuestionRepository.getQuestion()` 수정
 
 ```typescript
 async getQuestion(id: string): Promise<Question | null> {
@@ -199,7 +199,7 @@ async getQuestion(id: string): Promise<Question | null> {
 }
 ```
 
-- [ ] `QuestionRepository.listQuestions()` 수정
+- [x] `QuestionRepository.listQuestions()` 수정
 
 ```typescript
 async listQuestions(filters: any): Promise<Question[]> {
@@ -212,15 +212,15 @@ async listQuestions(filters: any): Promise<Question[]> {
 }
 ```
 
-- [ ] AnswerRepository에도 동일 적용
-- [ ] AnswerCommentRepository에도 동일 적용
-- [ ] Lint/Error 체크: Repository 테스트 100% 통과
+- [x] AnswerRepository에도 동일 적용
+- [x] AnswerCommentRepository에도 동일 적용
+- [x] Lint/Error 체크: Repository 테스트 100% 통과
 
 ### 1.5 API 레벨 응답 필터링
 
 **목표**: Controller에서도 DELETED 상태 체크
 
-- [ ] `GET /api/questions/:id` 컨트롤러 수정
+- [x] `GET /api/questions/:id` 컨트롤러 수정
 
 ```typescript
 async getQuestion(req: Request, res: Response) {
@@ -236,13 +236,13 @@ async getQuestion(req: Request, res: Response) {
 }
 ```
 
-- [ ] Lint/Error 체크: API 통합 테스트 100% 통과
+- [x] Lint/Error 체크: API 통합 테스트 100% 통과
 
 ### 1.6 캐시 레벨 필터링
 
 **목표**: Redis 캐시에서도 DELETED 데이터 제외
 
-- [ ] 캐시 조회 시 status 체크
+- [x] 캐시 조회 시 status 체크
 
 ```typescript
 async getQuestionCached(id: string): Promise<Question | null> {
@@ -271,7 +271,7 @@ async getQuestionCached(id: string): Promise<Question | null> {
 }
 ```
 
-- [ ] 삭제 시 캐시 제거
+- [x] 삭제 시 캐시 제거
 
 ```typescript
 async deleteQuestion(id: string, userId: string): Promise<void> {
@@ -286,13 +286,13 @@ async deleteQuestion(id: string, userId: string): Promise<void> {
 }
 ```
 
-- [ ] Lint/Error 체크: 캐시 테스트 100% 통과
+- [x] Lint/Error 체크: 캐시 테스트 100% 통과
 
 ### 1.7 관리자 API (선택사항)
 
 **목표**: 관리자만 삭제된 데이터 조회 가능
 
-- [ ] `GET /api/admin/deleted-questions` 엔드포인트
+- [x] `GET /api/admin/deleted-questions` 엔드포인트
 
 ```typescript
 router.get(
@@ -317,12 +317,12 @@ router.get(
 );
 ```
 
-- [ ] 복구 기능: `POST /api/admin/restore-question/:id`
-- [ ] Lint/Error 체크: 관리자 API 권한 테스트 통과
+- [x] 복구 기능: `POST /api/admin/restore-question/:id`
+- [x] Lint/Error 체크: 관리자 API 권한 테스트 통과
 
 ### 1.8 단위 테스트
 
-- [ ] Repository 필터링 테스트
+- [x] Repository 필터링 테스트
 
 ```typescript
 describe("QuestionRepository", () => {
@@ -343,7 +343,7 @@ describe("QuestionRepository", () => {
 });
 ```
 
-- [ ] Lint/Error 체크: Phase 1 테스트 100% 통과
+- [x] Lint/Error 체크: Phase 1 테스트 100% 통과
 
 ### Phase 1 체크리스트
 
@@ -352,7 +352,7 @@ describe("QuestionRepository", () => {
 - [x] Repository에 필터링 추가
 - [x] API 컨트롤러에서 필터링
 - [x] 캐시 레벨 필터링
-- [ ] 관리자 API (선택사항)
+- [x] 관리자 API (선택사항)
 - [x] 모든 테스트 100% 통과
 - [x] Lint/Error 0개
 - [x] Git 커밋
@@ -373,7 +373,7 @@ describe("QuestionRepository", () => {
 
 **SRP 준수**: 질문만 삭제, 답변 삭제는 AnswerService에 위임
 
-- [ ] `apps/api/src/services/question/QuestionService.ts` 수정
+- [x] `apps/api/src/services/question/QuestionService.ts` 수정
 
 ```typescript
 export class QuestionService {
@@ -424,13 +424,13 @@ export class QuestionService {
 }
 ```
 
-- [ ] Lint/Error 체크: `pnpm run type-check` 통과
+- [x] Lint/Error 체크: `pnpm run type-check` 통과
 
 ### 2.2 AnswerService - deleteAnswer 수정
 
 **SRP 준수**: 답변만 삭제, 댓글 삭제는 AnswerCommentService에 위임
 
-- [ ] `apps/api/src/services/answer/AnswerService.ts` 수정
+- [x] `apps/api/src/services/answer/AnswerService.ts` 수정
 
 ```typescript
 export class AnswerService {
@@ -481,13 +481,13 @@ export class AnswerService {
 }
 ```
 
-- [ ] Lint/Error 체크: `pnpm run type-check` 통과
+- [x] Lint/Error 체크: `pnpm run type-check` 통과
 
 ### 2.3 AnswerCommentService - deleteComment 수정
 
 **SRP 준수**: 댓글만 삭제, 대댓글 삭제는 재귀 호출
 
-- [ ] `apps/api/src/services/answerComment/AnswerCommentService.ts` 수정
+- [x] `apps/api/src/services/answerComment/AnswerCommentService.ts` 수정
 
 ```typescript
 export class AnswerCommentService {
@@ -537,11 +537,11 @@ export class AnswerCommentService {
 }
 ```
 
-- [ ] Lint/Error 체크: `pnpm run type-check` 통과
+- [x] Lint/Error 체크: `pnpm run type-check` 통과
 
 ### 2.4 참조 무결성 유지
 
-- [ ] 질문 삭제 시 acceptedAnswerId 초기화
+- [x] 질문 삭제 시 acceptedAnswerId 초기화
 
 ```typescript
 async deleteQuestion(id: string, userId: string): Promise<void> {
@@ -559,12 +559,12 @@ async deleteQuestion(id: string, userId: string): Promise<void> {
 }
 ```
 
-- [ ] 좋아요/북마크는 물리 삭제 (cascade로 자동 처리)
-- [ ] Lint/Error 체크: 참조 무결성 테스트 통과
+- [x] 좋아요/북마크는 물리 삭제 (cascade로 자동 처리)
+- [x] Lint/Error 체크: 참조 무결성 테스트 통과
 
 ### 2.5 통합 테스트
 
-- [ ] 질문 삭제 시 답변/댓글도 함께 삭제 확인
+- [x] 질문 삭제 시 답변/댓글도 함께 삭제 확인
 
 ```typescript
 it("should delete question with all answers and comments", async () => {
@@ -591,7 +591,7 @@ it("should delete question with all answers and comments", async () => {
 });
 ```
 
-- [ ] Lint/Error 체크: Phase 2 테스트 100% 통과
+- [x] Lint/Error 체크: Phase 2 테스트 100% 통과
 
 ### Phase 2 체크리스트
 
@@ -617,7 +617,7 @@ it("should delete question with all answers and comments", async () => {
 
 **SRP 준수**: 배치 삭제만 전담
 
-- [ ] 파일 생성: `apps/api/src/services/deletedDataCleanup/DeletedDataCleanupService.ts`
+- [x] 파일 생성: `apps/api/src/services/deletedDataCleanup/DeletedDataCleanupService.ts`
 
 ```typescript
 import { PrismaClient } from "@jeju-tourlist/database";
@@ -679,11 +679,11 @@ export class DeletedDataCleanupService {
 }
 ```
 
-- [ ] Lint/Error 체크: `pnpm run type-check` 통과
+- [x] Lint/Error 체크: `pnpm run type-check` 통과
 
 ### 3.2 DeleteCleanupLog 테이블 생성
 
-- [ ] Prisma 스키마에 모델 추가
+- [x] Prisma 스키마에 모델 추가
 
 ```typescript
 model DeleteCleanupLog {
@@ -702,12 +702,12 @@ model DeleteCleanupLog {
 }
 ```
 
-- [ ] 마이그레이션 생성: `pnpm exec prisma migrate dev --name add-delete-cleanup-log`
-- [ ] Lint/Error 체크: `pnpm run type-check` 통과
+- [x] 마이그레이션 생성: `pnpm exec prisma migrate dev --name add-delete-cleanup-log`
+- [x] Lint/Error 체크: `pnpm run type-check` 통과
 
 ### 3.3 배치 스케줄 설정
 
-- [ ] 파일 생성: `apps/api/src/jobs/deleteCleanupJob.ts`
+- [x] 파일 생성: `apps/api/src/jobs/deleteCleanupJob.ts`
 
 ```typescript
 import cron from "node-cron";
@@ -767,7 +767,7 @@ export function scheduleDeleteCleanupJob() {
 }
 ```
 
-- [ ] API 시작 시 스케줄 등록: `apps/api/src/index.ts`
+- [x] API 시작 시 스케줄 등록: `apps/api/src/index.ts`
 
 ```typescript
 import { scheduleDeleteCleanupJob } from "./jobs/deleteCleanupJob";
@@ -776,11 +776,11 @@ import { scheduleDeleteCleanupJob } from "./jobs/deleteCleanupJob";
 scheduleDeleteCleanupJob();
 ```
 
-- [ ] Lint/Error 체크: `pnpm run type-check` 통과
+- [x] Lint/Error 체크: `pnpm run type-check` 통과
 
 ### 3.4 관리자 수동 삭제 API
 
-- [ ] `DELETE /api/admin/permanently-delete-question/:id` 엔드포인트
+- [x] `DELETE /api/admin/permanently-delete-question/:id` 엔드포인트
 
 ```typescript
 router.delete(
@@ -825,11 +825,11 @@ router.delete(
 );
 ```
 
-- [ ] Lint/Error 체크: 관리자 API 권한 테스트 통과
+- [x] Lint/Error 체크: 관리자 API 권한 테스트 통과
 
 ### 3.5 단위 테스트
 
-- [ ] 배치 작업 테스트
+- [x] 배치 작업 테스트
 
 ```typescript
 it("should permanently delete data older than 30 days", async () => {
@@ -852,7 +852,7 @@ it("should permanently delete data older than 30 days", async () => {
 });
 ```
 
-- [ ] Lint/Error 체크: Phase 3 테스트 100% 통과
+- [x] Lint/Error 체크: Phase 3 테스트 100% 통과
 
 ### Phase 3 체크리스트
 
@@ -876,7 +876,7 @@ it("should permanently delete data older than 30 days", async () => {
 
 ### 4.1 DeletionRequest 테이블 생성
 
-- [ ] Prisma 스키마에 모델 추가
+- [x] Prisma 스키마에 모델 추가
 
 ```typescript
 model DeletionRequest {
@@ -912,14 +912,14 @@ model User {
 }
 ```
 
-- [ ] 마이그레이션 생성: `pnpm exec prisma migrate dev --name add-deletion-request`
-- [ ] Lint/Error 체크: `pnpm run type-check` 통과
+- [x] 마이그레이션 생성: `pnpm exec prisma migrate dev --name add-deletion-request`
+- [x] Lint/Error 체크: `pnpm run type-check` 통과
 
 ### 4.2 UserDeletionService 생성 (새로운 Service)
 
 **SRP 준수**: 사용자 삭제만 전담
 
-- [ ] 파일 생성: `apps/api/src/services/userDeletion/UserDeletionService.ts`
+- [x] 파일 생성: `apps/api/src/services/userDeletion/UserDeletionService.ts`
 
 ```typescript
 import { PrismaClient } from "@jeju-tourlist/database";
@@ -1076,11 +1076,11 @@ export class UserDeletionService {
 }
 ```
 
-- [ ] Lint/Error 체크: `pnpm run type-check` 통과
+- [x] Lint/Error 체크: `pnpm run type-check` 통과
 
 ### 4.3 API 엔드포인트
 
-- [ ] `POST /api/users/me/deletion-request`
+- [x] `POST /api/users/me/deletion-request`
 
 ```typescript
 router.post(
@@ -1114,7 +1114,7 @@ router.post(
 );
 ```
 
-- [ ] `POST /api/users/me/deletion-request/cancel`
+- [x] `POST /api/users/me/deletion-request/cancel`
 
 ```typescript
 router.post(
@@ -1138,12 +1138,12 @@ router.post(
 );
 ```
 
-- [ ] 관리자 API 추가 (선택사항)
-- [ ] Lint/Error 체크: API 테스트 100% 통과
+- [x] 관리자 API 추가 (선택사항)
+- [x] Lint/Error 체크: API 테스트 100% 통과
 
 ### 4.4 배치 작업
 
-- [ ] 파일 생성: `apps/api/src/jobs/userDeletionJob.ts`
+- [x] 파일 생성: `apps/api/src/jobs/userDeletionJob.ts`
 
 ```typescript
 import cron from "node-cron";
@@ -1191,14 +1191,14 @@ export function scheduleUserDeletionJob() {
 }
 ```
 
-- [ ] Lint/Error 체크: `pnpm run type-check` 통과
+- [x] Lint/Error 체크: `pnpm run type-check` 통과
 
 ### 4.5 단위 테스트
 
-- [ ] 삭제 요청 테스트
-- [ ] 취소 테스트
-- [ ] 실제 삭제 테스트
-- [ ] Lint/Error 체크: Phase 4 테스트 100% 통과
+- [x] 삭제 요청 테스트
+- [x] 취소 테스트
+- [x] 실제 삭제 테스트
+- [x] Lint/Error 체크: Phase 4 테스트 100% 통과
 
 ### Phase 4 체크리스트
 
@@ -1220,32 +1220,32 @@ export function scheduleUserDeletionJob() {
 
 ### 5.1 단위 테스트
 
-- [ ] 모든 Service 메서드 테스트
-- [ ] Repository 필터링 테스트
-- [ ] 배치 작업 테스트
+- [x] 모든 Service 메서드 테스트
+- [x] Repository 필터링 테스트
+- [x] 배치 작업 테스트
 
 ### 5.2 통합 테스트
 
-- [ ] API 엔드포인트 테스트
-- [ ] 권한 검증 테스트
-- [ ] 삭제 플로우 엔드투엔드 테스트
+- [x] API 엔드포인트 테스트
+- [x] 권한 검증 테스트
+- [x] 삭제 플로우 엔드투엔드 테스트
 
 ### 5.3 E2E 테스트
 
-- [ ] 사용자가 질문 삭제 → 다른 사용자가 조회 불가 확인
-- [ ] 관리자만 삭제된 데이터 조회 가능 확인
-- [ ] 삭제 요청 → 30일 후 자동 삭제 확인
+- [x] 사용자가 질문 삭제 → 다른 사용자가 조회 불가 확인
+- [x] 관리자만 삭제된 데이터 조회 가능 확인
+- [x] 삭제 요청 → 30일 후 자동 삭제 확인
 
 ### 5.4 성능 테스트
 
-- [ ] 1000개 데이터 삭제 성능 (30초 이내)
-- [ ] 배치 작업 성능 (10만 개 DELETED 데이터)
+- [x] 1000개 데이터 삭제 성능 (30초 이내)
+- [x] 배치 작업 성능 (10만 개 DELETED 데이터)
 
 ### 5.5 보안 테스트
 
-- [ ] 일반 사용자가 삭제된 데이터 조회 불가 확인
-- [ ] 일반 사용자가 다른 사용자 데이터 삭제 불가 확인
-- [ ] 감시 로그 조작 불가 확인
+- [x] 일반 사용자가 삭제된 데이터 조회 불가 확인
+- [x] 일반 사용자가 다른 사용자 데이터 삭제 불가 확인
+- [x] 감시 로그 조작 불가 확인
 
 ### Phase 5 체크리스트
 
@@ -1266,42 +1266,42 @@ export function scheduleUserDeletionJob() {
 
 ### 전체 완료 요구사항
 
-- [ ] Phase 1 (접근 제어): 100% 완료
-- [ ] Phase 2 (Cascade 삭제): 100% 완료
-- [ ] Phase 3 (자동 배치): 100% 완료
-- [ ] Phase 4 (회원정보 삭제): 100% 완료
-- [ ] Phase 5 (테스트): 100% 완료
-- [ ] 모든 테스트 100% 통과
-- [ ] 테스트 커버리지 90% 이상
-- [ ] Lint/Error 0개
-- [ ] TypeScript 컴파일 에러 0개
-- [ ] 기존 기능 회귀 없음
+- [x] Phase 1 (접근 제어): 100% 완료
+- [x] Phase 2 (Cascade 삭제): 100% 완료
+- [x] Phase 3 (자동 배치): 100% 완료
+- [x] Phase 4 (회원정보 삭제): 100% 완료
+- [x] Phase 5 (테스트): 100% 완료
+- [x] 모든 테스트 100% 통과
+- [x] 테스트 커버리지 90% 이상
+- [x] Lint/Error 0개
+- [x] TypeScript 컴파일 에러 0개
+- [x] 기존 기능 회귀 없음
 
 ### 법적 준수
 
-- [ ] PIPA 요구사항 100% 준수
-- [ ] GDPR 요구사항 100% 준수
-- [ ] 감사 로그 5년 유지
+- [x] PIPA 요구사항 100% 준수
+- [x] GDPR 요구사항 100% 준수
+- [x] 감사 로그 5년 유지
 
 ### SOLID 원칙 준수
 
-- [ ] SRP: 각 Service는 자신의 책임만 처리
-- [ ] OCP: 기존 로직 수정 없이 확장
-- [ ] LSP: Service 인터페이스 통일
-- [ ] ISP: 필요한 메서드만 노출
-- [ ] DIP: 의존성 주입 명확화
+- [x] SRP: 각 Service는 자신의 책임만 처리
+- [x] OCP: 기존 로직 수정 없이 확장
+- [x] LSP: Service 인터페이스 통일
+- [x] ISP: 필요한 메서드만 노출
+- [x] DIP: 의존성 주입 명확화
 
 ---
 
 ## 📊 진행도
 
-| Phase    | 작업                   | 예상 소요 | 상태  |
-| -------- | ---------------------- | --------- | ----- |
-| 1        | 접근 제어 강화         | 1일       | ☑    |
-| 2        | Cascade 소프트삭제     | 1-2일     | ☑    |
-| 3        | 자동 완전삭제 배치     | 1일       | ☑    |
-| 4        | 회원정보 개인정보 삭제 | 2-3일     | ☑    |
-| 5        | 테스트 및 검증         | 1-2일     | ☑    |
+| Phase    | 작업                   | 예상 소요 | 상태   |
+| -------- | ---------------------- | --------- | ------ |
+| 1        | 접근 제어 강화         | 1일       | ☑     |
+| 2        | Cascade 소프트삭제     | 1-2일     | ☑     |
+| 3        | 자동 완전삭제 배치     | 1일       | ☑     |
+| 4        | 회원정보 개인정보 삭제 | 2-3일     | ☑     |
+| 5        | 테스트 및 검증         | 1-2일     | ☑     |
 | **전체** | **5 Phases**           | **6-9일** | **☑** |
 
 ---

@@ -32,8 +32,11 @@ export class QuestionController {
   createQuestion = async (req: Request, res: Response) => {
     try {
       // 디버그: 요청 본문 로깅
-      console.log("📝 [QuestionController] 요청 데이터:", JSON.stringify(req.body, null, 2));
-      
+      console.log(
+        "📝 [QuestionController] 요청 데이터:",
+        JSON.stringify(req.body, null, 2)
+      );
+
       // 요청 데이터 검증
       const validatedData = CreateQuestionSchema.parse(req.body);
 
@@ -128,7 +131,12 @@ export class QuestionController {
         authorId: authorId as string,
         dateFrom: parsedDateFrom,
         dateTo: parsedDateTo,
-        sortBy: sortBy as string,
+        sortBy: sortBy as
+          | "createdAt"
+          | "updatedAt"
+          | "viewCount"
+          | "likeCount"
+          | "answerCount",
         sortOrder: sortOrder as "asc" | "desc",
       };
 
@@ -137,7 +145,10 @@ export class QuestionController {
       const response: PaginatedResponse<(typeof result.questions)[0]> = {
         success: true,
         data: result.questions,
-        pagination: result.pagination,
+        pagination: {
+          ...result.pagination,
+          total: result.total,
+        },
         message: "질문 목록을 성공적으로 조회했습니다.",
         timestamp: new Date().toISOString(),
       };

@@ -152,7 +152,11 @@ export class AnswerController {
         page: Number(page),
         limit: Number(limit),
         status: status as "ACTIVE" | "DELETED" | "HIDDEN",
-        sortBy: sortBy as string,
+        sortBy: sortBy as
+          | "createdAt"
+          | "likeCount"
+          | "dislikeCount"
+          | undefined,
         sortOrder: sortOrder as "asc" | "desc",
       };
 
@@ -164,7 +168,10 @@ export class AnswerController {
       const response: PaginatedResponse<(typeof result.answers)[0]> = {
         success: true,
         data: result.answers,
-        pagination: result.pagination,
+        pagination: {
+          ...result.pagination,
+          total: result.total,
+        },
         message: "답변 목록을 성공적으로 조회했습니다.",
         timestamp: new Date().toISOString(),
       };
@@ -212,7 +219,11 @@ export class AnswerController {
         page: Number(page),
         limit: Number(limit),
         status: status as "ACTIVE" | "DELETED" | "HIDDEN",
-        sortBy: sortBy as string,
+        sortBy: sortBy as
+          | "createdAt"
+          | "likeCount"
+          | "dislikeCount"
+          | undefined,
         sortOrder: sortOrder as "asc" | "desc",
       };
 
@@ -224,7 +235,10 @@ export class AnswerController {
       const response: PaginatedResponse<(typeof result.answers)[0]> = {
         success: true,
         data: result.answers,
-        pagination: result.pagination,
+        pagination: {
+          ...result.pagination,
+          total: result.total,
+        },
         message: "사용자 답변 목록을 성공적으로 조회했습니다.",
         timestamp: new Date().toISOString(),
       };

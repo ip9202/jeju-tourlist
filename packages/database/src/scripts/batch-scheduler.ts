@@ -14,12 +14,14 @@
 
 import "dotenv-flow/config";
 import { PrismaClient } from "@prisma/client";
-import { BatchSchedulerService } from "@jeju-tourlist/database/services/batch-scheduler.service";
+import { BatchSchedulerService } from "../services/batch-scheduler.service";
 
 // 환경변수 설정
 const env = {
   NODE_ENV: process.env.NODE_ENV || "development",
-  DATABASE_URL: process.env.DATABASE_URL || "postgresql://test:test@localhost:5433/asklocal_dev?schema=public",
+  DATABASE_URL:
+    process.env.DATABASE_URL ||
+    "postgresql://test:test@localhost:5433/asklocal_dev?schema=public",
   LOG_LEVEL: process.env.LOG_LEVEL || "info",
 };
 
@@ -70,7 +72,7 @@ async function main() {
     process.exit(0);
   } catch (error) {
     console.error("❌ 배치 작업 실행 실패:", error);
-    
+
     // 실패 시 종료 코드 1
     process.exit(1);
   } finally {
@@ -107,7 +109,7 @@ process.on("SIGTERM", async () => {
 });
 
 // 처리되지 않은 예외 처리
-process.on("uncaughtException", (error) => {
+process.on("uncaughtException", (error: Error) => {
   console.error("❌ 처리되지 않은 예외:", error);
   process.exit(1);
 });
@@ -118,7 +120,7 @@ process.on("unhandledRejection", (_reason, _promise) => {
 });
 
 // 메인 함수 실행
-main().catch((error) => {
+main().catch(error => {
   console.error("❌ 메인 함수 실행 실패:", error);
   process.exit(1);
 });

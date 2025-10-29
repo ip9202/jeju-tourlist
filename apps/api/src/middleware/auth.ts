@@ -1,5 +1,4 @@
-import { Request, Response, NextFunction } from "express";
-import { User } from "@jeju-tourlist/types";
+import { UserRole } from "@jeju-tourlist/types";
 
 // Express Request 타입 확장
 declare global {
@@ -82,7 +81,7 @@ export const authMiddleware = async (
       email: "temp@example.com",
       name: "임시 사용자",
       avatar: undefined,
-      role: "user",
+      role: UserRole.USER,
       isActive: true,
       createdAt: new Date(),
       updatedAt: new Date(),

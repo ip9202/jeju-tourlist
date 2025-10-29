@@ -75,19 +75,21 @@ function handleKnownRequestError(
   const { code, meta } = error;
 
   switch (code) {
-    case "P2002": // Unique constraint violation
+    case "P2002": {
+      // Unique constraint violation
       const target = Array.isArray(meta?.target) ? meta.target : [meta?.target];
-      return new DuplicateRecordError(
-        target[0] || "record",
-        target[0] || "field",
-        target[0] || "value",
-        { ...context, prismaCode: code, meta }
-      );
+      const targetField = String(target[0] || "record");
+      return new DuplicateRecordError("record", targetField, "value", {
+        ...context,
+        prismaCode: code,
+        meta,
+      });
+    }
 
     case "P2025": // Record not found
       return new RecordNotFoundError(
-        meta?.model || "record",
-        meta?.cause || "unknown",
+        String(meta?.model || "record"),
+        String(meta?.cause || "unknown"),
         { ...context, prismaCode: code, meta }
       );
 
@@ -100,7 +102,7 @@ function handleKnownRequestError(
 
     case "P2004": // Constraint violation
       return new ConstraintViolationError(
-        meta?.constraint || "unknown",
+        String(meta?.constraint || "unknown"),
         error.message,
         { ...context, prismaCode: code, meta }
       );
@@ -108,21 +110,21 @@ function handleKnownRequestError(
     case "P2021": // Table does not exist
       return new DatabaseSchemaError(
         `Table '${meta?.table}' does not exist`,
-        meta?.table || "unknown",
+        String(meta?.table || "unknown"),
         { ...context, prismaCode: code, meta }
       );
 
     case "P2022": // Column does not exist
       return new DatabaseSchemaError(
         `Column '${meta?.column}' does not exist`,
-        meta?.table || "unknown",
+        String(meta?.table || "unknown"),
         { ...context, prismaCode: code, meta }
       );
 
     case "P2024": // Timed out
       return new DatabaseTimeoutError(
-        meta?.operation || "unknown",
-        meta?.timeout || 0,
+        String(meta?.operation || "unknown"),
+        Number(meta?.timeout || 0),
         { ...context, prismaCode: code, meta }
       );
 

@@ -55,7 +55,6 @@ interface MeResponseData {
   expiresAt?: string;
 }
 
-type LoginResponse = ApiResponseData<LoginResponseData>;
 type MeResponse = ApiResponseData<MeResponseData>;
 
 // 컨텍스트 생성
@@ -113,7 +112,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   ): Promise<{ success: boolean; message: string }> => {
     try {
       setIsLoading(true);
-      const response = await api.post<LoginResponse>("/auth/login", {
+      const response = await api.post<LoginResponseData>("/auth/login", {
         email,
         password,
       });
@@ -121,7 +120,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.log("🔐 로그인 응답:", response);
 
       if (response.success && response.data?.user) {
-        const loginData = response.data as LoginResponseData;
+        const loginData = response.data;
         // 클라이언트 사이드에서만 localStorage 접근
         if (typeof window !== "undefined") {
           // 임시로 사용자 ID를 토큰으로 사용 (나중에 JWT로 변경 필요)

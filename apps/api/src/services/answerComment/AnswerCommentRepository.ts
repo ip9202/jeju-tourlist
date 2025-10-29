@@ -383,14 +383,22 @@ export class AnswerCommentRepository {
    */
   async updateDislikeCount(commentId: string): Promise<AnswerComment> {
     try {
-      const dislikeCount = await this.prisma.answerCommentLike.count({
-        where: { commentId, isLike: false },
-      });
-
-      return await this.prisma.answerComment.update({
+      // dislikeCount는 AnswerComment 모델에 없으므로 업데이트하지 않음
+      // 좋아요/싫어요는 AnswerCommentLike 테이블에서 관리됨
+      const comment = await this.prisma.answerComment.findUnique({
         where: { id: commentId },
-        data: { dislikeCount },
+        include: {
+          author: {
+            select: {
+              id: true,
+              nickname: true,
+              avatar: true,
+              userRole: true,
+            },
+          },
+        },
       });
+      return comment as AnswerComment;
     } catch (error) {
       throw new Error(
         `싫어요 수 업데이트 실패: ${error instanceof Error ? error.message : "알 수 없는 오류"}`

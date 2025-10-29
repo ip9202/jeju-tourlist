@@ -156,16 +156,18 @@ export class AnswerCommentController {
       const totalCount =
         await this.answerCommentService.getCommentStats(answerId);
 
+      const pageNum = parseInt(page as string);
+      const limitNum = parseInt(limit as string);
       const response: PaginatedResponse<any> = {
         success: true,
         data: comments,
         pagination: {
-          page: parseInt(page as string),
-          limit: parseInt(limit as string),
+          page: pageNum,
+          limit: limitNum,
           total: totalCount.totalComments,
-          totalPages: Math.ceil(
-            totalCount.totalComments / parseInt(limit as string)
-          ),
+          totalPages: Math.ceil(totalCount.totalComments / limitNum),
+          hasNext: pageNum * limitNum < totalCount.totalComments,
+          hasPrev: pageNum > 1,
         },
         message: "답변 댓글 목록을 성공적으로 조회했습니다.",
         timestamp: new Date().toISOString(),
@@ -223,14 +225,18 @@ export class AnswerCommentController {
         }
       );
 
+      const pageNum = parseInt(page as string);
+      const limitNum = parseInt(limit as string);
       const response: PaginatedResponse<any> = {
         success: true,
         data: comments,
         pagination: {
-          page: parseInt(page as string),
-          limit: parseInt(limit as string),
+          page: pageNum,
+          limit: limitNum,
           total: comments.length,
-          totalPages: Math.ceil(comments.length / parseInt(limit as string)),
+          totalPages: Math.ceil(comments.length / limitNum),
+          hasNext: pageNum * limitNum < comments.length,
+          hasPrev: pageNum > 1,
         },
         message: "사용자 댓글 목록을 성공적으로 조회했습니다.",
         timestamp: new Date().toISOString(),

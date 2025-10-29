@@ -76,6 +76,7 @@ interface Question {
   categoryId: string;
   answerCount: number;
   viewCount: number;
+  likeCount: number;
   createdAt: string;
   author: {
     nickname: string;

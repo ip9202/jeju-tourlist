@@ -260,10 +260,11 @@ export class UserController {
 
           const answersCount = answers.length;
           const acceptedAnswersCount = answers.filter(
-            answer => answer.isAccepted
+            (answer: (typeof answers)[0]) => answer.isAccepted
           ).length;
           const likesReceived = answers.reduce(
-            (sum, answer) => sum + (answer.likeCount || 0),
+            (sum: number, answer: (typeof answers)[0]) =>
+              sum + (answer.likeCount || 0),
             0
           );
 

@@ -8,11 +8,10 @@
  */
 
 import { Request, Response, NextFunction } from "express";
-import { body, validationResult, ValidationChain } from "express-validator";
+import { validationResult, ValidationChain } from "express-validator";
 import DOMPurify from "isomorphic-dompurify";
 import { rateLimit } from "express-rate-limit";
 import helmet from "helmet";
-import crypto from "crypto";
 
 /**
  * 입력 검증 미들웨어
@@ -53,7 +52,11 @@ export const inputValidationMiddleware = (validations: ValidationChain[]) => {
  * - XSS 공격 방지
  * - 안전한 HTML만 허용
  */
-export function sanitizeHtmlMiddleware(req: Request, res: Response, next: NextFunction) {
+export function sanitizeHtmlMiddleware(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   const sanitizeObject = (obj: any): any => {
     if (typeof obj === "string") {
       return DOMPurify.sanitize(obj, {
@@ -61,11 +64,11 @@ export function sanitizeHtmlMiddleware(req: Request, res: Response, next: NextFu
         ALLOWED_ATTR: [],
       });
     }
-    
+
     if (Array.isArray(obj)) {
       return obj.map(sanitizeObject);
     }
-    
+
     if (obj && typeof obj === "object") {
       const sanitized: any = {};
       for (const [key, value] of Object.entries(obj)) {
@@ -73,7 +76,7 @@ export function sanitizeHtmlMiddleware(req: Request, res: Response, next: NextFu
       }
       return sanitized;
     }
-    
+
     return obj;
   };
 
@@ -98,7 +101,11 @@ export function sanitizeHtmlMiddleware(req: Request, res: Response, next: NextFu
  * - CSRF 토큰 검증
  * - Origin 헤더 검증
  */
-export function csrfProtectionMiddleware(req: Request, res: Response, next: NextFunction) {
+export function csrfProtectionMiddleware(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   // GET, HEAD, OPTIONS 요청은 CSRF 검사 제외
   if (["GET", "HEAD", "OPTIONS"].includes(req.method)) {
     return next();
@@ -123,7 +130,7 @@ export function csrfProtectionMiddleware(req: Request, res: Response, next: Next
   if (referer) {
     const refererUrl = new URL(referer);
     const allowedHosts = allowedOrigins.map(origin => new URL(origin).host);
-    
+
     if (!allowedHosts.includes(refererUrl.host)) {
       return res.status(403).json({
         success: false,
@@ -154,7 +161,7 @@ export function sqlInjectionProtectionMiddleware(
     /(\b(OR|AND)\s+['"]\s*=\s*['"])/i,
     /(\b(OR|AND)\s+1\s*=\s*1)/i,
     /(\b(OR|AND)\s+['"]1['"]\s*=\s*['"]1['"])/i,
-    /(;|\-\-|\/\*|\*\/)/,
+    /(;|--|\/\*|\*\/)/,
     /(\bUNION\b.*\bSELECT\b)/i,
     /(\bEXEC\b|\bEXECUTE\b)/i,
     /(\bSCRIPT\b)/i,
@@ -162,7 +169,7 @@ export function sqlInjectionProtectionMiddleware(
 
   const checkInput = (input: any, path: string = ""): string[] => {
     const errors: string[] = [];
-    
+
     if (typeof input === "string") {
       for (const pattern of dangerousPatterns) {
         if (pattern.test(input)) {
@@ -178,7 +185,7 @@ export function sqlInjectionProtectionMiddleware(
         errors.push(...checkInput(value, `${path}.${key}`));
       }
     }
-    
+
     return errors;
   };
 
@@ -231,7 +238,15 @@ export function fileUploadSecurityMiddleware(
     "text/plain",
   ];
 
-  const allowedExtensions = [".jpg", ".jpeg", ".png", ".gif", ".webp", ".pdf", ".txt"];
+  const allowedExtensions = [
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".gif",
+    ".webp",
+    ".pdf",
+    ".txt",
+  ];
 
   const maxFileSize = 10 * 1024 * 1024; // 10MB
 
@@ -242,14 +257,18 @@ export function fileUploadSecurityMiddleware(
     }
 
     // 파일 확장자 검증
-    const extension = file.originalname.toLowerCase().substring(file.originalname.lastIndexOf("."));
+    const extension = file.originalname
+      .toLowerCase()
+      .substring(file.originalname.lastIndexOf("."));
     if (!allowedExtensions.includes(extension)) {
       throw new Error(`허용되지 않는 파일 확장자: ${extension}`);
     }
 
     // 파일 크기 검증
     if (file.size > maxFileSize) {
-      throw new Error(`파일 크기가 너무 큽니다. 최대 ${maxFileSize / 1024 / 1024}MB까지 허용됩니다.`);
+      throw new Error(
+        `파일 크기가 너무 큽니다. 최대 ${maxFileSize / 1024 / 1024}MB까지 허용됩니다.`
+      );
     }
 
     // 파일명 검증 (위험한 문자 제거)
@@ -263,12 +282,14 @@ export function fileUploadSecurityMiddleware(
     if (req.file) {
       checkFile(req.file);
     }
-    
+
     if (req.files) {
-      const files = Array.isArray(req.files) ? req.files : Object.values(req.files).flat();
+      const files = Array.isArray(req.files)
+        ? req.files
+        : Object.values(req.files).flat();
       files.forEach(checkFile);
     }
-    
+
     next();
   } catch (error) {
     return res.status(400).json({
@@ -286,25 +307,26 @@ export function fileUploadSecurityMiddleware(
  * - DDoS 공격 방지
  * - API 남용 방지
  */
-export const securityRateLimit = process.env.NODE_ENV === "production"
-  ? rateLimit({
-      windowMs: 15 * 60 * 1000, // 15분
-      max: 100, // 최대 100 요청
-      message: {
-        success: false,
-        message: "너무 많은 요청이 발생했습니다. 잠시 후 다시 시도해주세요.",
-      },
-      standardHeaders: true,
-      legacyHeaders: false,
-      // IP별 제한
-      keyGenerator: (req) => {
-        return req.ip || req.connection.remoteAddress || "unknown";
-      },
-    })
-  : (req: any, res: any, next: any) => {
-      console.log("🔓 개발 환경: Security Rate Limiter 비활성화됨");
-      next();
-    };
+export const securityRateLimit =
+  process.env.NODE_ENV === "production"
+    ? rateLimit({
+        windowMs: 15 * 60 * 1000, // 15분
+        max: 100, // 최대 100 요청
+        message: {
+          success: false,
+          message: "너무 많은 요청이 발생했습니다. 잠시 후 다시 시도해주세요.",
+        },
+        standardHeaders: true,
+        legacyHeaders: false,
+        // IP별 제한
+        keyGenerator: req => {
+          return req.ip || req.connection.remoteAddress || "unknown";
+        },
+      })
+    : (req: any, res: any, next: any) => {
+        console.log("🔓 개발 환경: Security Rate Limiter 비활성화됨");
+        next();
+      };
 
 /**
  * 보안 헤더 미들웨어
@@ -330,34 +352,28 @@ export const securityHeadersMiddleware = helmet({
       upgradeInsecureRequests: [],
     },
   },
-  
+
   // HTTP Strict Transport Security
   hsts: {
     maxAge: 31536000, // 1년
     includeSubDomains: true,
     preload: true,
   },
-  
+
   // X-Frame-Options
   frameguard: { action: "deny" },
-  
+
   // X-Content-Type-Options
   noSniff: true,
-  
+
   // X-XSS-Protection
   xssFilter: true,
-  
+
   // Referrer Policy
   referrerPolicy: { policy: "strict-origin-when-cross-origin" },
-  
-  // Permissions Policy
-  permissionsPolicy: {
-    camera: [],
-    microphone: [],
-    geolocation: [],
-    payment: [],
-    usb: [],
-  },
+
+  // Permissions Policy는 helmet에서 featurePolicy 또는 permissionsPolicy로 설정되지 않음
+  // 수동으로 헤더 설정 필요
 });
 
 /**
@@ -384,20 +400,22 @@ export function inputLengthLimitMiddleware(
 
   const checkLength = (obj: any, path: string = ""): string[] => {
     const errors: string[] = [];
-    
+
     for (const [key, value] of Object.entries(obj)) {
       const currentPath = path ? `${path}.${key}` : key;
       const limit = limits[key as keyof typeof limits];
-      
+
       if (limit && typeof value === "string" && value.length > limit) {
-        errors.push(`${currentPath}이(가) 너무 깁니다. 최대 ${limit}자까지 허용됩니다.`);
+        errors.push(
+          `${currentPath}이(가) 너무 깁니다. 최대 ${limit}자까지 허용됩니다.`
+        );
       }
-      
+
       if (value && typeof value === "object" && !Array.isArray(value)) {
         errors.push(...checkLength(value, currentPath));
       }
     }
-    
+
     return errors;
   };
 
@@ -425,18 +443,18 @@ export function errorProtectionMiddleware(
   err: any,
   req: Request,
   res: Response,
-  next: NextFunction
+  _next: NextFunction
 ) {
   // 프로덕션 환경에서 민감한 정보 제거
   if (process.env.NODE_ENV === "production") {
     // 스택 트레이스 제거
     delete err.stack;
-    
+
     // 내부 에러 메시지 일반화
     if (err.message && err.message.includes("prisma")) {
       err.message = "데이터베이스 오류가 발생했습니다";
     }
-    
+
     if (err.message && err.message.includes("jwt")) {
       err.message = "인증 오류가 발생했습니다";
     }
@@ -464,7 +482,7 @@ export function securityLoggingMiddleware(
   next: NextFunction
 ) {
   const startTime = Date.now();
-  
+
   // 응답 완료 시 로깅
   res.on("finish", () => {
     const duration = Date.now() - startTime;
@@ -486,7 +504,8 @@ export function securityLoggingMiddleware(
     }
 
     // 의심스러운 활동 감지
-    if (duration > 5000) { // 5초 이상
+    if (duration > 5000) {
+      // 5초 이상
       console.warn("Slow request detected:", logData);
     }
 

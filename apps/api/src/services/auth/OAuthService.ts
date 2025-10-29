@@ -1,29 +1,35 @@
 import axios from "axios";
-// 타입 정의
-interface OAuthProfile {
+import { AuthProvider } from "@jeju-tourlist/types";
+
+// 로컬 OAuth 프로필 타입 (반환용)
+interface LocalOAuthProfile {
   id: string;
   email: string;
   name: string;
   picture?: string;
   provider: string;
+  providerId: string;
+  profileImage?: string;
+  rawProfile: any;
 }
-
-type AuthProvider = 'kakao' | 'naver' | 'google';
 // 환경변수 설정
 const env = {
-  NODE_ENV: process.env.NODE_ENV || 'development',
-  DATABASE_URL: process.env.DATABASE_URL || 'postgresql://localhost:5432/jeju_tourlist',
-  NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET || 'your-super-secret-key-here-must-be-at-least-32-characters-long',
-  NEXTAUTH_URL: process.env.NEXTAUTH_URL || 'http://localhost:3000',
-  API_BASE_URL: process.env.API_BASE_URL || 'http://localhost:4000',
-  SOCKET_URL: process.env.SOCKET_URL || 'http://localhost:4001',
-  SOCKET_PORT: process.env.SOCKET_PORT || '4001',
-  LOG_LEVEL: process.env.LOG_LEVEL || 'info',
-  REDIS_URL: process.env.REDIS_URL || 'redis://localhost:6379',
-  REDIS_HOST: process.env.REDIS_HOST || 'localhost',
-  REDIS_PORT: process.env.REDIS_PORT || '6379',
+  NODE_ENV: process.env.NODE_ENV || "development",
+  DATABASE_URL:
+    process.env.DATABASE_URL || "postgresql://localhost:5432/jeju_tourlist",
+  NEXTAUTH_SECRET:
+    process.env.NEXTAUTH_SECRET ||
+    "your-super-secret-key-here-must-be-at-least-32-characters-long",
+  NEXTAUTH_URL: process.env.NEXTAUTH_URL || "http://localhost:3000",
+  API_BASE_URL: process.env.API_BASE_URL || "http://localhost:4000",
+  SOCKET_URL: process.env.SOCKET_URL || "http://localhost:4001",
+  SOCKET_PORT: process.env.SOCKET_PORT || "4001",
+  LOG_LEVEL: process.env.LOG_LEVEL || "info",
+  REDIS_URL: process.env.REDIS_URL || "redis://localhost:6379",
+  REDIS_HOST: process.env.REDIS_HOST || "localhost",
+  REDIS_PORT: process.env.REDIS_PORT || "6379",
   REDIS_PASSWORD: process.env.REDIS_PASSWORD,
-  REDIS_DB: process.env.REDIS_DB || '0',
+  REDIS_DB: process.env.REDIS_DB || "0",
 };
 
 /**
@@ -32,7 +38,7 @@ const env = {
  */
 export abstract class OAuthProvider {
   abstract getAccessToken(code: string): Promise<string>;
-  abstract getUserProfile(accessToken: string): Promise<OAuthProfile>;
+  abstract getUserProfile(accessToken: string): Promise<LocalOAuthProfile>;
   abstract getAuthUrl(state?: string): string;
 }
 
@@ -83,7 +89,7 @@ export class KakaoOAuthService extends OAuthProvider {
     return response.data.access_token;
   }
 
-  async getUserProfile(accessToken: string): Promise<OAuthProfile> {
+  async getUserProfile(accessToken: string): Promise<LocalOAuthProfile> {
     const response = await axios.get("https://kapi.kakao.com/v2/user/me", {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -154,7 +160,7 @@ export class NaverOAuthService extends OAuthProvider {
     return response.data.access_token;
   }
 
-  async getUserProfile(accessToken: string): Promise<OAuthProfile> {
+  async getUserProfile(accessToken: string): Promise<LocalOAuthProfile> {
     const response = await axios.get("https://openapi.naver.com/v1/nid/me", {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -222,7 +228,7 @@ export class GoogleOAuthService extends OAuthProvider {
     return response.data.access_token;
   }
 
-  async getUserProfile(accessToken: string): Promise<OAuthProfile> {
+  async getUserProfile(accessToken: string): Promise<LocalOAuthProfile> {
     const response = await axios.get(
       "https://www.googleapis.com/oauth2/v2/userinfo",
       {
@@ -252,11 +258,11 @@ export class GoogleOAuthService extends OAuthProvider {
 export class OAuthServiceFactory {
   static createProvider(provider: AuthProvider): OAuthProvider {
     switch (provider) {
-      case AuthProvider.KAKAO:
+      case "kakao":
         return new KakaoOAuthService();
-      case AuthProvider.NAVER:
+      case "naver":
         return new NaverOAuthService();
-      case AuthProvider.GOOGLE:
+      case "google":
         return new GoogleOAuthService();
       default:
         throw new Error(`Unsupported OAuth provider: ${provider}`);
@@ -264,6 +270,6 @@ export class OAuthServiceFactory {
   }
 
   static getSupportedProviders(): AuthProvider[] {
-    return [AuthProvider.KAKAO, AuthProvider.NAVER, AuthProvider.GOOGLE];
+    return ["kakao", "naver", "google"] as AuthProvider[];
   }
 }

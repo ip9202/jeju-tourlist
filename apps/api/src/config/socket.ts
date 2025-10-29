@@ -32,6 +32,7 @@ const env = {
 };
 import {
   TypedServer,
+  TypedSocket,
   SocketServerConfig,
   ClientToServerEvents,
   ServerToClientEvents,
@@ -57,8 +58,6 @@ export class SocketConfig {
       cors: {
         origin: ["http://localhost:3000", "http://localhost:3001"],
         credentials: true,
-        methods: ["GET", "POST"],
-        allowedHeaders: ["Content-Type", "Authorization"],
       },
       redis: env.REDIS_URL
         ? {
@@ -191,14 +190,13 @@ export const createCorsConfig = (allowedOrigins: string[]) => ({
     }
   },
   credentials: true,
-  methods: ["GET", "POST"],
 });
 
 /**
  * Socket.io 미들웨어 타입
  */
 export type SocketMiddleware = (
-  socket: Socket,
+  socket: TypedSocket,
   next: (err?: Error) => void
 ) => void;
 

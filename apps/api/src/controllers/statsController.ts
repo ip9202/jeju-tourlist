@@ -95,7 +95,7 @@ export class StatsController {
             select: { name: true },
           });
           return {
-            name: categoryInfo?.name || "알 수 없음",
+            name: categoryInfo?.name ?? "알 수 없음",
             count: category._count.categoryId,
           };
         })

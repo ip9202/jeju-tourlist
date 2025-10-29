@@ -181,7 +181,7 @@ export class AnswerCommentService {
 
     // 2. 모든 대댓글 삭제 (재귀)
     const replies = await this.prisma.answerComment.findMany({
-      where: { parentCommentId: id },
+      where: { parentId: id },
       select: { id: true },
     });
 

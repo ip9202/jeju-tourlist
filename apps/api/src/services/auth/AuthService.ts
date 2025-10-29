@@ -41,7 +41,17 @@ export class AuthService {
         request.provider
       );
       const accessToken = await oauthProvider.getAccessToken(request.code);
-      const oauthProfile = await oauthProvider.getUserProfile(accessToken);
+      const rawProfile = await oauthProvider.getUserProfile(accessToken);
+
+      // OAuthService 로컬 타입을 types 패키지의 OAuthProfile로 변환
+      const oauthProfile: OAuthProfile = {
+        provider: rawProfile.provider as AuthProvider,
+        providerId: rawProfile.providerId,
+        email: rawProfile.email,
+        name: rawProfile.name,
+        profileImage: rawProfile.profileImage,
+        rawProfile: rawProfile.rawProfile,
+      };
 
       // 기존 사용자 확인 또는 새 사용자 생성
       let user = await this.userRepository.findByProviderAndProviderId(

@@ -2,33 +2,3 @@
 > @jeju-tourlist/database@1.0.0 build /Users/ip9202/develop/vibe/jeju-tourlist/packages/database
 > tsc
 
-src/__tests__/setup.ts(83,38): error TS18046: 'error' is of type 'unknown'.
-src/errors/error-handler.ts(89,9): error TS2345: Argument of type '{}' is not assignable to parameter of type 'string'.
-src/errors/error-handler.ts(103,9): error TS2345: Argument of type '{}' is not assignable to parameter of type 'string'.
-src/errors/error-handler.ts(111,9): error TS2345: Argument of type '{}' is not assignable to parameter of type 'string'.
-src/errors/error-handler.ts(118,9): error TS2345: Argument of type '{}' is not assignable to parameter of type 'string'.
-src/errors/error-handler.ts(124,9): error TS2345: Argument of type '{}' is not assignable to parameter of type 'string'.
-src/repositories/enhanced-user.repository.ts(37,45): error TS2314: Generic type 'BaseRepository<T, CreateData, UpdateData, SearchOptions>' requires 4 type argument(s).
-src/repositories/enhanced-user.repository.ts(52,31): error TS2339: Property 'prisma' does not exist on type 'EnhancedUserRepository'.
-src/repositories/enhanced-user.repository.ts(99,31): error TS2339: Property 'prisma' does not exist on type 'EnhancedUserRepository'.
-src/repositories/enhanced-user.repository.ts(144,31): error TS2339: Property 'prisma' does not exist on type 'EnhancedUserRepository'.
-src/repositories/enhanced-user.repository.ts(195,31): error TS2339: Property 'prisma' does not exist on type 'EnhancedUserRepository'.
-src/repositories/enhanced-user.repository.ts(238,31): error TS2339: Property 'prisma' does not exist on type 'EnhancedUserRepository'.
-src/repositories/enhanced-user.repository.ts(281,32): error TS2339: Property 'buildWhereClause' does not exist on type 'EnhancedUserRepository'.
-src/repositories/enhanced-user.repository.ts(283,32): error TS2339: Property 'prisma' does not exist on type 'EnhancedUserRepository'.
-src/repositories/enhanced-user.repository.ts(286,23): error TS2339: Property 'buildOrderBy' does not exist on type 'EnhancedUserRepository'.
-src/repositories/enhanced-user.repository.ts(287,23): error TS2339: Property 'limit' does not exist on type 'UserSearchOptions'.
-src/repositories/enhanced-user.repository.ts(288,23): error TS2339: Property 'offset' does not exist on type 'UserSearchOptions'.
-src/repositories/enhanced-user.repository.ts(327,32): error TS2339: Property 'buildWhereClause' does not exist on type 'EnhancedUserRepository'.
-src/repositories/enhanced-user.repository.ts(329,32): error TS2339: Property 'prisma' does not exist on type 'EnhancedUserRepository'.
-src/repositories/enhanced-user.repository.ts(366,32): error TS2339: Property 'prisma' does not exist on type 'EnhancedUserRepository'.
-src/scripts/batch-scheduler.ts(17,39): error TS2307: Cannot find module '@jeju-tourlist/database/services/batch-scheduler.service' or its corresponding type declarations.
-src/scripts/batch-scheduler.ts(64,29): error TS7006: Parameter 'error' implicitly has an 'any' type.
-src/services/badge.service.v2.ts(81,32): error TS2339: Property 'isEarned' does not exist on type '{ id: string; userId: string; badgeId: string; earnedAt: Date; notified: boolean; }'.
-src/services/badge.service.v2.ts(153,30): error TS2339: Property 'isEarned' does not exist on type '{ id: string; userId: string; badgeId: string; earnedAt: Date; notified: boolean; }'.
-src/services/badge.service.v2.ts(203,31): error TS7053: Element implicitly has an 'any' type because expression of type '"prisma"' can't be used to index type 'IBadgeRepository'.
-  Property 'prisma' does not exist on type 'IBadgeRepository'.
-src/services/badge.service.v2.ts(257,21): error TS2339: Property 'isEarned' does not exist on type '{ id: string; userId: string; badgeId: string; earnedAt: Date; notified: boolean; }'.
-src/services/badge.service.v2.ts(262,11): error TS7053: Element implicitly has an 'any' type because expression of type '"prisma"' can't be used to index type 'IBadgeRepository'.
-  Property 'prisma' does not exist on type 'IBadgeRepository'.
- ELIFECYCLE  Command failed with exit code 1.

@@ -28,7 +28,7 @@ function SearchPageContent() {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [filters, setFilters] = useState<SearchFilters>({
     categoryId: "",
-    status: "all",
+    status: "",
     sortBy: "createdAt",
     sortOrder: "desc",
   });
@@ -142,13 +142,13 @@ function SearchPageContent() {
             <Filter className="w-4 h-4 text-gray-500" />
             <span className="text-sm text-gray-600">상태:</span>
             <select
-              value={filters.status}
+              value={filters.status || ""}
               onChange={e => handleFilterChange("status", e.target.value)}
               className="px-3 py-1 border border-gray-300 rounded-md text-sm"
             >
-              <option value="all">전체</option>
-              <option value="answered">답변완료</option>
-              <option value="unanswered">답변대기</option>
+              <option value="">전체</option>
+              <option value="ACTIVE">활성</option>
+              <option value="CLOSED">종료</option>
             </select>
           </div>
           <div className="flex items-center space-x-2">
