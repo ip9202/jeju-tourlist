@@ -35,6 +35,17 @@ interface Expert {
   rank: number;
 }
 
+interface ExpertResponse {
+  experts: Expert[];
+  pagination: {
+    currentPage: number;
+    totalPages: number;
+    totalCount: number;
+    hasNext: boolean;
+    hasPrev: boolean;
+  };
+}
+
 export function ExpertDashboardLayout({
   variant = "card",
   showTopSection = true,
@@ -45,6 +56,9 @@ export function ExpertDashboardLayout({
   limit = 20,
 }: ExpertDashboardLayoutProps) {
   const [experts, setExperts] = useState<Expert[]>([]);
+  const [pagination, setPagination] = useState<
+    ExpertResponse["pagination"] | null
+  >(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
@@ -76,6 +90,7 @@ export function ExpertDashboardLayout({
 
         const data = await response.json();
         setExperts(data.data?.experts || []);
+        setPagination(data.data?.pagination || null);
       } catch (err) {
         setError(
           err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다"
@@ -114,7 +129,7 @@ export function ExpertDashboardLayout({
               <div>
                 <p className="text-sm text-gray-500">전체 전문가</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {experts.length || 0}
+                  {pagination?.totalCount || 0}
                 </p>
               </div>
               <Users className="w-8 h-8 text-blue-600" />
@@ -269,11 +284,11 @@ export function ExpertDashboardLayout({
             이전
           </button>
           <span className="text-sm text-gray-600">
-            {page} / {Math.ceil(experts.length / limit)}
+            {page} / {pagination?.totalPages || 1}
           </span>
           <button
             onClick={() => setPage(page + 1)}
-            disabled={experts.length < limit}
+            disabled={!pagination?.hasNext}
             className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
           >
             다음
