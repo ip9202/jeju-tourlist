@@ -13,7 +13,18 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Trophy, TrendingUp, Users, Award } from "lucide-react";
+import {
+  Trophy,
+  TrendingUp,
+  Users,
+  Award,
+  MapPin,
+  Utensils,
+  Bed,
+  Car,
+  ShoppingBag,
+  HelpCircle,
+} from "lucide-react";
 
 interface ExpertDashboardLayoutProps {
   variant?: "card" | "list";
@@ -80,6 +91,33 @@ export function ExpertDashboardLayout({
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [sortBy, setSortBy] = useState(initialSortBy);
   const [page, setPage] = useState(1);
+
+  // 카테고리별 아이콘 및 색상 매핑
+  const getCategoryIcon = (category: string | null) => {
+    if (!category) return null;
+    const iconMap: Record<string, React.ReactNode> = {
+      관광지: <MapPin className="w-4 h-4" />,
+      맛집: <Utensils className="w-4 h-4" />,
+      숙박: <Bed className="w-4 h-4" />,
+      교통: <Car className="w-4 h-4" />,
+      쇼핑: <ShoppingBag className="w-4 h-4" />,
+      기타: <HelpCircle className="w-4 h-4" />,
+    };
+    return iconMap[category] || <HelpCircle className="w-4 h-4" />;
+  };
+
+  const getCategoryColor = (category: string | null) => {
+    if (!category) return "#999999";
+    const colorMap: Record<string, string> = {
+      관광지: "#FF6B6B",
+      맛집: "#4ECDC4",
+      숙박: "#45B7D1",
+      교통: "#96CEB4",
+      쇼핑: "#FFEAA7",
+      기타: "#DDA0DD",
+    };
+    return colorMap[category] || "#999999";
+  };
 
   const categories = [
     "전체",
@@ -264,10 +302,13 @@ export function ExpertDashboardLayout({
                       .map(badge => (
                         <span
                           key={badge.id}
-                          className="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 rounded text-xs font-medium"
+                          className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium text-white"
+                          style={{
+                            backgroundColor: getCategoryColor(badge.category),
+                          }}
                           title={badge.name}
                         >
-                          <span>{badge.emoji}</span>
+                          {getCategoryIcon(badge.category)}
                           <span>{badge.category}</span>
                         </span>
                       ))}
