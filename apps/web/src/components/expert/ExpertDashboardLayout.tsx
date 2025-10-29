@@ -25,14 +25,30 @@ interface ExpertDashboardLayoutProps {
   limit?: number;
 }
 
+interface Badge {
+  id: string;
+  code: string;
+  name: string;
+  emoji: string;
+  description: string;
+  type: string;
+  category: string | null;
+}
+
 interface Expert {
   id: string;
   name: string;
-  category: string;
+  nickname: string;
+  avatar: string | null;
   points: number;
-  answerCount: number;
-  helpfulCount: number;
   rank: number;
+  badges: Badge[];
+  primaryBadge: Badge;
+  totalAnswers: number;
+  adoptedAnswers: number;
+  adoptRate: number;
+  joinDate: string;
+  rating: number;
 }
 
 interface ExpertResponse {
@@ -141,7 +157,7 @@ export function ExpertDashboardLayout({
               <div>
                 <p className="text-sm text-gray-500">총 답변</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {experts.reduce((sum, e) => sum + (e.answerCount || 0), 0)}
+                  {experts.reduce((sum, e) => sum + (e.totalAnswers || 0), 0)}
                 </p>
               </div>
               <TrendingUp className="w-8 h-8 text-green-600" />
@@ -153,7 +169,7 @@ export function ExpertDashboardLayout({
               <div>
                 <p className="text-sm text-gray-500">도움이 된 답변</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {experts.reduce((sum, e) => sum + (e.helpfulCount || 0), 0)}
+                  {experts.reduce((sum, e) => sum + (e.adoptedAnswers || 0), 0)}
                 </p>
               </div>
               <Award className="w-8 h-8 text-purple-600" />
@@ -233,13 +249,29 @@ export function ExpertDashboardLayout({
             className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-lg transition-shadow"
           >
             <div className="flex items-start justify-between mb-4">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 flex-1">
                 <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
                   {expert.rank}
                 </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900">{expert.name}</h3>
-                  <p className="text-sm text-gray-500">{expert.category}</p>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-gray-900">
+                    {expert.nickname}
+                  </h3>
+                  {/* 카테고리 배지 표시 */}
+                  <div className="flex items-center gap-1 mt-1 flex-wrap">
+                    {expert.badges
+                      .filter(badge => badge.type === "CATEGORY_EXPERT")
+                      .map(badge => (
+                        <span
+                          key={badge.id}
+                          className="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 rounded text-xs font-medium"
+                          title={badge.name}
+                        >
+                          <span>{badge.emoji}</span>
+                          <span>{badge.category}</span>
+                        </span>
+                      ))}
+                  </div>
                 </div>
               </div>
               <Trophy className="w-5 h-5 text-yellow-600" />
@@ -255,13 +287,19 @@ export function ExpertDashboardLayout({
               <div className="flex justify-between items-center">
                 <span className="text-sm text-gray-600">답변 수</span>
                 <span className="font-semibold text-gray-900">
-                  {expert.answerCount || 0}
+                  {expert.totalAnswers || 0}
                 </span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-600">도움이 된 답변</span>
+                <span className="text-sm text-gray-600">채택된 답변</span>
                 <span className="font-semibold text-gray-900">
-                  {expert.helpfulCount || 0}
+                  {expert.adoptedAnswers || 0}
+                </span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-600">채택율</span>
+                <span className="font-semibold text-gray-900">
+                  {expert.adoptRate?.toFixed(1) || 0}%
                 </span>
               </div>
             </div>
