@@ -308,6 +308,70 @@ export default function QuestionDetailPage() {
     }
   };
 
+  /**
+   * 답변 채택 핸들러
+   */
+  const handleAnswerAdopt = async (answerId: string) => {
+    try {
+      const response = await api.post(`/answers/${answerId}/adopt`, {});
+
+      if (!response.success) {
+        throw new Error(response.error || "채택 처리에 실패했습니다");
+      }
+
+      // 로컬 상태 업데이트
+      setAnswers(prev =>
+        prev.map(answer =>
+          answer.id === answerId
+            ? {
+                ...answer,
+                isAccepted: true,
+              }
+            : answer
+        )
+      );
+    } catch (error) {
+      console.error("답변 채택 실패:", error);
+      setAnswerError(
+        error instanceof Error
+          ? error.message
+          : "채택 처리 중 오류가 발생했습니다"
+      );
+    }
+  };
+
+  /**
+   * 답변 채택 취소 핸들러
+   */
+  const handleAnswerUnadopt = async (answerId: string) => {
+    try {
+      const response = await api.post(`/answers/${answerId}/unadopt`, {});
+
+      if (!response.success) {
+        throw new Error(response.error || "채택 취소 처리에 실패했습니다");
+      }
+
+      // 로컬 상태 업데이트
+      setAnswers(prev =>
+        prev.map(answer =>
+          answer.id === answerId
+            ? {
+                ...answer,
+                isAccepted: false,
+              }
+            : answer
+        )
+      );
+    } catch (error) {
+      console.error("답변 채택 취소 실패:", error);
+      setAnswerError(
+        error instanceof Error
+          ? error.message
+          : "채택 취소 처리 중 오류가 발생했습니다"
+      );
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -570,6 +634,8 @@ export default function QuestionDetailPage() {
                   onSubmitAnswer={handleAnswerSubmit}
                   onLike={handleAnswerLike}
                   onDislike={handleAnswerDislike}
+                  onAdopt={handleAnswerAdopt}
+                  onUnadopt={handleAnswerUnadopt}
                   onReply={() => {}}
                   isLoading={isSubmitting}
                   maxDepth={2}
