@@ -5,7 +5,7 @@ import {
   IQuestionRepository,
   IAnswerRepository,
   ICategoryRepository,
-} from "../repositories";
+} from "../repositories/index";
 import { User, Question, Answer, Category } from "@prisma/client";
 import { CreateUserData, UpdateUserData } from "../types/user";
 import {

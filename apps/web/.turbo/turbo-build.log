@@ -1,0 +1,315 @@
+
+> @jeju-tourlist/web@1.0.0 build /Users/ip9202/develop/vibe/jeju-tourlist/apps/web
+> next build
+
+  ▲ Next.js 14.2.33
+  - Environments: .env.local
+  - Experiments (use with caution):
+    · memoryBasedWorkersCount
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+
+Failed to compile.
+
+./src/__tests__/e2e/popular-search-terms.e2e.test.ts
+129:7  Warning: Unexpected console statement.  no-console
+429:5  Warning: Unexpected console statement.  no-console
+445:9  Warning: Unexpected console statement.  no-console
+525:7  Warning: Unexpected console statement.  no-console
+
+./src/app/categories/page.tsx
+106:6  Warning: React Hook useEffect has a missing dependency: 'loadCategoryQuestions'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+118:9  Warning: Unexpected console statement.  no-console
+223:7  Warning: Unexpected console statement.  no-console
+
+./src/app/page.tsx
+108:5  Warning: Unexpected console statement.  no-console
+125:5  Warning: Unexpected console statement.  no-console
+139:5  Warning: Unexpected console statement.  no-console
+
+./src/app/profile/[id]/page.tsx
+60:5  Warning: Unexpected console statement.  no-console
+116:5  Warning: Unexpected console statement.  no-console
+
+./src/app/profile/page.tsx
+45:9  Warning: Unexpected console statement.  no-console
+66:9  Warning: Unexpected console statement.  no-console
+69:7  Warning: Unexpected console statement.  no-console
+106:7  Warning: Unexpected console statement.  no-console
+160:23  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/app/questions/[id]/page.tsx
+22:3  Error: Definition for rule '@typescript-eslint/no-unused-vars' was not found.  @typescript-eslint/no-unused-vars
+24:3  Error: Definition for rule '@typescript-eslint/no-unused-vars' was not found.  @typescript-eslint/no-unused-vars
+113:9  Warning: Unexpected console statement.  no-console
+204:7  Warning: Unexpected console statement.  no-console
+235:7  Warning: Unexpected console statement.  no-console
+278:7  Warning: Unexpected console statement.  no-console
+316:7  Warning: Unexpected console statement.  no-console
+458:21  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+471:27  Warning: Unexpected console statement.  no-console
+
+./src/app/questions/new/page.tsx
+76:9  Warning: Unexpected console statement.  no-console
+
+./src/app/questions/page.tsx
+66:6  Warning: React Hook useEffect has missing dependencies: 'isInitialized' and 'searchQuestions'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+74:6  Warning: React Hook useEffect has a missing dependency: 'searchQuestions'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+81:9  Warning: Unexpected console statement.  no-console
+85:7  Warning: Unexpected console statement.  no-console
+106:9  Warning: Unexpected console statement.  no-console
+116:7  Warning: Unexpected console statement.  no-console
+124:7  Warning: Unexpected console statement.  no-console
+128:9  Warning: Unexpected console statement.  no-console
+138:7  Warning: Unexpected console statement.  no-console
+179:6  Warning: React Hook useEffect has a missing dependency: 'searchQuestions'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+244:17  Warning: Unexpected console statement.  no-console
+458:23  Error: `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.  react/no-unescaped-entities
+458:36  Error: `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.  react/no-unescaped-entities
+
+./src/app/robots.txt/route.ts
+28:5  Warning: Unexpected console statement.  no-console
+
+./src/app/search/page.tsx
+52:6  Warning: React Hook useEffect has missing dependencies: 'filters' and 'performSearch'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/app/sitemap.xml/route.ts
+81:5  Warning: Unexpected console statement.  no-console
+
+./src/components/admin/BadgeSystemPerformanceMonitor.tsx
+67:7  Warning: Unexpected console statement.  no-console
+92:7  Warning: Unexpected console statement.  no-console
+100:5  Warning: Unexpected console statement.  no-console
+111:5  Warning: Unexpected console statement.  no-console
+116:5  Warning: Unexpected console statement.  no-console
+124:5  Warning: Unexpected console statement.  no-console
+129:5  Warning: Unexpected console statement.  no-console
+144:5  Warning: Unexpected console statement.  no-console
+149:5  Warning: Unexpected console statement.  no-console
+165:5  Warning: Unexpected console statement.  no-console
+
+./src/components/auth/EmailLoginForm.tsx
+55:7  Warning: Unexpected console statement.  no-console
+62:9  Warning: Unexpected console statement.  no-console
+69:9  Warning: Unexpected console statement.  no-console
+74:7  Warning: Unexpected console statement.  no-console
+
+./src/components/auth/LoginButton.tsx
+29:13  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+47:30  Warning: Unexpected console statement.  no-console
+51:30  Warning: Unexpected console statement.  no-console
+55:30  Warning: Unexpected console statement.  no-console
+
+./src/components/expert/AccessibilityImproved.tsx
+169:15  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/components/expert/ErrorHandling.tsx
+76:5  Warning: Unexpected console statement.  no-console
+366:5  Warning: Unexpected console statement.  no-console
+
+./src/components/expert/ExpertCard.tsx
+113:17  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+185:19  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+327:17  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/components/expert/ExpertListItem.tsx
+109:15  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+203:17  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+357:13  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/components/expert/ExpertRanking.tsx
+108:6  Warning: React Hook useEffect has a missing dependency: 'internalData'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/components/home/HeroSection.tsx
+74:9  Warning: Unexpected console statement.  no-console
+
+./src/components/home/PopularQuestions.tsx
+234:9  Warning: Unexpected console statement.  no-console
+248:6  Warning: React Hook useEffect has a missing dependency: 'mockQuestions'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+308:7  Warning: Unexpected console statement.  no-console
+353:5  Warning: Unexpected console statement.  no-console
+
+./src/components/home/RealtimeBanner.tsx
+69:9  Warning: Unexpected console statement.  no-console
+
+./src/components/layout/Header.tsx
+118:7  Warning: Unexpected console statement.  no-console
+131:7  Warning: Unexpected console statement.  no-console
+262:23  Warning: Unexpected console statement.  no-console
+
+./src/components/layout/HeaderUserBadge.tsx
+40:9  Warning: Unexpected console statement.  no-console
+153:9  Warning: Unexpected console statement.  no-console
+223:9  Warning: Unexpected console statement.  no-console
+
+./src/components/notification/BadgeCelebrationModal.tsx
+73:6  Warning: React Hook useEffect has a missing dependency: 'handleClose'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/components/notification/BadgeEarnedNotification.tsx
+51:6  Warning: React Hook useEffect has a missing dependency: 'handleClose'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/components/notification/BadgeProgressNotification.tsx
+48:6  Warning: React Hook useEffect has a missing dependency: 'handleClose'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+284:9  Warning: Unexpected console statement.  no-console
+
+./src/components/notification/NotificationSystem.tsx
+73:7  Warning: Unexpected console statement.  no-console
+81:7  Warning: Unexpected console statement.  no-console
+87:7  Warning: Unexpected console statement.  no-console
+105:7  Warning: Unexpected console statement.  no-console
+118:6  Warning: React Hook useEffect has a missing dependency: 'addNotification'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+161:7  Warning: Unexpected console statement.  no-console
+172:5  Warning: Unexpected console statement.  no-console
+183:9  Warning: Unexpected console statement.  no-console
+
+./src/components/profile/ActivityHistory.tsx
+185:6  Warning: React Hook useEffect has a missing dependency: 'mockActivities'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/components/profile/UserBadgeSection.tsx
+64:9  Warning: Unexpected console statement.  no-console
+
+./src/components/profile/UserProfile.tsx
+126:6  Warning: React Hook useEffect has a missing dependency: 'mockProfile'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/components/question/AdoptAnswerButton.tsx
+72:7  Warning: Unexpected console statement.  no-console
+161:7  Warning: Unexpected console statement.  no-console
+
+./src/components/question/AnswerAuthorBadge.tsx
+51:9  Warning: Unexpected console statement.  no-console
+170:9  Warning: Unexpected console statement.  no-console
+
+./src/components/question/AnswerCommentDemo.tsx
+132:7  Warning: Unexpected console statement.  no-console
+170:7  Warning: Unexpected console statement.  no-console
+201:7  Warning: Unexpected console statement.  no-console
+209:5  Warning: Unexpected console statement.  no-console
+231:7  Warning: Unexpected console statement.  no-console
+239:5  Warning: Unexpected console statement.  no-console
+247:5  Warning: Unexpected console statement.  no-console
+
+./src/components/question/AnswerCommentList.tsx
+81:7  Warning: Unexpected console statement.  no-console
+111:7  Warning: Unexpected console statement.  no-console
+136:7  Warning: Unexpected console statement.  no-console
+153:7  Warning: Unexpected console statement.  no-console
+
+./src/components/question/AnswerSection.tsx
+220:6  Warning: React Hook useEffect has a missing dependency: 'mockAnswers'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+320:9  Warning: Unexpected console statement.  no-console
+325:9  Warning: Unexpected console statement.  no-console
+348:7  Warning: Unexpected console statement.  no-console
+376:7  Warning: Unexpected console statement.  no-console
+
+./src/components/question/EnhancedAnswerCard.tsx
+177:9  Warning: Unexpected console statement.  no-console
+214:7  Warning: Unexpected console statement.  no-console
+254:7  Warning: Unexpected console statement.  no-console
+343:7  Warning: Unexpected console statement.  no-console
+380:7  Warning: Unexpected console statement.  no-console
+416:7  Warning: Unexpected console statement.  no-console
+436:7  Warning: Unexpected console statement.  no-console
+
+./src/components/question/HierarchicalCommentCard.tsx
+142:7  Warning: Unexpected console statement.  no-console
+
+./src/components/question/HierarchicalCommentList.tsx
+96:7  Warning: Unexpected console statement.  no-console
+113:7  Warning: Unexpected console statement.  no-console
+141:7  Warning: Unexpected console statement.  no-console
+166:7  Warning: Unexpected console statement.  no-console
+183:7  Warning: Unexpected console statement.  no-console
+
+./src/components/question/QuestionDetail.tsx
+129:6  Warning: React Hook useEffect has a missing dependency: 'mockQuestion'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/components/question/facebook/FacebookAnswerCard.tsx
+112:7  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+159:13  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/components/question/facebook/FacebookAnswerInput.tsx
+29:7  Warning: Unexpected console statement.  no-console
+95:11  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/components/question/facebook/FacebookAnswerThread.tsx
+55:9  Warning: Unexpected console statement.  no-console
+
+./src/components/question/facebook/FacebookQuestionCard.tsx
+58:13  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+104:15  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./src/components/search/SearchResults.tsx
+176:6  Warning: React Hook useEffect has a missing dependency: 'mockResults'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/contexts/AuthContext.tsx
+96:9  Warning: Unexpected console statement.  no-console
+120:7  Warning: Unexpected console statement.  no-console
+140:7  Warning: Unexpected console statement.  no-console
+163:7  Warning: Unexpected console statement.  no-console
+177:7  Warning: Unexpected console statement.  no-console
+179:7  Warning: Unexpected console statement.  no-console
+196:7  Warning: Unexpected console statement.  no-console
+
+./src/contexts/SocketContext.tsx
+243:9  Warning: Unexpected console statement.  no-console
+
+./src/hooks/useEmailCheck.ts
+32:9  Warning: Unexpected console statement.  no-console
+33:9  Warning: Unexpected console statement.  no-console
+34:9  Warning: Unexpected console statement.  no-console
+35:9  Warning: Unexpected console statement.  no-console
+38:9  Warning: Unexpected console statement.  no-console
+42:7  Warning: Unexpected console statement.  no-console
+50:31  Warning: React Hook useCallback received a function whose dependencies are unknown. Pass an inline function instead.  react-hooks/exhaustive-deps
+
+./src/hooks/useExperts.ts
+110:9  Warning: Unexpected console statement.  no-console
+140:6  Warning: React Hook useEffect has missing dependencies: 'fetchExperts' and 'options'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+207:9  Warning: Unexpected console statement.  no-console
+225:6  Warning: React Hook useEffect has a missing dependency: 'options'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+325:7  Warning: Unexpected console statement.  no-console
+
+./src/hooks/useQuestionSearch.ts
+80:9  Warning: Unexpected console statement.  no-console
+
+./src/hooks/useRegisterForm.ts
+111:7  Warning: Unexpected console statement.  no-console
+
+./src/hooks/useSocket.ts
+60:7  Warning: Unexpected console statement.  no-console
+67:7  Warning: Unexpected console statement.  no-console
+159:6  Warning: React Hook useEffect has missing dependencies: 'connect', 'handleStatusChange', and 'options?.auth'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+205:22  Warning: React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be statically checked.  react-hooks/exhaustive-deps
+
+./src/lib/apiClient.ts
+56:7  Warning: Unexpected console statement.  no-console
+68:7  Warning: Unexpected console statement.  no-console
+79:9  Warning: Unexpected console statement.  no-console
+93:7  Warning: Unexpected console statement.  no-console
+112:7  Warning: Unexpected console statement.  no-console
+130:7  Warning: Unexpected console statement.  no-console
+174:7  Warning: Unexpected console statement.  no-console
+202:7  Warning: Unexpected console statement.  no-console
+230:7  Warning: Unexpected console statement.  no-console
+269:7  Warning: Unexpected console statement.  no-console
+334:7  Warning: Unexpected console statement.  no-console
+363:7  Warning: Unexpected console statement.  no-console
+
+./src/lib/dateUtils.ts
+34:5  Warning: Unexpected console statement.  no-console
+66:5  Warning: Unexpected console statement.  no-console
+90:5  Warning: Unexpected console statement.  no-console
+
+./src/lib/performance.ts
+137:10  Warning: React Hook useCallback has a missing dependency: 'callback'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./src/lib/socket/socketClient.ts
+70:7  Warning: Unexpected console statement.  no-console
+162:7  Warning: Unexpected console statement.  no-console
+211:7  Warning: Unexpected console statement.  no-console
+232:7  Warning: Unexpected console statement.  no-console
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
+ ELIFECYCLE  Command failed with exit code 1.

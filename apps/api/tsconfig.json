@@ -1,11 +1,11 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "dist",
     "rootDir": "src",
     "target": "ES2022",
     "module": "CommonJS",
     "moduleResolution": "node",
+    "lib": ["ES2022"],
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
@@ -13,6 +13,8 @@
     "declarationMap": true,
     "sourceMap": true,
     "skipLibCheck": true,
+    "strict": false,
+    "noImplicitAny": false,
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]

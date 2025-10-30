@@ -118,3 +118,30 @@ apps/api/uploads/*
 
 # Temporary test files
 check_attachments.js
+venv/
+*.egg
+.idea/
+*.swo
+# Cache
+.tscache/
+*.log
+logs/
+.env/
+# Build artifacts
+# IDE
+*.temp
+__pycache__/
+# Backups
+.venv/
+*.egg-info/
+*.swp
+# Virtual environment
+# OS
+*.pyo
+.pytest_cache/
+.vscode/
+*.pyc
+env/
+*~
+*.tmp
+# Temporary files

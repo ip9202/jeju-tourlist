@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { PaginationOptions, PaginatedResult } from "../types";
+import { PaginationOptions, PaginatedResult } from "../types/index";
 
 /**
  * 기본 Repository 인터페이스

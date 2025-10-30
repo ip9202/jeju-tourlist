@@ -187,7 +187,7 @@ export class RoomManager implements IRoomManager {
         return;
       }
 
-      this.io.to(roomId).emit(event, data);
+      this.io.to(roomId).emit(event, data as any);
 
       // 활동 시간 업데이트
       room.lastActivity = Date.now();

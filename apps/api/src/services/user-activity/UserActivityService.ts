@@ -99,7 +99,7 @@ export class UserActivityService {
     sortBy: "points" | "questions" | "answers" | "likes" = "points"
   ) {
     try {
-      let orderBy: Record<string, string> = {};
+      let orderBy: Record<string, any> = {};
 
       switch (sortBy) {
         case "points":
@@ -358,11 +358,7 @@ export class UserActivityService {
       return await this.prisma.notification.create({
         data: {
           userId,
-          type: type as
-            | "QUESTION_ANSWERED"
-            | "ANSWER_ACCEPTED"
-            | "LEVEL_UP"
-            | "SYSTEM",
+          type: type as any,
           title,
           message,
           data: data ? JSON.stringify(data) : null,

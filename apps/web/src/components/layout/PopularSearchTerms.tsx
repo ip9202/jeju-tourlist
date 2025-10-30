@@ -69,13 +69,9 @@ export const PopularSearchTerms: React.FC<PopularSearchTermsProps> = ({
   // Render search terms as ul/li list (Carrot Market style)
   return (
     <ul className={`flex items-center gap-0 flex-wrap ${className}`}>
-      {keywords.map((term, index) => (
-        <li key={term.keyword} className="mr-2 md:mr-3">
+      {keywords.map((term) => (
+        <li key={term.keyword} className="mr-3">
           <SearchTermBadge keyword={term.keyword} />
-          {/* Separator between keywords (not after last one) */}
-          {index < keywords.length - 1 && (
-            <span className="text-gray-300 ml-2 md:ml-3">·</span>
-          )}
         </li>
       ))}
     </ul>

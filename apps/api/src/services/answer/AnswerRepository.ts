@@ -38,6 +38,7 @@ export class AnswerRepository {
           content: data.content,
           authorId: data.authorId,
           questionId: data.questionId,
+          categoryId: data.categoryId,
           status: "ACTIVE",
           isAccepted: false,
         },

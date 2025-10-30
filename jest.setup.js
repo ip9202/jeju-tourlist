@@ -1,5 +1,5 @@
 // Jest 설정 파일
-import 'dotenv-flow/config';
+require('dotenv-flow/config');
 
 // 테스트 환경 변수 설정
 process.env.NODE_ENV = 'test';

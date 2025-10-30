@@ -1,21 +1,20 @@
 // 서비스 인터페이스 및 구현 내보내기
-export * from "./base.service";
-export * from "./search.service";
-export * from "./cache.service";
-export * from "./cached.repository.service";
-export * from "./point.service";
+export * from "./auth.service";
 export * from "./badge.service";
 export * from "./notification.service";
-export * from "./admin.service";
+export * from "./point.service";
 export * from "./moderation.service";
 export * from "./password.service";
-export * from "./auth.service";
-export * from "./answer-adoption.service";
+export * from "./cache.service";
+export * from "./search.service";
 export * from "./batch-scheduler.service";
+export * from "./admin.service";
+export * from "./answer-adoption.service";
+export * from "./base.service";
 
 // 데이터베이스 서비스 팩토리
 import { PrismaClient } from "@prisma/client";
-import { RepositoryFactory } from "../repositories";
+import { RepositoryFactory } from "../repositories/index";
 import { RedisCacheService, ICacheService } from "./cache.service";
 import { SearchService, ISearchService } from "./search.service";
 import { CachedRepositoryService } from "./cached.repository.service";

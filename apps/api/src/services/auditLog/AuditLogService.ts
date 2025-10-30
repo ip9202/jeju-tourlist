@@ -29,7 +29,7 @@ export class AuditLogService {
    * @returns 생성된 감시 로그
    */
   async logDelete(data: {
-    targetType: "QUESTION" | "ANSWER" | "COMMENT";
+    targetType: "QUESTION" | "ANSWER" | "COMMENT" | "USER";
     targetId: string;
     userId: string;
     reason?: string;
@@ -62,7 +62,7 @@ export class AuditLogService {
    * @returns 생성된 감시 로그
    */
   async logRestore(data: {
-    targetType: "QUESTION" | "ANSWER" | "COMMENT";
+    targetType: "QUESTION" | "ANSWER" | "COMMENT" | "USER";
     targetId: string;
     userId: string;
     reason?: string;
@@ -95,7 +95,7 @@ export class AuditLogService {
    * @returns 생성된 감시 로그
    */
   async logPermanentlyDelete(data: {
-    targetType: "QUESTION" | "ANSWER" | "COMMENT";
+    targetType: "QUESTION" | "ANSWER" | "COMMENT" | "USER";
     targetId: string;
     userId?: string;
     reason?: string;
@@ -130,7 +130,7 @@ export class AuditLogService {
    * @returns 감시 로그 목록
    */
   async getAuditLogs(
-    targetType: "QUESTION" | "ANSWER" | "COMMENT",
+    targetType: "QUESTION" | "ANSWER" | "COMMENT" | "USER",
     targetId: string
   ): Promise<AuditLog[]> {
     try {

@@ -255,8 +255,23 @@ export class AuthService {
   }
 
   /**
-   * 인증 에러 생성
+   * 이메일 중복 여부 확인
+   * 회원가입 시 이메일이 이미 사용 중인지 확인
    */
+  async checkEmailAvailability(email: string): Promise<{ available: boolean }> {
+    if (!email || !email.includes('@')) {
+      throw this.createAuthError(
+        'INVALID_EMAIL',
+        '유효한 이메일 주소를 입력해주세요.'
+      );
+    }
+
+    const existingUser = await this.userRepository.findByEmail(email);
+    return {
+      available: !existingUser,
+    };
+  }
+
   private createAuthError(
     code: string,
     message: string,

@@ -26,6 +26,13 @@ const env = {
   REDIS_PORT: process.env.REDIS_PORT || "6379",
   REDIS_PASSWORD: process.env.REDIS_PASSWORD,
   REDIS_DB: process.env.REDIS_DB || "0",
+  // OAuth environment variables
+  KAKAO_CLIENT_ID: process.env.KAKAO_CLIENT_ID || "",
+  KAKAO_CLIENT_SECRET: process.env.KAKAO_CLIENT_SECRET || "",
+  NAVER_CLIENT_ID: process.env.NAVER_CLIENT_ID || "",
+  NAVER_CLIENT_SECRET: process.env.NAVER_CLIENT_SECRET || "",
+  GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID || "",
+  GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET || "",
 };
 
 // 환경변수 검증 함수
@@ -64,6 +71,7 @@ import { createBatchSchedulerRouter } from "./routes/batch-scheduler";
 import { createStatsRouter } from "./routes/stats";
 import { createUserRouter } from "./routes/user";
 import { createUserDeletionRouter } from "./routes/userDeletion";
+import { createSearchRouter } from "./routes/search";
 import {
   SocketConfig,
   createAuthMiddleware,
@@ -176,6 +184,9 @@ app.use("/api/auth", createEmailAuthRouter());
 
 // 통계 라우트
 app.use("/api/stats", createStatsRouter(prisma));
+
+// 검색 라우트 (SPEC-FEATURE-SEARCH-001)
+app.use("/api/search", createSearchRouter(prisma));
 
 // 파일 업로드 라우트
 app.use("/api/upload", uploadRoutes);

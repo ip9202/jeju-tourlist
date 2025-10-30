@@ -277,6 +277,7 @@ export class NotificationService extends BaseService {
         BADGE_EARNED: true,
         BADGE_PROGRESS: true,
         SYSTEM_ANNOUNCEMENT: true,
+        LEVEL_UP: true,
       },
       quietHours: {
         enabled: false,

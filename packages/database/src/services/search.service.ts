@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { QuestionSearchOptions, AnswerSearchOptions } from "../types";
+import { QuestionSearchOptions, AnswerSearchOptions } from "../types/index";
 
 /**
  * 검색 서비스 인터페이스

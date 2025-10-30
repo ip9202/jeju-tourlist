@@ -7,6 +7,7 @@ import { type Question, type SearchFilters } from "@/hooks/useQuestionSearch";
 import { Header } from "@/components/layout/Header";
 import { safeFormatSimpleDate } from "@/lib/dateUtils";
 import Link from "next/link";
+import { CheckCircle } from "lucide-react";
 
 interface Category {
   id: string;
@@ -498,13 +499,18 @@ function QuestionsPageContent() {
                     className="bg-white rounded-lg border border-gray-200 p-3 hover:shadow-md transition-shadow"
                   >
                     {/* 카테고리 & 상태 배지 */}
+                    {/* @TAG:CODE:ANSWER-INTERACTION-001-F1 - Completion badge with CheckCircle icon */}
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex items-center gap-2">
                         <span className="inline-block bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
                           {question.category?.name || "일반"}
                         </span>
                         {question.isResolved && (
-                          <span className="inline-block bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                          <span className="inline-flex items-center gap-1 bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                            <CheckCircle
+                              className="w-3 h-3"
+                              aria-label="Question resolved"
+                            />
                             해결됨
                           </span>
                         )}

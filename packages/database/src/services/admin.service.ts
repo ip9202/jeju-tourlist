@@ -13,7 +13,7 @@
  */
 
 import { PrismaClient } from '@prisma/client';
-import { BaseService } from './base.service';
+import { BaseService } from "./base.service";
 
 /**
  * 대시보드 통계 데이터

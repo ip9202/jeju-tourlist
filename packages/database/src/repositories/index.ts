@@ -1,10 +1,12 @@
 // Repository 인터페이스 내보내기
-export * from "./base.repository";
 export * from "./user.repository";
 export * from "./question.repository";
 export * from "./answer.repository";
 export * from "./category.repository";
 export * from "./auth.repository";
+export * from "./badge.repository";
+export * from "./point.repository";
+export * from "./answerComment.repository";
 
 // Repository 팩토리 클래스 (DIP - Dependency Inversion Principle)
 import { PrismaClient } from "@prisma/client";

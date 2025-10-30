@@ -30,6 +30,7 @@ export function createAuthRouter(): Router {
   router.post("/login", authController.login);
   router.post("/refresh", authController.refreshToken);
   router.get("/providers", authController.getProviders);
+  router.post("/check", authController.checkEmail);
 
   // OAuth 콜백 라우트 (인증 불필요)
   router.get("/kakao", async (req, res) => {

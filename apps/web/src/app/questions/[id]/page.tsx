@@ -153,7 +153,7 @@ export default function QuestionDetailPage() {
 
       if (parentId) {
         // 중첩 댓글: POST /api/answers/:answerId/comments
-        response = await api.post(`/api/answers/${parentId}/comments`, {
+        response = await api.post(`/answers/${parentId}/comments`, {
           content: content.trim(),
           authorId: user.id,
           parentId: undefined, // 1단계 중첩만 지원
@@ -532,52 +532,64 @@ export default function QuestionDetailPage() {
           </div>
 
           {/* Facebook 스타일 답변 스레드 */}
-          {user && question ? (
+          {question ? (
             useFacebookUI ? (
-              <FacebookAnswerThread
-                question={{
-                  id: question.id,
-                  title: question.title,
-                  content: question.content,
-                  author: {
-                    id: question.author.id,
-                    name: question.author.name,
-                    avatar: question.author.avatar || undefined,
-                  },
-                  createdAt: question.createdAt,
-                  likeCount: question.likeCount,
-                  answerCount: question.answerCount,
-                  viewCount: question.viewCount,
-                  tags: question.tags,
-                }}
-                answers={answers.map(answer => ({
-                  id: answer.id,
-                  content: answer.content,
-                  author: {
-                    id: answer.author.id,
-                    name: answer.author.name,
-                    avatar: answer.author.avatar || undefined,
-                  },
-                  createdAt: answer.createdAt,
-                  likeCount: answer.likeCount,
-                  dislikeCount: answer.dislikeCount || 0,
-                  isLiked: answer.isLiked || false,
-                  isDisliked: answer.isDisliked || false,
-                  isAccepted: answer.isAccepted,
-                  parentId: answer.parentId || undefined,
-                  replyCount: answer.replyCount || 0,
-                }))}
-                currentUser={{
-                  id: user.id,
-                  name: user.name || user.email,
-                }}
-                onSubmitAnswer={handleAnswerSubmit}
-                onLike={handleAnswerLike}
-                onDislike={handleAnswerDislike}
-                onReply={() => {}}
-                isLoading={isSubmitting}
-                maxDepth={2}
-              />
+              <>
+                <FacebookAnswerThread
+                  question={{
+                    id: question.id,
+                    title: question.title,
+                    content: question.content,
+                    author: {
+                      id: question.author.id,
+                      name: question.author.name,
+                      avatar: question.author.avatar || undefined,
+                    },
+                    createdAt: question.createdAt,
+                    likeCount: question.likeCount,
+                    answerCount: question.answerCount,
+                    viewCount: question.viewCount,
+                    tags: question.tags,
+                  }}
+                  answers={answers.map(answer => ({
+                    id: answer.id,
+                    content: answer.content,
+                    author: {
+                      id: answer.author.id,
+                      name: answer.author.name,
+                      avatar: answer.author.avatar || undefined,
+                    },
+                    createdAt: answer.createdAt,
+                    likeCount: answer.likeCount,
+                    dislikeCount: answer.dislikeCount || 0,
+                    isLiked: answer.isLiked || false,
+                    isDisliked: answer.isDisliked || false,
+                    isAccepted: answer.isAccepted,
+                    parentId: answer.parentId || undefined,
+                    replyCount: answer.replyCount || 0,
+                  }))}
+                  currentUser={user ? {
+                    id: user.id,
+                    name: user.name || user.email,
+                  } : null}
+                  onSubmitAnswer={handleAnswerSubmit}
+                  onLike={handleAnswerLike}
+                  onDislike={handleAnswerDislike}
+                  onReply={() => {}}
+                  isLoading={isSubmitting}
+                  maxDepth={2}
+                />
+                {!user && (
+                  <div className="text-center py-8 bg-blue-50 rounded-lg border border-blue-200">
+                    <Text className="text-gray-600 mb-4">
+                      답변을 작성하려면 로그인이 필요합니다.
+                    </Text>
+                    <Button onClick={() => router.push("/auth/signin")}>
+                      로그인하기
+                    </Button>
+                  </div>
+                )}
+              </>
             ) : (
               <div className="text-center py-8">
                 <Text className="text-gray-600 mb-4">
@@ -585,16 +597,7 @@ export default function QuestionDetailPage() {
                 </Text>
               </div>
             )
-          ) : (
-            <div className="text-center py-8">
-              <Text className="text-gray-600 mb-4">
-                답변을 작성하려면 로그인이 필요합니다.
-              </Text>
-              <Button onClick={() => router.push("/auth/signin")}>
-                로그인하기
-              </Button>
-            </div>
-          )}
+          ) : null}
 
           {answerError && (
             <div

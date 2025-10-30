@@ -1,5 +1,5 @@
 
 > @jeju-tourlist/web@1.0.0 test /Users/ip9202/develop/vibe/jeju-tourlist/apps/web
-> jest "--coverage" "--collectCoverageFrom=apps/web/src/config/**/*.ts" "--collectCoverageFrom=apps/web/src/hooks/useAnalytics.ts" "--collectCoverageFrom=apps/web/src/hooks/useWebVitals.ts" "apps/web/src/"
+> jest "--testPathPatterns=FacebookAnswerCard"
 
  ELIFECYCLE  Test failed. See above for more details.

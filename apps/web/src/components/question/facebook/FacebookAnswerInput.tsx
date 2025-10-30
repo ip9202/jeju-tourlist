@@ -48,6 +48,20 @@ export const FacebookAnswerInput: React.FC<FacebookAnswerInputProps> = ({
     }
   };
 
+  // 로그인이 필요한 경우
+  if (!user) {
+    return (
+      <div className={`
+        rounded-lg bg-gray-50 border border-gray-200 p-4 md:rounded-md md:p-3 sm:rounded-none sm:p-2
+        ${isReply ? "ml-10 md:ml-8 sm:ml-6" : "mb-4 md:mb-3 sm:mb-2"}
+      `}>
+        <p className="text-gray-600 text-sm text-center">
+          답변을 작성하려면 로그인이 필요합니다.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div
       className={`

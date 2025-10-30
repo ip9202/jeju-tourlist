@@ -199,7 +199,7 @@ export class QuestionRepository {
 
       if (sortBy === "viewCount" || sortBy === "likeCount") {
         orderBy = { [sortBy]: sortOrder };
-      } else if (sortBy === "answers") {
+      } else if (sortBy === "answerCount") {
         // 답변 수는 계산 필드이므로 createdAt으로 먼저 정렬 후 클라이언트에서 처리
         orderBy = { createdAt: "desc" };
       } else if (sortBy !== "createdAt") {
@@ -289,7 +289,7 @@ export class QuestionRepository {
       }));
 
       // 인기순(popularityScore) 정렬이 요청된 경우 클라이언트 사이드에서 정렬
-      if (sortBy === "answers") {
+      if (sortBy === "answerCount") {
         questionListItems.sort((a, b) => {
           const scoreA = calculatePopularityScore(
             a.answerCount,

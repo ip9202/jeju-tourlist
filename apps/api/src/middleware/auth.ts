@@ -1,4 +1,16 @@
+import { Request, Response, NextFunction } from "express";
 import { UserRole } from "@jeju-tourlist/types";
+
+interface User {
+  id: string;
+  email: string;
+  name: string;
+  avatar?: string;
+  role: UserRole;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 // Express Request 타입 확장
 declare global {

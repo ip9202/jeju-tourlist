@@ -270,6 +270,51 @@ export class AuthController {
   };
 
   /**
+   * 이메일 중복 확인
+   * POST /api/auth/check
+   */
+  checkEmail = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { email } = req.body;
+
+      if (!email) {
+        res.status(400).json({
+          success: false,
+          error: {
+            code: "MISSING_EMAIL",
+            message: "이메일이 필요합니다.",
+          },
+          timestamp: new Date().toISOString(),
+        });
+        return;
+      }
+
+      const result = await this.authService.checkEmailAvailability(email);
+
+      res.status(200).json({
+        success: true,
+        data: result,
+        timestamp: new Date().toISOString(),
+      });
+    } catch (error: any) {
+      console.error("Email check error:", error);
+
+      const statusCode = this.getErrorStatusCode(error.code);
+      const response: AuthApiResponse = {
+        success: false,
+        error: {
+          code: error.code || "EMAIL_CHECK_FAILED",
+          message: error.message || "이메일 중복 확인에 실패했습니다.",
+          details: error.details,
+        },
+        timestamp: new Date().toISOString(),
+      };
+
+      res.status(statusCode).json(response);
+    }
+  };
+
+  /**
    * 요청에서 토큰 추출
    */
   private extractToken(req: Request): string | null {

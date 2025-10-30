@@ -13,8 +13,8 @@
  */
 
 import { PrismaClient, ReportStatus, ReportTargetType } from '@prisma/client';
-import { BaseService } from './base.service';
-import { CreateReportData } from '../types/moderation';
+import { BaseService } from "./base.service";
+import { CreateReportData } from "../types/moderation";
 
 /**
  * 신고 처리 데이터

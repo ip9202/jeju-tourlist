@@ -126,6 +126,7 @@ model Category {
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
   questions   Question[]
+  answers     Answer[]
 
   @@index([isActive])
   @@index([order])
@@ -137,6 +138,7 @@ model Answer {
   content      String
   authorId     String
   questionId   String
+  categoryId   String?
   status       AnswerStatus @default(ACTIVE)
   isAccepted   Boolean      @default(false)
   likeCount    Int          @default(0)
@@ -150,11 +152,13 @@ model Answer {
   comments     AnswerComment[]
   author       User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
   question     Question     @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  category     Category?    @relation(fields: [categoryId], references: [id])
   acceptedBy   Question?    @relation("AcceptedAnswer")
   reports      Report[]     @relation("ReportAnswer")
 
   @@index([authorId])
   @@index([questionId])
+  @@index([categoryId])
   @@index([status])
   @@index([isAccepted])
   @@index([createdAt])
@@ -382,6 +386,7 @@ enum NotificationType {
   BADGE_EARNED
   SYSTEM_ANNOUNCEMENT
   BADGE_PROGRESS
+  LEVEL_UP
 }
 
 enum PointTransactionType {

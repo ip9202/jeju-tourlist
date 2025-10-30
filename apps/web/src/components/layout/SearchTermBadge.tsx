@@ -59,7 +59,7 @@ export const SearchTermBadge: React.FC<SearchTermBadgeProps> = ({
     <a
       onClick={handleClick}
       href={`/search?q=${encodeURIComponent(keyword)}`}
-      className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:underline cursor-pointer transition-colors duration-150 rounded-lg hover:bg-gray-50"
+      className="inline-flex items-center px-0 text-xs text-gray-600 hover:text-blue-600 cursor-pointer transition-colors duration-150"
       aria-label={`Search for ${keyword}`}
     >
       {keyword}

@@ -2,31 +2,8 @@
   "name": "@jeju-tourlist/database",
   "version": "1.0.0",
   "description": "Database package for Jeju Tourlist",
-  "main": "src/index.ts",
-  "types": "src/index.ts",
-  "exports": {
-    ".": "./src/index.ts",
-    "./src/types/question": "./src/types/question.ts",
-    "./types/question": "./src/types/question.ts",
-    "./src/types/answer": "./src/types/answer.ts",
-    "./types/answer": "./src/types/answer.ts",
-    "./src/types/answerComment": "./src/types/answerComment.ts",
-    "./types/answerComment": "./src/types/answerComment.ts",
-    "./src/types/category": "./src/types/category.ts",
-    "./types/category": "./src/types/category.ts",
-    "./src/types/user": "./src/types/user.ts",
-    "./types/user": "./src/types/user.ts",
-    "./src/types/auth": "./src/types/auth.ts",
-    "./types/auth": "./src/types/auth.ts",
-    "./src/repositories/answerComment.repository": "./src/repositories/answerComment.repository.ts",
-    "./repositories/answerComment.repository": "./src/repositories/answerComment.repository.ts",
-    "./src/repositories/auth.repository": "./src/repositories/auth.repository.ts",
-    "./repositories/auth.repository": "./src/repositories/auth.repository.ts",
-    "./src/services/auth.service": "./src/services/auth.service.ts",
-    "./services/auth.service": "./src/services/auth.service.ts",
-    "./src/services/password.service": "./src/services/password.service.ts",
-    "./services/password.service": "./src/services/password.service.ts"
-  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
@@ -63,6 +40,6 @@
     "zod": "^4.1.9"
   },
   "prisma": {
-    "seed": "tsx src/seed-badges.ts"
+    "seed": "tsx src/seed.ts"
   }
 }

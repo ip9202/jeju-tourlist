@@ -11,62 +11,12 @@
  */
 
 import { Badge, BadgeType, UserBadge } from "@prisma/client";
-
-/**
- * 배지 생성 데이터
- */
-export interface CreateBadgeData {
-  code: string;
-  name: string;
-  emoji: string;
-  description: string;
-  type: BadgeType;
-  category?: string;
-  requiredAnswers: number;
-  requiredAdoptRate?: number;
-  bonusPoints: number;
-  adoptBonusPoints?: number;
-  requiresGpsAuth?: boolean;
-  requiresSocialAuth?: boolean;
-  requiresDocAuth?: boolean;
-  isActive?: boolean;
-}
-
-/**
- * 배지 수정 데이터
- */
-export interface UpdateBadgeData {
-  name?: string;
-  description?: string;
-  requiredAnswers?: number;
-  requiredAdoptRate?: number;
-  bonusPoints?: number;
-  adoptBonusPoints?: number;
-  isActive?: boolean;
-}
-
-/**
- * 배지 조회 옵션
- */
-export interface BadgeQueryOptions {
-  category?: string;
-  type?: BadgeType;
-  isActive?: boolean;
-  page?: number;
-  limit?: number;
-}
-
-/**
- * 사용자 배지 조회 옵션
- */
-export interface UserBadgeQueryOptions {
-  userId: string;
-  category?: string;
-  type?: BadgeType;
-  isEarned?: boolean;
-  page?: number;
-  limit?: number;
-}
+import {
+  CreateBadgeData,
+  UpdateBadgeData,
+  BadgeQueryOptions,
+  UserBadgeQueryOptions,
+} from "../types/badge";
 
 /**
  * 배지 리포지토리 인터페이스
@@ -125,3 +75,11 @@ export interface IBadgeRepository {
   >;
   getBadgeSystemStats(days: number): Promise<any>;
 }
+
+// Re-export types for backward compatibility
+export type {
+  CreateBadgeData,
+  UpdateBadgeData,
+  BadgeQueryOptions,
+  UserBadgeQueryOptions,
+};

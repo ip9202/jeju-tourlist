@@ -56,6 +56,23 @@ export interface FacebookQuestionCardProps {
   isLoading?: boolean;
 }
 
+/**
+ * Props for FacebookAnswerCard component
+ * 
+ * @interface FacebookAnswerCardProps
+ * @property {Answer} answer - The answer object to display
+ * @property {boolean} [isNested=false] - Whether this is a nested reply
+ * @property {number} [depth=0] - Nesting level (0: top-level, 1+: replies)
+ * @property {Function} [onLike] - Callback when like button is clicked
+ * @property {Function} [onDislike] - Callback when dislike button is clicked
+ * @property {Function} [onReply] - Callback when reply button is clicked
+ * @property {Function} [onMore] - Callback when more options button is clicked
+ * @property {boolean} [isLoading=false] - Loading state
+ * @property {User} [questionAuthor] - The question author (for adoption feature)
+ * @property {User} [currentUser] - Current logged-in user
+ * @property {Function} [onAdopt] - Callback when adopt button is clicked (Phase 4)
+ * @property {Function} [onUnadopt] - Callback when unadopt button is clicked (Phase 4)
+ */
 export interface FacebookAnswerCardProps {
   answer: Answer;
   isNested?: boolean;
@@ -65,6 +82,11 @@ export interface FacebookAnswerCardProps {
   onReply?: (answerId: string) => void;
   onMore?: (answerId: string) => void;
   isLoading?: boolean;
+  // Phase 4: Adoption feature
+  questionAuthor?: User;
+  currentUser?: User;
+  onAdopt?: (answerId: string) => void;
+  onUnadopt?: (answerId: string) => void;
 }
 
 export interface FacebookAnswerInputProps {

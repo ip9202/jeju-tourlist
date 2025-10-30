@@ -55,6 +55,10 @@ export interface ClientToServerEvents {
 
 /**
  * 서버에서 클라이언트로 전송하는 이벤트 타입
+ *
+ * @TAG:CODE:ANSWER-INTERACTION-001-E1
+ * @TAG:CODE:ANSWER-INTERACTION-001-E2
+ * @TAG:CODE:ANSWER-INTERACTION-001-E3
  */
 export interface ServerToClientEvents {
   // 연결 확인
@@ -81,6 +85,31 @@ export interface ServerToClientEvents {
     isUpdate?: boolean;
   }) => void;
 
+  // @TAG:CODE:ANSWER-INTERACTION-001-E1 - Answer adoption event
+  answer_adopted: (data: {
+    answerId: string;
+    adopterId: string;
+    adopteeId: string;
+    questionId: string;
+    timestamp: number;
+  }) => void;
+
+  // @TAG:CODE:ANSWER-INTERACTION-001-E2 - Answer reaction (like/dislike) updates
+  answer_reaction_updated: (data: {
+    answerId: string;
+    likeCount: number;
+    dislikeCount: number;
+    timestamp: number;
+  }) => void;
+
+  // @TAG:CODE:ANSWER-INTERACTION-001-E3 - Badge award notification
+  badge_awarded: (data: {
+    userId: string;
+    badgeName: string;
+    badgeId: string;
+    timestamp: number;
+  }) => void;
+
   // 타이핑 상태
   user_typing: (data: {
     questionId: string;
@@ -99,7 +128,7 @@ export interface ServerToClientEvents {
 
   // 알림
   notification: (data: {
-    type: "question" | "answer" | "accepted" | "mention";
+    type: "question" | "answer" | "accepted" | "mention" | "system";
     title: string;
     message: string;
     targetUserId?: string;

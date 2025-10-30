@@ -8,7 +8,6 @@
  */
 
 import Redis from "ioredis";
-import { promisify } from "util";
 
 /**
  * 캐시 서비스 클래스
@@ -27,7 +26,6 @@ export class CacheService {
       host: process.env.REDIS_HOST || "localhost",
       port: parseInt(process.env.REDIS_PORT || "6379"),
       password: process.env.REDIS_PASSWORD,
-      retryDelayOnFailover: 100,
       maxRetriesPerRequest: 3,
       lazyConnect: true,
     });

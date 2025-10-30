@@ -23,10 +23,12 @@ import { PrismaClient } from "@prisma/client";
  */
 import { AuditLogService } from "../auditLog/AuditLogService";
 import { AnswerCommentService } from "../answerComment/AnswerCommentService";
+import { PointService } from "../point/PointService";
 
 export class AnswerService {
   private readonly answerRepository: AnswerRepository;
   private readonly auditLogService: AuditLogService;
+  private readonly pointService: PointService;
 
   constructor(
     private readonly prisma: PrismaClient,
@@ -34,6 +36,7 @@ export class AnswerService {
   ) {
     this.answerRepository = new AnswerRepository(prisma);
     this.auditLogService = new AuditLogService(prisma);
+    this.pointService = new PointService(prisma);
   }
 
   /**
@@ -47,7 +50,7 @@ export class AnswerService {
     // 질문 존재 여부 확인
     const question = await this.prisma.question.findUnique({
       where: { id: data.questionId },
-      select: { id: true, authorId: true, isResolved: true },
+      select: { id: true, categoryId: true, authorId: true, isResolved: true },
     });
 
     if (!question) {
@@ -63,8 +66,14 @@ export class AnswerService {
       await this.ensureTempUserExists();
     }
 
+    // categoryId를 질문에서 가져와서 답변 데이터에 추가
+    const dataWithCategory = {
+      ...data,
+      categoryId: question.categoryId,
+    };
+
     // 답변 생성
-    const answer = await this.answerRepository.create(data);
+    const answer = await this.answerRepository.create(dataWithCategory);
 
     // 질문의 답변 수 증가 (비동기)
     this.updateQuestionAnswerCount(data.questionId).catch(console.error);
@@ -351,8 +360,16 @@ export class AnswerService {
    * @param answerId - 답변 ID
    * @param questionId - 질문 ID
    * @param userId - 요청자 ID (질문 작성자)
-   * @returns 채택된 답변 정보
+   * @returns 채택된 답변 정보 with pointsAwarded
    * @throws {Error} 권한이 없거나 답변을 찾을 수 없을 때 에러 발생
+   *
+   * @TAG:CODE:ANSWER-INTERACTION-001-C1
+   * SPEC: SPEC-ANSWER-INTERACTION-001 - Allow multiple answer adoption
+   * Key Change: Removed unacceptOtherAnswers() call to support multiple adoptions
+   *
+   * @TAG:CODE:ANSWER-INTERACTION-002-C2
+   * SPEC: SPEC-ANSWER-INTERACTION-002 - Automatic point distribution on adoption
+   * Key Feature: Distributes 50 points to answer author using transaction atomicity
    */
   async acceptAnswer(answerId: string, questionId: string, userId: string) {
     // 질문 작성자 확인
@@ -383,14 +400,74 @@ export class AnswerService {
       throw new Error("해당 질문의 답변이 아닙니다.");
     }
 
-    // 다른 답변들 채택 해제
-    await this.answerRepository.unacceptOtherAnswers(questionId, answerId);
+    // [REMOVED] Multiple adoption support: Do NOT unaccept other answers
+    // Previous behavior: await this.answerRepository.unacceptOtherAnswers(questionId, answerId);
+    // New behavior: Allow multiple answers to be accepted simultaneously
 
-    // 답변 채택
-    const acceptedAnswer = await this.answerRepository.updateAcceptedStatus(
-      answerId,
-      true
-    );
+    // Phase 2: Use transaction for atomicity (answer adoption + point distribution)
+    // If either operation fails, entire transaction is rolled back
+    const result = await this.prisma.$transaction(async tx => {
+      // Step 1: Accept answer
+      const acceptedAnswer = await tx.answer.update({
+        where: { id: answerId },
+        data: {
+          isAccepted: true,
+          acceptedAt: new Date(),
+        },
+        include: {
+          author: {
+            select: {
+              id: true,
+              name: true,
+              nickname: true,
+              avatar: true,
+            },
+          },
+          question: {
+            select: {
+              id: true,
+              title: true,
+              authorId: true,
+            },
+          },
+        },
+      });
+
+      // Step 2: Distribute 50 points to answer author (within same transaction)
+      // Update user points
+      const updatedUser = await tx.user.update({
+        where: { id: answer.authorId },
+        data: {
+          points: {
+            increment: 50,
+          },
+        },
+        select: {
+          id: true,
+          points: true,
+        },
+      });
+
+      // Create point transaction record
+      const pointTransaction = await tx.pointTransaction.create({
+        data: {
+          userId: answer.authorId,
+          amount: 50,
+          balance: updatedUser.points,
+          type: "ANSWER_ACCEPTED",
+          description: "Answer adopted",
+          relatedType: "ANSWER",
+          relatedId: answerId,
+        },
+      });
+
+      return {
+        ...acceptedAnswer,
+        pointsAwarded: 50,
+        newBalance: updatedUser.points,
+        transactionId: pointTransaction.id,
+      };
+    });
 
     // 질문 해결 상태 변경 (비동기)
     this.updateQuestionResolvedStatus(questionId, true).catch(console.error);
@@ -400,7 +477,7 @@ export class AnswerService {
       console.error
     );
 
-    return acceptedAnswer;
+    return result;
   }
 
   /**
@@ -411,6 +488,10 @@ export class AnswerService {
    * @param userId - 요청자 ID (질문 작성자)
    * @returns 채택 해제된 답변 정보
    * @throws {Error} 권한이 없거나 답변을 찾을 수 없을 때 에러 발생
+   *
+   * @TAG:CODE:ANSWER-INTERACTION-001-C2
+   * SPEC: SPEC-ANSWER-INTERACTION-001 - Manage isResolved based on remaining accepted answers
+   * Key Change: Check if other accepted answers exist before setting isResolved=false
    */
   async unacceptAnswer(answerId: string, questionId: string, userId: string) {
     // 질문 작성자 확인
@@ -433,8 +514,19 @@ export class AnswerService {
       false
     );
 
-    // 질문 해결 상태 변경 (비동기)
-    this.updateQuestionResolvedStatus(questionId, false).catch(console.error);
+    // Check if any other accepted answers remain
+    const remainingAcceptedCount = await this.prisma.answer.count({
+      where: {
+        questionId: questionId,
+        isAccepted: true,
+      },
+    });
+
+    // Only set isResolved=false if NO accepted answers remain
+    const shouldResolve = remainingAcceptedCount > 0;
+    this.updateQuestionResolvedStatus(questionId, shouldResolve).catch(
+      console.error
+    );
 
     return unacceptedAnswer;
   }

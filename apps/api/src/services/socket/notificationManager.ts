@@ -88,7 +88,7 @@ export class NotificationManager implements INotificationManager {
       if (!userSocketIds || userSocketIds.size === 0) {
         // 오프라인 사용자 - 큐에 저장
         if (event === "notification") {
-          this.queueNotification(userId, data);
+          this.queueNotification(userId, data as NotificationData);
         }
         console.log(`📴 오프라인 사용자: ${userId} - 알림 큐에 저장`);
         return;
@@ -97,9 +97,9 @@ export class NotificationManager implements INotificationManager {
       // 사용자 설정 확인
       if (
         event === "notification" &&
-        !this.shouldSendNotification(userId, data)
+        !this.shouldSendNotification(userId, data as NotificationData)
       ) {
-        console.log(`🔕 알림 차단: ${userId} - ${data.type}`);
+        console.log(`🔕 알림 차단: ${userId} - ${(data as any).type}`);
         return;
       }
 
@@ -107,7 +107,7 @@ export class NotificationManager implements INotificationManager {
       userSocketIds.forEach(socketId => {
         const socket = this.io.sockets.sockets.get(socketId);
         if (socket) {
-          socket.emit(event, data);
+          socket.emit(event, data as any);
         }
       });
 
@@ -129,7 +129,7 @@ export class NotificationManager implements INotificationManager {
     data: unknown
   ): void {
     try {
-      this.io.emit(event, data);
+      this.io.emit(event, data as any);
       console.log(`📡 전체 브로드캐스트: ${event}`, data);
     } catch (error) {
       console.error(`❌ 전체 브로드캐스트 실패:`, error);
@@ -150,7 +150,7 @@ export class NotificationManager implements INotificationManager {
     try {
       // 위치 기반 룸에 브로드캐스트
       const roomName = `location:${location}`;
-      this.io.to(roomName).emit(event, data);
+      this.io.to(roomName).emit(event, data as any);
 
       console.log(`🗺️  위치 기반 알림: ${location} - ${event}`);
     } catch (error) {

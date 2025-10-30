@@ -2,17 +2,17 @@
 export * from "./client";
 
 // 타입 정의
-export * from "./types";
+export * from "./types/index";
 
 // Repository 패턴
-export * from "./repositories";
+export * from "./repositories/index";
 
 // 서비스 레이어
-export * from "./services";
+export * from "./services/index";
 
 // 데이터베이스 서비스 팩토리
 import { prisma } from "./client";
-import { DatabaseServiceFactory } from "./services";
+import { DatabaseServiceFactory } from "./services/index";
 
 // Prisma 클라이언트 직접 export
 export { prisma };

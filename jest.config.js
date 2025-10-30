@@ -6,8 +6,20 @@ module.exports = {
     '**/__tests__/**/*.+(ts|tsx|js)',
     '**/*.(test|spec).+(ts|tsx|js)'
   ],
-  transform: {
-    '^.+\\.(ts|tsx)$': 'ts-jest'
+  globals: {
+    'ts-jest': {
+      tsconfig: {
+        jsx: 'react',
+        esModuleInterop: true,
+        allowSyntheticDefaultImports: true,
+        strict: false,
+        skipLibCheck: true,
+        resolveJsonModule: true,
+        target: 'ES2020',
+        module: 'commonjs'
+      },
+      isolatedModules: true
+    }
   },
   collectCoverageFrom: [
     'apps/**/*.{ts,tsx}',
@@ -19,8 +31,7 @@ module.exports = {
   ],
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov', 'html'],
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-  moduleNameMapping: {
+  moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1'
   }
 };

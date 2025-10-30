@@ -393,7 +393,7 @@ export class AnswerCommentRepository {
               id: true,
               nickname: true,
               avatar: true,
-              userRole: true,
+              
             },
           },
         },

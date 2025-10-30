@@ -1,5 +1,5 @@
 // 공통 타입 정의 내보내기
-export * from "./auth";
+export * from "./auth.js";
 
 // API 응답 공통 타입
 export interface ApiResponse<T = any> {

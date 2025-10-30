@@ -30,6 +30,13 @@ const env = {
   REDIS_PORT: process.env.REDIS_PORT || "6379",
   REDIS_PASSWORD: process.env.REDIS_PASSWORD,
   REDIS_DB: process.env.REDIS_DB || "0",
+  // OAuth environment variables
+  KAKAO_CLIENT_ID: process.env.KAKAO_CLIENT_ID || "",
+  KAKAO_CLIENT_SECRET: process.env.KAKAO_CLIENT_SECRET || "",
+  NAVER_CLIENT_ID: process.env.NAVER_CLIENT_ID || "",
+  NAVER_CLIENT_SECRET: process.env.NAVER_CLIENT_SECRET || "",
+  GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID || "",
+  GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET || "",
 };
 
 /**
@@ -99,6 +106,7 @@ export class KakaoOAuthService extends OAuthProvider {
     const profile = response.data;
 
     return {
+      id: profile.id.toString(),
       provider: AuthProvider.KAKAO,
       providerId: profile.id.toString(),
       email: profile.kakao_account?.email || "",
@@ -170,6 +178,7 @@ export class NaverOAuthService extends OAuthProvider {
     const profile = response.data.response;
 
     return {
+      id: profile.id,
       provider: AuthProvider.NAVER,
       providerId: profile.id,
       email: profile.email || "",
@@ -241,6 +250,7 @@ export class GoogleOAuthService extends OAuthProvider {
     const profile = response.data;
 
     return {
+      id: profile.id,
       provider: AuthProvider.GOOGLE,
       providerId: profile.id,
       email: profile.email || "",
