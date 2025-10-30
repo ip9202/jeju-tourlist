@@ -121,9 +121,7 @@ export function AdoptionNotificationContainer() {
 
   const removeNotification = (id: string) => {
     setNotifications(prev => prev.filter(n => n.id !== id));
-  };
-
-  // Expose add/remove methods to window for E2E testing
+  }; // Expose add/remove methods to window for E2E testing
   useEffect(() => {
     if (typeof window !== "undefined") {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -131,7 +129,7 @@ export function AdoptionNotificationContainer() {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (window as any).__removeAdoptionNotification = removeNotification;
     }
-  }, []);
+  }, [addNotification, removeNotification]);
 
   return (
     <>
