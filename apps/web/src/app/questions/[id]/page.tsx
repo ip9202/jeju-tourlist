@@ -244,20 +244,14 @@ export default function QuestionDetailPage() {
   /**
    * 답변 좋아요 핸들러
    */
-  const handleAnswerLike = async (answerId: string) => {
+  const handleAnswerLike = async (answerId: string, _isLike?: boolean) => {
     try {
-      const response = await fetch(`/api/answers/${answerId}/reaction`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          isLike: true,
-        }),
+      const response = await api.post(`/answers/${answerId}/reaction`, {
+        isLike: true,
       });
 
-      if (!response.ok) {
-        throw new Error("좋아요 처리에 실패했습니다");
+      if (!response.success) {
+        throw new Error(response.error || "좋아요 처리에 실패했습니다");
       }
 
       // 로컬 상태 업데이트
@@ -282,20 +276,17 @@ export default function QuestionDetailPage() {
   /**
    * 답변 싫어요 핸들러
    */
-  const handleAnswerDislike = async (answerId: string) => {
+  const handleAnswerDislike = async (
+    answerId: string,
+    _isDislike?: boolean
+  ) => {
     try {
-      const response = await fetch(`/api/answers/${answerId}/reaction`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          isLike: false,
-        }),
+      const response = await api.post(`/answers/${answerId}/reaction`, {
+        isLike: false,
       });
 
-      if (!response.ok) {
-        throw new Error("싫어요 처리에 실패했습니다");
+      if (!response.success) {
+        throw new Error(response.error || "싫어요 처리에 실패했습니다");
       }
 
       // 로컬 상태 업데이트
@@ -568,10 +559,14 @@ export default function QuestionDetailPage() {
                     parentId: answer.parentId || undefined,
                     replyCount: answer.replyCount || 0,
                   }))}
-                  currentUser={user ? {
-                    id: user.id,
-                    name: user.name || user.email,
-                  } : null}
+                  currentUser={
+                    user
+                      ? {
+                          id: user.id,
+                          name: user.name || user.email,
+                        }
+                      : null
+                  }
                   onSubmitAnswer={handleAnswerSubmit}
                   onLike={handleAnswerLike}
                   onDislike={handleAnswerDislike}
