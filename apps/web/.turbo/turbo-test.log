@@ -1,5 +1,5 @@
 
 > @jeju-tourlist/web@1.0.0 test /Users/ip9202/develop/vibe/jeju-tourlist/apps/web
-> jest "--testPathPatterns=FacebookAnswerCard"
+> jest "--testPathPattern=(answerNotificationService|useAnswerNotifications)"
 
  ELIFECYCLE  Test failed. See above for more details.

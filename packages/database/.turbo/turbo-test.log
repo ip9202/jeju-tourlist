@@ -1,21 +1,14 @@
 
 > @jeju-tourlist/database@1.0.0 test /Users/ip9202/develop/vibe/jeju-tourlist/packages/database
-> jest "--testPathPatterns=FacebookAnswerCard"
+> jest "--testPathPattern=(answerNotificationService|useAnswerNotifications)"
 
-● Validation Warning:
+testPathPattern:
 
-  Unknown option "moduleNameMapping" with value {"^@/(.*)$": "<rootDir>/src/$1"} was found.
-  This is probably a typing mistake. Fixing it will remove this message.
+  Option "testPathPattern" was replaced by "--testPathPatterns". "--testPathPatterns" is only available as a command-line option.
+  
+  Please update your configuration.
 
-  Configuration Documentation:
-  https://jestjs.io/docs/configuration
-
-● Validation Warning:
-
-  Unknown option "moduleNameMapping" with value {"^@/(.*)$": "<rootDir>/src/$1"} was found.
-  This is probably a typing mistake. Fixing it will remove this message.
-
-  Configuration Documentation:
-  https://jestjs.io/docs/configuration
+  CLI Options Documentation:
+  https://jestjs.io/docs/cli
 
  ELIFECYCLE  Test failed. See above for more details.
