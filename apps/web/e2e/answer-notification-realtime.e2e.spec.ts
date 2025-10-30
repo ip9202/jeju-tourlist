@@ -370,6 +370,17 @@ test.describe("Answer Notification Real-time E2E Tests - Phase 7", () => {
     }) => {
       // This test will FAIL because reconnection logic is not optimized
 
+      // Connect socket first
+      await page.evaluate(async () => {
+        const socketClient = (window as any).__socketClient;
+        if (socketClient && !socketClient.isConnected()) {
+          await socketClient.connect();
+        }
+      });
+
+      // Wait for connection
+      await page.waitForTimeout(500);
+
       // Check if socket is connected
       const isConnected = await page.evaluate(() => {
         const socketClient = (window as any).__socketClient;

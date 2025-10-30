@@ -58,6 +58,14 @@ export function SocketProvider({
     auth: { userId, token },
   });
 
+  // Expose socket to window for E2E testing
+  useEffect(() => {
+    if (typeof window !== "undefined" && socket) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (window as any).__socketClient = socket;
+    }
+  }, [socket]);
+
   // 상태 관리
   const [notifications, setNotifications] = useState<RealtimeNotification[]>(
     []
