@@ -18,7 +18,7 @@
 
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { CheckCircle } from "lucide-react";
 
 export interface AdoptionNotificationProps {
@@ -108,7 +108,7 @@ export function AdoptionNotificationContainer() {
   }, [notifications]);
 
   // @TEST:ANSWER-INTERACTION-001-PHASE7-P3 - Memory limit: 50 notifications max
-  const addNotification = (notification: NotificationData) => {
+  const addNotification = useCallback((notification: NotificationData) => {
     setNotifications(prev => {
       const updated = [...prev, notification];
       // Enforce memory limit of 50 notifications
@@ -117,11 +117,11 @@ export function AdoptionNotificationContainer() {
       }
       return updated;
     });
-  };
+  }, []);
 
-  const removeNotification = (id: string) => {
+  const removeNotification = useCallback((id: string) => {
     setNotifications(prev => prev.filter(n => n.id !== id));
-  }; // Expose add/remove methods to window for E2E testing
+  }, []); // Expose add/remove methods to window for E2E testing
   useEffect(() => {
     if (typeof window !== "undefined") {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
