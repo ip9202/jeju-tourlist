@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState, useMemo, useCallback } from "react";
 import { FacebookAnswerThreadProps, Answer } from "./types";
 import { sortByBadgePriority } from "./utils";
@@ -8,10 +6,13 @@ import FacebookAnswerCard from "./FacebookAnswerCard";
 
 export const FacebookAnswerThread: React.FC<FacebookAnswerThreadProps> = ({
   answers,
+  question,
   currentUser,
   onSubmitAnswer,
   onLike,
   onDislike,
+  onAdopt,
+  onUnadopt,
   onReply,
   isLoading = false,
   maxDepth = 2,
@@ -93,8 +94,12 @@ export const FacebookAnswerThread: React.FC<FacebookAnswerThreadProps> = ({
           answer={{ ...answer, replyCount: replies.length }}
           isNested={depth > 0}
           depth={depth}
+          currentUser={currentUser}
+          questionAuthor={question.author}
           onLike={onLike}
           onDislike={onDislike}
+          onAdopt={onAdopt}
+          onUnadopt={onUnadopt}
           onReply={handleReply}
           isLoading={isLoading}
         />

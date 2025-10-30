@@ -58,7 +58,7 @@ export interface FacebookQuestionCardProps {
 
 /**
  * Props for FacebookAnswerCard component
- * 
+ *
  * @interface FacebookAnswerCardProps
  * @property {Answer} answer - The answer object to display
  * @property {boolean} [isNested=false] - Whether this is a nested reply
@@ -106,6 +106,8 @@ export interface FacebookAnswerThreadProps {
   onSubmitAnswer: (content: string, parentId?: string) => Promise<void>;
   onLike?: (answerId: string, isLiked: boolean) => void;
   onDislike?: (answerId: string, isDisliked: boolean) => void;
+  onAdopt?: (answerId: string) => void;
+  onUnadopt?: (answerId: string) => void;
   onReply?: (answerId: string) => void;
   isLoading?: boolean;
   maxDepth?: number; // 최대 중첩 레벨 (기본값: 2)
