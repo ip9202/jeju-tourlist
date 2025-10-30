@@ -99,7 +99,7 @@ test.describe("Answer Notification Real-time E2E Tests - Phase 7", () => {
     test.beforeEach(async ({ page }) => {
       // Navigate to question page
       await page.goto(`${BASE_URL}/questions/${QUESTION_ID}`, {
-        waitUntil: "networkidle",
+        waitUntil: "domcontentloaded",
       });
 
       // Clear any existing notifications
@@ -243,7 +243,7 @@ test.describe("Answer Notification Real-time E2E Tests - Phase 7", () => {
   test.describe("Suite 2: Performance Validation @REQ:ANSWER-INTERACTION-001-P1", () => {
     test.beforeEach(async ({ page }) => {
       await page.goto(`${BASE_URL}/questions/${QUESTION_ID}`, {
-        waitUntil: "networkidle",
+        waitUntil: "domcontentloaded",
       });
     });
 
@@ -474,7 +474,7 @@ test.describe("Answer Notification Real-time E2E Tests - Phase 7", () => {
           pages.push(page);
 
           await page.goto(`${BASE_URL}/questions/${QUESTION_ID}`, {
-            waitUntil: "networkidle",
+            waitUntil: "domcontentloaded",
           });
         }
 
@@ -522,10 +522,10 @@ test.describe("Answer Notification Real-time E2E Tests - Phase 7", () => {
 
       try {
         await page1.goto(`${BASE_URL}/questions/${QUESTION_ID}`, {
-          waitUntil: "networkidle",
+          waitUntil: "domcontentloaded",
         });
         await page2.goto(`${BASE_URL}/questions/${QUESTION_ID}`, {
-          waitUntil: "networkidle",
+          waitUntil: "domcontentloaded",
         });
 
         const startTime = performance.now();
@@ -572,10 +572,10 @@ test.describe("Answer Notification Real-time E2E Tests - Phase 7", () => {
 
       try {
         await page1.goto(`${BASE_URL}/questions/${QUESTION_ID}`, {
-          waitUntil: "networkidle",
+          waitUntil: "domcontentloaded",
         });
         await page2.goto(`${BASE_URL}/questions/${QUESTION_ID}`, {
-          waitUntil: "networkidle",
+          waitUntil: "domcontentloaded",
         });
 
         // Both users click like simultaneously
@@ -631,7 +631,7 @@ test.describe("Answer Notification Real-time E2E Tests - Phase 7", () => {
           pages.push(page);
 
           await page.goto(`${BASE_URL}/questions/${QUESTION_ID}`, {
-            waitUntil: "networkidle",
+            waitUntil: "domcontentloaded",
           });
         }
 
