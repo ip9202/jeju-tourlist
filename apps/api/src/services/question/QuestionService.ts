@@ -74,26 +74,65 @@ export class QuestionService {
     }
 
     // 각 답변의 isAccepted를 동적으로 계산 (acceptedAnswerId 기반)
-    // 그리고 각 답변의 댓글 개수(replyCount) 계산
+    // 그리고 각 답변의 댓글 개수와 댓글 데이터 포함
     const questionWithAnswers = question as any;
     if (questionWithAnswers.answers) {
-      questionWithAnswers.answers = await Promise.all(
-        questionWithAnswers.answers.map(async (answer: any) => {
-          // 댓글 개수 계산
-          const replyCount = await this.prisma.answerComment.count({
-            where: {
-              answerId: answer.id,
-              status: "ACTIVE",
-            },
-          });
+      const allAnswersAndComments: any[] = [];
 
-          return {
-            ...answer,
-            replyCount,
-            isAccepted: answer.id === question.acceptedAnswerId,
-          };
-        })
-      );
+      for (const answer of questionWithAnswers.answers) {
+        // 최상위 답변 데이터 추가
+        const answerData = {
+          ...answer,
+          isAccepted: answer.id === question.acceptedAnswerId,
+        };
+
+        // 답글 개수 계산 및 답글 데이터 조회
+        const comments = await this.prisma.answerComment.findMany({
+          where: {
+            answerId: answer.id,
+            status: "ACTIVE",
+          },
+          include: {
+            author: {
+              select: {
+                id: true,
+                name: true,
+                nickname: true,
+                avatar: true,
+              },
+            },
+          },
+          orderBy: {
+            createdAt: "asc",
+          },
+        });
+
+        // replyCount 설정
+        answerData.replyCount = comments.length;
+
+        // 최상위 답변 추가
+        allAnswersAndComments.push(answerData);
+
+        // 답글을 Answer 형식으로 변환하여 추가
+        const commentAsAnswers = comments.map((comment: any) => ({
+          id: comment.id,
+          content: comment.content,
+          author: comment.author,
+          createdAt: comment.createdAt,
+          likeCount: comment.likeCount,
+          dislikeCount: 0,
+          commentCount: 0,
+          isAccepted: false,
+          isLiked: false,
+          isDisliked: false,
+          parentId: answer.id, // 부모 답변의 ID
+          replyCount: 0, // 답글의 답글은 미지원
+        }));
+
+        allAnswersAndComments.push(...commentAsAnswers);
+      }
+
+      questionWithAnswers.answers = allAnswersAndComments;
     }
 
     // 조회수 증가 (비동기)
