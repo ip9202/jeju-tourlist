@@ -314,7 +314,9 @@ export default function QuestionDetailPage() {
    */
   const handleAnswerAdopt = async (answerId: string) => {
     try {
-      const response = await api.post(`/api/answers/${answerId}/adopt`, {});
+      const response = await api.post(`/api/answers/${answerId}/adopt`, {
+        questionId: params.id,
+      });
 
       if (!response.success) {
         throw new Error(response.error || "채택 처리에 실패했습니다");
@@ -346,7 +348,7 @@ export default function QuestionDetailPage() {
    */
   const handleAnswerUnadopt = async (answerId: string) => {
     try {
-      const response = await api.post(`/api/answers/${answerId}/unadopt`, {});
+      const response = await api.delete(`/api/answers/${answerId}/adopt`);
 
       if (!response.success) {
         throw new Error(response.error || "채택 취소 처리에 실패했습니다");
