@@ -3,6 +3,7 @@ import { FacebookAnswerThreadProps, Answer } from "./types";
 import { sortByBadgePriority } from "./utils";
 import FacebookAnswerInput from "./FacebookAnswerInput";
 import FacebookAnswerCard from "./FacebookAnswerCard";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 export const FacebookAnswerThread: React.FC<FacebookAnswerThreadProps> = ({
   answers,
@@ -122,19 +123,26 @@ export const FacebookAnswerThread: React.FC<FacebookAnswerThreadProps> = ({
         {/* Replies */}
         {canShowReplies && (
           <div className="ml-10 mt-2 space-y-2 md:ml-8 md:mt-1.5 sm:ml-6 sm:mt-1">
-            {!isExpanded && replies.length > 0 && (
-              <button
-                onClick={() => toggleExpandReplies(answer.id)}
-                className="text-xs font-semibold text-blue-600 hover:text-blue-700 transition-colors"
-              >
-                답글 {replies.length}개 보기
-              </button>
-            )}
+            {replies.length > 0 && (
+              <>
+                <button
+                  onClick={() => toggleExpandReplies(answer.id)}
+                  className="flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700 transition-colors"
+                >
+                  {isExpanded ? (
+                    <ChevronUp size={16} />
+                  ) : (
+                    <ChevronDown size={16} />
+                  )}
+                  답글 {replies.length}개 {isExpanded ? "숨기기" : "보기"}
+                </button>
 
-            {isExpanded && replies.length > 0 && (
-              <div className="space-y-2">
-                {replies.map(reply => renderAnswer(reply, depth + 1))}
-              </div>
+                {isExpanded && (
+                  <div className="space-y-2">
+                    {replies.map(reply => renderAnswer(reply, depth + 1))}
+                  </div>
+                )}
+              </>
             )}
           </div>
         )}

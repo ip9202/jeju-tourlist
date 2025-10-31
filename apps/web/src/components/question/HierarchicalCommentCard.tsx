@@ -2,15 +2,7 @@
 
 import React, { useState } from "react";
 import { Button } from "@jeju-tourlist/ui";
-import {
-  Heart,
-  Reply,
-  MoreHorizontal,
-  Edit,
-  Trash2,
-  ChevronDown,
-  ChevronRight,
-} from "lucide-react";
+import { Heart, Reply, MoreHorizontal, Edit, Trash2 } from "lucide-react";
 
 /**
  * 계층구조 댓글 데이터 타입
@@ -70,7 +62,6 @@ export const HierarchicalCommentCard: React.FC<
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(comment.content);
   const [showActions, setShowActions] = useState(false);
-  const [showReplies, setShowReplies] = useState(true);
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [replyContent, setReplyContent] = useState("");
   const [isSubmittingReply, setIsSubmittingReply] = useState(false);
@@ -159,13 +150,6 @@ export const HierarchicalCommentCard: React.FC<
   const handleCancelEdit = () => {
     setEditContent(comment.content);
     setIsEditing(false);
-  };
-
-  /**
-   * 답글 토글 핸들러
-   */
-  const toggleReplies = () => {
-    setShowReplies(!showReplies);
   };
 
   /**
@@ -348,50 +332,24 @@ export const HierarchicalCommentCard: React.FC<
             </div>
           </div>
         )}
+
+        {/* 답글들 */}
+        {comment.replies && comment.replies.length > 0 && (
+          <div className="mt-2 space-y-2">
+            {comment.replies.map(reply => (
+              <HierarchicalCommentCard
+                key={reply.id}
+                comment={reply}
+                onLike={onLike}
+                onEdit={onEdit}
+                onDelete={onDelete}
+                onReply={onReply}
+                maxDepth={maxDepth}
+              />
+            ))}
+          </div>
+        )}
       </div>
-
-      {/* 답글 목록 */}
-      {comment.replies && comment.replies.length > 0 && (
-        <div className="mt-2">
-          {/* 답글 펼치기/접기 버튼 */}
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={toggleReplies}
-            className="text-gray-500 hover:text-gray-700"
-            style={{ marginLeft: "16px" }}
-          >
-            {showReplies ? (
-              <>
-                <ChevronDown className="h-4 w-4 mr-1" />
-                답글 숨기기
-              </>
-            ) : (
-              <>
-                <ChevronRight className="h-4 w-4 mr-1" />
-                답글 {comment.replyCount}개 보기
-              </>
-            )}
-          </Button>
-
-          {/* 답글들 */}
-          {showReplies && (
-            <div className="mt-2 space-y-2">
-              {comment.replies.map(reply => (
-                <HierarchicalCommentCard
-                  key={reply.id}
-                  comment={reply}
-                  onLike={onLike}
-                  onEdit={onEdit}
-                  onDelete={onDelete}
-                  onReply={onReply}
-                  maxDepth={maxDepth}
-                />
-              ))}
-            </div>
-          )}
-        </div>
-      )}
     </div>
   );
 };

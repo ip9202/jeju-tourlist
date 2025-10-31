@@ -258,13 +258,6 @@ const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
             </button>
           )}
         </div>
-
-        {/* Reply Count */}
-        {(answer.replyCount || 0) > 0 && (
-          <button className="mt-2 pl-3 text-xs font-semibold text-blue-600 hover:text-blue-700 transition-colors md:mt-1 md:pl-2 sm:mt-0.5 sm:pl-1.5 sm:text-xs">
-            답글 {answer.replyCount}개 보기
-          </button>
-        )}
       </div>
     </div>
   );
