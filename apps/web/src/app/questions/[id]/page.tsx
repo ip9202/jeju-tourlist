@@ -191,7 +191,7 @@ export default function QuestionDetailPage() {
       }
 
       if (!response.success) {
-        throw new Error(response.error || "작성에 실패했습니다.");
+        throw new Error(response.message || "작성에 실패했습니다.");
       }
 
       // 새 답변/댓글을 목록에 추가 (API 응답에 author 정보가 포함됨)
@@ -354,7 +354,7 @@ export default function QuestionDetailPage() {
       });
 
       if (!response.success) {
-        throw new Error(response.error || "채택 처리에 실패했습니다");
+        throw new Error(response.message || "채택 처리에 실패했습니다");
       }
 
       // 로컬 상태 업데이트
@@ -386,7 +386,7 @@ export default function QuestionDetailPage() {
       const response = await api.delete(`/api/answers/${answerId}/adopt`);
 
       if (!response.success) {
-        throw new Error(response.error || "채택 취소 처리에 실패했습니다");
+        throw new Error(response.message || "채택 취소 처리에 실패했습니다");
       }
 
       // 로컬 상태 업데이트
