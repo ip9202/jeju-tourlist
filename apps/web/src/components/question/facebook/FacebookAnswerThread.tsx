@@ -104,7 +104,7 @@ export const FacebookAnswerThread: React.FC<FacebookAnswerThreadProps> = ({
           isLoading={isLoading}
         />
 
-        {/* Reply Input */}
+        {/* Reply Input - Placed right after answer card with cascade indentation */}
         {isReply && (
           <div className="ml-10 mt-2 md:ml-8 md:mt-1.5 sm:ml-6 sm:mt-1">
             <FacebookAnswerInput
@@ -121,18 +121,18 @@ export const FacebookAnswerThread: React.FC<FacebookAnswerThreadProps> = ({
 
         {/* Replies */}
         {canShowReplies && (
-          <div className="mt-2 md:mt-1.5 sm:mt-1">
+          <div className="ml-10 mt-2 space-y-2 md:ml-8 md:mt-1.5 sm:ml-6 sm:mt-1">
             {!isExpanded && replies.length > 0 && (
               <button
                 onClick={() => toggleExpandReplies(answer.id)}
-                className="ml-10 text-xs font-semibold text-blue-600 hover:text-blue-700 transition-colors md:ml-8 md:text-xs sm:ml-6 sm:text-xs"
+                className="text-xs font-semibold text-blue-600 hover:text-blue-700 transition-colors"
               >
                 답글 {replies.length}개 보기
               </button>
             )}
 
             {isExpanded && replies.length > 0 && (
-              <div className="ml-10 mt-2 space-y-0 md:ml-8 md:mt-1.5 sm:ml-6 sm:mt-1">
+              <div className="space-y-2">
                 {replies.map(reply => renderAnswer(reply, depth + 1))}
               </div>
             )}

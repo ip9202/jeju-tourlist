@@ -276,10 +276,13 @@ export class AnswerAdoptionService {
       },
     });
 
-    // 질문의 채택된 답변 ID 업데이트
+    // 질문의 채택된 답변 ID 업데이트 및 해결됨 상태 설정
     await tx.question.update({
       where: { id: data.questionId },
-      data: { acceptedAnswerId: data.answerId },
+      data: {
+        acceptedAnswerId: data.answerId,
+        isResolved: true, // 질문이 채택된 답변이 생기면 해결됨 표시
+      },
     });
 
     return answer;
@@ -562,10 +565,13 @@ export class AnswerAdoptionService {
         data: { adoptedAt: null },
       });
 
-      // 질문의 채택된 답변 ID 제거
+      // 질문의 채택된 답변 ID 제거 및 해결됨 상태 해제
       await tx.question.update({
         where: { id: questionId },
-        data: { acceptedAnswerId: null },
+        data: {
+          acceptedAnswerId: null,
+          isResolved: false, // 채택 취소 시 해결됨 상태도 해제
+        },
       });
 
       console.log(`🔄 답변 채택 취소: 질문 ${questionId}`);

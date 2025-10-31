@@ -126,6 +126,14 @@ export class QuestionRepository {
         return null;
       }
 
+      // Ensure isResolved is true if answer is adopted
+      if (question) {
+        return {
+          ...question,
+          isResolved: question.isResolved || question.acceptedAnswerId !== null,
+        };
+      }
+
       return question;
     } catch (error) {
       throw new Error(
@@ -278,7 +286,7 @@ export class QuestionRepository {
         tags: question.tags,
         location: question.location,
         status: question.status as "ACTIVE" | "CLOSED" | "DELETED" | "HIDDEN",
-        isResolved: question.isResolved,
+        isResolved: question.isResolved || question.acceptedAnswerId !== null,
         isPinned: question.isPinned,
         viewCount: question.viewCount,
         likeCount: question.likeCount,
@@ -608,7 +616,7 @@ export class QuestionRepository {
         tags: question.tags,
         location: question.location,
         status: question.status as "ACTIVE" | "CLOSED" | "DELETED" | "HIDDEN",
-        isResolved: question.isResolved,
+        isResolved: question.isResolved || question.acceptedAnswerId !== null,
         isPinned: question.isPinned,
         viewCount: question.viewCount,
         likeCount: question.likeCount,

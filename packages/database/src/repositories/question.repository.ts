@@ -122,9 +122,17 @@ export class QuestionRepository
 
   async findById(id: string): Promise<Question | null> {
     try {
-      return await this.prisma.question.findUnique({
+      const question = await this.prisma.question.findUnique({
         where: { id },
       });
+
+      if (!question) return null;
+
+      // Ensure isResolved is true if answer is adopted
+      return {
+        ...question,
+        isResolved: question.isResolved || question.acceptedAnswerId !== null,
+      };
     } catch (error) {
       this.handleError(error, "findById");
     }
@@ -172,7 +180,7 @@ export class QuestionRepository
         tags: question.tags,
         location: question.location || undefined,
         status: question.status,
-        isResolved: question.isResolved,
+        isResolved: question.isResolved || question.acceptedAnswerId !== null, // Ensure resolved if answer is adopted
         isPinned: question.isPinned,
         viewCount: question.viewCount,
         likeCount: question.likeCount,
@@ -469,6 +477,7 @@ export class QuestionRepository
           likeCount: true,
           answerCount: true,
           isResolved: true,
+          acceptedAnswerId: true,
           resolvedAt: true,
           createdAt: true,
         },
@@ -483,7 +492,7 @@ export class QuestionRepository
         totalLikes: question.likeCount,
         totalAnswers: question.answerCount,
         totalBookmarks: 0, // TODO: 북마크 통계 추가
-        isResolved: question.isResolved,
+        isResolved: question.isResolved || question.acceptedAnswerId !== null, // Ensure resolved if answer is adopted
         resolutionTime:
           question.resolvedAt && question.isResolved
             ? Math.floor(

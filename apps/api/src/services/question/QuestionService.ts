@@ -73,12 +73,23 @@ export class QuestionService {
       throw new Error("질문을 찾을 수 없습니다.");
     }
 
+    // 각 답변의 isAccepted를 동적으로 계산 (acceptedAnswerId 기반)
+    const questionWithAnswers = question as any;
+    if (questionWithAnswers.answers && question.acceptedAnswerId) {
+      questionWithAnswers.answers = questionWithAnswers.answers.map(
+        (answer: any) => ({
+          ...answer,
+          isAccepted: answer.id === question.acceptedAnswerId,
+        })
+      );
+    }
+
     // 조회수 증가 (비동기)
     if (incrementView) {
       this.questionRepository.incrementViewCount(id).catch(console.error);
     }
 
-    return question;
+    return questionWithAnswers;
   }
 
   /**

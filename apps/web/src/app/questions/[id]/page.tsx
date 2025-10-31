@@ -157,7 +157,6 @@ export default function QuestionDetailPage() {
         response = await api.post(`/api/answers/${parentId}/comments`, {
           content: content.trim(),
           authorId: user.id,
-          parentId: undefined, // 1단계 중첩만 지원
         });
       } else {
         // 메인 답변: POST /api/answers
@@ -255,16 +254,20 @@ export default function QuestionDetailPage() {
         throw new Error(response.error || "좋아요 처리에 실패했습니다");
       }
 
-      // 로컬 상태 업데이트
+      // 로컬 상태 업데이트 - 싫어요 자동 해제
       setAnswers(prev =>
         prev.map(answer =>
           answer.id === answerId
             ? {
                 ...answer,
                 isLiked: !answer.isLiked,
+                isDisliked: false, // 좋아요 체크 시 싫어요 해제
                 likeCount: answer.isLiked
                   ? answer.likeCount - 1
                   : answer.likeCount + 1,
+                dislikeCount: answer.isDisliked
+                  ? answer.dislikeCount - 1
+                  : answer.dislikeCount,
               }
             : answer
         )
@@ -276,6 +279,7 @@ export default function QuestionDetailPage() {
 
   /**
    * 답변 싫어요 핸들러
+   * 싫어요 클릭 시 좋아요 자동 해제 (상호 배제)
    */
   const handleAnswerDislike = async (
     answerId: string,
@@ -290,16 +294,20 @@ export default function QuestionDetailPage() {
         throw new Error(response.error || "싫어요 처리에 실패했습니다");
       }
 
-      // 로컬 상태 업데이트
+      // 로컬 상태 업데이트 - 좋아요 자동 해제
       setAnswers(prev =>
         prev.map(answer =>
           answer.id === answerId
             ? {
                 ...answer,
                 isDisliked: !answer.isDisliked,
+                isLiked: false, // 싫어요 체크 시 좋아요 해제
                 dislikeCount: answer.isDisliked
                   ? answer.dislikeCount - 1
                   : answer.dislikeCount + 1,
+                likeCount: answer.isLiked
+                  ? answer.likeCount - 1
+                  : answer.likeCount,
               }
             : answer
         )

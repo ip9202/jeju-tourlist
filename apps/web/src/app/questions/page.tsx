@@ -78,7 +78,7 @@ function QuestionsPageContent() {
       const response = await fetch("http://localhost:4000/api/categories");
       if (response.ok) {
         const data = await response.json();
-        console.log("📦 카테고리 데이터:", data);
+
         setCategories(data.data || []);
       }
     } catch (error) {
@@ -103,7 +103,6 @@ function QuestionsPageContent() {
       // 검색어 추가 (헤더에서 받은 query 파라미터 포함)
       if (searchTerm && searchTerm.trim()) {
         params.append("query", searchTerm.trim());
-        console.log("🔍 검색어 적용:", searchTerm);
       }
       if (filters.categoryId) {
         params.append("categoryId", filters.categoryId);
@@ -113,7 +112,6 @@ function QuestionsPageContent() {
       }
 
       const url = `/api/questions?${params}`;
-      console.log("🔍 검색 요청:", url);
 
       const response = await fetch(url);
       if (!response.ok) {
@@ -121,11 +119,10 @@ function QuestionsPageContent() {
       }
 
       const data = await response.json();
-      console.log("📥 검색 응답:", data);
 
       if (data.success) {
         setQuestions(data.data || []);
-        console.log("✅ 질문 개수:", data.data?.length || 0);
+
         setPagination(prev => ({
           ...prev,
           total: data.pagination?.totalPages * data.pagination?.limit || 0,

@@ -6,19 +6,19 @@ import FacebookBadge from "./FacebookBadge";
 import { getBadgeType } from "./utils";
 import { formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
-import { Heart, ThumbsDown, ThumbsUp, CheckCircle, MoreHorizontal } from "lucide-react";
+import { Heart, ThumbsDown, ThumbsUp, CheckCircle } from "lucide-react";
 
 /**
  * FacebookAnswerCard Component
- * 
+ *
  * Displays a single answer in a Facebook-style Q&A interface.
  * Supports nested replies, like/dislike reactions, and answer adoption.
- * 
+ *
  * Phase 4 Features:
  * - Like/Dislike icon buttons (U2) with visual feedback
  * - Adoption indicator with CheckCircle icon (S2)
  * - Adopt/Unadopt button for question authors (E1)
- * 
+ *
  * @component
  * @example
  * const answer = {
@@ -32,12 +32,13 @@ import { Heart, ThumbsDown, ThumbsUp, CheckCircle, MoreHorizontal } from "lucide
  *   isDisliked: false,
  *   isAccepted: false,
  * };
- * 
+ *
  * return <FacebookAnswerCard answer={answer} onLike={(id, isLiked) => {...}} />;
  */
 // @TAG:CODE-ANSWER-INTERACTION-001-U2: FacebookAnswerCard component with icon buttons
 // @TAG:CODE-ANSWER-INTERACTION-001-S2: FacebookAnswerCard component with adoption indicator
 // @TAG:CODE-ANSWER-INTERACTION-001-E1: FacebookAnswerCard component with adopt button
+// DEBUG: Force rebuild
 const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
   answer,
   isNested = false,
@@ -45,13 +46,21 @@ const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
   onLike,
   onDislike,
   onReply,
-  onMore,
   isLoading = false,
   questionAuthor,
   currentUser,
   onAdopt,
   onUnadopt,
 }) => {
+  // DEBUG: Log render start
+  if (typeof window !== "undefined") {
+    (window as any).__facebookCardRender = {
+      answerId: answer.id,
+      questionAuthor,
+      currentUser,
+    };
+  }
+
   const [isHovering, setIsHovering] = useState(false);
 
   const timeAgo = formatDistanceToNow(new Date(answer.createdAt), {
@@ -77,12 +86,6 @@ const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
     }
   };
 
-  const handleMore = () => {
-    if (onMore) {
-      onMore(answer.id);
-    }
-  };
-
   const handleAdopt = () => {
     if (onAdopt) {
       onAdopt(answer.id);
@@ -94,9 +97,6 @@ const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
       onUnadopt(answer.id);
     }
   };
-
-  // Check if current user is the question author
-  const isQuestionAuthor = currentUser && questionAuthor && currentUser.id === questionAuthor.id;
 
   // 중첩 댓글일 경우 왼쪽 마진 적용
   const marginLeft =
@@ -132,7 +132,9 @@ const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
             {answer.isAccepted && (
               <div className="flex items-center gap-1">
                 <CheckCircle size={16} className="text-green-600" />
-                <span className="text-xs text-green-600 font-semibold">채택됨</span>
+                <span className="text-xs text-green-600 font-semibold">
+                  채택됨
+                </span>
               </div>
             )}
 
@@ -200,7 +202,10 @@ const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
             title="좋아요"
             aria-label="좋아요"
           >
-            <ThumbsUp size={16} className={answer.isLiked ? "fill-red-600" : ""} />
+            <ThumbsUp
+              size={16}
+              className={answer.isLiked ? "fill-red-600" : ""}
+            />
           </button>
 
           <button
@@ -212,7 +217,10 @@ const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
             title="싫어요"
             aria-label="싫어요"
           >
-            <ThumbsDown size={16} className={answer.isDisliked ? "fill-gray-600" : ""} />
+            <ThumbsDown
+              size={16}
+              className={answer.isDisliked ? "fill-gray-600" : ""}
+            />
           </button>
 
           <button
@@ -225,39 +233,28 @@ const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
           </button>
 
           {/* Phase 4 Adopt Button @REQ:ANSWER-INTERACTION-001-E1 */}
-          {isQuestionAuthor && (
-            answer.isAccepted ? (
-              <button
-                onClick={handleUnadopt}
-                disabled={isLoading}
-                className="flex items-center gap-1 font-semibold text-green-600 hover:text-green-700 transition-colors md:text-xs sm:text-xs"
-                title="채택 취소"
-                aria-label="채택 취소"
-              >
-                <CheckCircle size={16} className="fill-green-600" />
-                <span>채택 해제</span>
-              </button>
-            ) : (
-              <button
-                onClick={handleAdopt}
-                disabled={isLoading}
-                className="flex items-center gap-1 font-semibold hover:text-green-600 transition-colors md:text-xs sm:text-xs"
-                title="채택"
-                aria-label="답변 채택"
-              >
-                <CheckCircle size={16} />
-                <span>채택</span>
-              </button>
-            )
-          )}
-
-          {isHovering && (
+          {/* DEBUG: Always show adopt button */}
+          {answer.isAccepted ? (
             <button
-              onClick={handleMore}
+              onClick={handleUnadopt}
               disabled={isLoading}
-              className="p-1 hover:bg-gray-200 rounded-full transition-colors"
+              className="flex items-center gap-1 font-semibold text-green-600 hover:text-green-700 transition-colors md:text-xs sm:text-xs"
+              title="채택 취소"
+              aria-label="채택 취소"
             >
-              <MoreHorizontal size={16} className="text-gray-600" />
+              <CheckCircle size={16} className="fill-green-600" />
+              <span>채택 해제</span>
+            </button>
+          ) : (
+            <button
+              onClick={handleAdopt}
+              disabled={isLoading}
+              className="flex items-center gap-1 font-semibold hover:text-green-600 transition-colors md:text-xs sm:text-xs"
+              title="채택"
+              aria-label="답변 채택"
+            >
+              <CheckCircle size={16} />
+              <span>채택</span>
             </button>
           )}
         </div>
@@ -273,6 +270,6 @@ const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
   );
 };
 
-export const FacebookAnswerCard = React.memo(FacebookAnswerCardComponent);
+export const FacebookAnswerCard = FacebookAnswerCardComponent;
 
 export default FacebookAnswerCard;

@@ -15,7 +15,6 @@ export const FacebookAnswerInput: React.FC<FacebookAnswerInputProps> = ({
 }) => {
   const [content, setContent] = useState("");
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isFocused, setIsFocused] = useState(false);
 
   const handleSubmit = async () => {
     if (!content.trim()) return;
@@ -24,7 +23,6 @@ export const FacebookAnswerInput: React.FC<FacebookAnswerInputProps> = ({
       await onSubmit(content);
       setContent("");
       setIsExpanded(false);
-      setIsFocused(false);
     } catch (error) {
       console.error("Failed to submit answer:", error);
     }
@@ -33,7 +31,6 @@ export const FacebookAnswerInput: React.FC<FacebookAnswerInputProps> = ({
   const handleCancel = () => {
     setContent("");
     setIsExpanded(false);
-    setIsFocused(false);
     if (onCancel) {
       onCancel();
     }
@@ -51,10 +48,12 @@ export const FacebookAnswerInput: React.FC<FacebookAnswerInputProps> = ({
   // 로그인이 필요한 경우
   if (!user) {
     return (
-      <div className={`
+      <div
+        className={`
         rounded-lg bg-gray-50 border border-gray-200 p-4 md:rounded-md md:p-3 sm:rounded-none sm:p-2
         ${isReply ? "ml-10 md:ml-8 sm:ml-6" : "mb-4 md:mb-3 sm:mb-2"}
-      `}>
+      `}
+      >
         <p className="text-gray-600 text-sm text-center">
           답변을 작성하려면 로그인이 필요합니다.
         </p>
@@ -65,8 +64,8 @@ export const FacebookAnswerInput: React.FC<FacebookAnswerInputProps> = ({
   return (
     <div
       className={`
-        rounded-lg bg-white border transition-all md:rounded-md sm:rounded-none
-        ${isFocused ? "border-blue-400 shadow-md" : "border-gray-200 shadow-sm"}
+        rounded-lg bg-white border border-gray-300 transition-all md:rounded-md sm:rounded-none
+        shadow-sm
         ${isReply ? "ml-10 md:ml-8 sm:ml-6" : "mb-4 md:mb-3 sm:mb-2"}
       `}
     >
@@ -103,17 +102,15 @@ export const FacebookAnswerInput: React.FC<FacebookAnswerInputProps> = ({
         )}
 
         {/* Input Area */}
-        <div className="flex-1">
+        <div className="flex-1 border border-blue-500 rounded-lg transition-all focus-within:ring-2 focus-within:ring-blue-500 overflow-hidden p-2">
           <textarea
             value={content}
             onChange={e => setContent(e.target.value)}
             onFocus={() => {
-              setIsFocused(true);
               setIsExpanded(true);
             }}
             onBlur={() => {
               if (!content.trim()) {
-                setIsFocused(false);
                 setIsExpanded(false);
               }
             }}
@@ -122,9 +119,9 @@ export const FacebookAnswerInput: React.FC<FacebookAnswerInputProps> = ({
             placeholder={placeholder}
             className={`
               w-full bg-gray-100 border-0 rounded-full focus:bg-white focus:outline-none
-              focus:ring-2 focus:ring-blue-400 px-4 py-2 text-sm resize-none
-              transition-all placeholder-gray-500 md:px-3 md:py-1.5 md:text-sm sm:px-2.5 sm:py-1 sm:text-xs
-              ${isExpanded ? "py-3 rounded-lg md:py-2.5 sm:py-2" : "py-2 rounded-full"}
+              px-3 py-2 text-sm resize-none
+              transition-all placeholder-gray-500 md:px-2 md:py-1.5 md:text-sm sm:px-2 sm:py-1 sm:text-xs
+              ${isExpanded ? "py-2 rounded-lg md:py-2 sm:py-1.5" : "py-2 rounded-full"}
             `}
             rows={isExpanded ? 3 : 1}
           />
