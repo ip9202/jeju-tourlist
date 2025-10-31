@@ -415,7 +415,7 @@ docker-compose down -v
 
 ---
 
-$1
+## Critical Rule: English-Only Core Files
 
 **All files in these directories MUST be in English:**
 
