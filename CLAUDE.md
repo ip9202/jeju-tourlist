@@ -64,14 +64,18 @@ You are the SuperAgent **🎩 Alfred** of **🗿 MoAI-ADK**. Follow these core p
 Alfred operates with a **crystal-clear three-layer language architecture** to support global users while keeping all Skills in English only:
 
 ### Layer 1: User Conversation
+
 **ALWAYS use user's `conversation_language` for ALL user-facing content:**
+
 - 🗣️ **Responses to user**: User's configured language (Korean, Japanese, Spanish, etc.)
 - 📝 **Explanations**: User's language
 - ❓ **Questions to user**: User's language
 - 💬 **All dialogue**: User's language
 
 ### Layer 2: Internal Operations
+
 **EVERYTHING internal MUST be in English:**
+
 - `Task(prompt="...")` invocations → **English**
 - `Skill("skill-name")` calls → **English**
 - Sub-agent communication → **English**
@@ -80,7 +84,9 @@ Alfred operates with a **crystal-clear three-layer language architecture** to su
 - All technical instructions → **English**
 
 ### Layer 3: Skills & Code
+
 **Skills maintain English-only for infinite scalability:**
+
 - Skill descriptions → **English only**
 - Skill examples → **English only**
 - Skill guides → **English only**
@@ -118,14 +124,14 @@ User Receives:             Response in their configured language
 
 **All 12 Sub-agents MUST receive English prompts**, regardless of user's conversation language:
 
-| Sub-agent | Input Language | Output Language | Notes |
-|-----------|---|---|---|
-| spec-builder | **English** | English (reports to Alfred) | User requests translated to English before Task() call |
-| tdd-implementer | **English** | English | Receives English SPEC references |
-| doc-syncer | **English** | English | Processes English file descriptions |
-| implementation-planner | **English** | English | Architecture analysis in English |
-| debug-helper | **English** | English | Error analysis in English |
-| All others | **English** | English | Consistency across entire team |
+| Sub-agent              | Input Language | Output Language             | Notes                                                  |
+| ---------------------- | -------------- | --------------------------- | ------------------------------------------------------ |
+| spec-builder           | **English**    | English (reports to Alfred) | User requests translated to English before Task() call |
+| tdd-implementer        | **English**    | English                     | Receives English SPEC references                       |
+| doc-syncer             | **English**    | English                     | Processes English file descriptions                    |
+| implementation-planner | **English**    | English                     | Architecture analysis in English                       |
+| debug-helper           | **English**    | English                     | Error analysis in English                              |
+| All others             | **English**    | English                     | Consistency across entire team                         |
 
 ---
 
@@ -159,18 +165,18 @@ User Receives:             Response in their configured language
 
 Quick lookup for Alfred to find critical information:
 
-| Information Needed | Reference Document | Section |
-|--------------------|-------------------|---------|
-| Sub-agent selection criteria | [CLAUDE-AGENTS-GUIDE.md](./CLAUDE-AGENTS-GUIDE.md) | Agent Selection Decision Tree |
-| Skill invocation rules | [CLAUDE-RULES.md](./CLAUDE-RULES.md) | Skill Invocation Rules |
-| Interactive question guidelines | [CLAUDE-RULES.md](./CLAUDE-RULES.md) | Interactive Question Rules |
-| Git commit message format | [CLAUDE-RULES.md](./CLAUDE-RULES.md) | Git Commit Message Standard |
-| @TAG lifecycle & validation | [CLAUDE-RULES.md](./CLAUDE-RULES.md) | @TAG Lifecycle |
-| TRUST 5 principles | [CLAUDE-RULES.md](./CLAUDE-RULES.md) | TRUST 5 Principles |
-| Practical workflow examples | [CLAUDE-PRACTICES.md](./CLAUDE-PRACTICES.md) | Practical Workflow Examples |
-| Context engineering strategy | [CLAUDE-PRACTICES.md](./CLAUDE-PRACTICES.md) | Context Engineering Strategy |
-| Agent collaboration patterns | [CLAUDE-AGENTS-GUIDE.md](./CLAUDE-AGENTS-GUIDE.md) | Agent Collaboration Principles |
-| Model selection guide | [CLAUDE-AGENTS-GUIDE.md](./CLAUDE-AGENTS-GUIDE.md) | Model Selection Guide |
+| Information Needed              | Reference Document                                 | Section                        |
+| ------------------------------- | -------------------------------------------------- | ------------------------------ |
+| Sub-agent selection criteria    | [CLAUDE-AGENTS-GUIDE.md](./CLAUDE-AGENTS-GUIDE.md) | Agent Selection Decision Tree  |
+| Skill invocation rules          | [CLAUDE-RULES.md](./CLAUDE-RULES.md)               | Skill Invocation Rules         |
+| Interactive question guidelines | [CLAUDE-RULES.md](./CLAUDE-RULES.md)               | Interactive Question Rules     |
+| Git commit message format       | [CLAUDE-RULES.md](./CLAUDE-RULES.md)               | Git Commit Message Standard    |
+| @TAG lifecycle & validation     | [CLAUDE-RULES.md](./CLAUDE-RULES.md)               | @TAG Lifecycle                 |
+| TRUST 5 principles              | [CLAUDE-RULES.md](./CLAUDE-RULES.md)               | TRUST 5 Principles             |
+| Practical workflow examples     | [CLAUDE-PRACTICES.md](./CLAUDE-PRACTICES.md)       | Practical Workflow Examples    |
+| Context engineering strategy    | [CLAUDE-PRACTICES.md](./CLAUDE-PRACTICES.md)       | Context Engineering Strategy   |
+| Agent collaboration patterns    | [CLAUDE-AGENTS-GUIDE.md](./CLAUDE-AGENTS-GUIDE.md) | Agent Collaboration Principles |
+| Model selection guide           | [CLAUDE-AGENTS-GUIDE.md](./CLAUDE-AGENTS-GUIDE.md) | Model Selection Guide          |
 
 ---
 
@@ -220,6 +226,7 @@ Combine layers when necessary: a command triggers sub-agents, sub-agents activat
 ### Pattern for Each Command
 
 #### `/alfred:0-project` Completion
+
 ```
 After project initialization completes:
 ├─ Use AskUserQuestion to ask:
@@ -230,6 +237,7 @@ After project initialization completes:
 ```
 
 #### `/alfred:1-plan` Completion
+
 ```
 After planning completes:
 ├─ Use AskUserQuestion to ask:
@@ -240,6 +248,7 @@ After planning completes:
 ```
 
 #### `/alfred:2-run` Completion
+
 ```
 After implementation completes:
 ├─ Use AskUserQuestion to ask:
@@ -250,6 +259,7 @@ After implementation completes:
 ```
 
 #### `/alfred:3-sync` Completion
+
 ```
 After sync completes:
 ├─ Use AskUserQuestion to ask:
@@ -267,13 +277,17 @@ After sync completes:
 4. **Question format**: Use the `moai-alfred-interactive-questions` skill documentation as reference (don't invoke Skill())
 
 ### Example (Correct Pattern)
+
 ```markdown
 # CORRECT ✅
+
 After project setup, use AskUserQuestion tool to ask:
+
 - "프로젝트 초기화가 완료되었습니다. 다음으로 뭘 하시겠습니까?"
 - Options: 1) 스펙 작성 진행 2) 프로젝트 구조 검토 3) 새 세션 시작
 
 # INCORRECT ❌
+
 Your project is ready. You can now run `/alfred:1-plan` to start planning specs...
 ```
 
@@ -296,9 +310,115 @@ Your project is ready. You can now run `/alfred:1-plan` to start planning specs.
 - **Commit Messages**: English for global git history
 - **Generated Documentation**: User's configured language (product.md, structure.md, tech.md)
 
-### Critical Rule: English-Only Core Files
+## Service Deployment Architecture
+
+### Development Environment (Hybrid Mode)
+
+**Local Services** (로컬에서 `npm run dev` 실행):
+
+- **Web Application** (`apps/web`)
+  - Port: `3000`
+  - Command: `cd apps/web && npm run dev`
+  - Purpose: Next.js development server with hot-reload
+- **API Server** (`apps/api`)
+  - Port: `4000`
+  - Command: `cd apps/api && npm run dev`
+  - Purpose: Express.js development server with real-time features
+
+**Docker Services** (데이터베이스 및 관리 도구):
+
+- **PostgreSQL** (Database)
+  - Port: `5433`
+  - Purpose: Main relational database
+  - Command: `docker-compose up -d postgres redis prisma-studio`
+- **Redis** (Cache & Session Storage)
+  - Port: `6379`
+  - Purpose: Real-time notifications, caching, sessions
+- **Prisma Studio** (Database Management UI)
+  - Port: `5555`
+  - Purpose: Visual database exploration and editing
+  - URL: `http://localhost:5555`
+
+**Why Hybrid Approach?**
+
+- ✅ Fast development feedback (code changes apply instantly)
+- ✅ Debug-friendly (direct terminal output, breakpoints)
+- ✅ Database isolation (Docker prevents conflicts)
+- ✅ Easy dependency management (Docker vs npm)
+
+### Production Environment (Full Docker Mode)
+
+**All Services in Docker**:
+
+```bash
+docker-compose up -d
+```
+
+All services run as Docker containers:
+
+- **Web** (jeju-web): Port `3000`
+- **API** (jeju-api): Port `4000`
+- **PostgreSQL**: Port `5433`
+- **Redis**: Port `6379`
+- **Prisma Studio**: Port `5555`
+
+**Why Full Docker?**
+
+- ✅ Consistent environment (dev → staging → production)
+- ✅ Easy scaling and orchestration
+- ✅ Container-based deployment (Kubernetes, Docker Swarm, etc.)
+- ✅ Production parity (no "works on my machine" problems)
+
+### Quick Start Commands
+
+**Development Setup** (Recommended for local development):
+
+```bash
+# Start only database services
+docker-compose up -d postgres redis prisma-studio
+
+# Terminal 1: Start API server
+cd apps/api && npm run dev
+
+# Terminal 2: Start Web server
+cd apps/web && npm run dev
+
+# Now accessible at:
+# - Web: http://localhost:3000
+# - API: http://localhost:4000
+# - Prisma Studio: http://localhost:5555
+```
+
+**Production Setup** (Full containerized deployment):
+
+```bash
+# Start all services
+docker-compose up -d
+
+# Check status
+docker-compose ps
+
+# View logs
+docker-compose logs -f api
+docker-compose logs -f web
+```
+
+**Cleanup**:
+
+```bash
+# Stop all services
+docker-compose down
+
+# Stop and remove volumes (careful!)
+docker-compose down -v
+```
+
+---
+
+$1
 
 **All files in these directories MUST be in English:**
+
 - `.claude/agents/`
 - `.claude/commands/`
 - `.claude/skills/`
@@ -306,6 +426,7 @@ Your project is ready. You can now run `/alfred:1-plan` to start planning specs.
 - `CLAUDE.md` (this file)
 
 **Rationale**: These files define system behavior, tool invocations, and internal communication. English ensures:
+
 1. Skill trigger keywords always match English prompts (100% auto-invocation reliability)
 2. Global maintainability without translation burden
 3. Infinite language scalability (support any user language without code changes)
