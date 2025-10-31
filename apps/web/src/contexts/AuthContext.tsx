@@ -84,7 +84,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           return;
         }
 
-        const response = await api.get<MeResponse>("/auth/me");
+        const response = await api.get<MeResponse>("/api/auth/me");
         const userData = response.data as MeResponseData | undefined;
         if (response.success && userData?.user) {
           setUser(userData.user);
@@ -112,7 +112,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   ): Promise<{ success: boolean; message: string }> => {
     try {
       setIsLoading(true);
-      const response = await api.post<LoginResponseData>("/auth/login", {
+      const response = await api.post<LoginResponseData>("/api/auth/login", {
         email,
         password,
       });
@@ -156,7 +156,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (typeof window !== "undefined") {
         const token = localStorage.getItem("auth_token");
         if (token) {
-          await api.post("/auth/logout");
+          await api.post("/api/auth/logout");
         }
       }
     } catch (error) {
@@ -184,7 +184,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // 사용자 정보 갱신 함수
   const refreshUser = async (): Promise<void> => {
     try {
-      const response = await api.get<MeResponse>("/auth/me");
+      const response = await api.get<MeResponse>("/api/auth/me");
       const userData = response.data as MeResponseData | undefined;
       if (response.success && userData?.user) {
         setUser(userData.user);

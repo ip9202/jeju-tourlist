@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
-import { useNewFacebookUI } from "@/hooks/useNewFacebookUI";
+// import { useNewFacebookUI } from "@/hooks/useNewFacebookUI"; // TODO: Will be used for feature flag switching
 import { Button, Heading, Text, ImageLightbox } from "@jeju-tourlist/ui";
 import {
   ArrowLeft,
@@ -76,7 +76,7 @@ export default function QuestionDetailPage() {
   const params = useParams();
   const router = useRouter();
   const { user } = useAuth();
-  const { useFacebookUI } = useNewFacebookUI();
+  // const { useFacebookUI } = useNewFacebookUI(); // TODO: Will be used for feature flag switching
   const [question, setQuestion] = useState<Question | null>(null);
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [loading, setLoading] = useState(true);
@@ -154,14 +154,14 @@ export default function QuestionDetailPage() {
 
       if (parentId) {
         // 중첩 댓글: POST /api/answers/:answerId/comments
-        response = await api.post(`/answers/${parentId}/comments`, {
+        response = await api.post(`/api/answers/${parentId}/comments`, {
           content: content.trim(),
           authorId: user.id,
           parentId: undefined, // 1단계 중첩만 지원
         });
       } else {
         // 메인 답변: POST /api/answers
-        response = await api.post("/answers", {
+        response = await api.post("/api/answers", {
           content: content.trim(),
           questionId: params.id,
           authorId: user.id,
@@ -223,7 +223,7 @@ export default function QuestionDetailPage() {
     }
 
     try {
-      const response = await api.delete(`/questions/${params.id}`);
+      const response = await api.delete(`/api/questions/${params.id}`);
 
       if (!response.success) {
         throw new Error(response.error || "질문 삭제에 실패했습니다.");
@@ -247,7 +247,7 @@ export default function QuestionDetailPage() {
    */
   const handleAnswerLike = async (answerId: string, _isLike?: boolean) => {
     try {
-      const response = await api.post(`/answers/${answerId}/reaction`, {
+      const response = await api.post(`/api/answers/${answerId}/reaction`, {
         isLike: true,
       });
 
@@ -282,7 +282,7 @@ export default function QuestionDetailPage() {
     _isDislike?: boolean
   ) => {
     try {
-      const response = await api.post(`/answers/${answerId}/reaction`, {
+      const response = await api.post(`/api/answers/${answerId}/reaction`, {
         isLike: false,
       });
 
@@ -314,7 +314,7 @@ export default function QuestionDetailPage() {
    */
   const handleAnswerAdopt = async (answerId: string) => {
     try {
-      const response = await api.post(`/answers/${answerId}/adopt`, {});
+      const response = await api.post(`/api/answers/${answerId}/adopt`, {});
 
       if (!response.success) {
         throw new Error(response.error || "채택 처리에 실패했습니다");
@@ -346,7 +346,7 @@ export default function QuestionDetailPage() {
    */
   const handleAnswerUnadopt = async (answerId: string) => {
     try {
-      const response = await api.post(`/answers/${answerId}/unadopt`, {});
+      const response = await api.post(`/api/answers/${answerId}/unadopt`, {});
 
       if (!response.success) {
         throw new Error(response.error || "채택 취소 처리에 실패했습니다");
@@ -588,78 +588,70 @@ export default function QuestionDetailPage() {
           </div>
 
           {/* Facebook 스타일 답변 스레드 */}
-          {question ? (
-            useFacebookUI ? (
-              <>
-                <FacebookAnswerThread
-                  question={{
-                    id: question.id,
-                    title: question.title,
-                    content: question.content,
-                    author: {
-                      id: question.author.id,
-                      name: question.author.name,
-                      avatar: question.author.avatar || undefined,
-                    },
-                    createdAt: question.createdAt,
-                    likeCount: question.likeCount,
-                    answerCount: question.answerCount,
-                    viewCount: question.viewCount,
-                    tags: question.tags,
-                  }}
-                  answers={answers.map(answer => ({
-                    id: answer.id,
-                    content: answer.content,
-                    author: {
-                      id: answer.author.id,
-                      name: answer.author.name,
-                      avatar: answer.author.avatar || undefined,
-                    },
-                    createdAt: answer.createdAt,
-                    likeCount: answer.likeCount,
-                    dislikeCount: answer.dislikeCount || 0,
-                    isLiked: answer.isLiked || false,
-                    isDisliked: answer.isDisliked || false,
-                    isAccepted: answer.isAccepted,
-                    parentId: answer.parentId || undefined,
-                    replyCount: answer.replyCount || 0,
-                  }))}
-                  currentUser={
-                    user
-                      ? {
-                          id: user.id,
-                          name: user.name || user.email,
-                        }
-                      : null
-                  }
-                  onSubmitAnswer={handleAnswerSubmit}
-                  onLike={handleAnswerLike}
-                  onDislike={handleAnswerDislike}
-                  onAdopt={handleAnswerAdopt}
-                  onUnadopt={handleAnswerUnadopt}
-                  onReply={() => {}}
-                  isLoading={isSubmitting}
-                  maxDepth={2}
-                />
-                {!user && (
-                  <div className="text-center py-8 bg-blue-50 rounded-lg border border-blue-200">
-                    <Text className="text-gray-600 mb-4">
-                      답변을 작성하려면 로그인이 필요합니다.
-                    </Text>
-                    <Button onClick={() => router.push("/auth/signin")}>
-                      로그인하기
-                    </Button>
-                  </div>
-                )}
-              </>
-            ) : (
-              <div className="text-center py-8">
-                <Text className="text-gray-600 mb-4">
-                  기존 답변 시스템입니다.
-                </Text>
-              </div>
-            )
-          ) : null}
+          {question && (
+            <>
+              <FacebookAnswerThread
+                question={{
+                  id: question.id,
+                  title: question.title,
+                  content: question.content,
+                  author: {
+                    id: question.author.id,
+                    name: question.author.name,
+                    avatar: question.author.avatar || undefined,
+                  },
+                  createdAt: question.createdAt,
+                  likeCount: question.likeCount,
+                  answerCount: question.answerCount,
+                  viewCount: question.viewCount,
+                  tags: question.tags,
+                }}
+                answers={answers.map(answer => ({
+                  id: answer.id,
+                  content: answer.content,
+                  author: {
+                    id: answer.author.id,
+                    name: answer.author.name,
+                    avatar: answer.author.avatar || undefined,
+                  },
+                  createdAt: answer.createdAt,
+                  likeCount: answer.likeCount,
+                  dislikeCount: answer.dislikeCount || 0,
+                  isLiked: answer.isLiked || false,
+                  isDisliked: answer.isDisliked || false,
+                  isAccepted: answer.isAccepted,
+                  parentId: answer.parentId || undefined,
+                  replyCount: answer.replyCount || 0,
+                }))}
+                currentUser={
+                  user
+                    ? {
+                        id: user.id,
+                        name: user.name || user.email,
+                      }
+                    : undefined
+                }
+                onSubmitAnswer={handleAnswerSubmit}
+                onLike={handleAnswerLike}
+                onDislike={handleAnswerDislike}
+                onAdopt={handleAnswerAdopt}
+                onUnadopt={handleAnswerUnadopt}
+                onReply={() => {}}
+                isLoading={isSubmitting}
+                maxDepth={2}
+              />
+              {!user && (
+                <div className="text-center py-8 bg-blue-50 rounded-lg border border-blue-200">
+                  <Text className="text-gray-600 mb-4">
+                    답변을 작성하려면 로그인이 필요합니다.
+                  </Text>
+                  <Button onClick={() => router.push("/auth/signin")}>
+                    로그인하기
+                  </Button>
+                </div>
+              )}
+            </>
+          )}
 
           {answerError && (
             <div
