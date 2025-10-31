@@ -83,8 +83,19 @@ export default function QuestionDetailPage() {
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [answerError, setAnswerError] = useState("");
+  const [answerErrorTimeout, setAnswerErrorTimeout] =
+    useState<NodeJS.Timeout | null>(null);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // 컴포넌트 언마운트 시 타이머 정리
+  useEffect(() => {
+    return () => {
+      if (answerErrorTimeout) {
+        clearTimeout(answerErrorTimeout);
+      }
+    };
+  }, [answerErrorTimeout]);
 
   useEffect(() => {
     const loadQuestion = async () => {
@@ -129,20 +140,32 @@ export default function QuestionDetailPage() {
     // 로그인 체크
     if (!user?.id) {
       setAnswerError("로그인이 필요합니다.");
-      setTimeout(() => {
+      // 타이머 정리
+      if (answerErrorTimeout) clearTimeout(answerErrorTimeout);
+      // 5초 후 자동 닫기
+      const timeout = setTimeout(() => {
         router.push("/auth/signin");
       }, 1500);
+      setAnswerErrorTimeout(timeout);
       return;
     }
 
     // 답변 검증
     if (!content.trim()) {
       setAnswerError("답변을 입력해주세요");
+      // 타이머 정리 및 재설정
+      if (answerErrorTimeout) clearTimeout(answerErrorTimeout);
+      const timeout = setTimeout(() => setAnswerError(""), 4000);
+      setAnswerErrorTimeout(timeout);
       return;
     }
 
     if (content.trim().length < 10) {
       setAnswerError("답변을 10자 이상 입력해주세요");
+      // 타이머 정리 및 재설정
+      if (answerErrorTimeout) clearTimeout(answerErrorTimeout);
+      const timeout = setTimeout(() => setAnswerError(""), 4000);
+      setAnswerErrorTimeout(timeout);
       return;
     }
 
@@ -202,9 +225,13 @@ export default function QuestionDetailPage() {
       }
     } catch (error) {
       console.error("작성 실패:", error);
-      setAnswerError(
-        error instanceof Error ? error.message : "작성 중 오류가 발생했습니다."
-      );
+      const errorMsg =
+        error instanceof Error ? error.message : "작성 중 오류가 발생했습니다.";
+      setAnswerError(errorMsg);
+      // 타이머 정리 및 재설정
+      if (answerErrorTimeout) clearTimeout(answerErrorTimeout);
+      const timeout = setTimeout(() => setAnswerError(""), 4000);
+      setAnswerErrorTimeout(timeout);
     } finally {
       setIsSubmitting(false);
     }
@@ -375,11 +402,15 @@ export default function QuestionDetailPage() {
       );
     } catch (error) {
       console.error("답변 채택 취소 실패:", error);
-      setAnswerError(
+      const errorMsg =
         error instanceof Error
           ? error.message
-          : "채택 취소 처리 중 오류가 발생했습니다"
-      );
+          : "채택 취소 처리 중 오류가 발생했습니다";
+      setAnswerError(errorMsg);
+      // 타이머 정리 및 재설정
+      if (answerErrorTimeout) clearTimeout(answerErrorTimeout);
+      const timeout = setTimeout(() => setAnswerError(""), 4000);
+      setAnswerErrorTimeout(timeout);
     }
   };
 
@@ -597,6 +628,50 @@ export default function QuestionDetailPage() {
             </Heading>
           </div>
 
+          {/* 에러 메시지 배너 */}
+          {answerError && (
+            <div
+              className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 rounded flex items-start gap-3"
+              data-testid="answer-error"
+              role="alert"
+            >
+              <svg
+                className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <div className="flex-1">
+                <p className="text-red-800 font-medium">{answerError}</p>
+                <p className="text-red-700 text-xs mt-1">
+                  몇 초 후 자동으로 닫힙니다.
+                </p>
+              </div>
+              <button
+                onClick={() => setAnswerError("")}
+                className="text-red-500 hover:text-red-700 transition-colors flex-shrink-0"
+                aria-label="에러 메시지 닫기"
+              >
+                <svg
+                  className="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </button>
+            </div>
+          )}
+
           {/* Facebook 스타일 답변 스레드 */}
           {question && (
             <>
@@ -661,15 +736,6 @@ export default function QuestionDetailPage() {
                 </div>
               )}
             </>
-          )}
-
-          {answerError && (
-            <div
-              className="text-red-600 text-sm mt-4"
-              data-testid="answer-error"
-            >
-              {answerError}
-            </div>
           )}
         </div>
       </div>
