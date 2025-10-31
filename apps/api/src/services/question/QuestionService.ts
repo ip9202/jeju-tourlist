@@ -74,12 +74,24 @@ export class QuestionService {
     }
 
     // 각 답변의 isAccepted를 동적으로 계산 (acceptedAnswerId 기반)
+    // 그리고 각 답변의 댓글 개수(replyCount) 계산
     const questionWithAnswers = question as any;
-    if (questionWithAnswers.answers && question.acceptedAnswerId) {
-      questionWithAnswers.answers = questionWithAnswers.answers.map(
-        (answer: any) => ({
-          ...answer,
-          isAccepted: answer.id === question.acceptedAnswerId,
+    if (questionWithAnswers.answers) {
+      questionWithAnswers.answers = await Promise.all(
+        questionWithAnswers.answers.map(async (answer: any) => {
+          // 댓글 개수 계산
+          const replyCount = await this.prisma.answerComment.count({
+            where: {
+              answerId: answer.id,
+              status: "ACTIVE",
+            },
+          });
+
+          return {
+            ...answer,
+            replyCount,
+            isAccepted: answer.id === question.acceptedAnswerId,
+          };
         })
       );
     }
