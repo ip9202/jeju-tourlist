@@ -1,3 +1,7 @@
+// @CODE:ANSWER-INTERACTION-001-FACEBOOK-INPUT
+// @SPEC:SPEC-ANSWER-INTERACTION-001-PHASE7
+// Facebook-style answer input component with expandable textarea
+
 "use client";
 
 import React, { useState } from "react";

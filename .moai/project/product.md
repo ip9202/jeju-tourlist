@@ -12,7 +12,17 @@ priority: high
 
 ## HISTORY
 
+### v0.2.1 (2025-11-01)
+
+- **ADDED**: Error Handling Feature (SPEC-ANSWER-INTERACTION-001-PHASE7)
+- **AUTHOR**: @Alfred
+- **FEATURE**: Answer interaction error messages with countdown timer
+- **COMPONENTS**: Error banner with 4-second countdown, auto-dismiss, manual close button
+- **IMPLEMENTATION**: `page.tsx`, `FacebookAnswerCard.tsx`, `FacebookAnswerInput.tsx`, `FacebookAnswerThread.tsx`
+- **TESTS**: 19 unit tests + 5 E2E tests for error handling validation
+
 ### v0.2.0 (2025-10-29)
+
 - **MERGED**: Backup content merged into latest template (v0.3.8)
 - **AUTHOR**: @Alfred
 - **MERGE SOURCE**: .moai-backups/backup/CLAUDE.md
@@ -21,6 +31,7 @@ priority: high
 - **ACTION**: Replaced MoAI-ADK placeholder with actual "동네물어봐" (AskLocal) service information
 
 ### v0.1.3 (2025-10-17)
+
 - **UPDATED**: Template version synced (v0.3.8)
 - **AUTHOR**: @Alfred
 - **SECTIONS**: Mission (finalized team of 12 agents: Alfred + 11 specialists)
@@ -28,16 +39,19 @@ priority: high
   - Split code-builder into implementation-planner + tdd-implementer + quality-gate
 
 ### v0.1.2 (2025-10-17)
+
 - **UPDATED**: Agent count adjusted (9 → 11)
 - **AUTHOR**: @Alfred
 - **SECTIONS**: Mission (updated Alfred SuperAgent roster)
 
 ### v0.1.1 (2025-10-17)
+
 - **UPDATED**: Template defaults aligned with the real MoAI-ADK project
 - **AUTHOR**: @Alfred
 - **SECTIONS**: Mission, User, Problem, Strategy, Success populated with project context
 
 ### v0.1.0 (2025-10-01)
+
 - **INITIAL**: Authored the product definition document
 - **AUTHOR**: @project-owner
 - **SECTIONS**: Mission, User, Problem, Strategy, Success, Legacy
@@ -70,17 +84,18 @@ priority: high
 
 #### Service Ports
 
-| 서비스 | 포트 | URL |
-|--------|------|-----|
-| Web | 3000 | http://localhost:3000 |
-| API | 4000 | http://localhost:4000 |
-| PostgreSQL | 5433 | - |
-| Redis | 6379 | - |
+| 서비스        | 포트 | URL                   |
+| ------------- | ---- | --------------------- |
+| Web           | 3000 | http://localhost:3000 |
+| API           | 4000 | http://localhost:4000 |
+| PostgreSQL    | 5433 | -                     |
+| Redis         | 6379 | -                     |
 | Prisma Studio | 5555 | http://localhost:5555 |
 
 ## @SPEC:USER-001 Primary Users
 
 ### Primary Audience
+
 - **Who**: 제주도를 여행하는 관광객
 - **Core Needs**:
   - 현지인만 아는 맛집, 숨겨진 관광지, 실시간 날씨/교통 정보
@@ -92,6 +107,7 @@ priority: high
   - 다른 여행자들의 경험 공유 확인
 
 ### Secondary Audience
+
 - **Who**: 제주도 현지 주민 및 전문가
 - **Needs**:
   - 자신의 지역 전문성 공유
@@ -101,15 +117,18 @@ priority: high
 ## @SPEC:PROBLEM-001 Problems to Solve
 
 ### High Priority
+
 1. **정보 신뢰성**: 온라인 여행 정보의 신뢰성 부족 문제 해결
 2. **실시간성**: 여행 중 긴급한 질문에 대한 빠른 답변 필요
 3. **접근성**: 흩어진 여행 정보를 한 곳에서 검색/관리
 
 ### Medium Priority
+
 - 여행자와 현지인 간의 소통 장벽
 - 개인화된 여행 정보 부족
 
 ### Current Failure Cases
+
 - 기존 여행 커뮤니티는 답변이 느리거나 신뢰도가 낮음
 - 포털 사이트 정보는 상업적 목적이 강하고 현지 정보 부족
 - SNS는 정보가 산발적이고 검색이 어려움
@@ -117,6 +136,7 @@ priority: high
 ## @DOC:STRATEGY-001 Differentiators & Strengths
 
 ### Strengths Versus Alternatives
+
 1. **실시간 알림 시스템**
    - **When it matters**: 여행 중 긴급한 질문에 대해 즉각적인 답변 알림을 받을 수 있음
 
@@ -126,9 +146,55 @@ priority: high
 3. **카테고리별 전문화**
    - **When it matters**: 음식, 관광, 교통, 숙박 등 카테고리별로 전문가를 찾아 정확한 답변 획득
 
+## @SPEC:FEATURES-001 Implemented Features
+
+### Phase 7: Error Handling with Countdown Timer (v0.2.1)
+
+**Feature Name**: Answer Interaction Error Handling
+
+**Description**: 사용자가 답변과 상호작용할 때 발생하는 오류를 명확하게 표시하고 자동으로 해제하는 기능입니다.
+
+**Components**:
+
+- **Error Banner**: 상단에 빨간색 배경으로 오류 메시지 표시
+- **Countdown Timer**: 4초에서 1초까지 카운트다운 표시
+- **Auto-dismiss**: 카운트다운이 0에 도달하면 자동으로 배너 숨김
+- **Manual Close**: ✕ 버튼으로 즉시 닫을 수 있음
+- **Accessibility**: ARIA alert role로 스크린 리더 지원
+
+**User Interactions Supported**:
+
+- 답변 채택 실패 → "자신의 답변은 채택할 수 없습니다."
+- 좋아요 처리 실패 → "좋아요 처리에 실패했습니다."
+- 싫어요 처리 실패 → "싫어요 처리에 실패했습니다."
+
+**Technical Implementation**:
+
+- Backend: Express.js 핸들러에서 `response.message` 필드로 사용자 친화적 메시지 전달
+- Frontend: `setAnswerErrorWithTimer()` 함수로 카운트다운 로직 처리
+- State Management: `answerError` (에러 메시지), `countdown` (타이머), `countdownIntervalRef` (interval 참조)
+- Timer Logic: `remainingSeconds` 로컬 변수로 race condition 방지
+
+**Test Coverage**:
+
+- Unit Tests: 19개 (에러 배너 표시, 카운트다운, 자동 종료, 수동 종료 등)
+- E2E Tests: 5개 (실제 브라우저 상호작용 검증)
+
+**Related SPECs**: SPEC-ANSWER-INTERACTION-001-PHASE7
+**Related TAGs**:
+
+- @CODE:ANSWER-INTERACTION-001-ERROR-HANDLING
+- @CODE:ANSWER-INTERACTION-001-FACEBOOK-CARD
+- @CODE:ANSWER-INTERACTION-001-FACEBOOK-INPUT
+- @CODE:ANSWER-INTERACTION-001-FACEBOOK-THREAD
+- @TEST:ANSWER-INTERACTION-001-F3
+
+---
+
 ## @SPEC:SUCCESS-001 Success Metrics
 
 ### Immediately Measurable KPIs
+
 1. **답변 응답 시간**
    - **Baseline**: 평균 30분 이내 첫 답변 목표
 
@@ -139,6 +205,7 @@ priority: high
    - **Baseline**: 답변 만족도 평균 4.0/5.0 이상
 
 ### Measurement Cadence
+
 - **Daily**: 신규 질문 수, 답변 수, 실시간 알림 발송 수
 - **Weekly**: 전문가 활동 통계, 카테고리별 질문 분포
 - **Monthly**: 사용자 증가율, 재방문율, 전문가 활동 지속률
@@ -146,6 +213,7 @@ priority: high
 ## Legacy Context
 
 ### Existing Assets
+
 - **완료된 기능**: 회원가입/로그인, 질문/답변, 계층형 댓글, 검색/필터링, 전문가 대시보드, 실시간 알림, 북마크/공유, 프로필
 - **테스트 계정**: 4개의 테스트 계정 보유 (관리자 및 일반 사용자)
 - **서비스 스크립트**: `start-services.sh`, `kill-services.sh`로 전체 서비스 관리 자동화
@@ -153,9 +221,9 @@ priority: high
 
 ### Test Accounts
 
-| 이메일            | 비밀번호    | 역할 |
-| ----------------- | ----------- | ---- |
-| ip9202@gmail.com  | rkdcjfIP00! | 관리자 |
+| 이메일            | 비밀번호    | 역할        |
+| ----------------- | ----------- | ----------- |
+| ip9202@gmail.com  | rkdcjfIP00! | 관리자      |
 | user1@example.com | test123456  | 일반 사용자 |
 | user2@example.com | test123456  | 일반 사용자 |
 | user3@example.com | test123456  | 일반 사용자 |
@@ -175,6 +243,7 @@ priority: high
 Use these EARS patterns to keep SPEC requirements structured:
 
 #### EARS Patterns
+
 1. **Ubiquitous Requirements**: The system shall provide [capability].
 2. **Event-driven Requirements**: WHEN [condition], the system shall [behaviour].
 3. **State-driven Requirements**: WHILE [state], the system shall [behaviour].
@@ -182,20 +251,26 @@ Use these EARS patterns to keep SPEC requirements structured:
 5. **Constraints**: IF [condition], the system shall enforce [constraint].
 
 #### Sample Application
+
 ```markdown
 ### Ubiquitous Requirements (Foundational)
+
 - The system shall provide real-time notification capabilities.
 
 ### Event-driven Requirements
+
 - WHEN a user posts a question, the system shall notify relevant experts.
 
 ### State-driven Requirements
+
 - WHILE a user remains logged in, the system shall display personalized dashboard.
 
 ### Optional Features
+
 - WHERE an account is verified expert, the system may display expert badge.
 
 ### Constraints
+
 - IF a question is reported 3+ times, the system shall hide the content pending review.
 ```
 

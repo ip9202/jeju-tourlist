@@ -12,7 +12,18 @@ priority: medium
 
 ## HISTORY
 
+### v0.2.1 (2025-11-01)
+
+- **ADDED**: Error Handling Test Strategy (SPEC-ANSWER-INTERACTION-001-PHASE7)
+- **AUTHOR**: @Alfred
+- **TEST STRATEGY**: Dual-tier testing (Unit + E2E)
+- **UNIT TESTS**: 19 tests validating countdown timer, auto-dismiss, manual close
+- **E2E TESTS**: 5 tests validating real browser interactions and user flows
+- **COVERAGE**: Error banner display, countdown decrement, timer cleanup, accessibility
+- **TOOLS**: Jest + React Testing Library (Unit), Playwright (E2E)
+
 ### v0.2.0 (2025-10-29)
+
 - **MERGED**: Backup content merged into latest template (v0.3.8)
 - **AUTHOR**: @Alfred
 - **MERGE SOURCE**: .moai-backups/backup/CLAUDE.md
@@ -21,11 +32,13 @@ priority: medium
 - **ACTION**: Updated all technology sections with real project dependencies and configurations
 
 ### v0.1.1 (2025-10-17)
+
 - **UPDATED**: Template version synced (v0.3.8)
 - **AUTHOR**: @Alfred
 - **SECTIONS**: Metadata standardization (single `author` field, added `priority`)
 
 ### v0.1.0 (2025-10-01)
+
 - **INITIAL**: Authored the technology stack document
 - **AUTHOR**: @tech-lead
 - **SECTIONS**: Stack, Framework, Quality, Security, Deploy
@@ -43,11 +56,11 @@ priority: medium
 
 ### Multi-Platform Support
 
-| Platform    | Support Level | Validation Tooling  | Key Constraints |
-| ----------- | ------------- | ------------------- | --------------- |
-| **macOS**   | ✅ Primary  | Local development (Docker Desktop) | None |
-| **Linux**   | ✅ Production | Docker containers | None |
-| **Windows** | ⚠️ Limited | WSL2 required | Windows 10+ with WSL2 |
+| Platform    | Support Level | Validation Tooling                 | Key Constraints       |
+| ----------- | ------------- | ---------------------------------- | --------------------- |
+| **macOS**   | ✅ Primary    | Local development (Docker Desktop) | None                  |
+| **Linux**   | ✅ Production | Docker containers                  | None                  |
+| **Windows** | ⚠️ Limited    | WSL2 required                      | Windows 10+ with WSL2 |
 
 ## @DOC:FRAMEWORK-001 Core Frameworks & Libraries
 
@@ -137,19 +150,59 @@ priority: medium
 
 ## @DOC:QUALITY-001 Quality Gates & Policies
 
-### Test Coverage
+### Test Coverage & Strategy
+
+#### Overall Coverage Target
 
 - **Target**: 80% line coverage (unit + integration tests)
 - **Measurement Tool**: Vitest coverage (c8)
 - **Failure Response**: CI 빌드 실패, PR 머지 차단
 
+#### Error Handling Test Strategy (SPEC-ANSWER-INTERACTION-001-PHASE7)
+
+**Unit Tests (Jest + React Testing Library)**
+
+- **Location**: `apps/web/src/app/questions/__tests__/QuestionDetail.error-handling.test.tsx`
+- **Test Count**: 19 comprehensive tests
+- **Coverage Areas**:
+  1. Error Banner Display (4 tests) – 배너 표시, 숨김, 텍스트, ARIA role
+  2. Countdown Timer Display (4 tests) – 4초 시작, 1초마다 감소, 자동 종료, 다중 오류 재설정
+  3. Manual Close Button (3 tests) – 즉시 종료, 타이머 정지, aria-label
+  4. Error Banner Styling (4 tests) – 배경색, 텍스트색, 폰트 크기, 아이콘
+  5. Different Error Messages (3 tests) – 채택 오류, 좋아요 오류, 메시지 업데이트
+  6. Cleanup (1 test) – 컴포넌트 언마운트 시 타이머 정리
+
+**E2E Tests (Playwright)**
+
+- **Location**: `apps/web/src/__tests__/e2e/question-detail-error.e2e.test.ts`
+- **Test Count**: 5 integration tests
+- **Coverage Areas**:
+  1. Error banner displays in real browser
+  2. Countdown timer works with real timing
+  3. Auto-dismiss after countdown
+  4. Manual close button stops timer
+  5. Multiple error scenarios and recovery
+
+**Test Execution**:
+
+```bash
+# Run unit tests
+pnpm test
+
+# Run E2E tests
+pnpm test:e2e
+
+# Run with coverage
+pnpm test:coverage
+```
+
 ### Static Analysis
 
-| Tool           | Role      | Config File   | Failure Handling |
-| -------------- | --------- | ------------- | ---------------- |
-| ESLint | 코드 품질 | `.eslintrc.js` | Pre-commit hook 실패 |
-| Prettier | 코드 포맷팅 | `.prettierrc` | Auto-fix on save |
-| TypeScript | 타입 체크 | `tsconfig.json` | Build 실패 |
+| Tool       | Role        | Config File     | Failure Handling     |
+| ---------- | ----------- | --------------- | -------------------- |
+| ESLint     | 코드 품질   | `.eslintrc.js`  | Pre-commit hook 실패 |
+| Prettier   | 코드 포맷팅 | `.prettierrc`   | Auto-fix on save     |
+| TypeScript | 타입 체크   | `tsconfig.json` | Build 실패           |
 
 ### Automation Scripts
 
@@ -187,7 +240,7 @@ pnpm test:e2e                # Playwright E2E tests
 - **Log Levels**: debug, info, warn, error (NODE_ENV에 따라 필터링)
 - **Sensitive Data Masking**:
   - 비밀번호, JWT 토큰은 로그에 기록 금지
-  - 이메일 주소는 마스킹 (e***@example.com)
+  - 이메일 주소는 마스킹 (e\*\*\*@example.com)
 - **Retention Policy**:
   - 로컬 개발: 재시작 시 초기화
   - 프로덕션: 7일 보관 후 삭제
@@ -223,14 +276,14 @@ pnpm dev                     # Start all services (web:3000, api:4000)
 
 ### 3. CI/CD Pipeline
 
-| Stage     | Objective   | Tooling | Success Criteria |
-| --------- | ----------- | ------- | ---------------- |
-| Lint | 코드 품질 검증 | ESLint + Prettier | No errors |
-| Type Check | 타입 안정성 검증 | TypeScript | No type errors |
-| Test | 단위/통합 테스트 | Vitest | 80%+ coverage |
-| Build | 빌드 검증 | Turborepo | All apps build success |
-| E2E | 통합 테스트 | Playwright | Critical paths pass |
-| Deploy | 배포 | Docker + Cloud | Health check pass |
+| Stage      | Objective        | Tooling           | Success Criteria       |
+| ---------- | ---------------- | ----------------- | ---------------------- |
+| Lint       | 코드 품질 검증   | ESLint + Prettier | No errors              |
+| Type Check | 타입 안정성 검증 | TypeScript        | No type errors         |
+| Test       | 단위/통합 테스트 | Vitest            | 80%+ coverage          |
+| Build      | 빌드 검증        | Turborepo         | All apps build success |
+| E2E        | 통합 테스트      | Playwright        | Critical paths pass    |
+| Deploy     | 배포             | Docker + Cloud    | Health check pass      |
 
 ## Environment Profiles
 
@@ -299,12 +352,24 @@ docker-compose down
 
 ## @CODE:TECH-DEBT-001 Technical Debt Management
 
+### Resolved Issues (v0.2.1)
+
+1. **✅ 에러 핸들링 표준화** (RESOLVED in SPEC-ANSWER-INTERACTION-001-PHASE7)
+   - Implemented unified error response format: `{ success: false, message: "user-friendly text" }`
+   - Applied across all answer interaction handlers: adopt, like, dislike
+   - Error messages prioritized from `response.message` field (backend)
+   - Tests: 19 unit tests + 5 E2E tests validating error message display and countdown timer
+
+2. ✅ E2E 테스트 커버리지 개선 (부분 해결)
+   - Added 5 E2E tests for error handling workflows
+   - Test scenarios: banner display, countdown accuracy, auto-dismiss, manual close
+   - Still need: Additional E2E coverage for non-error answer flows
+
 ### Current Debt
 
-1. **E2E 테스트 커버리지 부족** – Playwright 테스트 시나리오 추가 필요 (우선순위: 높음)
+1. **E2E 테스트 커버리지 부족** – Non-error answer flows 추가 필요 (우선순위: 높음)
 2. **API 응답 캐싱 미흡** – Redis 캐싱 전략 개선 (우선순위: 중)
-3. **에러 핸들링 표준화** – 통일된 에러 응답 형식 필요 (우선순위: 중)
-4. **성능 모니터링 부재** – APM 도구 도입 필요 (우선순위: 낮음)
+3. **성능 모니터링 부재** – APM 도구 도입 필요 (우선순위: 낮음)
 
 ### Remediation Plan
 
@@ -319,24 +384,30 @@ docker-compose down
 Apply EARS patterns when documenting technical decisions and quality gates:
 
 #### Technology Stack EARS Example
+
 ```markdown
 ### Ubiquitous Requirements (Baseline)
+
 - The system shall guarantee TypeScript type safety across all modules.
 - The system shall provide real-time notifications using Socket.io.
 
 ### Event-driven Requirements
+
 - WHEN code is committed, the system shall run ESLint, type-check, and tests automatically.
 - WHEN a build fails, the system shall notify developers via CI pipeline.
 
 ### State-driven Requirements
+
 - WHILE in development mode, the system shall offer hot reloading for frontend and backend.
 - WHILE in production mode, the system shall produce optimized builds with minification.
 
 ### Optional Features
+
 - WHERE Docker is available, the system may support containerized deployment.
 - WHERE Playwright is installed, the system may execute E2E tests on each commit.
 
 ### Constraints
+
 - IF a dependency vulnerability (High+) is detected, the system shall halt the build.
 - Test coverage shall remain at or above 80%.
 - API response time shall not exceed 200ms (P95).

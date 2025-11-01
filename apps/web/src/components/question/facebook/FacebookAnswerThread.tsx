@@ -1,3 +1,7 @@
+// @CODE:ANSWER-INTERACTION-001-FACEBOOK-THREAD
+// @SPEC:SPEC-ANSWER-INTERACTION-001-PHASE7
+// Facebook-style answer thread with nested replies and badge-based sorting
+
 import React, { useState, useMemo, useCallback } from "react";
 import { FacebookAnswerThreadProps, Answer } from "./types";
 import { sortByBadgePriority } from "./utils";

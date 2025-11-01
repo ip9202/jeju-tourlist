@@ -1,3 +1,7 @@
+// @CODE:ANSWER-INTERACTION-001-FACEBOOK-CARD
+// @SPEC:SPEC-ANSWER-INTERACTION-001-PHASE7
+// Facebook-style answer card with like/dislike reactions and adoption indicator
+
 "use client";
 
 import React, { useState } from "react";
