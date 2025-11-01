@@ -1,7 +1,7 @@
 "use client";
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 // import { useNewFacebookUI } from "@/hooks/useNewFacebookUI"; // TODO: Will be used for feature flag switching
@@ -72,6 +72,8 @@ interface Answer {
   replyCount?: number;
 }
 
+const ANSWER_ERROR_TIMEOUT_MS = 4000;
+
 export default function QuestionDetailPage() {
   const params = useParams();
   const router = useRouter();
@@ -83,19 +85,18 @@ export default function QuestionDetailPage() {
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [answerError, setAnswerError] = useState("");
-  const [answerErrorTimeout, setAnswerErrorTimeout] =
-    useState<NodeJS.Timeout | null>(null);
+  const answerErrorTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   // 컴포넌트 언마운트 시 타이머 정리
   useEffect(() => {
     return () => {
-      if (answerErrorTimeout) {
-        clearTimeout(answerErrorTimeout);
+      if (answerErrorTimeoutRef.current) {
+        clearTimeout(answerErrorTimeoutRef.current);
       }
     };
-  }, [answerErrorTimeout]);
+  }, []);
 
   useEffect(() => {
     const loadQuestion = async () => {
@@ -141,31 +142,23 @@ export default function QuestionDetailPage() {
     if (!user?.id) {
       setAnswerError("로그인이 필요합니다.");
       // 타이머 정리
-      if (answerErrorTimeout) clearTimeout(answerErrorTimeout);
-      // 5초 후 자동 닫기
-      const timeout = setTimeout(() => {
+      if (answerErrorTimeoutRef.current)
+        clearTimeout(answerErrorTimeoutRef.current);
+      // 1.5초 후 자동 닫기 및 리다이렉트
+      answerErrorTimeoutRef.current = setTimeout(() => {
         router.push("/auth/signin");
       }, 1500);
-      setAnswerErrorTimeout(timeout);
       return;
     }
 
     // 답변 검증
     if (!content.trim()) {
-      setAnswerError("답변을 입력해주세요");
-      // 타이머 정리 및 재설정
-      if (answerErrorTimeout) clearTimeout(answerErrorTimeout);
-      const timeout = setTimeout(() => setAnswerError(""), 4000);
-      setAnswerErrorTimeout(timeout);
+      setAnswerErrorWithTimer("답변을 입력해주세요");
       return;
     }
 
     if (content.trim().length < 10) {
-      setAnswerError("답변을 10자 이상 입력해주세요");
-      // 타이머 정리 및 재설정
-      if (answerErrorTimeout) clearTimeout(answerErrorTimeout);
-      const timeout = setTimeout(() => setAnswerError(""), 4000);
-      setAnswerErrorTimeout(timeout);
+      setAnswerErrorWithTimer("답변을 10자 이상 입력해주세요");
       return;
     }
 
@@ -227,11 +220,7 @@ export default function QuestionDetailPage() {
       console.error("작성 실패:", error);
       const errorMsg =
         error instanceof Error ? error.message : "작성 중 오류가 발생했습니다.";
-      setAnswerError(errorMsg);
-      // 타이머 정리 및 재설정
-      if (answerErrorTimeout) clearTimeout(answerErrorTimeout);
-      const timeout = setTimeout(() => setAnswerError(""), 4000);
-      setAnswerErrorTimeout(timeout);
+      setAnswerErrorWithTimer(errorMsg);
     } finally {
       setIsSubmitting(false);
     }
@@ -406,11 +395,7 @@ export default function QuestionDetailPage() {
         error instanceof Error
           ? error.message
           : "채택 취소 처리 중 오류가 발생했습니다";
-      setAnswerError(errorMsg);
-      // 타이머 정리 및 재설정
-      if (answerErrorTimeout) clearTimeout(answerErrorTimeout);
-      const timeout = setTimeout(() => setAnswerError(""), 4000);
-      setAnswerErrorTimeout(timeout);
+      setAnswerErrorWithTimer(errorMsg);
     }
   };
 
@@ -448,6 +433,19 @@ export default function QuestionDetailPage() {
       </div>
     );
   }
+
+  // 에러 메시지를 4초 타이머와 함께 설정
+  const setAnswerErrorWithTimer = (message: string) => {
+    setAnswerError(message);
+
+    if (answerErrorTimeoutRef.current) {
+      clearTimeout(answerErrorTimeoutRef.current);
+    }
+
+    answerErrorTimeoutRef.current = setTimeout(() => {
+      setAnswerError("");
+    }, ANSWER_ERROR_TIMEOUT_MS);
+  };
 
   if (!question) {
     return (
@@ -649,7 +647,7 @@ export default function QuestionDetailPage() {
               <div className="flex-1">
                 <p className="text-red-800 font-medium">{answerError}</p>
                 <p className="text-red-700 text-xs mt-1">
-                  몇 초 후 자동으로 닫힙니다.
+                  4초 후 자동으로 닫힙니다.
                 </p>
               </div>
               <button
