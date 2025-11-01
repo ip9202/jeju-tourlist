@@ -85,7 +85,9 @@ export default function QuestionDetailPage() {
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [answerError, setAnswerError] = useState("");
+  const [countdown, setCountdown] = useState(0);
   const answerErrorTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const countdownIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -94,6 +96,9 @@ export default function QuestionDetailPage() {
     return () => {
       if (answerErrorTimeoutRef.current) {
         clearTimeout(answerErrorTimeoutRef.current);
+      }
+      if (countdownIntervalRef.current) {
+        clearInterval(countdownIntervalRef.current);
       }
     };
   }, []);
@@ -437,14 +442,23 @@ export default function QuestionDetailPage() {
   // 에러 메시지를 4초 타이머와 함께 설정
   const setAnswerErrorWithTimer = (message: string) => {
     setAnswerError(message);
+    setCountdown(ANSWER_ERROR_TIMEOUT_MS / 1000); // 4로 설정
 
-    if (answerErrorTimeoutRef.current) {
-      clearTimeout(answerErrorTimeoutRef.current);
+    // 이전 interval 정리
+    if (countdownIntervalRef.current) {
+      clearInterval(countdownIntervalRef.current);
     }
 
-    answerErrorTimeoutRef.current = setTimeout(() => {
-      setAnswerError("");
-    }, ANSWER_ERROR_TIMEOUT_MS);
+    // 카운트다운 시작 - 처음부터 4로 표시하고 1초마다 감소
+    let remainingSeconds = ANSWER_ERROR_TIMEOUT_MS / 1000;
+    countdownIntervalRef.current = setInterval(() => {
+      remainingSeconds--;
+      setCountdown(remainingSeconds);
+      if (remainingSeconds <= 0) {
+        setAnswerError("");
+        clearInterval(countdownIntervalRef.current!);
+      }
+    }, 1000);
   };
 
   if (!question) {
@@ -647,11 +661,17 @@ export default function QuestionDetailPage() {
               <div className="flex-1">
                 <p className="text-red-800 font-medium">{answerError}</p>
                 <p className="text-red-700 text-xs mt-1">
-                  4초 후 자동으로 닫힙니다.
+                  {countdown}초 후 자동으로 닫힙니다.
                 </p>
               </div>
               <button
-                onClick={() => setAnswerError("")}
+                onClick={() => {
+                  setAnswerError("");
+                  setCountdown(0);
+                  if (countdownIntervalRef.current) {
+                    clearInterval(countdownIntervalRef.current);
+                  }
+                }}
                 className="text-red-500 hover:text-red-700 transition-colors flex-shrink-0"
                 aria-label="에러 메시지 닫기"
               >
