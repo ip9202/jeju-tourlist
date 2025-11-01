@@ -1,0 +1,24 @@
+{
+  "project": {
+    "name": "jeju-tourlist",
+    "mode": "personal",
+    "locale": "ko",
+    "language": "typescript-fullstack",
+    "language_detection": {
+      "detected_language": "typescript-fullstack",
+      "detection_method": "backup_merge",
+      "confidence": "high",
+      "markers": [
+        "Next.js 14",
+        "TypeScript",
+        "Express.js",
+        "Prisma",
+        "PostgreSQL"
+      ],
+      "confirmed_by": "project-manager"
+    },
+    "optimized": true,
+    "last_merge": "2025-10-29T00:00:00+09:00",
+    "merge_source": ".moai-backups/backup/CLAUDE.md"
+  }
+}

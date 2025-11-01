@@ -72,6 +72,10 @@ const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
 
   const [isHovering, setIsHovering] = useState(false);
 
+  // Calculate if this is a nested reply based on parentId
+  // This is more reliable than relying on the isNested prop
+  const isActuallyNested = !!answer.parentId;
+
   const timeAgo = formatDistanceToNow(new Date(answer.createdAt), {
     addSuffix: true,
     locale: ko,
@@ -243,7 +247,8 @@ const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
 
           {/* Phase 4 Adopt Button @REQ:ANSWER-INTERACTION-001-E1 */}
           {/* Only show adopt button for top-level answers (not nested replies) */}
-          {!isNested && (
+          {/* isActuallyNested calculated from answer.parentId to ensure correct rendering */}
+          {!isActuallyNested && (
             <>
               {answer.isAccepted ? (
                 <button
