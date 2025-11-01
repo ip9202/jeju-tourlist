@@ -216,7 +216,7 @@ const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
           <button
             onClick={handleLike}
             disabled={isLoading}
-            className={`px-0.5 flex items-center gap-1 hover:text-red-600 transition-colors md:text-xs sm:text-xs ${
+            className={`flex items-center gap-1 hover:text-red-600 transition-colors md:text-xs sm:text-xs ${
               answer.isLiked ? "text-red-600" : "text-gray-600"
             }`}
             title="좋아요"
@@ -231,7 +231,7 @@ const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
           <button
             onClick={handleDislike}
             disabled={isLoading}
-            className={`px-0.5 flex items-center gap-1 hover:text-gray-600 transition-colors md:text-xs sm:text-xs ${
+            className={`flex items-center gap-1 hover:text-gray-600 transition-colors md:text-xs sm:text-xs ${
               answer.isDisliked ? "text-gray-600" : "text-gray-400"
             }`}
             title="싫어요"
