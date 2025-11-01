@@ -76,6 +76,13 @@ const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
   // This is more reliable than relying on the isNested prop
   const isActuallyNested = !!answer.parentId;
 
+  // DEBUG: Log values to understand why conditional rendering isn't working
+  if (typeof window !== "undefined" && answer.content.length < 50) {
+    console.log(
+      `[DEBUG] answerId: ${answer.id}, parentId: ${answer.parentId}, isActuallyNested: ${isActuallyNested}`
+    );
+  }
+
   const timeAgo = formatDistanceToNow(new Date(answer.createdAt), {
     addSuffix: true,
     locale: ko,
