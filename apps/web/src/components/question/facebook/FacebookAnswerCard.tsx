@@ -58,10 +58,15 @@ const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
 }) => {
   // DEBUG: Log render start
   if (typeof window !== "undefined") {
+    console.log(
+      `[FacebookAnswerCard] ${answer.author.name} - isNested: ${isNested}, depth: ${depth}`
+    );
     (window as any).__facebookCardRender = {
       answerId: answer.id,
       questionAuthor,
       currentUser,
+      isNested,
+      depth,
     };
   }
 
@@ -237,29 +242,33 @@ const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
           </button>
 
           {/* Phase 4 Adopt Button @REQ:ANSWER-INTERACTION-001-E1 */}
-          {/* DEBUG: Always show adopt button */}
-          {answer.isAccepted ? (
-            <button
-              onClick={handleUnadopt}
-              disabled={isLoading}
-              className="flex items-center gap-1 font-semibold text-green-600 hover:text-green-700 transition-colors md:text-xs sm:text-xs"
-              title="채택 취소"
-              aria-label="채택 취소"
-            >
-              <CheckCircle size={16} className="fill-green-600" />
-              <span>채택 해제</span>
-            </button>
-          ) : (
-            <button
-              onClick={handleAdopt}
-              disabled={isLoading}
-              className="flex items-center gap-1 font-semibold hover:text-green-600 transition-colors md:text-xs sm:text-xs"
-              title="채택"
-              aria-label="답변 채택"
-            >
-              <CheckCircle size={16} />
-              <span>채택</span>
-            </button>
+          {/* Only show adopt button for top-level answers (not nested replies) */}
+          {!isNested && (
+            <>
+              {answer.isAccepted ? (
+                <button
+                  onClick={handleUnadopt}
+                  disabled={isLoading}
+                  className="flex items-center gap-1 font-semibold text-green-600 hover:text-green-700 transition-colors md:text-xs sm:text-xs"
+                  title="채택 취소"
+                  aria-label="채택 취소"
+                >
+                  <CheckCircle size={16} className="fill-green-600" />
+                  <span>채택 해제</span>
+                </button>
+              ) : (
+                <button
+                  onClick={handleAdopt}
+                  disabled={isLoading}
+                  className="flex items-center gap-1 font-semibold hover:text-green-600 transition-colors md:text-xs sm:text-xs"
+                  title="채택"
+                  aria-label="답변 채택"
+                >
+                  <CheckCircle size={16} />
+                  <span>채택</span>
+                </button>
+              )}
+            </>
           )}
         </div>
       </div>
