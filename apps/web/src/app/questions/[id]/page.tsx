@@ -272,7 +272,7 @@ export default function QuestionDetailPage() {
       });
 
       if (!response.success) {
-        throw new Error(response.error || "좋아요 처리에 실패했습니다");
+        throw new Error(response.message || "좋아요 처리에 실패했습니다");
       }
 
       // 로컬 상태 업데이트 - 싫어요 자동 해제
@@ -295,6 +295,11 @@ export default function QuestionDetailPage() {
       );
     } catch (error) {
       console.error("답변 좋아요 실패:", error);
+      const errorMsg =
+        error instanceof Error
+          ? error.message
+          : "좋아요 처리 중 오류가 발생했습니다";
+      setAnswerErrorWithTimer(errorMsg);
     }
   };
 
@@ -312,7 +317,7 @@ export default function QuestionDetailPage() {
       });
 
       if (!response.success) {
-        throw new Error(response.error || "싫어요 처리에 실패했습니다");
+        throw new Error(response.message || "싫어요 처리에 실패했습니다");
       }
 
       // 로컬 상태 업데이트 - 좋아요 자동 해제
@@ -335,6 +340,11 @@ export default function QuestionDetailPage() {
       );
     } catch (error) {
       console.error("답변 싫어요 실패:", error);
+      const errorMsg =
+        error instanceof Error
+          ? error.message
+          : "싫어요 처리 중 오류가 발생했습니다";
+      setAnswerErrorWithTimer(errorMsg);
     }
   };
 
@@ -364,11 +374,11 @@ export default function QuestionDetailPage() {
       );
     } catch (error) {
       console.error("답변 채택 실패:", error);
-      setAnswerError(
+      const errorMsg =
         error instanceof Error
           ? error.message
-          : "채택 처리 중 오류가 발생했습니다"
-      );
+          : "채택 처리 중 오류가 발생했습니다";
+      setAnswerErrorWithTimer(errorMsg);
     }
   };
 
