@@ -28,6 +28,10 @@ import {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   isValidApiResponse,
 } from "@/lib/facebook-qa-converter";
+import {
+  validateAnswerData,
+  filterTopLevelAnswers,
+} from "@/lib/validators/answerValidator";
 
 interface Question {
   id: string;
@@ -62,7 +66,7 @@ interface Answer {
     nickname: string;
     avatar?: string | null;
   };
-  createdAt: string;
+  createdAt: string | Date;
   likeCount: number;
   dislikeCount: number;
   commentCount: number;
@@ -122,7 +126,25 @@ export default function QuestionDetailPage() {
         }
 
         setQuestion(result.data);
-        setAnswers(result.data.answers || []);
+
+        // @CODE:ANSWER-VALIDATOR-INTEGRATION-001
+        // Validate and filter answers
+        const rawAnswers = result.data.answers || [];
+        try {
+          // Validate each answer
+          const validatedAnswers = rawAnswers.map((answer: any) =>
+            validateAnswerData(answer)
+          );
+
+          // Filter top-level answers only (exclude comments with parentId)
+          const topLevelAnswers = filterTopLevelAnswers(validatedAnswers);
+
+          setAnswers(topLevelAnswers);
+        } catch (validationError) {
+          console.error("[DEBUG] Answer validation failed:", validationError);
+          // Fallback: use raw answers if validation fails
+          setAnswers(rawAnswers);
+        }
       } catch (err) {
         console.error("[DEBUG] 질문 로드 실패:", err);
         setError(
@@ -723,7 +745,10 @@ export default function QuestionDetailPage() {
                     name: answer.author.name,
                     avatar: answer.author.avatar || undefined,
                   },
-                  createdAt: answer.createdAt,
+                  createdAt:
+                    typeof answer.createdAt === "string"
+                      ? answer.createdAt
+                      : answer.createdAt.toISOString(),
                   likeCount: answer.likeCount,
                   dislikeCount: answer.dislikeCount || 0,
                   isLiked: answer.isLiked || false,
