@@ -187,7 +187,7 @@ const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
         </div>
 
         {/* Metadata and Actions */}
-        <div className="flex items-center gap-1 mt-1 pl-3 text-xs text-gray-600 md:gap-1 md:mt-0.5 md:pl-2 sm:gap-1 sm:mt-0.5 sm:pl-1.5 sm:text-xs">
+        <div className="!h-fit flex items-center gap-1 mt-1 pl-3 text-xs text-gray-600 md:gap-1 md:mt-0.5 md:pl-2 sm:gap-1 sm:mt-0.5 sm:pl-1.5 sm:text-xs">
           {/* Time */}
           <span>{timeAgo}</span>
 
