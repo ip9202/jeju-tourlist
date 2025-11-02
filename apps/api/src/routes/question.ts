@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { QuestionController } from "../controllers/questionController";
 import { PrismaClient } from "@prisma/client";
-import { authMiddleware } from "../middleware/auth";
+import { authMiddleware, optionalAuthMiddleware } from "../middleware/auth";
 
 /**
  * 질문 라우터 생성 함수
@@ -49,7 +49,11 @@ export function createQuestionRouter(prisma: PrismaClient): Router {
    * @param { string } id - 질문 ID
    * @query { incrementView?: boolean }
    */
-  router.get("/:id", questionController.getQuestionById);
+  router.get(
+    "/:id",
+    optionalAuthMiddleware,
+    questionController.getQuestionById
+  );
 
   /**
    * @route PUT /api/questions/:id
