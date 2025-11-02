@@ -57,14 +57,12 @@ export function useSocket(options?: {
    */
   const connect = useCallback(async () => {
     if (socketRef.current?.isConnected()) {
-      console.log("🔌 이미 연결되어 있습니다.");
       return;
     }
 
     try {
       await socketRef.current?.connect();
     } catch (error) {
-      console.error("❌ Socket 연결 실패:", error);
       setState(prev => ({
         ...prev,
         status: "error",
@@ -192,7 +190,7 @@ export function useSocketEvent<
     if (!socket) return;
 
     const eventHandler = (...args: unknown[]) => {
-      if (typeof handlerRef.current === 'function') {
+      if (typeof handlerRef.current === "function") {
         (handlerRef.current as (...args: unknown[]) => void)(...args);
       }
     };

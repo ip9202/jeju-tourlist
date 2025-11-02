@@ -1,46 +1,47 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useCallback } from 'react';
-import { debounce } from '@/lib/debounce';
+import { useState, useCallback } from "react";
+import { debounce } from "@/lib/debounce";
 
-export type EmailCheckState = 'idle' | 'checking' | 'available' | 'unavailable' | 'error';
+export type EmailCheckState =
+  | "idle"
+  | "checking"
+  | "available"
+  | "unavailable"
+  | "error";
 
 export function useEmailCheck() {
-  const [state, setState] = useState<EmailCheckState>('idle');
+  const [state, setState] = useState<EmailCheckState>("idle");
   const [isLoading, setIsLoading] = useState(false);
 
   const checkEmail = useCallback(async (email: string) => {
-    if (!email || !email.includes('@')) {
-      setState('idle');
+    if (!email || !email.includes("@")) {
+      setState("idle");
       return;
     }
 
     setIsLoading(true);
-    setState('checking');
+    setState("checking");
 
     try {
       const response = await fetch(`http://localhost:4000/api/auth/check`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ email }),
       });
 
       if (response.ok) {
         const responseData = await response.json();
-        console.log('🔍 [DEBUG] API 응답:', responseData);
-        console.log('🔍 [DEBUG] data 객체:', responseData.data);
-        console.log('🔍 [DEBUG] available 값:', responseData.data?.available);
-        console.log('🔍 [DEBUG] 설정할 상태:', responseData.data?.available ? 'available' : 'unavailable');
-        setState(responseData.data?.available ? 'available' : 'unavailable');
+
+        setState(responseData.data?.available ? "available" : "unavailable");
       } else {
-        console.log('🔍 [DEBUG] API 에러 응답:', response.status, response.statusText);
-        setState('error');
+        setState("error");
       }
     } catch (error) {
-      console.error('이메일 중복체크 에러:', error);
-      setState('error');
+      console.error("이메일 중복체크 에러:", error);
+      setState("error");
     } finally {
       setIsLoading(false);
     }
@@ -55,17 +56,17 @@ export function useEmailCheck() {
   );
 
   const reset = useCallback(() => {
-    setState('idle');
+    setState("idle");
     setIsLoading(false);
   }, []);
 
   return {
     state,
     isLoading,
-    available: state === 'available',
-    unavailable: state === 'unavailable',
-    checking: state === 'checking',
-    error: state === 'error',
+    available: state === "available",
+    unavailable: state === "unavailable",
+    checking: state === "checking",
+    error: state === "error",
     checkEmail: debouncedCheckEmail,
     reset,
   };

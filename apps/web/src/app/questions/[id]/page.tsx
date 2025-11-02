@@ -141,12 +141,10 @@ export default function QuestionDetailPage() {
 
           setAnswers(topLevelAnswers);
         } catch (validationError) {
-          console.error("[DEBUG] Answer validation failed:", validationError);
           // Fallback: use raw answers if validation fails
           setAnswers(rawAnswers);
         }
       } catch (err) {
-        console.error("[DEBUG] 질문 로드 실패:", err);
         setError(
           err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다"
         );
