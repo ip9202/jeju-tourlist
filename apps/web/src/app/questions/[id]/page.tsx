@@ -114,19 +114,12 @@ export default function QuestionDetailPage() {
 
       try {
         // API 호출
-        const response = await fetch(`/api/questions/${params.id}`);
-
-        if (!response.ok) {
-          if (response.status === 404) {
-            throw new Error("질문을 찾을 수 없습니다");
-          }
-          throw new Error("질문을 불러오는 중 오류가 발생했습니다");
-        }
-
-        const result = await response.json();
+        const result = await api.get(`/api/questions/${params.id}`);
 
         if (!result.success) {
-          throw new Error(result.error || "질문을 불러올 수 없습니다");
+          throw new Error(
+            result.error || result.message || "질문을 불러올 수 없습니다"
+          );
         }
 
         setQuestion(result.data);
