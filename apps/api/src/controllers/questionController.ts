@@ -178,6 +178,7 @@ export class QuestionController {
     try {
       const { id } = req.params;
       const { incrementView = "true" } = req.query;
+      const userId = req.user?.id;
 
       if (!id) {
         const response: ApiResponse = {
@@ -190,7 +191,8 @@ export class QuestionController {
 
       const question = await this.questionService.getQuestionById(
         id,
-        incrementView === "true"
+        incrementView === "true",
+        userId
       );
 
       const response: ApiResponse = {

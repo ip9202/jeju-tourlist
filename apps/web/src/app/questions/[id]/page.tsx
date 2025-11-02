@@ -3,7 +3,6 @@
 // Error handling with countdown timer for answer interactions
 
 "use client";
-"use client";
 
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";

@@ -119,12 +119,12 @@ const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
   };
 
   // 중첩 댓글일 경우 왼쪽 마진 적용
-  const marginLeft =
-    isNested && depth > 0 ? `ml-${Math.min(depth * 8, 32)}` : "";
+  const marginLeftPixels = isNested && depth > 0 ? Math.min(depth * 8, 32) : 0;
 
   return (
     <div
-      className={`flex gap-3 py-3 md:gap-2 md:py-2 sm:gap-1.5 sm:py-1.5 ${marginLeft}`}
+      className="flex gap-3 py-3 md:gap-2 md:py-2 sm:gap-1.5 sm:py-1.5"
+      style={{ marginLeft: `${marginLeftPixels}px` }}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
     >

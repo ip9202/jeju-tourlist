@@ -4,9 +4,61 @@
 SessionStart, SessionEnd event handling
 """
 
+import json
+from pathlib import Path
+
 from core import HookPayload, HookResult
 from core.checkpoint import list_checkpoints
 from core.project import count_specs, detect_language, get_git_info, get_package_version_info
+
+
+def load_user_critical_from_claude() -> list:
+    """Extract @USER_CRITICAL section from CLAUDE.md
+
+    Reads both global (~/.claude/CLAUDE.md) and project CLAUDE.md files
+    and extracts content between @USER_CRITICAL markers.
+    Returns empty list if section not found or files don't exist.
+    """
+    critical_rules = []
+
+    # Try to read CLAUDE.md files
+    for claude_path in [
+        Path.home() / ".claude" / "CLAUDE.md",  # Global
+        Path.cwd() / "CLAUDE.md",  # Project root
+    ]:
+        if not claude_path.exists():
+            continue
+
+        try:
+            with open(claude_path) as f:
+                content = f.read()
+
+            # Look for @USER_CRITICAL section
+            if "@USER_CRITICAL" in content:
+                # Extract content between @USER_CRITICAL and next # section
+                lines = content.split('\n')
+                in_critical = False
+
+                for line in lines:
+                    if "@USER_CRITICAL" in line:
+                        in_critical = True
+                        continue
+
+                    # Stop at next section marker
+                    if in_critical and line.startswith('#'):
+                        break
+
+                    # Extract rule lines (starting with - or **)
+                    if in_critical:
+                        stripped = line.strip()
+                        if stripped and not stripped.startswith('#') and not stripped.startswith('CRITICAL:'):
+                            critical_rules.append(stripped)
+
+        except Exception:
+            # Graceful degradation if file read fails
+            pass
+
+    return critical_rules
 
 
 def handle_session_start(payload: HookPayload) -> HookResult:
@@ -64,6 +116,9 @@ def handle_session_start(payload: HookPayload) -> HookResult:
 
     cwd = payload.get("cwd", ".")
 
+    # Load critical rules from CLAUDE.md @USER_CRITICAL section
+    critical_rules = load_user_critical_from_claude()
+
     # CRITICAL: Language detection - MUST succeed (no try-except)
     language = detect_language(cwd)
 
@@ -110,6 +165,13 @@ def handle_session_start(payload: HookPayload) -> HookResult:
         "🚀 MoAI-ADK Session Started",
         "",  # Blank line after title
     ]
+
+    # Add critical rules from CLAUDE.md if available
+    if critical_rules:
+        lines.append("📋 Critical Rules (from @USER_CRITICAL):")
+        for rule in critical_rules:
+            lines.append(f"   • {rule}")
+        lines.append("")  # Blank line separator
 
     # Add version info first (at the top, right after title)
     if version_info and version_info.get("current") != "unknown":

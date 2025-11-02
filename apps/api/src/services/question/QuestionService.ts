@@ -66,7 +66,11 @@ export class QuestionService {
    * @returns 질문 정보
    * @throws {Error} 질문을 찾을 수 없을 때 에러 발생
    */
-  async getQuestionById(id: string, incrementView: boolean = true) {
+  async getQuestionById(
+    id: string,
+    incrementView: boolean = true,
+    userId?: string
+  ) {
     const question = await this.questionRepository.findById(id);
 
     if (!question) {
@@ -85,6 +89,20 @@ export class QuestionService {
           ...answer,
           isAccepted: answer.id === question.acceptedAnswerId,
         };
+
+        // 사용자 반응 조회
+        if (userId) {
+          const userReaction = await this.prisma.answerReaction.findUnique({
+            where: {
+              userId_answerId: {
+                userId,
+                answerId: answer.id,
+              },
+            },
+          });
+          answerData.isLiked = userReaction?.isLike ?? false;
+          answerData.isDisliked = userReaction ? !userReaction.isLike : false;
+        }
 
         // 답글 개수 계산 및 답글 데이터 조회
         const comments = await this.prisma.answerComment.findMany({
@@ -114,20 +132,43 @@ export class QuestionService {
         allAnswersAndComments.push(answerData);
 
         // 답글을 Answer 형식으로 변환하여 추가
-        const commentAsAnswers = comments.map((comment: any) => ({
-          id: comment.id,
-          content: comment.content,
-          author: comment.author,
-          createdAt: comment.createdAt,
-          likeCount: comment.likeCount,
-          dislikeCount: 0,
-          commentCount: 0,
-          isAccepted: false,
-          isLiked: false,
-          isDisliked: false,
-          parentId: answer.id, // 부모 답변의 ID
-          replyCount: 0, // 답글의 답글은 미지원
-        }));
+        const commentAsAnswers = await Promise.all(
+          comments.map(async (comment: any) => {
+            const commentData = {
+              id: comment.id,
+              content: comment.content,
+              author: comment.author,
+              createdAt: comment.createdAt,
+              likeCount: comment.likeCount,
+              dislikeCount: 0,
+              commentCount: 0,
+              isAccepted: false,
+              isLiked: false,
+              isDisliked: false,
+              parentId: answer.id, // 부모 답변의 ID
+              replyCount: 0, // 답글의 답글은 미지원
+            };
+
+            // 댓글의 사용자 반응 조회
+            if (userId) {
+              const userCommentReaction =
+                await this.prisma.answerReaction.findUnique({
+                  where: {
+                    userId_answerId: {
+                      userId,
+                      answerId: comment.id,
+                    },
+                  },
+                });
+              commentData.isLiked = userCommentReaction?.isLike ?? false;
+              commentData.isDisliked = userCommentReaction
+                ? !userCommentReaction.isLike
+                : false;
+            }
+
+            return commentData;
+          })
+        );
 
         allAnswersAndComments.push(...commentAsAnswers);
       }

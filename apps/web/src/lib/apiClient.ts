@@ -77,11 +77,23 @@ class ApiClient {
       // HTTP 상태 코드가 에러인 경우 처리
       if (!response.ok) {
         console.error(`API POST ${response.status}:`, responseData);
+
+        // 401 Unauthorized - 로그인 필요
+        if (response.status === 401) {
+          return {
+            success: false,
+            message: "로그인이 필요합니다.",
+            data: responseData.data,
+            error: `HTTP ${response.status}`,
+          };
+        }
+
         return {
           success: false,
           message:
             responseData.message ||
             responseData.error?.message ||
+            responseData.error ||
             "요청에 실패했습니다.",
           data: responseData.data,
           error: responseData.error?.code || `HTTP ${response.status}`,
