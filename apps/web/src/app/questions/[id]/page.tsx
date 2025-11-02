@@ -772,18 +772,6 @@ export default function QuestionDetailPage() {
                 isLoading={isSubmitting}
                 maxDepth={2}
               />
-              {!user && (
-                <div className="rounded-lg bg-gray-50 border border-gray-200 p-4 md:rounded-md md:p-3 sm:rounded-none sm:p-2 mb-4 md:mb-3 sm:mb-2">
-                  <p className="text-gray-600 text-sm text-center mb-4">
-                    답변을 작성하려면 로그인이 필요합니다.
-                  </p>
-                  <div className="text-center">
-                    <Button onClick={() => router.push("/auth/signin")}>
-                      로그인하기
-                    </Button>
-                  </div>
-                </div>
-              )}
             </>
           )}
         </div>
