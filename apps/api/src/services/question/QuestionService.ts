@@ -81,99 +81,12 @@ export class QuestionService {
     // 그리고 각 답변의 댓글 개수와 댓글 데이터 포함
     const questionWithAnswers = question as any;
     if (questionWithAnswers.answers) {
-      const allAnswersAndComments: any[] = [];
-
-      for (const answer of questionWithAnswers.answers) {
-        // 최상위 답변 데이터 추가
-        const answerData = {
-          ...answer,
-          isAccepted: answer.id === question.acceptedAnswerId,
-        };
-
-        // 사용자 반응 조회
-        if (userId) {
-          const userReaction = await this.prisma.answerReaction.findUnique({
-            where: {
-              userId_answerId: {
-                userId,
-                answerId: answer.id,
-              },
-            },
-          });
-          answerData.isLiked = userReaction?.isLike ?? false;
-          answerData.isDisliked = userReaction ? !userReaction.isLike : false;
-        }
-
-        // 답글 개수 계산 및 답글 데이터 조회
-        const comments = await this.prisma.answerComment.findMany({
-          where: {
-            answerId: answer.id,
-            status: "ACTIVE",
-          },
-          include: {
-            author: {
-              select: {
-                id: true,
-                name: true,
-                nickname: true,
-                avatar: true,
-              },
-            },
-          },
-          orderBy: {
-            createdAt: "asc",
-          },
-        });
-
-        // replyCount 설정
-        answerData.replyCount = comments.length;
-
-        // 최상위 답변 추가
-        allAnswersAndComments.push(answerData);
-
-        // 답글을 Answer 형식으로 변환하여 추가
-        const commentAsAnswers = await Promise.all(
-          comments.map(async (comment: any) => {
-            const commentData = {
-              id: comment.id,
-              content: comment.content,
-              author: comment.author,
-              createdAt: comment.createdAt,
-              likeCount: comment.likeCount,
-              dislikeCount: 0,
-              commentCount: 0,
-              isAccepted: false,
-              isLiked: false,
-              isDisliked: false,
-              parentId: answer.id, // 부모 답변의 ID
-              replyCount: 0, // 답글의 답글은 미지원
-            };
-
-            // 댓글의 사용자 반응 조회
-            if (userId) {
-              const userCommentReaction =
-                await this.prisma.answerReaction.findUnique({
-                  where: {
-                    userId_answerId: {
-                      userId,
-                      answerId: comment.id,
-                    },
-                  },
-                });
-              commentData.isLiked = userCommentReaction?.isLike ?? false;
-              commentData.isDisliked = userCommentReaction
-                ? !userCommentReaction.isLike
-                : false;
-            }
-
-            return commentData;
-          })
-        );
-
-        allAnswersAndComments.push(...commentAsAnswers);
-      }
-
-      questionWithAnswers.answers = allAnswersAndComments;
+      questionWithAnswers.answers = await this.normalizeAnswersWithComments(
+        questionWithAnswers.answers,
+        question.acceptedAnswerId,
+        question.authorId,
+        userId
+      );
     }
 
     // 조회수 증가 (비동기)
@@ -182,6 +95,210 @@ export class QuestionService {
     }
 
     return questionWithAnswers;
+  }
+
+  /**
+   * @CODE:ANSWER-SERVICE-DEFAULTS-001
+   * @CODE:ANSWER-USER-REACTIONS-001
+   * @CODE:ANSWER-TOP-LEVEL-FILTER-001
+   *
+   * Normalize answers with comments and user reactions
+   *
+   * @param answers - Raw answers from database
+   * @param acceptedAnswerId - ID of the accepted answer
+   * @param questionAuthorId - ID of the question author
+   * @param userId - Optional user ID for checking reactions
+   * @returns Normalized answers array with comments flattened
+   * @private
+   */
+  private async normalizeAnswersWithComments(
+    answers: any[],
+    acceptedAnswerId: string | null,
+    questionAuthorId: string,
+    userId?: string
+  ): Promise<any[]> {
+    const allAnswersAndComments: any[] = [];
+
+    for (const answer of answers) {
+      // Normalize top-level answer
+      const answerData = await this.normalizeAnswer(
+        answer,
+        acceptedAnswerId,
+        questionAuthorId,
+        userId
+      );
+
+      // Fetch and normalize comments
+      const comments = await this.fetchAnswerComments(answer.id);
+      answerData.replyCount = comments.length;
+      allAnswersAndComments.push(answerData);
+
+      // Normalize comments as answer-like objects
+      const normalizedComments = await Promise.all(
+        comments.map((comment: any) =>
+          this.normalizeComment(comment, answer.id, questionAuthorId, userId)
+        )
+      );
+
+      allAnswersAndComments.push(...normalizedComments);
+    }
+
+    return allAnswersAndComments;
+  }
+
+  /**
+   * Normalize a single answer with default boolean fields
+   *
+   * @param answer - Raw answer object
+   * @param acceptedAnswerId - ID of accepted answer
+   * @param questionAuthorId - ID of question author
+   * @param userId - Optional user ID
+   * @returns Normalized answer object
+   * @private
+   */
+  private async normalizeAnswer(
+    answer: any,
+    acceptedAnswerId: string | null,
+    questionAuthorId: string,
+    userId?: string
+  ): Promise<any> {
+    const normalized = {
+      ...answer,
+      isAccepted: answer.id === acceptedAnswerId,
+      isLiked: false,
+      isDisliked: false,
+      isAuthor: userId ? answer.authorId === userId : false,
+      isQuestionAuthor: userId ? answer.authorId === questionAuthorId : false,
+    };
+
+    // Load user reaction if userId is provided
+    if (userId) {
+      await this.loadAnswerUserReaction(normalized, answer.id, userId);
+    }
+
+    return normalized;
+  }
+
+  /**
+   * Normalize a comment as an answer-like object
+   *
+   * @param comment - Raw comment object
+   * @param parentAnswerId - Parent answer ID
+   * @param questionAuthorId - Question author ID
+   * @param userId - Optional user ID
+   * @returns Normalized comment object
+   * @private
+   */
+  private async normalizeComment(
+    comment: any,
+    parentAnswerId: string,
+    questionAuthorId: string,
+    userId?: string
+  ): Promise<any> {
+    const normalized = {
+      id: comment.id,
+      content: comment.content,
+      author: comment.author,
+      createdAt: comment.createdAt,
+      likeCount: comment.likeCount,
+      dislikeCount: 0,
+      commentCount: 0,
+      isAccepted: false,
+      isLiked: false,
+      isDisliked: false,
+      isAuthor: userId ? comment.authorId === userId : false,
+      isQuestionAuthor: userId ? comment.authorId === questionAuthorId : false,
+      parentId: parentAnswerId,
+      replyCount: 0,
+    };
+
+    // Load user reaction if userId is provided
+    if (userId) {
+      await this.loadCommentUserReaction(normalized, comment.id, userId);
+    }
+
+    return normalized;
+  }
+
+  /**
+   * Fetch active comments for an answer
+   *
+   * @param answerId - Answer ID
+   * @returns Comments array
+   * @private
+   */
+  private async fetchAnswerComments(answerId: string): Promise<any[]> {
+    return await this.prisma.answerComment.findMany({
+      where: {
+        answerId,
+        status: "ACTIVE",
+      },
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+            nickname: true,
+            avatar: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "asc",
+      },
+    });
+  }
+
+  /**
+   * Load user reaction for an answer (mutates the answer object)
+   *
+   * @param answer - Answer object to mutate
+   * @param answerId - Answer ID
+   * @param userId - User ID
+   * @private
+   */
+  private async loadAnswerUserReaction(
+    answer: any,
+    answerId: string,
+    userId: string
+  ): Promise<void> {
+    const userReaction = await this.prisma.answerLike.findUnique({
+      where: {
+        userId_answerId: {
+          userId,
+          answerId,
+        },
+      },
+    });
+
+    answer.isLiked = userReaction?.isLike ?? false;
+    answer.isDisliked = userReaction ? !userReaction.isLike : false;
+  }
+
+  /**
+   * Load user reaction for a comment (mutates the comment object)
+   *
+   * @param comment - Comment object to mutate
+   * @param commentId - Comment ID
+   * @param userId - User ID
+   * @private
+   */
+  private async loadCommentUserReaction(
+    comment: any,
+    commentId: string,
+    userId: string
+  ): Promise<void> {
+    const userReaction = await this.prisma.answerCommentLike.findUnique({
+      where: {
+        userId_commentId: {
+          userId,
+          commentId,
+        },
+      },
+    });
+
+    comment.isLiked = userReaction?.isLike ?? false;
+    comment.isDisliked = userReaction ? !userReaction.isLike : false;
   }
 
   /**
