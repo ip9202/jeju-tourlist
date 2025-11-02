@@ -187,21 +187,19 @@ const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
         </div>
 
         {/* Metadata and Actions */}
-        <div className="flex items-start gap-2 mt-1 pl-3 text-xs text-gray-600 md:gap-1 md:mt-0.5 md:pl-2 sm:gap-1 sm:mt-0.5 sm:pl-1.5 sm:text-xs">
-          {/* Time */}
+        <div className="flex items-center gap-3 mt-1 text-xs text-gray-600 md:gap-2 md:mt-0.5 sm:gap-1.5 sm:mt-0.5">
           <span>{timeAgo}</span>
 
-          {/* Reactions Count */}
           {(answer.likeCount > 0 || answer.dislikeCount > 0) && (
             <div className="flex items-center gap-1">
               {answer.likeCount > 0 && (
-                <span className="flex items-center gap-1">
+                <span className="flex items-center gap-0.5">
                   <Heart size={12} className="fill-red-500 text-red-500" />
                   {answer.likeCount}
                 </span>
               )}
               {answer.dislikeCount > 0 && (
-                <span className="flex items-center gap-1">
+                <span className="flex items-center gap-0.5">
                   <ThumbsDown
                     size={12}
                     className="fill-gray-400 text-gray-400"
@@ -212,11 +210,10 @@ const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
             </div>
           )}
 
-          {/* Action Buttons - Phase 4 Icon Buttons @REQ:ANSWER-INTERACTION-001-U2 */}
           <button
             onClick={handleLike}
             disabled={isLoading}
-            className={`cursor-pointer hover:text-red-600 transition-colors ${
+            className={`p-0 hover:text-red-600 transition-colors ${
               answer.isLiked ? "text-red-600" : "text-gray-600"
             }`}
             title="좋아요"
@@ -231,7 +228,7 @@ const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
           <button
             onClick={handleDislike}
             disabled={isLoading}
-            className={`cursor-pointer hover:text-gray-600 transition-colors ${
+            className={`p-0 hover:text-gray-600 transition-colors ${
               answer.isDisliked ? "text-gray-600" : "text-gray-400"
             }`}
             title="싫어요"
@@ -246,41 +243,26 @@ const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
           <button
             onClick={handleReply}
             disabled={isLoading}
-            className="font-semibold hover:text-blue-600 transition-colors md:text-xs sm:text-xs"
+            className="hover:text-blue-600 transition-colors"
             title="답글"
           >
             답글
           </button>
 
-          {/* Phase 4 Adopt Button @REQ:ANSWER-INTERACTION-001-E1 */}
-          {/* Only show adopt button for top-level answers (not nested replies) */}
-          {/* isActuallyNested calculated from answer.parentId to ensure correct rendering */}
           {!isActuallyNested && (
-            <>
-              {answer.isAccepted ? (
-                <button
-                  onClick={handleUnadopt}
-                  disabled={isLoading}
-                  className="flex items-center gap-1 font-semibold text-green-600 hover:text-green-700 transition-colors md:text-xs sm:text-xs"
-                  title="채택 취소"
-                  aria-label="채택 취소"
-                >
-                  <CheckCircle size={16} className="fill-green-600" />
-                  <span>채택 해제</span>
-                </button>
-              ) : (
-                <button
-                  onClick={handleAdopt}
-                  disabled={isLoading}
-                  className="flex items-center gap-1 font-semibold hover:text-green-600 transition-colors md:text-xs sm:text-xs"
-                  title="채택"
-                  aria-label="답변 채택"
-                >
-                  <CheckCircle size={16} />
-                  <span>채택</span>
-                </button>
-              )}
-            </>
+            <button
+              onClick={answer.isAccepted ? handleUnadopt : handleAdopt}
+              disabled={isLoading}
+              className={`hover:transition-colors ${
+                answer.isAccepted
+                  ? "text-green-600 hover:text-green-700"
+                  : "hover:text-green-600"
+              }`}
+              title={answer.isAccepted ? "채택 취소" : "채택"}
+              aria-label={answer.isAccepted ? "채택 취소" : "답변 채택"}
+            >
+              {answer.isAccepted ? "채택 해제" : "채택"}
+            </button>
           )}
         </div>
       </div>
