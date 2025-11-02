@@ -11,13 +11,18 @@
  ✓ Compiled successfully
    Linting and checking validity of types ...
 
-Failed to compile.
-
 ./src/__tests__/e2e/popular-search-terms.e2e.test.ts
 129:7  Warning: Unexpected console statement.  no-console
 429:5  Warning: Unexpected console statement.  no-console
 445:9  Warning: Unexpected console statement.  no-console
 525:7  Warning: Unexpected console statement.  no-console
+
+./src/__tests__/e2e/question-detail-error.e2e.test.ts
+44:7  Warning: Unexpected console statement.  no-console
+63:7  Warning: Unexpected console statement.  no-console
+88:7  Warning: Unexpected console statement.  no-console
+112:7  Warning: Unexpected console statement.  no-console
+134:7  Warning: Unexpected console statement.  no-console
 
 ./src/app/categories/page.tsx
 106:6  Warning: React Hook useEffect has a missing dependency: 'loadCategoryQuestions'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
@@ -41,15 +46,16 @@ Failed to compile.
 160:23  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
 
 ./src/app/questions/[id]/page.tsx
-114:9  Warning: Unexpected console statement.  no-console
-204:7  Warning: Unexpected console statement.  no-console
-235:7  Warning: Unexpected console statement.  no-console
-276:7  Warning: Unexpected console statement.  no-console
-316:7  Warning: Unexpected console statement.  no-console
-345:7  Warning: Unexpected console statement.  no-console
-377:7  Warning: Unexpected console statement.  no-console
-524:21  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
-537:27  Warning: Unexpected console statement.  no-console
+144:11  Warning: Unexpected console statement.  no-console
+149:9  Warning: Unexpected console statement.  no-console
+243:7  Warning: Unexpected console statement.  no-console
+274:7  Warning: Unexpected console statement.  no-console
+315:7  Warning: Unexpected console statement.  no-console
+360:7  Warning: Unexpected console statement.  no-console
+394:7  Warning: Unexpected console statement.  no-console
+426:7  Warning: Unexpected console statement.  no-console
+595:21  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+608:27  Warning: Unexpected console statement.  no-console
 
 ./src/app/questions/new/page.tsx
 76:9  Warning: Unexpected console statement.  no-console
@@ -208,7 +214,7 @@ Failed to compile.
 436:7  Warning: Unexpected console statement.  no-console
 
 ./src/components/question/HierarchicalCommentCard.tsx
-363:4  Error: Parsing error: Declaration or statement expected.
+133:7  Warning: Unexpected console statement.  no-console
 
 ./src/components/question/HierarchicalCommentList.tsx
 96:7  Warning: Unexpected console statement.  no-console
@@ -221,15 +227,17 @@ Failed to compile.
 129:6  Warning: React Hook useEffect has a missing dependency: 'mockQuestion'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
 
 ./src/components/question/facebook/FacebookAnswerCard.tsx
-114:7  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
-163:13  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+61:5  Warning: Unexpected console statement.  no-console
+81:5  Warning: Unexpected console statement.  no-console
+132:7  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+181:13  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
 
 ./src/components/question/facebook/FacebookAnswerInput.tsx
-27:7  Warning: Unexpected console statement.  no-console
-94:11  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+31:7  Warning: Unexpected console statement.  no-console
+98:11  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
 
 ./src/components/question/facebook/FacebookAnswerThread.tsx
-56:9  Warning: Unexpected console statement.  no-console
+61:9  Warning: Unexpected console statement.  no-console
 
 ./src/components/question/facebook/FacebookQuestionCard.tsx
 58:13  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
@@ -282,15 +290,15 @@ Failed to compile.
 56:7  Warning: Unexpected console statement.  no-console
 68:7  Warning: Unexpected console statement.  no-console
 79:9  Warning: Unexpected console statement.  no-console
-93:7  Warning: Unexpected console statement.  no-console
-112:7  Warning: Unexpected console statement.  no-console
-130:7  Warning: Unexpected console statement.  no-console
-174:7  Warning: Unexpected console statement.  no-console
-202:7  Warning: Unexpected console statement.  no-console
-230:7  Warning: Unexpected console statement.  no-console
-269:7  Warning: Unexpected console statement.  no-console
-334:7  Warning: Unexpected console statement.  no-console
-363:7  Warning: Unexpected console statement.  no-console
+105:7  Warning: Unexpected console statement.  no-console
+124:7  Warning: Unexpected console statement.  no-console
+142:7  Warning: Unexpected console statement.  no-console
+186:7  Warning: Unexpected console statement.  no-console
+214:7  Warning: Unexpected console statement.  no-console
+242:7  Warning: Unexpected console statement.  no-console
+281:7  Warning: Unexpected console statement.  no-console
+346:7  Warning: Unexpected console statement.  no-console
+375:7  Warning: Unexpected console statement.  no-console
 
 ./src/lib/dateUtils.ts
 34:5  Warning: Unexpected console statement.  no-console
@@ -307,4 +315,123 @@ Failed to compile.
 232:7  Warning: Unexpected console statement.  no-console
 
 info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
- ELIFECYCLE  Command failed with exit code 1.
+   Collecting page data ...
+   Generating static pages (0/19) ...
+   Generating static pages (4/19) 
+   Generating static pages (9/19) 
+카테고리 조회 실패: n [Error]: Dynamic server usage: no-store fetch http://localhost:4000/api/categories /
+    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:2:10750
+    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:2:18365
+    at e.with (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:1:10789)
+    at e.with (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:1:11857)
+    at e.startActiveSpan (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:1:13973)
+    at e.startActiveSpan (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:1:14271)
+    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:2:17898
+    at e.with (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:1:10789)
+    at e.with (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:1:11857)
+    at h.trace (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:2:17852) {
+  description: 'no-store fetch http://localhost:4000/api/categories /',
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+질문 조회 실패: n [Error]: Dynamic server usage: no-store fetch http://localhost:4000/api/questions?page=1&limit=6 /
+    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:2:10750
+    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:2:18365
+    at e.with (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:1:10789)
+    at e.with (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:1:11857)
+    at e.startActiveSpan (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:1:13973)
+    at e.startActiveSpan (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:1:14271)
+    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:2:17898
+    at e.with (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:1:10789)
+    at e.with (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:1:11857)
+    at h.trace (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:2:17852) {
+  description: 'no-store fetch http://localhost:4000/api/questions?page=1&limit=6 /',
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+전문가 조회 실패: n [Error]: Dynamic server usage: no-store fetch http://localhost:4000/api/users?limit=4 /
+    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:2:10750
+    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:2:18365
+    at e.with (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:1:10789)
+    at e.with (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:1:11857)
+    at e.startActiveSpan (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:1:13973)
+    at e.startActiveSpan (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:1:14271)
+    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:2:17898
+    at e.with (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:1:10789)
+    at e.with (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:1:11857)
+    at h.trace (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:2:17852) {
+  description: 'no-store fetch http://localhost:4000/api/users?limit=4 /',
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+카테고리 조회 실패: n [Error]: Dynamic server usage: no-store fetch http://localhost:4000/api/categories /
+    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:2:10750
+    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:2:18365
+    at e.with (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:1:10789)
+    at e.with (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:1:11857)
+    at e.startActiveSpan (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:1:13973)
+    at e.startActiveSpan (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:1:14271)
+    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:2:17898
+    at e.with (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:1:10789)
+    at e.with (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:1:11857)
+    at h.trace (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:2:17852) {
+  description: 'no-store fetch http://localhost:4000/api/categories /',
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+질문 조회 실패: n [Error]: Dynamic server usage: no-store fetch http://localhost:4000/api/questions?page=1&limit=6 /
+    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:2:10750
+    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:2:18365
+    at e.with (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:1:10789)
+    at e.with (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:1:11857)
+    at e.startActiveSpan (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:1:13973)
+    at e.startActiveSpan (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:1:14271)
+    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:2:17898
+    at e.with (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:1:10789)
+    at e.with (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:1:11857)
+    at h.trace (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:2:17852) {
+  description: 'no-store fetch http://localhost:4000/api/questions?page=1&limit=6 /',
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+전문가 조회 실패: n [Error]: Dynamic server usage: no-store fetch http://localhost:4000/api/users?limit=4 /
+    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:2:10750
+    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:2:18365
+    at e.with (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:1:10789)
+    at e.with (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:1:11857)
+    at e.startActiveSpan (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:1:13973)
+    at e.startActiveSpan (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:1:14271)
+    at /Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:2:17898
+    at e.with (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:1:10789)
+    at e.with (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:1:11857)
+    at h.trace (/Users/ip9202/develop/vibe/jeju-tourlist/apps/web/.next/server/chunks/522.js:2:17852) {
+  description: 'no-store fetch http://localhost:4000/api/users?limit=4 /',
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+   Generating static pages (14/19) 
+ ✓ Generating static pages (19/19)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                             Size     First Load JS
+┌ ƒ /                                   183 B           317 kB
+├ ○ /_not-found                         133 B           282 kB
+├ ○ /admin                              5.66 kB         323 kB
+├ ○ /auth/error                         1.21 kB         318 kB
+├ ○ /auth/signin                        2.83 kB         320 kB
+├ ○ /auth/signup                        5.1 kB          322 kB
+├ ○ /categories                         2.9 kB          320 kB
+├ ƒ /experts                            2.51 kB         319 kB
+├ ○ /notifications/settings             1.23 kB         318 kB
+├ ○ /profile                            2.29 kB         319 kB
+├ ƒ /profile/[id]                       9.17 kB         326 kB
+├ ○ /questions                          3.65 kB         321 kB
+├ ƒ /questions/[id]                     7.41 kB         324 kB
+├ ○ /questions/new                      3.4 kB          320 kB
+├ ○ /robots.txt                         0 B                0 B
+├ ○ /search                             2.64 kB         320 kB
+├ ○ /sitemap.xml                        0 B                0 B
+└ ○ /yeogi-demo                         2.74 kB         285 kB
++ First Load JS shared by all           282 kB
+  └ chunks/vendors-ef35517ebd108a1b.js  280 kB
+  └ other shared chunks (total)         1.95 kB
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
