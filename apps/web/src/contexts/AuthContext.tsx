@@ -117,8 +117,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         password,
       });
 
-      console.log("🔐 로그인 응답:", response);
-
       if (response.success && response.data?.user) {
         const loginData = response.data;
         // 클라이언트 사이드에서만 localStorage 접근
@@ -174,7 +172,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const refreshSession = async (): Promise<void> => {
     try {
       // TODO: JWT 토큰 갱신 API 구현 필요
-      console.log("Session refresh not implemented yet");
     } catch (error) {
       console.error("Session refresh error:", error);
       await logout();

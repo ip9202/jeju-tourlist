@@ -51,37 +51,16 @@ const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
   onDislike,
   onReply,
   isLoading = false,
-  questionAuthor,
-  currentUser,
+  _questionAuthor,
+  _currentUser,
   onAdopt,
   onUnadopt,
 }) => {
-  // DEBUG: Log render start
-  if (typeof window !== "undefined") {
-    console.log(
-      `[FacebookAnswerCard] ${answer.author.name} - isNested: ${isNested}, depth: ${depth}`
-    );
-    (window as any).__facebookCardRender = {
-      answerId: answer.id,
-      questionAuthor,
-      currentUser,
-      isNested,
-      depth,
-    };
-  }
-
   const [isHovering, setIsHovering] = useState(false);
 
   // Calculate if this is a nested reply based on parentId
   // This is more reliable than relying on the isNested prop
   const isActuallyNested = !!answer.parentId;
-
-  // DEBUG: Log values to understand why conditional rendering isn't working
-  if (typeof window !== "undefined" && answer.content.length < 50) {
-    console.log(
-      `[DEBUG] answerId: ${answer.id}, parentId: ${answer.parentId}, isActuallyNested: ${isActuallyNested}`
-    );
-  }
 
   const timeAgo = formatDistanceToNow(new Date(answer.createdAt), {
     addSuffix: true,
