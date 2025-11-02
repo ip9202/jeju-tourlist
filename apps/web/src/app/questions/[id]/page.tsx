@@ -773,13 +773,15 @@ export default function QuestionDetailPage() {
                 maxDepth={2}
               />
               {!user && (
-                <div className="text-center py-8 bg-blue-50 rounded-lg border border-blue-200">
-                  <Text className="text-gray-600 mb-4">
+                <div className="rounded-lg bg-gray-50 border border-gray-200 p-4 md:rounded-md md:p-3 sm:rounded-none sm:p-2 mb-4 md:mb-3 sm:mb-2">
+                  <p className="text-gray-600 text-sm text-center mb-4">
                     답변을 작성하려면 로그인이 필요합니다.
-                  </Text>
-                  <Button onClick={() => router.push("/auth/signin")}>
-                    로그인하기
-                  </Button>
+                  </p>
+                  <div className="text-center">
+                    <Button onClick={() => router.push("/auth/signin")}>
+                      로그인하기
+                    </Button>
+                  </div>
                 </div>
               )}
             </>
