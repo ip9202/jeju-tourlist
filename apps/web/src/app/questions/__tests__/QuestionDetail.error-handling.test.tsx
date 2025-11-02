@@ -467,7 +467,7 @@ describe("Question Detail Error Handling", () => {
       expect(message).toHaveTextContent("자신의 답변은 채택할 수 없습니다.");
 
       // Close first error
-      let closeBtn = screen.getByTestId("error-close-btn");
+      const closeBtn = screen.getByTestId("error-close-btn");
       fireEvent.click(closeBtn);
 
       expect(
