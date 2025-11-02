@@ -8,7 +8,8 @@ import { Header } from "@/components/layout/Header";
 
 export default function SignInPage() {
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/";
+  const callbackUrl =
+    searchParams.get("redirect") || searchParams.get("callbackUrl") || "/";
 
   return (
     <div className="min-h-screen bg-gray-50">

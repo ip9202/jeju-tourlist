@@ -5,6 +5,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { FacebookAnswerInputProps } from "./types";
 import { Smile, Send, X } from "lucide-react";
 
@@ -50,16 +51,33 @@ export const FacebookAnswerInput: React.FC<FacebookAnswerInputProps> = ({
   };
 
   // 로그인이 필요한 경우
+  const router = useRouter();
+
+  const handleLogin = () => {
+    const currentPath =
+      typeof window !== "undefined"
+        ? window.location.pathname + window.location.search
+        : "/";
+    router.push(`/auth/signin?redirect=${encodeURIComponent(currentPath)}`);
+  };
+
   if (!user) {
     return (
       <div
         className={`
-        rounded-lg bg-gray-50 border border-gray-200 p-4 md:rounded-md md:p-3 sm:rounded-none sm:p-2
+        rounded-lg bg-blue-50 border border-blue-300 p-4 md:rounded-md md:p-3 sm:rounded-none sm:p-2
         ${isReply ? "ml-10 md:ml-8 sm:ml-6" : "mb-4 md:mb-3 sm:mb-2"}
       `}
       >
-        <p className="text-gray-600 text-sm text-center">
-          답변을 작성하려면 로그인이 필요합니다.
+        <p className="text-gray-800 text-sm text-center font-semibold">
+          답변을 작성하려면{" "}
+          <button
+            onClick={handleLogin}
+            className="text-blue-600 hover:text-blue-800 font-bold underline transition-colors"
+          >
+            로그인
+          </button>
+          이 필요합니다.
         </p>
       </div>
     );
