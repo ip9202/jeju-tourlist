@@ -211,10 +211,15 @@ export default function QuestionDetailPage() {
       // 새 답변/댓글을 목록에 추가 (API 응답에 author 정보가 포함됨)
       if (response.data.author) {
         if (parentId) {
-          // 대댓글인 경우 - 부모 답변의 replyCount 증가
-          setAnswers(prev =>
-            prev
-              .map(answer =>
+          // 대댓글인 경우 - 부모 답변의 replyCount 증가 + parentId 명시적 설정
+          const newReply = {
+            ...response.data,
+            parentId: parentId, // 명시적으로 parentId 설정
+          };
+
+          setAnswers(
+            prev =>
+              prev.map(answer =>
                 answer.id === parentId
                   ? {
                       ...answer,
@@ -222,8 +227,11 @@ export default function QuestionDetailPage() {
                     }
                   : answer
               )
-              .concat(response.data)
+            // 댓글은 답변 목록이 아닌 별도 관리 (이후 FacebookAnswerThread에서 필터링)
           );
+
+          // 댓글도 answers 배열에 추가하되 parentId 포함
+          setAnswers(prev => [...prev, newReply]);
         } else {
           // 메인 답변인 경우
           setAnswers(prev => [response.data, ...prev]);
