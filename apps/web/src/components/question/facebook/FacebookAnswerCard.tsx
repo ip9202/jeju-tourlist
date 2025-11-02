@@ -187,7 +187,7 @@ const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
         </div>
 
         {/* Metadata and Actions */}
-        <div className="!h-fit flex items-center gap-1 mt-1 pl-3 text-xs text-gray-600 md:gap-1 md:mt-0.5 md:pl-2 sm:gap-1 sm:mt-0.5 sm:pl-1.5 sm:text-xs">
+        <div className="flex items-start gap-2 mt-1 pl-3 text-xs text-gray-600 md:gap-1 md:mt-0.5 md:pl-2 sm:gap-1 sm:mt-0.5 sm:pl-1.5 sm:text-xs">
           {/* Time */}
           <span>{timeAgo}</span>
 
@@ -216,7 +216,7 @@ const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
           <button
             onClick={handleLike}
             disabled={isLoading}
-            className={`!p-0 !m-0 !leading-none !h-fit !w-fit flex items-center gap-1 hover:text-red-600 transition-colors md:text-xs sm:text-xs ${
+            className={`cursor-pointer hover:text-red-600 transition-colors ${
               answer.isLiked ? "text-red-600" : "text-gray-600"
             }`}
             title="좋아요"
@@ -231,7 +231,7 @@ const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
           <button
             onClick={handleDislike}
             disabled={isLoading}
-            className={`!p-0 !m-0 !leading-none !h-fit !w-fit flex items-center gap-1 hover:text-gray-600 transition-colors md:text-xs sm:text-xs ${
+            className={`cursor-pointer hover:text-gray-600 transition-colors ${
               answer.isDisliked ? "text-gray-600" : "text-gray-400"
             }`}
             title="싫어요"
