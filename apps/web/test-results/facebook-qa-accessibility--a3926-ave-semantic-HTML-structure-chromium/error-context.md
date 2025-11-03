@@ -1,0 +1,459 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+    - alert [ref=e2]
+    - generic [ref=e3]:
+        - banner [ref=e4]:
+            - generic [ref=e7]:
+                - link "동네물어봐 제주 여행 Q&A" [ref=e8] [cursor=pointer]:
+                    - /url: /
+                    - img [ref=e10]:
+                        - generic [ref=e11]: "?"
+                        - generic [ref=e12]: "!"
+                    - generic [ref=e17]: 동네물어봐
+                    - generic [ref=e18]: 제주 여행 Q&A
+                - navigation [ref=e19]:
+                    - link "질문 목록" [ref=e20] [cursor=pointer]:
+                        - /url: /questions
+                    - link "카테고리" [ref=e21] [cursor=pointer]:
+                        - /url: /categories
+                    - link "전문가" [ref=e22] [cursor=pointer]:
+                        - /url: /experts
+                - generic [ref=e23]:
+                    - link "질문하기" [ref=e24] [cursor=pointer]:
+                        - /url: /auth/signin?callbackUrl=%2Fquestions%2Fnew
+                        - button "질문하기" [ref=e25]:
+                            - generic [ref=e26]: 질문하기
+                    - link "로그인" [ref=e27] [cursor=pointer]:
+                        - /url: /auth/signin?callbackUrl=%2Fquestions%2Fcmhbvi9y400ossda2zjbif9ug
+                        - generic [ref=e28]: 로그인
+            - generic [ref=e30]:
+                - generic [ref=e31]:
+                    - combobox [ref=e32]:
+                        - option "전체" [selected]
+                        - option "관광지"
+                        - option "맛집"
+                        - option "숙박"
+                        - option "교통"
+                        - option "쇼핑"
+                    - generic [ref=e33]:
+                        - img [ref=e34]
+                        - searchbox "제주 여행 정보 검색..." [ref=e37]
+                    - button [ref=e38] [cursor=pointer]:
+                        - img [ref=e39]
+                - generic [ref=e44]:
+                    - generic [ref=e45]: 인기 검색어
+                    - list [ref=e46]:
+                        - listitem [ref=e47]:
+                            - link "Search for 제주도 맛집" [ref=e48] [cursor=pointer]:
+                                - /url: /search?q=%EC%A0%9C%EC%A3%BC%EB%8F%84%20%EB%A7%9B%EC%A7%91
+                                - text: 제주도 맛집
+                        - listitem [ref=e49]:
+                            - link "Search for 한라산 등반" [ref=e50] [cursor=pointer]:
+                                - /url: /search?q=%ED%95%9C%EB%9D%BC%EC%82%B0%20%EB%93%B1%EB%B0%98
+                                - text: 한라산 등반
+                        - listitem [ref=e51]:
+                            - link "Search for 섭지코지" [ref=e52] [cursor=pointer]:
+                                - /url: /search?q=%EC%84%AD%EC%A7%80%EC%BD%94%EC%A7%80
+                                - text: 섭지코지
+                        - listitem [ref=e53]:
+                            - link "Search for 우도 여행" [ref=e54] [cursor=pointer]:
+                                - /url: /search?q=%EC%9A%B0%EB%8F%84%20%EC%97%AC%ED%96%89
+                                - text: 우도 여행
+                        - listitem [ref=e55]:
+                            - link "Search for 제주 카페" [ref=e56] [cursor=pointer]:
+                                - /url: /search?q=%EC%A0%9C%EC%A3%BC%20%EC%B9%B4%ED%8E%98
+                                - text: 제주 카페
+        - generic [ref=e57]:
+            - generic [ref=e58]:
+                - generic [ref=e59]:
+                    - 'heading "TRANSPORT Question 12: 제주도에서 가족 여행하기 좋은가요?" [level=1] [ref=e60]'
+                    - generic [ref=e61]:
+                        - button "공유" [ref=e62] [cursor=pointer]:
+                            - img [ref=e64]
+                        - button "북마크" [ref=e70] [cursor=pointer]:
+                            - img [ref=e72]
+                - generic [ref=e75]:
+                    - generic [ref=e76]: 조회 885
+                    - generic [ref=e77]: 좋아요 0
+                    - generic [ref=e78]: 답변 0
+                    - generic [ref=e79]: 2025. 10. 29. 오후 7:49:18
+                - generic [ref=e80]: This is a detailed question about transport. Question 12. 제주도 가는 최적의 시기는 언제인가요?
+                - generic [ref=e81]:
+                    - generic [ref=e82]:
+                        - generic [ref=e84]: U
+                        - generic [ref=e85]:
+                            - generic [ref=e86]: User 3
+                            - generic [ref=e87]: 교통
+                    - button "좋아요" [ref=e88] [cursor=pointer]:
+                        - generic [ref=e89]:
+                            - img [ref=e90]
+                            - text: 좋아요
+            - generic [ref=e92]:
+                - heading "답변 18개" [level=2] [ref=e94]:
+                    - img [ref=e95]
+                    - text: 답변 18개
+                - generic [ref=e97]:
+                    - paragraph [ref=e99]:
+                        - text: 답변을 작성하려면
+                        - button "로그인" [ref=e100] [cursor=pointer]
+                        - text: 이 필요합니다.
+                    - generic [ref=e101]:
+                        - generic [ref=e103]:
+                            - img "Expert 13" [ref=e104]
+                            - generic [ref=e105]:
+                                - generic [ref=e106]:
+                                    - generic [ref=e107]:
+                                        - generic [ref=e108]:
+                                            - img [ref=e109]
+                                            - generic [ref=e112]: 채택됨
+                                        - generic [ref=e113]: Expert 13
+                                        - generic "질문 작성자가 채택한 답변입니다" [ref=e115]:
+                                            - generic [ref=e116]: ✓
+                                    - paragraph [ref=e117]: 제 경험상 정말 좋았던 곳입니다. 꼭 가보세요! (Answer 1 to transport question)
+                                - generic [ref=e118]:
+                                    - generic [ref=e119]: 5일 전
+                                    - generic [ref=e121]:
+                                        - img [ref=e122]
+                                        - text: "46"
+                                    - button "좋아요" [ref=e124] [cursor=pointer]:
+                                        - img [ref=e125]
+                                    - button "싫어요" [ref=e127] [cursor=pointer]:
+                                        - img [ref=e128]
+                                    - button "답글" [ref=e130] [cursor=pointer]:
+                                        - generic [ref=e131]: 답글
+                        - generic [ref=e133]:
+                            - img "전문가_47" [ref=e134]
+                            - generic [ref=e135]:
+                                - generic [ref=e136]:
+                                    - generic [ref=e138]: 전문가_47
+                                    - paragraph [ref=e139]: 면세점에서는 화장품과 명품을 저렴하게 구입할 수 있어요.
+                                - generic [ref=e140]:
+                                    - generic [ref=e141]: 5일 전
+                                    - generic [ref=e143]:
+                                        - img [ref=e144]
+                                        - text: "15"
+                                    - button "좋아요" [ref=e146] [cursor=pointer]:
+                                        - img [ref=e147]
+                                    - button "싫어요" [ref=e149] [cursor=pointer]:
+                                        - img [ref=e150]
+                                    - button "답글" [ref=e152] [cursor=pointer]:
+                                        - generic [ref=e153]: 답글
+                        - generic [ref=e155]:
+                            - img "전문가_46" [ref=e156]
+                            - generic [ref=e157]:
+                                - generic [ref=e158]:
+                                    - generic [ref=e160]: 전문가_46
+                                    - paragraph [ref=e161]: 게스트하우스는 가성비가 정말 좋습니다.
+                                - generic [ref=e162]:
+                                    - generic [ref=e163]: 5일 전
+                                    - generic [ref=e164]:
+                                        - generic [ref=e165]:
+                                            - img [ref=e166]
+                                            - text: "17"
+                                        - generic [ref=e168]:
+                                            - img [ref=e169]
+                                            - text: "1"
+                                    - button "좋아요" [ref=e171] [cursor=pointer]:
+                                        - img [ref=e172]
+                                    - button "싫어요" [ref=e174] [cursor=pointer]:
+                                        - img [ref=e175]
+                                    - button "답글" [ref=e177] [cursor=pointer]:
+                                        - generic [ref=e178]: 답글
+                        - generic [ref=e180]:
+                            - img "전문가_44" [ref=e181]
+                            - generic [ref=e182]:
+                                - generic [ref=e183]:
+                                    - generic [ref=e185]: 전문가_44
+                                    - paragraph [ref=e186]: 버스와 택시를 잘 이용하면 저렴하게 여행할 수 있어요.
+                                - generic [ref=e187]:
+                                    - generic [ref=e188]: 5일 전
+                                    - generic [ref=e189]:
+                                        - generic [ref=e190]:
+                                            - img [ref=e191]
+                                            - text: "18"
+                                        - generic [ref=e193]:
+                                            - img [ref=e194]
+                                            - text: "4"
+                                    - button "좋아요" [ref=e196] [cursor=pointer]:
+                                        - img [ref=e197]
+                                    - button "싫어요" [ref=e199] [cursor=pointer]:
+                                        - img [ref=e200]
+                                    - button "답글" [ref=e202] [cursor=pointer]:
+                                        - generic [ref=e203]: 답글
+                        - generic [ref=e205]:
+                            - img "전문가_44" [ref=e206]
+                            - generic [ref=e207]:
+                                - generic [ref=e208]:
+                                    - generic [ref=e210]: 전문가_44
+                                    - paragraph [ref=e211]: 버스와 택시를 잘 이용하면 저렴하게 여행할 수 있어요.
+                                - generic [ref=e212]:
+                                    - generic [ref=e213]: 5일 전
+                                    - generic [ref=e214]:
+                                        - generic [ref=e215]:
+                                            - img [ref=e216]
+                                            - text: "8"
+                                        - generic [ref=e218]:
+                                            - img [ref=e219]
+                                            - text: "4"
+                                    - button "좋아요" [ref=e221] [cursor=pointer]:
+                                        - img [ref=e222]
+                                    - button "싫어요" [ref=e224] [cursor=pointer]:
+                                        - img [ref=e225]
+                                    - button "답글" [ref=e227] [cursor=pointer]:
+                                        - generic [ref=e228]: 답글
+                        - generic [ref=e230]:
+                            - img "전문가_31" [ref=e231]
+                            - generic [ref=e232]:
+                                - generic [ref=e233]:
+                                    - generic [ref=e235]: 전문가_31
+                                    - paragraph [ref=e236]: 해산물이 신선하고 조리가 정말 잘되어 있어요. 강력 추천합니다!
+                                - generic [ref=e237]:
+                                    - generic [ref=e238]: 5일 전
+                                    - generic [ref=e239]:
+                                        - generic [ref=e240]:
+                                            - img [ref=e241]
+                                            - text: "14"
+                                        - generic [ref=e243]:
+                                            - img [ref=e244]
+                                            - text: "1"
+                                    - button "좋아요" [ref=e246] [cursor=pointer]:
+                                        - img [ref=e247]
+                                    - button "싫어요" [ref=e249] [cursor=pointer]:
+                                        - img [ref=e250]
+                                    - button "답글" [ref=e252] [cursor=pointer]:
+                                        - generic [ref=e253]: 답글
+                        - generic [ref=e255]:
+                            - img "전문가_26" [ref=e256]
+                            - generic [ref=e257]:
+                                - generic [ref=e258]:
+                                    - generic [ref=e260]: 전문가_26
+                                    - paragraph [ref=e261]: 버스와 택시를 잘 이용하면 저렴하게 여행할 수 있어요.
+                                - generic [ref=e262]:
+                                    - generic [ref=e263]: 5일 전
+                                    - generic [ref=e264]:
+                                        - generic [ref=e265]:
+                                            - img [ref=e266]
+                                            - text: "15"
+                                        - generic [ref=e268]:
+                                            - img [ref=e269]
+                                            - text: "4"
+                                    - button "좋아요" [ref=e271] [cursor=pointer]:
+                                        - img [ref=e272]
+                                    - button "싫어요" [ref=e274] [cursor=pointer]:
+                                        - img [ref=e275]
+                                    - button "답글" [ref=e277] [cursor=pointer]:
+                                        - generic [ref=e278]: 답글
+                        - generic [ref=e280]:
+                            - img "전문가_13" [ref=e281]
+                            - generic [ref=e282]:
+                                - generic [ref=e283]:
+                                    - generic [ref=e285]: 전문가_13
+                                    - paragraph [ref=e286]: 오랜 전통을 지켜온 맛집이에요. 제주도 여행 필수 코스입니다.
+                                - generic [ref=e287]:
+                                    - generic [ref=e288]: 5일 전
+                                    - generic [ref=e289]:
+                                        - generic [ref=e290]:
+                                            - img [ref=e291]
+                                            - text: "13"
+                                        - generic [ref=e293]:
+                                            - img [ref=e294]
+                                            - text: "4"
+                                    - button "좋아요" [ref=e296] [cursor=pointer]:
+                                        - img [ref=e297]
+                                    - button "싫어요" [ref=e299] [cursor=pointer]:
+                                        - img [ref=e300]
+                                    - button "답글" [ref=e302] [cursor=pointer]:
+                                        - generic [ref=e303]: 답글
+                        - generic [ref=e305]:
+                            - img "전문가_11" [ref=e306]
+                            - generic [ref=e307]:
+                                - generic [ref=e308]:
+                                    - generic [ref=e310]: 전문가_11
+                                    - paragraph [ref=e311]: 면세점에서는 화장품과 명품을 저렴하게 구입할 수 있어요.
+                                - generic [ref=e312]:
+                                    - generic [ref=e313]: 5일 전
+                                    - generic [ref=e314]:
+                                        - generic [ref=e315]:
+                                            - img [ref=e316]
+                                            - text: "19"
+                                        - generic [ref=e318]:
+                                            - img [ref=e319]
+                                            - text: "2"
+                                    - button "좋아요" [ref=e321] [cursor=pointer]:
+                                        - img [ref=e322]
+                                    - button "싫어요" [ref=e324] [cursor=pointer]:
+                                        - img [ref=e325]
+                                    - button "답글" [ref=e327] [cursor=pointer]:
+                                        - generic [ref=e328]: 답글
+                        - generic [ref=e330]:
+                            - img "전문가_9" [ref=e331]
+                            - generic [ref=e332]:
+                                - generic [ref=e333]:
+                                    - generic [ref=e335]: 전문가_9
+                                    - paragraph [ref=e336]: 트래킹 코스로는 한라산이 최고입니다. 날씨가 좋은 날에 가세요!
+                                - generic [ref=e337]:
+                                    - generic [ref=e338]: 5일 전
+                                    - generic [ref=e339]:
+                                        - generic [ref=e340]:
+                                            - img [ref=e341]
+                                            - text: "2"
+                                        - generic [ref=e343]:
+                                            - img [ref=e344]
+                                            - text: "3"
+                                    - button "좋아요" [ref=e346] [cursor=pointer]:
+                                        - img [ref=e347]
+                                    - button "싫어요" [ref=e349] [cursor=pointer]:
+                                        - img [ref=e350]
+                                    - button "답글" [ref=e352] [cursor=pointer]:
+                                        - generic [ref=e353]: 답글
+                        - generic [ref=e355]:
+                            - img "전문가_7" [ref=e356]
+                            - generic [ref=e357]:
+                                - generic [ref=e358]:
+                                    - generic [ref=e360]: 전문가_7
+                                    - paragraph [ref=e361]: 오랜 전통을 지켜온 맛집이에요. 제주도 여행 필수 코스입니다.
+                                - generic [ref=e362]:
+                                    - generic [ref=e363]: 5일 전
+                                    - generic [ref=e364]:
+                                        - generic [ref=e365]:
+                                            - img [ref=e366]
+                                            - text: "2"
+                                        - generic [ref=e368]:
+                                            - img [ref=e369]
+                                            - text: "2"
+                                    - button "좋아요" [ref=e371] [cursor=pointer]:
+                                        - img [ref=e372]
+                                    - button "싫어요" [ref=e374] [cursor=pointer]:
+                                        - img [ref=e375]
+                                    - button "답글" [ref=e377] [cursor=pointer]:
+                                        - generic [ref=e378]: 답글
+                        - generic [ref=e380]:
+                            - img "전문가_4" [ref=e381]
+                            - generic [ref=e382]:
+                                - generic [ref=e383]:
+                                    - generic [ref=e385]: 전문가_4
+                                    - paragraph [ref=e386]: 에어비앤비로 현지인 집에서 머물면 진정한 여행 경험을 할 수 있어요.
+                                - generic [ref=e387]:
+                                    - generic [ref=e388]: 5일 전
+                                    - generic [ref=e389]:
+                                        - generic [ref=e390]:
+                                            - img [ref=e391]
+                                            - text: "18"
+                                        - generic [ref=e393]:
+                                            - img [ref=e394]
+                                            - text: "2"
+                                    - button "좋아요" [ref=e396] [cursor=pointer]:
+                                        - img [ref=e397]
+                                    - button "싫어요" [ref=e399] [cursor=pointer]:
+                                        - img [ref=e400]
+                                    - button "답글" [ref=e402] [cursor=pointer]:
+                                        - generic [ref=e403]: 답글
+                        - generic [ref=e405]:
+                            - img "전문가_4" [ref=e406]
+                            - generic [ref=e407]:
+                                - generic [ref=e408]:
+                                    - generic [ref=e410]: 전문가_4
+                                    - paragraph [ref=e411]: 게스트하우스는 가성비가 정말 좋습니다.
+                                - generic [ref=e412]:
+                                    - generic [ref=e413]: 5일 전
+                                    - generic [ref=e414]:
+                                        - generic [ref=e415]:
+                                            - img [ref=e416]
+                                            - text: "8"
+                                        - generic [ref=e418]:
+                                            - img [ref=e419]
+                                            - text: "4"
+                                    - button "좋아요" [ref=e421] [cursor=pointer]:
+                                        - img [ref=e422]
+                                    - button "싫어요" [ref=e424] [cursor=pointer]:
+                                        - img [ref=e425]
+                                    - button "답글" [ref=e427] [cursor=pointer]:
+                                        - generic [ref=e428]: 답글
+                        - generic [ref=e430]:
+                            - img "Expert 18" [ref=e431]
+                            - generic [ref=e432]:
+                                - generic [ref=e433]:
+                                    - generic [ref=e435]: Expert 18
+                                    - paragraph [ref=e436]: 많은 관광객들이 사랑하는 곳이에요. (Answer 6 to transport question)
+                                - generic [ref=e437]:
+                                    - generic [ref=e438]: 5일 전
+                                    - generic [ref=e440]:
+                                        - img [ref=e441]
+                                        - text: "21"
+                                    - button "좋아요" [ref=e443] [cursor=pointer]:
+                                        - img [ref=e444]
+                                    - button "싫어요" [ref=e446] [cursor=pointer]:
+                                        - img [ref=e447]
+                                    - button "답글" [ref=e449] [cursor=pointer]:
+                                        - generic [ref=e450]: 답글
+                        - generic [ref=e452]:
+                            - img "Expert 17" [ref=e453]
+                            - generic [ref=e454]:
+                                - generic [ref=e455]:
+                                    - generic [ref=e457]: Expert 17
+                                    - paragraph [ref=e458]: 현지인으로서 강력하게 추천드립니다. (Answer 5 to transport question)
+                                - generic [ref=e459]:
+                                    - generic [ref=e460]: 5일 전
+                                    - generic [ref=e462]:
+                                        - img [ref=e463]
+                                        - text: "41"
+                                    - button "좋아요" [ref=e465] [cursor=pointer]:
+                                        - img [ref=e466]
+                                    - button "싫어요" [ref=e468] [cursor=pointer]:
+                                        - img [ref=e469]
+                                    - button "답글" [ref=e471] [cursor=pointer]:
+                                        - generic [ref=e472]: 답글
+                        - generic [ref=e474]:
+                            - img "Expert 16" [ref=e475]
+                            - generic [ref=e476]:
+                                - generic [ref=e477]:
+                                    - generic [ref=e479]: Expert 16
+                                    - paragraph [ref=e480]: 꼭 한 번 방문해보세요! (Answer 4 to transport question)
+                                - generic [ref=e481]:
+                                    - generic [ref=e482]: 5일 전
+                                    - generic [ref=e484]:
+                                        - img [ref=e485]
+                                        - text: "17"
+                                    - button "좋아요" [ref=e487] [cursor=pointer]:
+                                        - img [ref=e488]
+                                    - button "싫어요" [ref=e490] [cursor=pointer]:
+                                        - img [ref=e491]
+                                    - button "답글" [ref=e493] [cursor=pointer]:
+                                        - generic [ref=e494]: 답글
+                        - generic [ref=e496]:
+                            - img "Expert 15" [ref=e497]
+                            - generic [ref=e498]:
+                                - generic [ref=e499]:
+                                    - generic [ref=e501]: Expert 15
+                                    - paragraph [ref=e502]: 현지인으로서 강력하게 추천드립니다. (Answer 3 to transport question)
+                                - generic [ref=e503]:
+                                    - generic [ref=e504]: 5일 전
+                                    - generic [ref=e506]:
+                                        - img [ref=e507]
+                                        - text: "54"
+                                    - button "좋아요" [ref=e509] [cursor=pointer]:
+                                        - img [ref=e510]
+                                    - button "싫어요" [ref=e512] [cursor=pointer]:
+                                        - img [ref=e513]
+                                    - button "답글" [ref=e515] [cursor=pointer]:
+                                        - generic [ref=e516]: 답글
+                        - generic [ref=e518]:
+                            - img "Expert 14" [ref=e519]
+                            - generic [ref=e520]:
+                                - generic [ref=e521]:
+                                    - generic [ref=e523]: Expert 14
+                                    - paragraph [ref=e524]: 현지인으로서 강력하게 추천드립니다. (Answer 2 to transport question)
+                                - generic [ref=e525]:
+                                    - generic [ref=e526]: 5일 전
+                                    - generic [ref=e528]:
+                                        - img [ref=e529]
+                                        - text: "28"
+                                    - button "좋아요" [ref=e531] [cursor=pointer]:
+                                        - img [ref=e532]
+                                    - button "싫어요" [ref=e534] [cursor=pointer]:
+                                        - img [ref=e535]
+                                    - button "답글" [ref=e537] [cursor=pointer]:
+                                        - generic [ref=e538]: 답글
+```

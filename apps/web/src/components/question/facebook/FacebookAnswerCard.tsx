@@ -130,8 +130,8 @@ const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
             {/* Adoption Indicator - Phase 4 @REQ:ANSWER-INTERACTION-001-S2 */}
             {answer.isAccepted && (
               <div className="flex items-center gap-1">
-                <CheckCircle size={16} className="text-green-600" />
-                <span className="text-xs text-green-600 font-semibold">
+                <CheckCircle size={16} className="text-green-700" />
+                <span className="text-xs text-green-700 font-semibold">
                   채택됨
                 </span>
               </div>
