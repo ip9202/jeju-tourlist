@@ -126,23 +126,30 @@ export const FacebookAnswerThread: React.FC<FacebookAnswerThreadProps> = ({
 
         {/* Replies */}
         {canShowReplies && (
-          <div className="ml-10 mt-2 space-y-2 md:ml-8 md:mt-1.5 sm:ml-6 sm:mt-1">
+          <div className="ml-10 mt-2 md:ml-8 md:mt-1.5 sm:ml-6 sm:mt-1">
             {replies.length > 0 && (
               <>
                 <button
                   onClick={() => toggleExpandReplies(answer.id)}
-                  className="flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700 transition-colors"
+                  className="flex items-center gap-1 px-2 py-1 text-xs font-semibold text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-md transition-colors sm:min-h-[44px] sm:px-3"
+                  aria-label={`답글 ${replies.length}개 ${isExpanded ? "숨기기" : "보기"}`}
                 >
                   {isExpanded ? (
-                    <ChevronUp size={16} />
+                    <ChevronUp size={16} className="sm:w-5 sm:h-5" />
                   ) : (
-                    <ChevronDown size={16} />
+                    <ChevronDown size={16} className="sm:w-5 sm:h-5" />
                   )}
-                  답글 {replies.length}개 {isExpanded ? "숨기기" : "보기"}
+                  <span className="flex items-center gap-1">
+                    답글
+                    <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-bold text-blue-600 bg-blue-100 rounded-full">
+                      {replies.length}
+                    </span>
+                    {isExpanded ? "숨기기" : "보기"}
+                  </span>
                 </button>
 
                 {isExpanded && (
-                  <div className="space-y-2">
+                  <div className="space-y-2 mt-2 pl-4 border-l-2 border-gray-200 md:pl-3 sm:pl-2">
                     {replies.map(reply => renderAnswer(reply, depth + 1))}
                   </div>
                 )}

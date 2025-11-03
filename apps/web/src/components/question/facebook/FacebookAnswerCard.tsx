@@ -222,10 +222,15 @@ const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
           <button
             onClick={handleReply}
             disabled={isLoading}
-            className="hover:text-blue-600 transition-colors sm:min-h-[44px] sm:px-2"
+            className="hover:text-blue-600 transition-colors sm:min-h-[44px] sm:px-2 flex items-center gap-1"
             title="답글"
           >
-            답글
+            <span>답글</span>
+            {answer.replyCount !== undefined && answer.replyCount > 0 && (
+              <span className="text-xs text-gray-500">
+                ({answer.replyCount})
+              </span>
+            )}
           </button>
 
           {!isActuallyNested && (
