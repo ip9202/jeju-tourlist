@@ -3,7 +3,6 @@ import { test, expect } from "@playwright/test";
 test.describe("API Endpoint Fix Verification", () => {
   test("verify /api/answers endpoint prefix is used (not /answers)", async ({
     page,
-    _context,
   }) => {
     // Set authentication cookie to bypass login
     const loginResponse = await page.request.post(
