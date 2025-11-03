@@ -90,11 +90,15 @@ const FacebookBadgeComponent: React.FC<FacebookBadgeProps> = ({
           ${sizes.fontSize} ${sizes.padding}
           hover:shadow-md hover:scale-105
           cursor-help
+          md:text-xs md:px-2 md:py-0.5
+          sm:text-xs sm:px-1.5 sm:py-0.5
         `}
         title={showTooltip ? undefined : badge.tooltip}
       >
-        <span className={sizes.icon}>{badge.icon}</span>
-        <span>{badge.label}</span>
+        <span className={`${sizes.icon} md:text-xs sm:text-xs`}>
+          {badge.icon}
+        </span>
+        <span className="md:hidden sm:hidden">{badge.label}</span>
       </span>
 
       {/* Tooltip (only show if showTooltip is true and hovered) */}

@@ -192,7 +192,7 @@ const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
           <button
             onClick={handleLike}
             disabled={isLoading}
-            className={`p-0 hover:text-red-600 transition-colors ${
+            className={`p-1 hover:text-red-600 transition-colors sm:min-h-[44px] sm:min-w-[44px] sm:flex sm:items-center sm:justify-center ${
               answer.isLiked ? "text-red-600" : "text-gray-600"
             }`}
             title="좋아요"
@@ -200,14 +200,14 @@ const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
           >
             <ThumbsUp
               size={16}
-              className={answer.isLiked ? "fill-red-600" : ""}
+              className={`${answer.isLiked ? "fill-red-600" : ""} md:w-5 md:h-5 sm:w-6 sm:h-6`}
             />
           </button>
 
           <button
             onClick={handleDislike}
             disabled={isLoading}
-            className={`p-0 hover:text-gray-600 transition-colors ${
+            className={`p-1 hover:text-gray-600 transition-colors sm:min-h-[44px] sm:min-w-[44px] sm:flex sm:items-center sm:justify-center ${
               answer.isDisliked ? "text-gray-600" : "text-gray-400"
             }`}
             title="싫어요"
@@ -215,14 +215,14 @@ const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
           >
             <ThumbsDown
               size={16}
-              className={answer.isDisliked ? "fill-gray-600" : ""}
+              className={`${answer.isDisliked ? "fill-gray-600" : ""} md:w-5 md:h-5 sm:w-6 sm:h-6`}
             />
           </button>
 
           <button
             onClick={handleReply}
             disabled={isLoading}
-            className="hover:text-blue-600 transition-colors"
+            className="hover:text-blue-600 transition-colors sm:min-h-[44px] sm:px-2"
             title="답글"
           >
             답글
@@ -232,7 +232,7 @@ const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
             <button
               onClick={answer.isAccepted ? handleUnadopt : handleAdopt}
               disabled={isLoading}
-              className={`hover:transition-colors ${
+              className={`hover:transition-colors sm:min-h-[44px] sm:px-2 ${
                 answer.isAccepted
                   ? "text-green-600 hover:text-green-700"
                   : "hover:text-green-600"
