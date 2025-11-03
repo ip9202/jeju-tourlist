@@ -91,33 +91,52 @@ export const convertToFacebookUser = (author: {
 };
 
 /**
- * 사용자 배지 결정 로직
+ * 사용자 배지 결정 로직 (우선순위 기반)
+ *
+ * Priority order (highest to lowest):
+ * 1. accepted - Accepted answer
+ * 2. verified - Verified expert (placeholder for future implementation)
+ * 3. expert - Question author
+ * 4. popular - Popular answer (10+ likes)
+ * 5. newbie - New user (≤5 answers)
  *
  * @param answer - API 답변 데이터
  * @param isQuestionAuthor - 질문 작성자 여부
- * @returns 배지 타입
+ * @returns 배지 타입 (우선순위가 가장 높은 것)
  */
 export const determineBadge = (
   answer: ApiAnswer,
   isQuestionAuthor: boolean
 ): BadgeType | undefined => {
-  // 채택된 답변 -> 'accepted' 배지
+  // Priority 1: 채택된 답변 -> 'accepted' 배지
   if (answer.isAccepted) {
     return "accepted";
   }
 
-  // 질문 작성자 -> 'expert' 배지
+  // Priority 2: 인증된 전문가 -> 'verified' 배지
+  // TODO: Add API field for verified status
+  // if (answer.author?.isVerified) {
+  //   return "verified";
+  // }
+
+  // Priority 3: 질문 작성자 -> 'expert' 배지
   if (isQuestionAuthor) {
     return "expert";
   }
 
-  // 신규 사용자 판정: 답변 5개 이하
+  // Priority 4: 인기 답변 -> 'popular' 배지 (좋아요 10개 이상)
+  const likeCount = answer.likeCount || 0;
+  if (likeCount >= 10) {
+    return "popular";
+  }
+
+  // Priority 5: 신규 사용자 -> 'newbie' 배지 (답변 5개 이하)
   const answerCount = answer.author_stats?.answerCount || 0;
   if (answerCount <= 5) {
     return "newbie";
   }
 
-  return undefined;
+  return undefined; // No badge
 };
 
 /**

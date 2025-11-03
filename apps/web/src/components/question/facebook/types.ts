@@ -2,7 +2,12 @@
  * Facebook 스타일 Q&A 컴포넌트 타입 정의
  */
 
-export type BadgeType = "accepted" | "expert" | "newbie";
+export type BadgeType =
+  | "accepted"
+  | "expert"
+  | "newbie"
+  | "popular"
+  | "verified";
 
 export interface User {
   id: string;
@@ -116,4 +121,5 @@ export interface FacebookAnswerThreadProps {
 export interface FacebookBadgeProps {
   type: BadgeType;
   size?: "sm" | "md" | "lg";
+  showTooltip?: boolean; // Show custom tooltip on hover
 }

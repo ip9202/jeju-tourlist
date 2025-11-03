@@ -51,8 +51,8 @@ const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
   onDislike,
   onReply,
   isLoading = false,
-  _questionAuthor,
-  _currentUser,
+  questionAuthor: _questionAuthor,
+  currentUser: _currentUser,
   onAdopt,
   onUnadopt,
 }) => {
