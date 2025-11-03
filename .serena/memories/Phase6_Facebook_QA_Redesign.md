@@ -1,6 +1,6 @@
-# Phase 6: Facebook Q&A 리디자인 - Phase 8 Unit Tests 완료! ✅
+# Phase 6: Facebook Q&A 리디자인 - Phase 8 Unit + Integration Tests 완료! ✅
 
-## 📊 현재 상태: Phase 8 Unit Tests ✅ 완료 (Integration Tests 진행 중)
+## 📊 현재 상태: Phase 8 Unit + Integration Tests ✅ 완료 (E2E Tests 진행 가능)
 
 ### 🎯 프로젝트 목표
 
@@ -504,9 +504,9 @@ return (
 - currentUser, questionAuthor, ID 일치 확인
 - 질문 작성자만 채택/해제 가능
 
-### 📊 Phase 8 Unit Tests 코드 메트릭
+### 📊 Phase 8 Unit + Integration Tests 코드 메트릭
 
-- **Total Tests**: 89 tests
+- **Total Tests**: 111 tests (89 unit + 22 integration)
 - **Pass Rate**: 100% (89/89) ✅
 - **New Test Files**: 3 files
   - utils.test.ts (17 tests)
@@ -529,12 +529,121 @@ Files: 3 changed, 1004 insertions(+)
 
 ### 🚀 Phase 8 남은 작업
 
-#### 2. Integration Tests (1시간) - ⏳ 다음 작업
+#### 2. Integration Tests (1시간) - ✅ 완료
 
-- FacebookAnswerThread 통합 테스트
-- 답변 추가/수정/삭제 플로우
-- 좋아요/싫어요 상태 관리
-- 채택 기능 테스트
+**FacebookAnswerThread.test.tsx (22 tests) - 모두 통과 ✅**:
+
+1. **Answer List Rendering (3 tests)**:
+   - 빈 상태 렌더링
+   - 답변 목록 렌더링 (2개)
+   - 답변 내용 표시
+
+2. **Badge-based Sorting (2 tests)**:
+   - 채택된 답변 우선 정렬
+   - Expert 답변 정렬
+
+3. **Nested Replies (3 tests)**:
+   - 중첩 답글 초기 숨김
+   - 답글 펼치기/접기 토글
+   - 답글 개수 배지 표시
+
+4. **Answer Submission (3 tests)**:
+   - 새 답변 제출
+   - 중첩 답글 제출 (parentId 포함)
+   - 제출 후 입력 필드 초기화
+
+5. **Like/Dislike Functionality (3 tests)**:
+   - Like 버튼 클릭 시 onLike 호출
+   - Dislike 버튼 클릭 시 onDislike 호출
+   - Like/Dislike 카운트 표시
+
+6. **Adoption Functionality (4 tests)**:
+   - 질문 작성자에게만 채택 버튼 표시
+   - 일반 사용자에게 채택 버튼 숨김
+   - 채택 버튼 클릭 시 onAdopt 호출
+   - 채택 해제 버튼 클릭 시 onUnadopt 호출
+
+7. **Reply Mode (2 tests)**:
+   - 답글 버튼 클릭 시 reply mode 활성화
+   - Reply mode에서 parentAuthorName 표시
+
+8. **Loading State (1 test)**:
+   - isLoading=true일 때 입력 필드 비활성화
+
+9. **React.memo Optimization (1 test)**:
+   - Props 불변 시 불필요한 리렌더링 방지
+
+### 🐛 Integration Tests 버그 수정
+
+**문제 1: Text Selector 실패**
+
+```typescript
+// BEFORE (실패)
+const toggleButton = screen.getByText(/답글.*1.*보기/);
+// 텍스트가 여러 DOM 요소로 분리되어 매칭 실패
+
+// AFTER (수정)
+const toggleButton = screen.getByLabelText("답글 1개 보기");
+// aria-label 사용으로 안정적인 선택
+```
+
+**문제 2: 다중 Cancel 버튼**
+
+```typescript
+// BEFORE (실패)
+const cancelButton = screen.getByText("취소");
+// 여러 취소 버튼이 있어 매칭 실패
+
+// AFTER (수정)
+const cancelButtons = screen.getAllByText("취소");
+await user.click(cancelButtons[cancelButtons.length - 1]);
+// 마지막 버튼 (reply mode cancel) 선택
+```
+
+### 📊 Integration Tests 코드 메트릭
+
+- **Total Tests**: 22 tests
+- **Pass Rate**: 100% (22/22) ✅
+- **New Test File**: FacebookAnswerThread.test.tsx (822 lines)
+- **Test Categories**: 9 categories
+- **Coverage**: Full component integration workflows
+
+### 📝 Git 커밋
+
+```
+Commit: 8679282
+Message: "test: Add comprehensive integration tests for FacebookAnswerThread"
+Files: 1 changed, 822 insertions(+)
+```
+
+### 🌟 Integration Tests 주요 성과
+
+1. **완전한 워크플로우 검증**:
+   - 답변 제출 → parentId 검증 → 입력 초기화
+   - 답글 펼치기 → 중첩 답글 표시 → 접기
+   - 채택 버튼 → 권한 체크 → onAdopt 호출
+
+2. **컴포넌트 간 통합 테스트**:
+   - FacebookAnswerThread ↔ FacebookAnswerCard
+   - FacebookAnswerCard ↔ FacebookAnswerInput
+   - FacebookBadge 정렬 알고리즘 통합
+
+3. **안정적인 테스트 선택자**:
+   - aria-label 사용으로 텍스트 분리 문제 해결
+   - getAllBy\* 메서드로 다중 요소 처리
+   - waitFor() 비동기 처리
+
+**FacebookAnswerThread.test.tsx (22 tests) - 모두 통과 ✅**:
+
+- Answer List Rendering (3 tests)
+- Badge-based Sorting (2 tests)
+- Nested Replies (3 tests)
+- Answer Submission (3 tests)
+- Like/Dislike Functionality (3 tests)
+- Adoption Functionality (4 tests)
+- Reply Mode (2 tests)
+- Loading State (1 test)
+- React.memo Optimization (1 test)
 
 #### 3. E2E Tests (1시간) - ⏳ 대기
 
@@ -570,9 +679,9 @@ Files: 3 changed, 1004 insertions(+)
 - Phase 5: 2시간 ✅
 - Phase 6: 1시간 ✅
 - Phase 7: 2시간 ✅
-- Phase 8: 1.5시간 (Unit Tests) ✅
-- **누적: 14.5시간 완료 (23시간 중 63%)**
-- **남은 시간: 8.5시간**
+- Phase 8: 2.5시간 (Unit + Integration Tests) ✅
+- **누적: 15.5시간 완료 (23시간 중 67.4%)**
+- **남은 시간: 7.5시간**
 
 ---
 
@@ -605,45 +714,54 @@ Files: 3 changed, 1004 insertions(+)
 6. `feat: Phase 6 - Enhanced Nested Reply System UI/UX` (Phase 6)
 7. `feat: Phase 7 - Performance Optimization for Facebook Q&A Components` (Phase 7)
 8. `fix: Fix critical bugs in Facebook Q&A sorting and adopt button` (Phase 8 - 18eb965)
-9. `test: Add comprehensive unit tests for Facebook Q&A components` (Phase 8 - 34a2f95) ← 최신
+9. `test: Add comprehensive unit tests for Facebook Q&A components` (Phase 8 - 34a2f95)
+10. `test: Add comprehensive integration tests for FacebookAnswerThread` (Phase 8 - 8679282) ← 최신
 
 ---
 
-## 🎯 Phase 8 Unit Tests Summary
+## 🎯 Phase 8 Unit + Integration Tests Summary
 
 ### 🔑 주요 성과
 
 1. **포괄적인 테스트 커버리지**:
-   - 89개 유닛 테스트 (100% 통과율)
+   - 111개 테스트 (89 unit + 22 integration, 100% 통과율)
    - 모든 핵심 컴포넌트 및 유틸 함수 테스트
    - 엣지 케이스 처리 검증
+   - 완전한 워크플로우 통합 테스트
 
 2. **버그 발견 및 수정**:
    - sortByBadgePriority 버그 (nullish coalescing 수정)
    - Adopt button 권한 체크 버그 수정
+   - Integration tests 중 selector 이슈 발견 및 수정
    - Testing을 통한 코드 품질 향상
 
 3. **테스트 자동화**:
    - Jest + React Testing Library
    - userEvent로 사용자 인터랙션 시뮬레이션
    - Mocking 및 비동기 처리 검증
+   - aria-label 기반 안정적인 선택자
 
 ### 📊 코드 메트릭
 
-- Total Tests: 89 (17 utils + 15+ badge + 30+ input)
+- Total Tests: 111 (89 unit + 22 integration)
 - Pass Rate: 100% ✅
-- New Test Files: 3 files, 1004 insertions
-- Bug Fixes: 2 critical bugs
-- Coverage: All core components and utilities
+- New Test Files: 4 files, 1826 insertions
+  - utils.test.ts (17 tests)
+  - FacebookBadge.test.tsx (15+ tests)
+  - FacebookAnswerInput.test.tsx (30+ tests)
+  - FacebookAnswerThread.test.tsx (22 tests)
+- Bug Fixes: 2 critical bugs + selector issues
+- Coverage: All core components, utilities, and integration workflows
 
-### 🌟 Integration Tests 준비 상태
+### 🌟 E2E Tests 준비 상태
 
-- Unit tests 완료 → Integration tests 준비 완료
-- FacebookAnswerThread 통합 테스트 대기
+- Unit tests 완료 ✅
+- Integration tests 완료 ✅
 - E2E 테스트 환경 준비 완료
+- Accessibility tests 대기
 
 ---
 
 **최종 업데이트**: 2025-11-03
 **작성자**: Alfred (tdd-implementer)
-**진행률**: 63% (14.5h/23h)
+**진행률**: 67.4% (15.5h/23h)
