@@ -520,9 +520,9 @@ export default function QuestionDetailPage() {
     <div className="min-h-screen bg-gray-50">
       <Header />
 
-      <div className="max-w-4xl mx-auto px-4 py-8">
+      <main className="max-w-4xl mx-auto px-4 py-8">
         {/* 질문 상세 */}
-        <div className="bg-white rounded-lg shadow-md p-8 mb-8">
+        <article className="bg-white rounded-lg shadow-md p-8 mb-8">
           {/* 질문 제목 및 액션 버튼 */}
           <div className="flex items-start justify-between mb-6 pb-6 border-b border-gray-200">
             <h1 className="text-2xl font-bold text-gray-900 flex-grow pr-4">
@@ -660,10 +660,10 @@ export default function QuestionDetailPage() {
               좋아요
             </Button>
           </div>
-        </div>
+        </article>
 
         {/* 답변 섹션 - FacebookAnswerThread 사용 */}
-        <div className="bg-white rounded-lg shadow-md p-8 mb-8">
+        <section className="bg-white rounded-lg shadow-md p-8 mb-8">
           <div className="flex items-center justify-between mb-6">
             <Heading
               level={2}
@@ -782,8 +782,8 @@ export default function QuestionDetailPage() {
               />
             </>
           )}
-        </div>
-      </div>
+        </section>
+      </main>
 
       {/* 이미지 라이트박스 */}
       {lightboxOpen && question.attachments && (

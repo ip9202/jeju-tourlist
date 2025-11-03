@@ -447,6 +447,7 @@ export const Header: React.FC = () => {
               value={selectedCategory}
               onChange={e => setSelectedCategory(e.target.value)}
               className="hidden sm:block px-3 py-2 border-0 text-sm font-medium text-gray-700 transition-colors flex-shrink-0 bg-white focus:outline-none"
+              aria-label="카테고리 선택"
             >
               {categories.map(cat => (
                 <option key={cat.id} value={cat.id}>
@@ -471,6 +472,7 @@ export const Header: React.FC = () => {
             <button
               type="submit"
               className="flex items-center justify-center px-4 py-2 bg-transparent hover:bg-gray-100 text-gray-600 hover:text-gray-900 font-medium transition-colors flex-shrink-0 border-0"
+              aria-label="검색"
             >
               <Search className="w-5 h-5" />
             </button>

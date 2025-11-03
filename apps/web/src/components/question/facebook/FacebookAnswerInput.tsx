@@ -171,6 +171,7 @@ const FacebookAnswerInputComponent: React.FC<FacebookAnswerInputProps> = ({
                   onClick={handleSubmit}
                   disabled={!content.trim() || isLoading}
                   className="px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-300 disabled:opacity-50 flex items-center gap-2 md:px-3 md:py-1.5 md:text-xs sm:px-2 sm:py-1 sm:text-xs sm:min-h-[44px]"
+                  aria-label="답변 등록"
                 >
                   <Send size={16} className="md:w-4 md:h-4 sm:w-4 sm:h-4" />
                   <span className="sm:hidden">등록</span>
