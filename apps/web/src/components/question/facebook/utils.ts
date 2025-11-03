@@ -63,15 +63,24 @@ export const isNewbie = (user?: User): boolean => {
  * @returns 우선순위로 정렬된 답변 배열
  */
 export const sortByBadgePriority = (answers: Answer[]): Answer[] => {
-  const badgePriority = { accepted: 0, expert: 1, newbie: 2, undefined: 3 };
+  // Badge priority based on Phase 4 specification
+  // Priority order (highest to lowest): accepted > verified > expert > popular > newbie
+  const badgePriority = {
+    accepted: 0,
+    verified: 1,
+    expert: 2,
+    popular: 3,
+    newbie: 4,
+    undefined: 5,
+  };
 
   return [...answers].sort((a, b) => {
     const aBadge = getBadgeType(a) || "undefined";
     const bBadge = getBadgeType(b) || "undefined";
 
     return (
-      (badgePriority[aBadge as keyof typeof badgePriority] || 3) -
-      (badgePriority[bBadge as keyof typeof badgePriority] || 3)
+      (badgePriority[aBadge as keyof typeof badgePriority] ?? 5) -
+      (badgePriority[bBadge as keyof typeof badgePriority] ?? 5)
     );
   });
 };

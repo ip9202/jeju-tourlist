@@ -234,21 +234,24 @@ const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
             )}
           </button>
 
-          {!isActuallyNested && (
-            <button
-              onClick={answer.isAccepted ? handleUnadopt : handleAdopt}
-              disabled={isLoading}
-              className={`hover:transition-colors sm:min-h-[44px] sm:px-2 ${
-                answer.isAccepted
-                  ? "text-green-600 hover:text-green-700"
-                  : "hover:text-green-600"
-              }`}
-              title={answer.isAccepted ? "채택 취소" : "채택"}
-              aria-label={answer.isAccepted ? "채택 취소" : "답변 채택"}
-            >
-              {answer.isAccepted ? "채택 해제" : "채택"}
-            </button>
-          )}
+          {!isActuallyNested &&
+            _currentUser &&
+            _questionAuthor &&
+            _currentUser.id === _questionAuthor.id && (
+              <button
+                onClick={answer.isAccepted ? handleUnadopt : handleAdopt}
+                disabled={isLoading}
+                className={`hover:transition-colors sm:min-h-[44px] sm:px-2 ${
+                  answer.isAccepted
+                    ? "text-green-600 hover:text-green-700"
+                    : "hover:text-green-600"
+                }`}
+                title={answer.isAccepted ? "채택 취소" : "채택"}
+                aria-label={answer.isAccepted ? "채택 취소" : "답변 채택"}
+              >
+                {answer.isAccepted ? "채택 해제" : "채택"}
+              </button>
+            )}
         </div>
       </div>
     </div>
