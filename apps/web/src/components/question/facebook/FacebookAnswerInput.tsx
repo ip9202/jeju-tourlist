@@ -9,7 +9,8 @@ import { useRouter } from "next/navigation";
 import { FacebookAnswerInputProps } from "./types";
 import { Smile, Send, X } from "lucide-react";
 
-export const FacebookAnswerInput: React.FC<FacebookAnswerInputProps> = ({
+// Performance optimization: Memoize component to prevent unnecessary re-renders
+const FacebookAnswerInputComponent: React.FC<FacebookAnswerInputProps> = ({
   placeholder = "댓글을 작성해주세요...",
   onSubmit,
   user,
@@ -182,5 +183,7 @@ export const FacebookAnswerInput: React.FC<FacebookAnswerInputProps> = ({
     </div>
   );
 };
+
+export const FacebookAnswerInput = React.memo(FacebookAnswerInputComponent);
 
 export default FacebookAnswerInput;

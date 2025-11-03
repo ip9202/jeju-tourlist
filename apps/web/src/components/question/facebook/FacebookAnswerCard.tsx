@@ -160,6 +160,7 @@ const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
             <img
               src={answer.imageUrl}
               alt="Answer image"
+              loading="lazy"
               className="rounded-lg max-w-xs mb-2 md:max-w-sm md:mb-1.5 sm:max-w-xs sm:mb-1"
             />
           )}
@@ -254,6 +255,7 @@ const FacebookAnswerCardComponent: React.FC<FacebookAnswerCardProps> = ({
   );
 };
 
-export const FacebookAnswerCard = FacebookAnswerCardComponent;
+// Performance optimization: Memoize component to prevent unnecessary re-renders
+export const FacebookAnswerCard = React.memo(FacebookAnswerCardComponent);
 
 export default FacebookAnswerCard;

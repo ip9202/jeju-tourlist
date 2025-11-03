@@ -105,6 +105,7 @@ const FacebookQuestionCardComponent: React.FC<FacebookQuestionCardProps> = ({
                 key={idx}
                 src={image}
                 alt={`Image ${idx + 1}`}
+                loading="lazy"
                 className="rounded-md w-full h-48 object-cover md:h-40 sm:h-32"
               />
             ))}

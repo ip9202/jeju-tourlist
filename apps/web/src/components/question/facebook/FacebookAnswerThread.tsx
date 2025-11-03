@@ -2,14 +2,15 @@
 // @SPEC:SPEC-ANSWER-INTERACTION-001-PHASE7
 // Facebook-style answer thread with nested replies and badge-based sorting
 
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback, memo } from "react";
 import { FacebookAnswerThreadProps, Answer } from "./types";
 import { sortByBadgePriority } from "./utils";
 import FacebookAnswerInput from "./FacebookAnswerInput";
 import FacebookAnswerCard from "./FacebookAnswerCard";
 import { ChevronDown, ChevronUp } from "lucide-react";
 
-export const FacebookAnswerThread: React.FC<FacebookAnswerThreadProps> = ({
+// Performance optimization: Memoize component to prevent unnecessary re-renders
+const FacebookAnswerThreadComponent: React.FC<FacebookAnswerThreadProps> = ({
   answers,
   question,
   currentUser,
@@ -86,80 +87,97 @@ export const FacebookAnswerThread: React.FC<FacebookAnswerThreadProps> = ({
     });
   }, []);
 
-  const renderAnswer = (answer: Answer, depth: number = 0): React.ReactNode => {
-    const replies = answerMap.get(answer.id) || [];
-    const isReply = replyingToId === answer.id;
-    const isExpanded = expandedReplies.has(answer.id);
-    const canShowReplies = depth < maxDepth && replies.length > 0;
+  // Performance optimization: Memoize render function to prevent recreations
+  const renderAnswer = useCallback(
+    (answer: Answer, depth: number = 0): React.ReactNode => {
+      const replies = answerMap.get(answer.id) || [];
+      const isReply = replyingToId === answer.id;
+      const isExpanded = expandedReplies.has(answer.id);
+      const canShowReplies = depth < maxDepth && replies.length > 0;
 
-    return (
-      <div key={answer.id}>
-        {/* Answer Card */}
-        <FacebookAnswerCard
-          answer={{ ...answer, replyCount: replies.length }}
-          isNested={depth > 0}
-          depth={depth}
-          currentUser={currentUser}
-          questionAuthor={question.author}
-          onLike={onLike}
-          onDislike={onDislike}
-          onAdopt={onAdopt}
-          onUnadopt={onUnadopt}
-          onReply={handleReply}
-          isLoading={isLoading}
-        />
+      return (
+        <div key={answer.id}>
+          {/* Answer Card */}
+          <FacebookAnswerCard
+            answer={{ ...answer, replyCount: replies.length }}
+            isNested={depth > 0}
+            depth={depth}
+            currentUser={currentUser}
+            questionAuthor={question.author}
+            onLike={onLike}
+            onDislike={onDislike}
+            onAdopt={onAdopt}
+            onUnadopt={onUnadopt}
+            onReply={handleReply}
+            isLoading={isLoading}
+          />
 
-        {/* Reply Input - Placed right after answer card with cascade indentation */}
-        {isReply && (
-          <div className="ml-10 mt-2 md:ml-8 md:mt-1.5 sm:ml-6 sm:mt-1">
-            <FacebookAnswerInput
-              placeholder={`${answer.author.name}님에게 답글...`}
-              onSubmit={handleSubmitAnswer}
-              user={currentUser}
-              isLoading={isLoading}
-              isReply={true}
-              parentAuthorName={answer.author.name}
-              onCancel={() => setReplyingToId(null)}
-            />
-          </div>
-        )}
+          {/* Reply Input - Placed right after answer card with cascade indentation */}
+          {isReply && (
+            <div className="ml-10 mt-2 md:ml-8 md:mt-1.5 sm:ml-6 sm:mt-1">
+              <FacebookAnswerInput
+                placeholder={`${answer.author.name}님에게 답글...`}
+                onSubmit={handleSubmitAnswer}
+                user={currentUser}
+                isLoading={isLoading}
+                isReply={true}
+                parentAuthorName={answer.author.name}
+                onCancel={() => setReplyingToId(null)}
+              />
+            </div>
+          )}
 
-        {/* Replies */}
-        {canShowReplies && (
-          <div className="ml-10 mt-2 md:ml-8 md:mt-1.5 sm:ml-6 sm:mt-1">
-            {replies.length > 0 && (
-              <>
-                <button
-                  onClick={() => toggleExpandReplies(answer.id)}
-                  className="flex items-center gap-1 px-2 py-1 text-xs font-semibold text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-md transition-colors sm:min-h-[44px] sm:px-3"
-                  aria-label={`답글 ${replies.length}개 ${isExpanded ? "숨기기" : "보기"}`}
-                >
-                  {isExpanded ? (
-                    <ChevronUp size={16} className="sm:w-5 sm:h-5" />
-                  ) : (
-                    <ChevronDown size={16} className="sm:w-5 sm:h-5" />
-                  )}
-                  <span className="flex items-center gap-1">
-                    답글
-                    <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-bold text-blue-600 bg-blue-100 rounded-full">
-                      {replies.length}
+          {/* Replies */}
+          {canShowReplies && (
+            <div className="ml-10 mt-2 md:ml-8 md:mt-1.5 sm:ml-6 sm:mt-1">
+              {replies.length > 0 && (
+                <>
+                  <button
+                    onClick={() => toggleExpandReplies(answer.id)}
+                    className="flex items-center gap-1 px-2 py-1 text-xs font-semibold text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-md transition-colors sm:min-h-[44px] sm:px-3"
+                    aria-label={`답글 ${replies.length}개 ${isExpanded ? "숨기기" : "보기"}`}
+                  >
+                    {isExpanded ? (
+                      <ChevronUp size={16} className="sm:w-5 sm:h-5" />
+                    ) : (
+                      <ChevronDown size={16} className="sm:w-5 sm:h-5" />
+                    )}
+                    <span className="flex items-center gap-1">
+                      답글
+                      <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-bold text-blue-600 bg-blue-100 rounded-full">
+                        {replies.length}
+                      </span>
+                      {isExpanded ? "숨기기" : "보기"}
                     </span>
-                    {isExpanded ? "숨기기" : "보기"}
-                  </span>
-                </button>
+                  </button>
 
-                {isExpanded && (
-                  <div className="space-y-2 mt-2 pl-4 border-l-2 border-gray-200 md:pl-3 sm:pl-2">
-                    {replies.map(reply => renderAnswer(reply, depth + 1))}
-                  </div>
-                )}
-              </>
-            )}
-          </div>
-        )}
-      </div>
-    );
-  };
+                  {isExpanded && (
+                    <div className="space-y-2 mt-2 pl-4 border-l-2 border-gray-200 md:pl-3 sm:pl-2">
+                      {replies.map(reply => renderAnswer(reply, depth + 1))}
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          )}
+        </div>
+      );
+    },
+    [
+      answerMap,
+      replyingToId,
+      expandedReplies,
+      maxDepth,
+      currentUser,
+      question.author,
+      onLike,
+      onDislike,
+      onAdopt,
+      onUnadopt,
+      handleReply,
+      isLoading,
+    ]
+  );
 
   return (
     <div className="space-y-4 md:space-y-3 sm:space-y-2">
@@ -189,5 +207,7 @@ export const FacebookAnswerThread: React.FC<FacebookAnswerThreadProps> = ({
     </div>
   );
 };
+
+export const FacebookAnswerThread = memo(FacebookAnswerThreadComponent);
 
 export default FacebookAnswerThread;
